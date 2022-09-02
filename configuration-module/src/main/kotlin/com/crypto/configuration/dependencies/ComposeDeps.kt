@@ -7,11 +7,12 @@ object ComposeDeps {
     const val material = "androidx.compose.material:material:$version"
     const val preview = "androidx.compose.ui:ui-tooling-preview:$version"
     const val icons = "androidx.compose.material:material-icons-extended:$version"
-    const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
-    const val uiTooling = "androidx.compose.ui:ui-tooling:$version"
     const val coil = "io.coil-kt:coil-compose:2.0.0"
     const val navigation = "androidx.navigation:navigation-compose:2.4.2"
     const val paging = "androidx.paging:paging-compose:1.0.0-alpha14"
+
+    const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
+    const val uiTooling = "androidx.compose.ui:ui-tooling:$version"
 
     object Material3 {
         private const val version = "1.0.0-alpha12"

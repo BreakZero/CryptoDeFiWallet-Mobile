@@ -26,8 +26,8 @@ java {
 gradlePlugin {
     plugins {
         create("Configuration") {
-            id = "basic-configuration-plugin"
-            implementationClass = "com.crypto.configuration.DependencyVersionPlugin"
+            id = "crypto.module.config"
+            implementationClass = "com.crypto.configuration.CryptoModuleConfigPlugin"
         }
     }
 }

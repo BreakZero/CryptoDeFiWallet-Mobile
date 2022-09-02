@@ -12,15 +12,15 @@ import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.util.*
 
-class DependencyVersionPlugin : Plugin<Project> {
-    private val ignoreList = listOf("app", "assets", "dapp", "settings")
+class CryptoModuleConfigPlugin : Plugin<Project> {
+    private val ignoreList = listOf("app", "onboarding")
 
     override fun apply(target: Project) {
         if (target.name !in ignoreList) {
             target.beforeEvaluate { applyPlugin() }
             target.afterEvaluate {
                 extensions.getByType(LibraryExtension::class).run {
-                    moduleConfig(target.name == "core")
+                    moduleConfig()
                 }
             }
         }
@@ -34,7 +34,7 @@ class DependencyVersionPlugin : Plugin<Project> {
     }
 
     @Suppress("UnstableApiUsage")
-    private fun LibraryExtension.moduleConfig(isCore: Boolean) {
+    private fun LibraryExtension.moduleConfig() {
         compileSdk = AndroidBuildConfig.compileSdkVersion
         packagingOptions {
             resources.excludes.add("META-INF/INDEX.LIST")
@@ -47,23 +47,6 @@ class DependencyVersionPlugin : Plugin<Project> {
             minSdk = AndroidBuildConfig.minSdkVersion
             targetSdk = AndroidBuildConfig.targetSdkVersion
             testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-
-            /*if (isCore) {
-                val keysProperties = keyStoreProperties()
-                val infuraApiKey = keysProperties.getProperty("apikey.infura")
-                val etherscanApiKey = keysProperties.getProperty("apikey.etherscan")
-                val polygonscanApiKey = keysProperties.getProperty("apikey.polygonscan")
-                val figmentApiKey = keysProperties.getProperty("apikey.figment")
-                val bscscanApikey = keysProperties.getProperty("apikey.bscscan")
-                val bscrpcApikey = keysProperties.getProperty("apikey.bscrpcscan")
-
-                buildConfigField("String", "INFURA_APIKEY", infuraApiKey)
-                buildConfigField("String", "ETHERSCAN_APIKEY", etherscanApiKey)
-                buildConfigField("String", "POLYGONSCAN_APIKEY", polygonscanApiKey)
-                buildConfigField("String", "FIGMENT_APIKEY", figmentApiKey)
-                buildConfigField("String", "BSCRPC_APIKEY", bscrpcApikey)
-                buildConfigField("String", "BSCSCAN_APIKEY", bscscanApikey)
-            }*/
         }
         buildTypes {
             release {
@@ -98,7 +81,7 @@ class DependencyVersionPlugin : Plugin<Project> {
 
 fun keyStoreProperties(): Properties {
     val properties = Properties()
-    val keyProperties = File("./keystore", "configs.properties")
+    val keyProperties = File("./keystore", "keystore.properties")
 
     if (keyProperties.isFile) {
         InputStreamReader(FileInputStream(keyProperties), Charsets.UTF_8).use { reader ->
