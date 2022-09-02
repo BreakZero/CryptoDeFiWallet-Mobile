@@ -84,6 +84,10 @@ dependencies {
     implementation(AndroidDeps.appcompat)
     implementation(AndroidDeps.activity_compose)
 
+
+    implementation(project(":resource"))
+    implementation(project(":core-ui"))
+
     composeUI()
     hiltDependencies()
 
