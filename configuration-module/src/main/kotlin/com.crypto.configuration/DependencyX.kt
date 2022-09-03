@@ -12,7 +12,7 @@ fun DependencyHandlerScope.unitTestDependencies() {
     "testImplementation"(TestDeps.mockito_kotlin)
     "testImplementation"(TestDeps.coroutines_test)
     "testImplementation"(TestDeps.turbine)
-    "testImplementation"(KotlinDeps.Ktor.client_test)
+    "testImplementation"(KotlinDeps.Ktor.mock)
 }
 
 fun DependencyHandlerScope.androidTestDependencies() {
@@ -23,7 +23,7 @@ fun DependencyHandlerScope.androidTestDependencies() {
     "androidTestImplementation"(TestDeps.mockito_kotlin)
     "androidTestImplementation"(TestDeps.coroutines_test)
     "androidTestImplementation"(TestDeps.turbine)
-    "androidTestImplementation"(KotlinDeps.Ktor.client_test)
+    "androidTestImplementation"(KotlinDeps.Ktor.mock)
 }
 
 fun DependencyHandlerScope.hiltDependencies() {
@@ -35,9 +35,9 @@ fun DependencyHandlerScope.hiltDependencies() {
 }
 
 fun DependencyHandlerScope.roomDependencies() {
-    "kapt"(AndroidDeps.Room.roomCompiler)
-    "implementation"(AndroidDeps.Room.roomKtx)
-    "implementation"(AndroidDeps.Room.roomRuntime)
+    "kapt"(AndroidDeps.Room.compiler)
+    "implementation"(AndroidDeps.Room.ktx)
+    "implementation"(AndroidDeps.Room.runtime)
 }
 
 fun DependencyHandlerScope.composeUI() {

@@ -6,14 +6,16 @@ object AndroidDeps {
     const val appcompat = "androidx.appcompat:appcompat:1.5.0"
     const val activity_compose = "androidx.activity:activity-compose:1.5.1"
 
+    const val zxing = "com.google.zxing:core:3.5.0"
+
     object Lifecycle {
         private const val lifecycle_version = "2.5.1"
         const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
-        const val liveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-        const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-        const val viewModelSavedState =
+        const val livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+        const val viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+        const val viewmodel_savedstate =
             "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
-        const val commonJava8 = "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+        const val common_java8 = "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
         const val service = "androidx.lifecycle:lifecycle-service:$lifecycle_version"
     }
 
@@ -27,16 +29,21 @@ object AndroidDeps {
     }
 
     object Room {
-        private const val room_version = "2.4.2"
-        const val roomRuntime = "androidx.room:room-runtime:$room_version"
-        const val roomCompiler = "androidx.room:room-compiler:$room_version"
-        const val roomKtx = "androidx.room:room-ktx:$room_version"
+        private const val version = "2.4.2"
+        const val runtime = "androidx.room:room-runtime:$version"
+        const val compiler = "androidx.room:room-compiler:$version"
+        const val ktx = "androidx.room:room-ktx:$version"
     }
 
+    object DataStore {
+        private const val version = "1.0.0"
+        const val core = "androidx.datastore:datastore:$version"
+        const val preferences = "androidx.datastore:datastore-preferences:$version"
+    }
     object Camera {
         private const val camera_version = "1.1.0-beta03"
-        const val camera = "androidx.camera:camera-camera2:$camera_version"
-        const val cameraLife = "androidx.camera:camera-lifecycle:$camera_version"
-        const val cameraView = "androidx.camera:camera-view:$camera_version"
+        const val camera2 = "androidx.camera:camera-camera2:$camera_version"
+        const val lifecycle = "androidx.camera:camera-lifecycle:$camera_version"
+        const val view = "androidx.camera:camera-view:$camera_version"
     }
 }

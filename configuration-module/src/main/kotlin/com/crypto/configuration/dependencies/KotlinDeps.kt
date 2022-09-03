@@ -1,14 +1,22 @@
 package com.crypto.configuration.dependencies
 
-class KotlinDeps {
+object KotlinDeps {
+    const val kotlinx_serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3"
+
+    object Coroutine {
+        private const val version = "1.6.0"
+        const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
+        const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
+    }
+
     object Ktor {
-        private const val ktor_version = "2.0.0"
-        const val client_core = "io.ktor:ktor-client-core:$ktor_version"
-        const val client_log = "io.ktor:ktor-client-logging:$ktor_version"
-        const val client_negotiation = "io.ktor:ktor-client-content-negotiation:$ktor_version"
-        const val client_android = "io.ktor:ktor-client-android:$ktor_version"
-        const val client_gson  = "io.ktor:ktor-serialization-gson:$ktor_version"
-        const val client_serializer  = "io.ktor:ktor-serialization-kotlinx-json:$ktor_version"
-        const val client_test = "io.ktor:ktor-client-mock:$ktor_version"
+        private const val version = "2.0.0"
+        const val core = "io.ktor:ktor-client-core:$version"
+        const val logging = "io.ktor:ktor-client-logging:$version"
+        const val negotiation = "io.ktor:ktor-client-content-negotiation:$version"
+        const val android = "io.ktor:ktor-client-android:$version"
+        const val gson  = "io.ktor:ktor-serialization-gson:$version"
+        const val json  = "io.ktor:ktor-serialization-kotlinx-json:$version"
+        const val mock = "io.ktor:ktor-client-mock:$version"
     }
 }
