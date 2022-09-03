@@ -8,6 +8,7 @@ plugins {
 
 dependencies {
     api(AndroidDeps.coreKtx)
+    api(AndroidDeps.securitys)
 
     api(KotlinDeps.Coroutine.core)
     api(KotlinDeps.Coroutine.android)
@@ -22,4 +23,8 @@ dependencies {
     api(AndroidDeps.DataStore.core)
 
     hiltDependencies()
+}
+
+kapt {
+    correctErrorTypes = true
 }

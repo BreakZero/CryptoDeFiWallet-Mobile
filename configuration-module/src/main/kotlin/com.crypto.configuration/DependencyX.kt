@@ -29,8 +29,6 @@ fun DependencyHandlerScope.androidTestDependencies() {
 fun DependencyHandlerScope.hiltDependencies() {
     "implementation"(AndroidDeps.Hilt.hilt_android)
     "kapt"(AndroidDeps.Hilt.hilt_android_compiler)
-    "implementation"(AndroidDeps.Hilt.hilt_lifecycle_viewmodel)
-    "kapt"(AndroidDeps.Hilt.hilt_compiler)
     "implementation"(AndroidDeps.Hilt.hilt_nav_compose)
 }
 

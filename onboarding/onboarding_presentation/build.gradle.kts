@@ -1,4 +1,5 @@
 import com.crypto.configuration.composeUI
+import com.crypto.configuration.hiltDependencies
 
 dependencies {
     implementation(project(":core"))
@@ -6,4 +7,5 @@ dependencies {
     implementation(project(":resource"))
 
     composeUI()
+    hiltDependencies()
 }
