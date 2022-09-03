@@ -1,5 +1,6 @@
 package com.crypto.onboarding.presentation.passcode
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,10 +30,12 @@ fun CreatePasscodePager(
         viewModel.uiEvent.collect {
             val passcode = it.getOrNull().orEmpty()
             if (it.isSuccess && passcode.isNotEmpty()) {
-                viewModel.onEvent(PasscodeEvent.Done)
-                navigateUp()
+                // navigateTo()
             }
         }
+    }
+    BackHandler() {
+        navigateUp()
     }
     Column(
         modifier = Modifier

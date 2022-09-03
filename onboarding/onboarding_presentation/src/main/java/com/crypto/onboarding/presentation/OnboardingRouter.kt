@@ -15,4 +15,11 @@ object OnboardingRouter {
                 KEY_OF_LEGAL to forCreate
             }
         }
+
+    fun CreatePassCode(forCreate: Boolean = false) =
+        buildNavigator(ParameterType.OPTIONAL, "onboarding_create_passcode") {
+            parameter {
+                KEY_OF_LEGAL to forCreate
+            }
+        }
 }

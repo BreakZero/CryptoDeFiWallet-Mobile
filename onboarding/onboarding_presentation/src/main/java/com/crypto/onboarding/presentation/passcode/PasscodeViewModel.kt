@@ -1,13 +1,10 @@
 package com.crypto.onboarding.presentation.passcode
 
-import android.content.SharedPreferences
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.crypto.core.common.SecurityUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -15,10 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PasscodeViewModel @Inject constructor(
-    private val preferences: SharedPreferences,
-    private val securityUtil: SecurityUtil
-) : ViewModel() {
+class PasscodeViewModel @Inject constructor() : ViewModel() {
     var passcodeState by mutableStateOf(PasscodeState(messageLabel = "Enter passcode"))
     private val _uiEvent = Channel<Result<String>>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -42,14 +36,6 @@ class PasscodeViewModel @Inject constructor(
                     } else {
                         passcodeState = passcodeState.originDone("Enter new passcode")
                     }
-                }
-            }
-            is PasscodeEvent.Done -> {
-                preferences.edit {
-                    /*val encryptedValue = securityUtil.encryptData(
-                        "passcode-alias", passcodeState.passcode
-                    )*/
-                    putString("passcode", passcodeState.passcode)
                 }
             }
         }

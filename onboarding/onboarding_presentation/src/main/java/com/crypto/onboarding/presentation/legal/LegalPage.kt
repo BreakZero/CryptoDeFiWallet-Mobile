@@ -1,6 +1,5 @@
 package com.crypto.onboarding.presentation.legal
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -8,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.crypto.core.ui.Spacing
@@ -16,6 +14,7 @@ import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.MenuData
 import com.crypto.core.ui.composables.MenuItemView
 import com.crypto.core.ui.routers.Navigator
+import com.crypto.onboarding.presentation.OnboardingRouter
 import com.crypto.resource.R
 
 @Composable
@@ -67,7 +66,6 @@ fun LegalPager(
                 }
             }
         }
-        val context = LocalContext.current
         Column(
             modifier = Modifier
                 .weight(1.0F)
@@ -89,7 +87,7 @@ fun LegalPager(
                     .fillMaxWidth(),
                 enabled = checkedState.value,
                 onClick = {
-                    Toast.makeText(context, "type: $forCreate", Toast.LENGTH_SHORT).show()
+                    navigateTo(OnboardingRouter.CreatePassCode(forCreate))
                 }) {
                 Text(text = stringResource(id = R.string.legal__continue_text))
             }
