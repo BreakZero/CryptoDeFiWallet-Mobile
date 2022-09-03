@@ -17,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.crypto.core.ui.routers.Navigator
+import com.crypto.onboarding.presentation.OnboardingRouter
 import com.crypto.core.ui.Spacing
 import com.crypto.resource.R
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -45,7 +47,7 @@ private val banners = listOf(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun OnboardPager(
-    navigateTo: () -> Unit
+    navigateTo: (Navigator) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -85,13 +87,17 @@ fun OnboardPager(
         Button(
             modifier = Modifier
                 .fillMaxWidth(),
-            onClick = { /*TODO*/ }) {
+            onClick = {
+                navigateTo(OnboardingRouter.Legal(true))
+            }) {
             Text("Create a new wallet")
         }
         Button(
             modifier = Modifier
                 .fillMaxWidth(),
-            onClick = { /*TODO*/ }) {
+            onClick = {
+                navigateTo(OnboardingRouter.Legal(false))
+            }) {
             Text("Import an existing wallet")
         }
     }

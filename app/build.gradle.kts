@@ -87,6 +87,7 @@ dependencies {
 
     implementation(project(":resource"))
     implementation(project(":onboarding:onboarding_presentation"))
+    implementation(project(":core"))
     implementation(project(":core-ui"))
 
     composeUI()
