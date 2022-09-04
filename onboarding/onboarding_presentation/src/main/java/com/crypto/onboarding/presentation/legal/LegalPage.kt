@@ -23,73 +23,75 @@ fun LegalPager(
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {
-    Column(
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        DeFiAppBar() {
-            navigateUp()
-        }
-        Text(
-            modifier = Modifier.padding(start = MaterialTheme.Spacing.medium),
-            text = stringResource(id = R.string.legal__legal),
-            fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
-            fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-            fontWeight = MaterialTheme.typography.titleLarge.fontWeight
-        )
-        Text(
-            modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.medium),
-            text = stringResource(
-                id = R.string.legal__legal_tips
-            )
-        )
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(MaterialTheme.Spacing.medium),
-            shape = RoundedCornerShape(8.dp)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                MenuItemView(
-                    modifier = Modifier.fillMaxWidth(),
-                    data = MenuData(title = stringResource(id = R.string.legal__terms_of_service))
-                ) {
-
-                }
-                Divider()
-                MenuItemView(
-                    modifier = Modifier.fillMaxWidth(),
-                    data = MenuData(title = stringResource(id = R.string.legal__privacy_notice))
-                ) {
-
-                }
-            }
-        }
+    Surface(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier
-                .weight(1.0F)
-                .fillMaxWidth()
-                .padding(horizontal = MaterialTheme.Spacing.medium),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            val checkedState = remember {
-                mutableStateOf(false)
+            DeFiAppBar() {
+                navigateUp()
             }
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Checkbox(checked = checkedState.value, onCheckedChange = {
-                    checkedState.value = it
-                })
-                Text(text = stringResource(id = R.string.legal__legal_read_confirm_tip))
-            }
-            Button(
+            Text(
+                modifier = Modifier.padding(start = MaterialTheme.Spacing.medium),
+                text = stringResource(id = R.string.legal__legal),
+                fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
+                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                fontWeight = MaterialTheme.typography.titleLarge.fontWeight
+            )
+            Text(
+                modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.medium),
+                text = stringResource(
+                    id = R.string.legal__legal_tips
+                )
+            )
+            Card(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                enabled = checkedState.value,
-                onClick = {
-                    navigateTo(OnboardingNavigations.CreatePasscode.destination(forCreate))
-                }) {
-                Text(text = stringResource(id = R.string.legal__continue_text))
+                    .fillMaxWidth()
+                    .padding(MaterialTheme.Spacing.medium),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    MenuItemView(
+                        modifier = Modifier.fillMaxWidth(),
+                        data = MenuData(title = stringResource(id = R.string.legal__terms_of_service))
+                    ) {
+
+                    }
+                    Divider()
+                    MenuItemView(
+                        modifier = Modifier.fillMaxWidth(),
+                        data = MenuData(title = stringResource(id = R.string.legal__privacy_notice))
+                    ) {
+
+                    }
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .weight(1.0F)
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.Spacing.medium),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                val checkedState = remember {
+                    mutableStateOf(false)
+                }
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Checkbox(checked = checkedState.value, onCheckedChange = {
+                        checkedState.value = it
+                    })
+                    Text(text = stringResource(id = R.string.legal__legal_read_confirm_tip))
+                }
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    enabled = checkedState.value,
+                    onClick = {
+                        navigateTo(OnboardingNavigations.CreatePasscode.destination(forCreate))
+                    }) {
+                    Text(text = stringResource(id = R.string.legal__continue_text))
+                }
             }
         }
     }

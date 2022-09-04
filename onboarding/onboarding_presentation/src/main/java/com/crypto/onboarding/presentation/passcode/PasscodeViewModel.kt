@@ -1,5 +1,6 @@
 package com.crypto.onboarding.presentation.passcode
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -39,5 +40,14 @@ class PasscodeViewModel @Inject constructor() : ViewModel() {
                 }
             }
         }
+    }
+
+    fun reset() {
+        passcodeState = PasscodeState(messageLabel = "Enter passcode")
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        reset()
     }
 }

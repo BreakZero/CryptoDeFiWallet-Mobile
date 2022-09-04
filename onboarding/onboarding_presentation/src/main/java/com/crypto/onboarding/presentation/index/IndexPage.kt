@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -49,56 +50,58 @@ private val banners = listOf(
 fun OnboardPager(
     navigateTo: (NavigationCommand) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(MaterialTheme.Spacing.medium),
-        verticalArrangement = Arrangement.Center
-    ) {
-        val pagerState = rememberPagerState()
-        val bannerState = remember {
-            banners
-        }
-        Image(
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = MaterialTheme.Spacing.medium)
-                .align(Alignment.CenterHorizontally),
-            contentScale = ContentScale.FillWidth,
-            painter = painterResource(id = R.drawable.img_defi_header),
-            contentDescription = null
-        )
-        HorizontalPager(
-            count = bannerState.size,
-            state = pagerState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally)
-                .weight(1.0F)
-        ) { page ->
-            OnboardBanner(info = bannerState[page], modifier = Modifier.fillMaxSize())
-        }
-        HorizontalPagerIndicator(
-            pagerState = pagerState,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
+                .fillMaxSize()
                 .padding(MaterialTheme.Spacing.medium),
-        )
-        Button(
-            modifier = Modifier
-                .fillMaxWidth(),
-            onClick = {
-                navigateTo(OnboardingNavigations.Legal.destination(true))
-            }) {
-            Text("Create a new wallet")
-        }
-        Button(
-            modifier = Modifier
-                .fillMaxWidth(),
-            onClick = {
-                navigateTo(OnboardingNavigations.Legal.destination(false))
-            }) {
-            Text("Import an existing wallet")
+            verticalArrangement = Arrangement.Center
+        ) {
+            val pagerState = rememberPagerState()
+            val bannerState = remember {
+                banners
+            }
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.Spacing.medium)
+                    .align(Alignment.CenterHorizontally),
+                contentScale = ContentScale.FillWidth,
+                painter = painterResource(id = R.drawable.img_defi_header),
+                contentDescription = null
+            )
+            HorizontalPager(
+                count = bannerState.size,
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+                    .weight(1.0F)
+            ) { page ->
+                OnboardBanner(info = bannerState[page], modifier = Modifier.fillMaxSize())
+            }
+            HorizontalPagerIndicator(
+                pagerState = pagerState,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(MaterialTheme.Spacing.medium),
+            )
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                onClick = {
+                    navigateTo(OnboardingNavigations.Legal.destination(true))
+                }) {
+                Text("Create a new wallet")
+            }
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                onClick = {
+                    navigateTo(OnboardingNavigations.Legal.destination(false))
+                }) {
+                Text("Import an existing wallet")
+            }
         }
     }
 }

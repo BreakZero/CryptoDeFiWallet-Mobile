@@ -22,6 +22,8 @@ dependencies {
     api(AndroidDeps.DataStore.preferences)
     api(AndroidDeps.DataStore.core)
 
+    api("com.trustwallet:wallet-core:3.0.0")
+
     hiltDependencies()
 }
 

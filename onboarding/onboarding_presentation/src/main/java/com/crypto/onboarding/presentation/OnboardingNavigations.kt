@@ -7,6 +7,8 @@ import com.crypto.core.ui.routers.NavigationCommand
 
 object OnboardingNavigations {
     const val KEY_IS_CREATE = "is_create"
+    const val KEY_PASSCODE = "passcode"
+
     val Index = object : NavigationCommand {
         override val arguments: List<NamedNavArgument>
             get() = emptyList()
@@ -41,6 +43,20 @@ object OnboardingNavigations {
             override val arguments
                 get() = args
             override val destination = "onboarding_create_passcode?$KEY_IS_CREATE=$forCreate"
+        }
+    }
+
+    object ImportWallet {
+        const val ROUTE = "onboarding_import_wallet?$KEY_PASSCODE={$KEY_PASSCODE}"
+        val args = listOf(
+            navArgument(KEY_PASSCODE) { type = NavType.StringType }
+        )
+        fun destination(
+            passcode: String
+        ) = object : NavigationCommand {
+            override val arguments
+                get() = args
+            override val destination = "onboarding_import_wallet?$KEY_PASSCODE=$passcode"
         }
     }
 

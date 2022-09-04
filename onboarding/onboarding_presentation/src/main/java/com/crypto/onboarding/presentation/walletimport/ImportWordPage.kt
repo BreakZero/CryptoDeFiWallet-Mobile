@@ -1,5 +1,6 @@
 package com.crypto.onboarding.presentation.walletimport
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -13,6 +14,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -28,20 +30,22 @@ import com.crypto.resource.R
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ImportWordsPager(
+    passcode: String,
     viewModel: WalletImportViewModel = hiltViewModel(),
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val context = LocalContext.current
     val importState = viewModel.state
     LaunchedEffect(key1 = keyboardController) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.Success -> {
-
+                    Log.d("=====", "import success")
                 }
                 is UiEvent.ShowSnackbar -> {
-
+                    Log.d("=====", event.message.asString(context))
                 }
                 is UiEvent.NavigateUp -> {
                     navigateUp()
@@ -59,7 +63,7 @@ fun ImportWordsPager(
                     Icon(imageVector = Icons.Default.QrCode, contentDescription = null)
                 }
             ) {
-                navigateUp.invoke()
+                viewModel.onNavigateUp()
             }
         }
     ) {
@@ -95,7 +99,7 @@ fun ImportWordsPager(
                     .padding(MaterialTheme.Spacing.medium),
                 shape = RoundedCornerShape(MaterialTheme.Spacing.space24),
                 onClick = {
-                    viewModel.onEvent(ImportEvent.OnImportClick)
+                    viewModel.onEvent(ImportEvent.OnImportClick(passcode))
                     keyboardController?.hide()
                 }
             ) {
