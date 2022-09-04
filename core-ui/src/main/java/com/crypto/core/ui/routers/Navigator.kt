@@ -51,7 +51,7 @@ data class Navigator internal constructor(
         }
     }
 
-    fun router(): String {
+    fun destination(): String {
         return when (parameterType) {
             ParameterType.NONE -> {
                 route

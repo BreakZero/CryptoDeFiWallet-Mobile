@@ -17,14 +17,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.ui.composables.ActionType
 import com.crypto.core.ui.composables.NumberKeyboard
-import com.crypto.core.ui.routers.Navigator
+import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.resource.R
 
 @Composable
 fun CreatePasscodePager(
     viewModel: PasscodeViewModel = hiltViewModel(),
     navigateUp: () -> Unit,
-    navigateTo: (Navigator) -> Unit
+    navigateTo: (NavigationCommand) -> Unit
 ) {
     LaunchedEffect(key1 = null) {
         viewModel.uiEvent.collect {

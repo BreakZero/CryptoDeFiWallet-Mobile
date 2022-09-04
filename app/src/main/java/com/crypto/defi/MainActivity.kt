@@ -20,7 +20,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.crypto.defi.ui.theme.DeFiWalletTheme
-import com.crypto.onboarding.presentation.OnboardingRouter
+import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.onboarding.presentation.index.OnboardPager
 import com.crypto.onboarding.presentation.legal.LegalPager
 import com.crypto.onboarding.presentation.passcode.CreatePasscodePager
@@ -56,11 +56,11 @@ class MainActivity : ComponentActivity() {
                 ) {
                     AnimatedNavHost(
                         navController = navController,
-                        startDestination = OnboardingRouter.Index.route(),
+                        startDestination = OnboardingNavigations.Index.destination,
                         modifier = Modifier
                     ) {
                         composable(
-                            route = OnboardingRouter.Index.route(),
+                            route = OnboardingNavigations.Index.destination,
                             enterTransition = {
                                 fadeIn(animationSpec = tween(500))
                             },
@@ -75,17 +75,13 @@ class MainActivity : ComponentActivity() {
                             }
                         ) {
                             OnboardPager {
-                                navController.navigate(it.router())
+                                navController.navigate(it.destination)
                             }
                         }
 
                         composable(
-                            route = OnboardingRouter.Legal().route(),
-                            arguments = listOf(
-                                navArgument(OnboardingRouter.KEY_OF_LEGAL) {
-                                    type = NavType.BoolType
-                                }
-                            ),
+                            route = OnboardingNavigations.Legal.ROUTE,
+                            arguments = OnboardingNavigations.Legal.args,
                             enterTransition = {
                                 fadeIn(animationSpec = tween(500))
                             },
@@ -100,22 +96,18 @@ class MainActivity : ComponentActivity() {
                             }
                         ) {
                             val forCreate =
-                                it.arguments?.getBoolean(OnboardingRouter.KEY_OF_LEGAL) ?: false
+                                it.arguments?.getBoolean(OnboardingNavigations.KEY_IS_CREATE) ?: false
                             LegalPager(
                                 forCreate = forCreate,
                                 navigateUp = { navController.navigateUp() },
                                 navigateTo = {
-                                    navController.navigate(it.router())
+                                    navController.navigate(it.destination)
                                 }
                             )
                         }
                         composable(
-                            route = OnboardingRouter.CreatePassCode().route(),
-                            arguments = listOf(
-                                navArgument(OnboardingRouter.KEY_OF_LEGAL) {
-                                    type = NavType.BoolType
-                                }
-                            ),
+                            route = OnboardingNavigations.CreatePasscode.ROUTE,
+                            arguments = OnboardingNavigations.CreatePasscode.args,
                             enterTransition = {
                                 fadeIn(animationSpec = tween(500))
                             },
@@ -130,7 +122,7 @@ class MainActivity : ComponentActivity() {
                             }
                         ) {
                             val forCreate =
-                                it.arguments?.getBoolean(OnboardingRouter.KEY_OF_LEGAL) ?: false
+                                it.arguments?.getBoolean(OnboardingNavigations.KEY_IS_CREATE) ?: false
                             CreatePasscodePager(navigateUp = {
                                 navController.navigateUp()
                             }, navigateTo = {

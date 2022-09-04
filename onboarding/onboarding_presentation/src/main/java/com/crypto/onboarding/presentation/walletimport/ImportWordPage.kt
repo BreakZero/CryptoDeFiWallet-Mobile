@@ -22,14 +22,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.common.UiEvent
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
-import com.crypto.core.ui.routers.Navigator
+import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.resource.R
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ImportWordsPager(
     viewModel: WalletImportViewModel = hiltViewModel(),
-    navigateUp: () -> Unit, navigateTo: (Navigator) -> Unit
+    navigateUp: () -> Unit,
+    navigateTo: (NavigationCommand) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val importState = viewModel.state

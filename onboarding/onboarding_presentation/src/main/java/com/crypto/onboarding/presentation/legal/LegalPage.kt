@@ -13,15 +13,15 @@ import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.MenuData
 import com.crypto.core.ui.composables.MenuItemView
-import com.crypto.core.ui.routers.Navigator
-import com.crypto.onboarding.presentation.OnboardingRouter
+import com.crypto.core.ui.routers.NavigationCommand
+import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.resource.R
 
 @Composable
 fun LegalPager(
     forCreate: Boolean,
     navigateUp: () -> Unit,
-    navigateTo: (Navigator) -> Unit
+    navigateTo: (NavigationCommand) -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.SpaceBetween
@@ -87,7 +87,7 @@ fun LegalPager(
                     .fillMaxWidth(),
                 enabled = checkedState.value,
                 onClick = {
-                    navigateTo(OnboardingRouter.CreatePassCode(forCreate))
+                    navigateTo(OnboardingNavigations.CreatePasscode.destination(forCreate))
                 }) {
                 Text(text = stringResource(id = R.string.legal__continue_text))
             }
