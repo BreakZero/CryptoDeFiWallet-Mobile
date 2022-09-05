@@ -1,10 +1,15 @@
 package com.crypto.defi.feature.assets.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -21,19 +26,23 @@ import com.crypto.resource.R
 @OptIn(ExperimentalMotionApi::class)
 @Composable
 fun MotionLayoutHeader(
-    progress: Float,
+    targetValue: Float,
     scrollableBody: @Composable () -> Unit
 ) {
+    val progress by animateFloatAsState(
+        targetValue = targetValue,
+        tween(50)
+    )
     MotionLayout(
         start = startConstraintSet(),
         end = endConstraintSet(),
         progress = progress,
         modifier = Modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primary)
     ) {
         Box(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.primary)
                 .zIndex(1.0f)
                 .layoutId("header-content")
         ) {

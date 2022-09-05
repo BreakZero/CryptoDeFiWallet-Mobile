@@ -68,7 +68,8 @@ fun MainPager(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-            count = menus.size, state = pageState
+            count = menus.size, state = pageState,
+            userScrollEnabled = false
         ) { page ->
             when (page) {
                 0 -> {

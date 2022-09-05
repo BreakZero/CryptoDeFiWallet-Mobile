@@ -1,6 +1,6 @@
 package com.crypto.defi.feature.assets.components
 
-import androidx.compose.foundation.background
+import android.util.Log
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -10,7 +10,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -60,8 +59,14 @@ fun CollapsableToolbar(
                     consumed: Velocity,
                     available: Velocity
                 ): Velocity {
+                    Log.d("=====", "onPostFling: $available.y")
                     swipingState.performFling(velocity = available.y)
                     return super.onPostFling(consumed, available)
+                }
+
+                override suspend fun onPreFling(available: Velocity): Velocity {
+                    Log.d("=====", "onPreFling: $available.y")
+                    return super.onPreFling(available)
                 }
 
                 private fun Float.toOffset() = Offset(0f, this)
@@ -82,10 +87,8 @@ fun CollapsableToolbar(
                 )
                 .nestedScroll(connection)
         ) {
-            Column() {
-                MotionLayoutHeader(progress = if (swipingState.progress.to == SwipingStates.COLLAPSED) swipingState.progress.fraction else 1f - swipingState.progress.fraction) {
-                    content(swipingState.progress.to == SwipingStates.EXPANDED && swipingState.progress.fraction == 1f)
-                }
+            MotionLayoutHeader(progress = if (swipingState.progress.to == SwipingStates.COLLAPSED) swipingState.progress.fraction else 1f - swipingState.progress.fraction) {
+                content(swipingState.progress.to == SwipingStates.EXPANDED && swipingState.progress.fraction == 1f)
             }
         }
     }
