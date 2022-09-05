@@ -21,18 +21,18 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.dialog
 import com.crypto.core.ui.composables.NormalTipsView
 import com.crypto.core.ui.models.NormalTips
+import com.crypto.defi.feature.main.MainPager
+import com.crypto.defi.feature.splash.SplashPager
+import com.crypto.defi.navigations.MainNavigation
+import com.crypto.defi.navigations.SplashNavigation
 import com.crypto.defi.ui.theme.DeFiWalletTheme
-import com.crypto.onboarding.presentation.OnboardingNavigations
-import com.crypto.onboarding.presentation.index.OnboardPager
-import com.crypto.onboarding.presentation.legal.LegalPager
-import com.crypto.onboarding.presentation.passcode.CreatePasscodePager
-import com.crypto.onboarding.presentation.walletimport.ImportWordsPager
+import com.crypto.onboarding.presentation.onboarding
+import com.crypto.resource.R
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
-import com.crypto.resource.R
 
 @OptIn(ExperimentalAnimationApi::class)
 @AndroidEntryPoint
@@ -61,11 +61,11 @@ class MainActivity : ComponentActivity() {
                 ) {
                     AnimatedNavHost(
                         navController = navController,
-                        startDestination = OnboardingNavigations.Index.destination,
+                        startDestination = SplashNavigation.Splashing.destination,
                         modifier = Modifier
                     ) {
                         composable(
-                            route = OnboardingNavigations.Index.destination,
+                            SplashNavigation.Splashing.destination,
                             enterTransition = {
                                 fadeIn(animationSpec = tween(500))
                             },
@@ -79,14 +79,13 @@ class MainActivity : ComponentActivity() {
                                 fadeOut(animationSpec = tween(500))
                             }
                         ) {
-                            OnboardPager {
+                            SplashPager {
                                 navController.navigate(it.destination)
                             }
                         }
 
                         composable(
-                            route = OnboardingNavigations.Legal.ROUTE,
-                            arguments = OnboardingNavigations.Legal.args,
+                            MainNavigation.Main.destination,
                             enterTransition = {
                                 fadeIn(animationSpec = tween(500))
                             },
@@ -100,70 +99,12 @@ class MainActivity : ComponentActivity() {
                                 fadeOut(animationSpec = tween(500))
                             }
                         ) {
-                            val forCreate =
-                                it.arguments?.getBoolean(OnboardingNavigations.KEY_IS_CREATE) ?: false
-                            LegalPager(
-                                forCreate = forCreate,
-                                navigateUp = { navController.navigateUp() },
-                                navigateTo = {
-                                    navController.navigate(it.destination)
-                                }
-                            )
-                        }
-                        composable(
-                            route = OnboardingNavigations.CreatePasscode.ROUTE,
-                            arguments = OnboardingNavigations.CreatePasscode.args,
-                            enterTransition = {
-                                fadeIn(animationSpec = tween(500))
-                            },
-                            exitTransition = {
-                                fadeOut(animationSpec = tween(500))
-                            },
-                            popEnterTransition = {
-                                fadeIn(animationSpec = tween(500))
-                            },
-                            popExitTransition = {
-                                fadeOut(animationSpec = tween(500))
+                            MainPager {
+                                navController.navigate(it.destination)
                             }
-                        ) {
-                            val forCreate =
-                                it.arguments?.getBoolean(OnboardingNavigations.KEY_IS_CREATE)
-                                    ?: false
-                            CreatePasscodePager(
-                                forCreate = forCreate,
-                                navigateUp = {
-                                    navController.navigateUp()
-                                }, navigateTo = {
-                                    navController.navigate(it.destination)
-                                })
-                        }
-                        composable(
-                            route = OnboardingNavigations.ImportWallet.ROUTE,
-                            arguments = OnboardingNavigations.ImportWallet.args,
-                            enterTransition = {
-                                fadeIn(animationSpec = tween(500))
-                            },
-                            exitTransition = {
-                                fadeOut(animationSpec = tween(500))
-                            },
-                            popEnterTransition = {
-                                fadeIn(animationSpec = tween(500))
-                            },
-                            popExitTransition = {
-                                fadeOut(animationSpec = tween(500))
-                            }
-                        ) {
-                            val passcode =
-                                it.arguments?.getString(OnboardingNavigations.KEY_PASSCODE)!!
-                            ImportWordsPager(
-                                passcode = passcode,
-                                navigateUp = {
-                                    navController.navigateUp()
-                                }, navigateTo = {
-
-                                })
                         }
 
+                        onboarding(navController)
                         /**
                          * common ui
                          */

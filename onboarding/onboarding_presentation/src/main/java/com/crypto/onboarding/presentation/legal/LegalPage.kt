@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
-import com.crypto.core.ui.composables.MenuData
+import com.crypto.core.ui.composables.AdvanceMenu
 import com.crypto.core.ui.composables.MenuItemView
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.onboarding.presentation.OnboardingNavigations
@@ -59,14 +59,14 @@ fun LegalPager(
                 ) {
                     MenuItemView(
                         modifier = Modifier.fillMaxWidth(),
-                        data = MenuData(title = stringResource(id = R.string.legal__terms_of_service))
+                        data = AdvanceMenu(title = stringResource(id = R.string.legal__terms_of_service))
                     ) {
 
                     }
                     Divider()
                     MenuItemView(
                         modifier = Modifier.fillMaxWidth(),
-                        data = MenuData(title = stringResource(id = R.string.legal__privacy_notice))
+                        data = AdvanceMenu(title = stringResource(id = R.string.legal__privacy_notice))
                     ) {
 
                     }

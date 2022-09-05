@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-data class MenuData(
+data class AdvanceMenu(
     val title: String,
     val subTitle: String? = null,
     val endValue: String? = null,
@@ -21,7 +21,7 @@ data class MenuData(
 
 @Composable
 fun MenuItemView(
-    modifier: Modifier = Modifier, data: MenuData, action: () -> Unit
+    modifier: Modifier = Modifier, data: AdvanceMenu, action: () -> Unit
 ) {
     Row(modifier = modifier
         .clickable {
@@ -65,7 +65,7 @@ fun MenuItemView(
 
 @Composable
 fun MenuBlockView(
-    modifier: Modifier, header: String, datas: List<MenuData>, onItemClick: (Int) -> Unit
+    modifier: Modifier, header: String, datas: List<AdvanceMenu>, onItemClick: (Int) -> Unit
 ) {
     Column(
         modifier = modifier

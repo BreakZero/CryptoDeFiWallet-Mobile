@@ -21,8 +21,12 @@ class SplashViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             walletRepository.activeOne()?.let {
-                walletRepository.inject(HDWallet(it.mnemonic, it.passphrase))
-                _uiEvent.send(true)
+                try {
+                    walletRepository.inject(HDWallet(it.mnemonic, it.passphrase))
+                    _uiEvent.send(true)
+                } catch (e: Exception) {
+                    _uiEvent.send(false)
+                }
             } ?: kotlin.run {
                 _uiEvent.send(false)
             }
