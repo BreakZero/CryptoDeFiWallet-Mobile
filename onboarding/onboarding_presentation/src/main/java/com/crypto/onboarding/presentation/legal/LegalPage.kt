@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -17,19 +19,24 @@ import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.resource.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LegalPager(
     forCreate: Boolean,
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Column(
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
             DeFiAppBar() {
                 navigateUp()
             }
+        }
+    ) {
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
             Text(
                 modifier = Modifier.padding(start = MaterialTheme.Spacing.medium),
                 text = stringResource(id = R.string.legal__legal),
@@ -74,19 +81,17 @@ fun LegalPager(
                     .padding(horizontal = MaterialTheme.Spacing.medium),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                val checkedState = remember {
-                    mutableStateOf(false)
-                }
+                var checked by rememberSaveable { mutableStateOf(false) }
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    Checkbox(checked = checkedState.value, onCheckedChange = {
-                        checkedState.value = it
+                    Checkbox(checked = checked, onCheckedChange = {
+                        checked = it
                     })
                     Text(text = stringResource(id = R.string.legal__legal_read_confirm_tip))
                 }
                 Button(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    enabled = checkedState.value,
+                    enabled = checked,
                     onClick = {
                         navigateTo(OnboardingNavigations.CreatePasscode.destination(forCreate))
                     }) {

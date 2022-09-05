@@ -16,7 +16,11 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
+import androidx.navigation.compose.dialog
+import com.crypto.core.ui.composables.NormalTipsView
+import com.crypto.core.ui.models.NormalTips
 import com.crypto.defi.ui.theme.DeFiWalletTheme
 import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.onboarding.presentation.index.OnboardPager
@@ -28,6 +32,7 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+import com.crypto.resource.R
 
 @OptIn(ExperimentalAnimationApi::class)
 @AndroidEntryPoint
@@ -157,6 +162,17 @@ class MainActivity : ComponentActivity() {
                                 }, navigateTo = {
 
                                 })
+                        }
+
+                        /**
+                         * common ui
+                         */
+                        dialog("normal_tips") {
+                            NormalTipsView(tips = NormalTips(
+                                title = stringResource(id = R.string.two_fa_view__2_factor_authentication),
+                                message = stringResource(id = R.string.wallet_protect__2fa_desc),
+                                iconRes = R.drawable.ic_shell
+                            ))
                         }
                     }
                 }

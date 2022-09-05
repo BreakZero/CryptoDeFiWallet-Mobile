@@ -90,6 +90,7 @@ dependencies {
     implementation(project(":onboarding:onboarding_presentation"))
     implementation(project(":core"))
     implementation(project(":core-ui"))
+    implementation(project(":wallet"))
 
     composeUI()
     hiltDependencies()

@@ -16,7 +16,7 @@ data class Dimensions(
     val extraLarge: Dp = 64.dp,
 
     val space12: Dp = 12.dp,
-    val space24: Dp = 12.dp,
+    val space24: Dp = 24.dp,
     val space48: Dp = 48.dp
 )
 

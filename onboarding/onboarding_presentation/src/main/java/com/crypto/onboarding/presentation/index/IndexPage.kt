@@ -89,10 +89,12 @@ fun OnboardPager(
             Button(
                 modifier = Modifier
                     .fillMaxWidth(),
+                enabled = false, // do not support right now
                 onClick = {
-                    navigateTo(OnboardingNavigations.Legal.destination(true))
+                    // do not support now.
+                    // navigateTo(OnboardingNavigations.Legal.destination(true))
                 }) {
-                Text("Create a new wallet")
+                Text(stringResource(id = R.string.welcome__create_a_new_wallet))
             }
             Button(
                 modifier = Modifier
@@ -100,7 +102,7 @@ fun OnboardPager(
                 onClick = {
                     navigateTo(OnboardingNavigations.Legal.destination(false))
                 }) {
-                Text("Import an existing wallet")
+                Text(stringResource(id = R.string.welcome__importing_an_existing_wallet))
             }
         }
     }
