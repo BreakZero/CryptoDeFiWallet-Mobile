@@ -28,6 +28,7 @@
             <option value="$PROJECT_DIR$/onboarding/onboarding_domain" />
             <option value="$PROJECT_DIR$/onboarding/onboarding_presentation" />
             <option value="$PROJECT_DIR$/resource" />
+            <option value="$PROJECT_DIR$/wallet" />
           </set>
         </option>
       </GradleProjectSettings>

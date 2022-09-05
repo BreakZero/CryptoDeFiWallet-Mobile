@@ -1,0 +1,36 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+    <path
+        android:fillType="nonZero"
+        android:pathData="M28.356,4.567L16.26,1.037c-0.17,-0.05 -0.35,-0.05 -0.52,0L3.644,4.567C3.262,4.68 3,5.021 3,5.41v12.944c0,1.684 0.7,3.408 2.082,5.123 1.056,1.31 2.516,2.626 4.34,3.91 3.064,2.158 6.082,3.482 6.209,3.537 0.117,0.051 0.243,0.077 0.37,0.077 0.125,0 0.25,-0.026 0.368,-0.077 0.127,-0.055 3.145,-1.379 6.21,-3.537 1.823,-1.284 3.283,-2.6 4.339,-3.91C28.299,21.761 29,20.037 29,18.353L29,5.41c0,-0.388 -0.262,-0.73 -0.644,-0.842z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="23.93598"
+                android:endY="28.484627"
+                android:startX="9.39678"
+                android:startY="0.9869999"
+                android:type="linear">
+                <item
+                    android:color="#FF1199FA"
+                    android:offset="0" />
+                <item
+                    android:color="#FF002860"
+                    android:offset="1" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <group>
+        <clip-path
+            android:pathData="M28.356,4.567L16.26,1.037c-0.17,-0.05 -0.35,-0.05 -0.52,0L3.644,4.567C3.262,4.68 3,5.021 3,5.41v12.944c0,1.684 0.7,3.408 2.082,5.123 1.056,1.31 2.516,2.626 4.34,3.91 3.064,2.158 6.082,3.482 6.209,3.537 0.117,0.051 0.243,0.077 0.37,0.077 0.125,0 0.25,-0.026 0.368,-0.077 0.127,-0.055 3.145,-1.379 6.21,-3.537 1.823,-1.284 3.283,-2.6 4.339,-3.91C28.299,21.761 29,20.037 29,18.353L29,5.41c0,-0.388 -0.262,-0.73 -0.644,-0.842z"
+            tools:ignore="VectorRaster" />
+        <path
+            android:fillColor="#0E84DD"
+            android:fillType="evenOdd"
+            android:pathData="M16,1L30,1L30,32L16,32z" />
+    </group>
+</vector>

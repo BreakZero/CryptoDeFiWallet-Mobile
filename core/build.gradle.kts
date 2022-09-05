@@ -8,6 +8,7 @@ plugins {
 
 dependencies {
     api(AndroidDeps.coreKtx)
+    api(AndroidDeps.securitys)
 
     api(KotlinDeps.Coroutine.core)
     api(KotlinDeps.Coroutine.android)
@@ -21,5 +22,11 @@ dependencies {
     api(AndroidDeps.DataStore.preferences)
     api(AndroidDeps.DataStore.core)
 
+    api("com.trustwallet:wallet-core:3.0.0")
+
     hiltDependencies()
+}
+
+kapt {
+    correctErrorTypes = true
 }

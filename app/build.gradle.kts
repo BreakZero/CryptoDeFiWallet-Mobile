@@ -84,10 +84,13 @@ dependencies {
     implementation(AndroidDeps.appcompat)
     implementation(AndroidDeps.activity_compose)
 
+    implementation(AndroidDeps.material)
 
     implementation(project(":resource"))
     implementation(project(":onboarding:onboarding_presentation"))
+    implementation(project(":core"))
     implementation(project(":core-ui"))
+    implementation(project(":wallet"))
 
     composeUI()
     hiltDependencies()

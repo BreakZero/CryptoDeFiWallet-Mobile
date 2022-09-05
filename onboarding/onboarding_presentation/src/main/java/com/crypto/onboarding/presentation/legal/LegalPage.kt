@@ -1,34 +1,101 @@
 package com.crypto.onboarding.presentation.legal
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Card
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.crypto.core.common.Navigator
+import androidx.compose.ui.unit.dp
+import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
+import com.crypto.core.ui.composables.MenuData
+import com.crypto.core.ui.composables.MenuItemView
+import com.crypto.core.ui.routers.NavigationCommand
+import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.resource.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LegalPager(
+    forCreate: Boolean,
     navigateUp: () -> Unit,
-    navigateTo: (Navigator) -> Unit
+    navigateTo: (NavigationCommand) -> Unit
 ) {
-    Column {
-        DeFiAppBar() {
-            navigateUp()
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            DeFiAppBar() {
+                navigateUp()
+            }
         }
-        Text(text = stringResource(id = R.string.legal__legal_tips))
-        Card() {
+    ) {
+        Column(
+            modifier = Modifier.padding(it)
+        ) {
+            Text(
+                modifier = Modifier.padding(start = MaterialTheme.Spacing.medium),
+                text = stringResource(id = R.string.legal__legal),
+                style = MaterialTheme.typography.titleLarge
+            )
+            Text(
+                modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.medium),
+                text = stringResource(
+                    id = R.string.legal__legal_tips
+                )
+            )
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(MaterialTheme.Spacing.medium),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    MenuItemView(
+                        modifier = Modifier.fillMaxWidth(),
+                        data = MenuData(title = stringResource(id = R.string.legal__terms_of_service))
+                    ) {
 
-        }
-        Row() {
-            Checkbox(checked = false, onCheckedChange = {
+                    }
+                    Divider()
+                    MenuItemView(
+                        modifier = Modifier.fillMaxWidth(),
+                        data = MenuData(title = stringResource(id = R.string.legal__privacy_notice))
+                    ) {
 
-            })
-            Text(text = stringResource(id = R.string.legal__legal_read_confirm_tip))
+                    }
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .weight(1.0F)
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.Spacing.medium),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                var checked by rememberSaveable { mutableStateOf(false) }
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Checkbox(checked = checked, onCheckedChange = {
+                        checked = it
+                    })
+                    Text(text = stringResource(id = R.string.legal__legal_read_confirm_tip))
+                }
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    enabled = checked,
+                    onClick = {
+                        navigateTo(OnboardingNavigations.CreatePasscode.destination(forCreate))
+                    }) {
+                    Text(text = stringResource(id = R.string.legal__continue_text))
+                }
+            }
         }
     }
 }
