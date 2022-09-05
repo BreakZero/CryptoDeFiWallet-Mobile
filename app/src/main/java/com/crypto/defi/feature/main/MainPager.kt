@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.feature.assets.MainAssetsPager
 import com.crypto.defi.feature.dapps.MainDappsPager
@@ -43,6 +44,7 @@ val navMenus = listOf(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MainPager(
+    mainViewModel: MainViewModel = hiltViewModel(),
     onNavigateTo: (NavigationCommand) -> Unit
 ) {
     val pageState = rememberPagerState()

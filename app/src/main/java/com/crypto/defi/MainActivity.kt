@@ -80,7 +80,11 @@ class MainActivity : ComponentActivity() {
                             }
                         ) {
                             SplashPager {
-                                navController.navigate(it.destination)
+                                navController.navigate(it.destination) {
+                                    popUpTo(SplashNavigation.Splashing.destination) {
+                                        inclusive = true
+                                    }
+                                }
                             }
                         }
 

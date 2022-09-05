@@ -41,7 +41,7 @@ fun SplashPager(
         )
         splashViewModel.uiEvent.collect {
             navigateTo.invoke(
-                if (!it) MainNavigation.Main else OnboardingNavigations.Index
+                if (it) MainNavigation.Main else OnboardingNavigations.Index
             )
         }
     }

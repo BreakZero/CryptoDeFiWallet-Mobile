@@ -33,7 +33,7 @@ fun ImportWordsPager(
     passcode: String,
     viewModel: WalletImportViewModel = hiltViewModel(),
     navigateUp: () -> Unit,
-    navigateTo: (NavigationCommand) -> Unit
+    navigateMain: () -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
@@ -42,7 +42,7 @@ fun ImportWordsPager(
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.Success -> {
-                    Log.d("=====", "import success")
+                    navigateMain()
                 }
                 is UiEvent.ShowSnackbar -> {
                     Log.d("=====", event.message.asString(context))
@@ -103,7 +103,14 @@ fun ImportWordsPager(
                     keyboardController?.hide()
                 }
             ) {
-                Text(text = stringResource(id = R.string.import_wallet__restore))
+                if (viewModel.state.inProgress) {
+                    Row {
+                        CircularProgressIndicator(modifier = Modifier.size(MaterialTheme.Spacing.large))
+                        Text(text = stringResource(id = R.string.import_wallet__restoring))
+                    }
+                } else {
+                    Text(text = stringResource(id = R.string.import_wallet__restore))
+                }
             }
         }
     }

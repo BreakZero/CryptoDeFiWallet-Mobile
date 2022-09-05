@@ -13,6 +13,6 @@ abstract class WalletDatabase : RoomDatabase() {
     abstract val walletDao: WalletDao
 
     init {
-        Log.d("Hello", "init database")
+        Log.d("=====", "init database")
     }
 }

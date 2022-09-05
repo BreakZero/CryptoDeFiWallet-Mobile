@@ -109,8 +109,12 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
             passcode = passcode,
             navigateUp = {
                 navController.navigateUp()
-            }, navigateTo = {
-
+            }, navigateMain = {
+                navController.navigate("main-home") {
+                    popUpTo(OnboardingNavigations.Index.destination) {
+                        inclusive = true
+                    }
+                }
             })
     }
 }

@@ -2,7 +2,9 @@ package com.crypto.wallet.di
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.room.Room
+import com.crypto.core.ConfigurationKeys
 import com.crypto.wallet.WalletRepository
 import com.crypto.wallet.model.WalletDatabase
 import dagger.Module
@@ -23,7 +25,9 @@ object MultiWalletModule {
         app: Application,
         sharedPreferences: SharedPreferences
     ): WalletDatabase {
-        val passcode = sharedPreferences.getString("passcode", "").orEmpty()
+        val passcode = sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "").orEmpty().also {
+            Log.d("=====", it)
+        }
 
         val passPhrase = SQLiteDatabase.getBytes(
             passcode.toCharArray()
