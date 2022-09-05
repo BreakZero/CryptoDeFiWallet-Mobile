@@ -18,17 +18,16 @@ import com.crypto.core.ui.LocalSpacing
 
 @Composable
 fun DeFiActionBar(
+    modifier: Modifier = Modifier,
     @DrawableRes navIcon: Int,
     @DrawableRes menuIcons: List<Int>,
-    backgroundColor: Color,
-    tint: Color,
+    title: String,
+    subtitle: String,
     onNavClick: () -> Unit,
     onMenuClick: (Int) -> Unit
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(backgroundColor),
+        modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -51,13 +50,13 @@ fun DeFiActionBar(
             }
             Column {
                 Text(
-                    text = "Wallet Name",
-                    color = tint
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall
                 )
                 Text(
-                    text = "View Settings",
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onTertiaryContainer
+                    text = subtitle,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.outline
                 )
             }
         }
@@ -70,8 +69,7 @@ fun DeFiActionBar(
                     contentDescription = null,
                     modifier = Modifier
                         .size(LocalSpacing.current.space48)
-                        .padding(LocalSpacing.current.space12),
-                    tint = tint
+                        .padding(LocalSpacing.current.space12)
                 )
             }
         }

@@ -2,10 +2,7 @@ package com.crypto.defi.feature.main
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -89,9 +86,10 @@ fun MainPager(
         TabRow(
             selectedTabIndex = tabIndex,
             modifier = Modifier.height(56.dp),
+            divider = {},
             indicator = {}
         ) {
-            menus.forEachIndexed { index, bottomMenuItem ->
+            menus.forEachIndexed { index, menu ->
                 Tab(
                     selected = index == tabIndex,
                     selectedContentColor = MaterialTheme.colorScheme.primary,
@@ -102,12 +100,14 @@ fun MainPager(
                         }
                     }
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Icon(
-                            painter = painterResource(id = bottomMenuItem.icon),
+                            painter = painterResource(id = menu.icon),
                             contentDescription = null
                         )
-                        Text(text = bottomMenuItem.label)
+                        Text(text = menu.label)
                     }
                 }
             }

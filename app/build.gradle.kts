@@ -1,5 +1,6 @@
 import com.crypto.configuration.*
 import com.crypto.configuration.dependencies.AndroidDeps
+import com.crypto.configuration.dependencies.ComposeDeps
 
 plugins {
     id("com.android.application")
@@ -85,6 +86,7 @@ dependencies {
     implementation(AndroidDeps.activity_compose)
 
     implementation(AndroidDeps.material)
+    implementation(ComposeDeps.constraintlayout)
 
     implementation(project(":resource"))
     implementation(project(":onboarding:onboarding_presentation"))
@@ -94,6 +96,7 @@ dependencies {
 
     composeUI()
     hiltDependencies()
+    roomDependencies()
 
     unitTestDependencies()
     androidTestDependencies()
