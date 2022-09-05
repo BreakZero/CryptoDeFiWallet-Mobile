@@ -35,14 +35,12 @@ fun LegalPager(
         }
     ) {
         Column(
-            verticalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.padding(it)
         ) {
             Text(
                 modifier = Modifier.padding(start = MaterialTheme.Spacing.medium),
                 text = stringResource(id = R.string.legal__legal),
-                fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
-                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                fontWeight = MaterialTheme.typography.titleLarge.fontWeight
+                style = MaterialTheme.typography.titleLarge
             )
             Text(
                 modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.medium),
