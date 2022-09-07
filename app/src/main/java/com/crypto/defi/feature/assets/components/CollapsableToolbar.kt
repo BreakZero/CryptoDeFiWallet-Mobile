@@ -59,13 +59,11 @@ fun CollapsableToolbar(
                     consumed: Velocity,
                     available: Velocity
                 ): Velocity {
-                    Log.d("=====", "onPostFling: $available.y")
                     swipingState.performFling(velocity = available.y)
                     return super.onPostFling(consumed, available)
                 }
 
                 override suspend fun onPreFling(available: Velocity): Velocity {
-                    Log.d("=====", "onPreFling: $available.y")
                     return super.onPreFling(available)
                 }
 
@@ -87,7 +85,7 @@ fun CollapsableToolbar(
                 )
                 .nestedScroll(connection)
         ) {
-            MotionLayoutHeader(progress = if (swipingState.progress.to == SwipingStates.COLLAPSED) swipingState.progress.fraction else 1f - swipingState.progress.fraction) {
+            MotionLayoutHeader(targetValue = if (swipingState.progress.to == SwipingStates.COLLAPSED) swipingState.progress.fraction else 1f - swipingState.progress.fraction) {
                 content(swipingState.progress.to == SwipingStates.EXPANDED && swipingState.progress.fraction == 1f)
             }
         }

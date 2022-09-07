@@ -7,7 +7,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
-    id("com.google.firebase.firebase-perf")
+    kotlin("plugin.serialization") version "1.7.10"
 }
 android {
     compileSdk = AndroidBuildConfig.compileSdkVersion

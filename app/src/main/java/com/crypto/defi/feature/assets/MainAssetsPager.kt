@@ -2,6 +2,7 @@ package com.crypto.defi.feature.assets
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,9 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiActionBar
 import com.crypto.defi.feature.assets.components.AssetCard
@@ -34,7 +37,9 @@ import com.crypto.resource.R
     ExperimentalMaterial3Api::class
 )
 @Composable
-fun MainAssetsPager() {
+fun MainAssetsPager(
+    assetsViewModel: MainAssetsViewModel = hiltViewModel()
+) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             DeFiActionBar(
@@ -92,12 +97,16 @@ fun MainAssetsPager() {
                                 )
                             }
                             item {
-                                LazyRow() {
+                                LazyRow(
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
                                     items((0..5).map { it }) { it ->
                                         Box(
-                                            modifier = Modifier.size(128.dp).background(Color.Blue),
+                                            modifier = Modifier
+                                                .size(128.dp),
                                             contentAlignment = Alignment.Center
                                         ) {
+                                            Image(painter = painterResource(id = R.drawable.card_small_orange), contentDescription = null)
                                             Text(text = "Item $it")
                                         }
                                     }
