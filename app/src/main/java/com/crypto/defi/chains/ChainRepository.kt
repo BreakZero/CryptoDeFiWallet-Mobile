@@ -8,6 +8,8 @@ import com.crypto.defi.models.remote.ChainDto
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ChainRepository @Inject constructor(
@@ -18,7 +20,7 @@ class ChainRepository @Inject constructor(
 
     suspend fun fetching() {
         try {
-            client.get("http://192.168.1.105:8080/chains").body<BaseResponse<List<ChainDto>>>().data.map {
+            val chains = client.get("http://192.168.1.105:8080/chains").body<BaseResponse<List<ChainDto>>>().data.map {
                 ChainEntity(
                     code = it.code,
                     chainType = it.chainTypes?.let {
@@ -28,9 +30,13 @@ class ChainRepository @Inject constructor(
                     isTestNet = it.isTestnet,
                     name = it.name
                 )
-            }.onEach {
+            }
+            withContext(Dispatchers.Default) {
+                database.chainDao.insertAll(chains)
+            }
+            chains.onEach {
                 chain[it.code] = when(it.chainType) {
-                   "evm" -> EvmChainImpl()
+                    "evm" -> EvmChainImpl()
                     else -> EmptyChain()
                 }
             }

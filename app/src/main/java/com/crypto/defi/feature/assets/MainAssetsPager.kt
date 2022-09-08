@@ -11,20 +11,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.crypto.core.model.NetworkStatus
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiActionBar
 import com.crypto.defi.feature.assets.components.AssetCard
@@ -40,6 +39,8 @@ import com.crypto.resource.R
 fun MainAssetsPager(
     assetsViewModel: MainAssetsViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+    val assetState = assetsViewModel.assetState
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             DeFiActionBar(
@@ -76,38 +77,52 @@ fun MainAssetsPager(
                                 )
                             )
                             .background(MaterialTheme.colorScheme.surface),
+                        contentAlignment = Alignment.Center
                     ) {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxHeight(),
-                            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 8.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            items((0..18).map {
-                                Asset(
-                                    slug = it.toString(),
-                                    name = "Name: $it",
-                                    symbol = "Symbol: $it",
-                                    iconUrl = ""
-                                )
-                            }) { asset ->
-                                AssetCard(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    asset = asset
-                                )
+                        when (assetState.assetsResult) {
+                            is NetworkStatus.Loading -> {
+                                CircularProgressIndicator()
                             }
-                            item {
-                                LazyRow(
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            is NetworkStatus.Error -> {
+                                Text(text = assetState.assetsResult.message)
+                            }
+                            is NetworkStatus.Success -> {
+                                LazyColumn(
+                                    modifier = Modifier.fillMaxHeight(),
+                                    contentPadding = PaddingValues(
+                                        vertical = MaterialTheme.Spacing.medium,
+                                        horizontal = MaterialTheme.Spacing.small
+                                    ),
+                                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
                                 ) {
-                                    items((0..5).map { it }) { it ->
-                                        Box(
+                                    items(assetState.assetsResult.data) { asset ->
+                                        AssetCard(
                                             modifier = Modifier
-                                                .size(128.dp),
-                                            contentAlignment = Alignment.Center
+                                                .fillMaxWidth(),
+                                            asset = asset
+                                        )
+                                    }
+                                    item {
+                                        LazyRow(
+                                            horizontalArrangement = Arrangement.spacedBy(
+                                                MaterialTheme.Spacing.space12
+                                            )
                                         ) {
-                                            Image(painter = painterResource(id = R.drawable.card_small_orange), contentDescription = null)
-                                            Text(text = "Item $it")
+                                            items(assetState.promoCard) {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .size(MaterialTheme.Spacing.space128)
+                                                ) {
+                                                    Image(
+                                                        painter = painterResource(id = it.backgroundRes),
+                                                        contentDescription = null
+                                                    )
+                                                    Text(
+                                                        modifier = Modifier.padding(MaterialTheme.Spacing.extraSmall),
+                                                        text = it.title.asString(context)
+                                                    )
+                                                }
+                                            }
                                         }
                                     }
                                 }

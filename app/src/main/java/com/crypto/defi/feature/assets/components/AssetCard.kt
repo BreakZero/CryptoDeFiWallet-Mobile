@@ -43,7 +43,7 @@ fun AssetCard(
                     .size(MaterialTheme.Spacing.space48)
                     .clip(CircleShape),
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("https://easywallet.s3.amazonaws.com/wallet-icons/cro.png")
+                    .data(asset.iconUrl)
                     .placeholder(R.drawable.avatar_generic_1)
                     .error(R.drawable.avatar_generic_1)
                     .crossfade(true)
