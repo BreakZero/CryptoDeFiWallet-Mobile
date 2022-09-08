@@ -56,7 +56,8 @@ class MainAssetsViewModel @Inject constructor(
                             slug = it.slug,
                             iconUrl = it.iconUrl,
                             name = it.coinName,
-                            symbol = it.symbol
+                            symbol = it.symbol,
+                            code = it.chain
                         )
                     }
                 assetState.copy(assetsResult = NetworkStatus.Success(remoteAsset.take(18)))

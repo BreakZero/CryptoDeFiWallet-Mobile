@@ -1,10 +1,8 @@
-package com.crypto.defi.feature.assets.components
+package com.crypto.core.ui.composables
 
-import android.util.Log
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
@@ -22,8 +20,8 @@ import androidx.compose.ui.unit.Velocity
 
 @ExperimentalMaterialApi
 @Composable
-fun CollapsableToolbar(
-    content: @Composable (Boolean) -> Unit
+fun DeFiBoxWithConstraints(
+    motionContent: @Composable (Float, Boolean) -> Unit
 ) {
     val swipingState = rememberSwipeableState(initialValue = SwipingStates.EXPANDED)
 
@@ -85,9 +83,12 @@ fun CollapsableToolbar(
                 )
                 .nestedScroll(connection)
         ) {
-            MotionLayoutHeader(targetValue = if (swipingState.progress.to == SwipingStates.COLLAPSED) swipingState.progress.fraction else 1f - swipingState.progress.fraction) {
-                content(swipingState.progress.to == SwipingStates.EXPANDED && swipingState.progress.fraction == 1f)
-            }
+            val targetValue = if (swipingState.progress.to == SwipingStates.COLLAPSED) swipingState.progress.fraction else 1f - swipingState.progress.fraction
+            val isExpend = swipingState.progress.to == SwipingStates.EXPANDED && swipingState.progress.fraction == 1f
+            motionContent(
+               targetValue,
+               isExpend
+            )
         }
     }
 }

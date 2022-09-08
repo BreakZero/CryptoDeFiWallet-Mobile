@@ -24,12 +24,15 @@ import com.crypto.resource.R
 @Composable
 fun AssetCard(
     modifier: Modifier = Modifier,
-    asset: Asset
+    asset: Asset,
+    onClick: (Asset) -> Unit
 ) {
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(MaterialTheme.Spacing.space12),
-        onClick = { /*TODO*/ }
+        onClick = {
+            onClick(asset)
+        }
     ) {
         Row(
             modifier = modifier

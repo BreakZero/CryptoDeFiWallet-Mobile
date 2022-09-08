@@ -23,8 +23,10 @@ import com.crypto.core.ui.composables.NormalTipsView
 import com.crypto.core.ui.models.NormalTips
 import com.crypto.defi.feature.main.MainPager
 import com.crypto.defi.feature.splash.SplashPager
+import com.crypto.defi.feature.transactions.TransactionPager
 import com.crypto.defi.navigations.MainNavigation
 import com.crypto.defi.navigations.SplashNavigation
+import com.crypto.defi.navigations.TransactionListNavigation
 import com.crypto.defi.ui.theme.DeFiWalletTheme
 import com.crypto.onboarding.presentation.onboarding
 import com.crypto.resource.R
@@ -108,15 +110,40 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
+                        composable(
+                            route = TransactionListNavigation.ROUTE,
+                            arguments = TransactionListNavigation.args,
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(500))
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(500))
+                            },
+                            popEnterTransition = {
+                                fadeIn(animationSpec = tween(500))
+                            },
+                            popExitTransition = {
+                                fadeOut(animationSpec = tween(500))
+                            }
+                        ) {
+                            val code = it.arguments?.getString(TransactionListNavigation.KEY_CODE) ?: ""
+                            TransactionPager(assetCode = code, navigateUp = {
+                                navController.navigateUp()
+                            }) {
+
+                            }
+                        }
+
                         onboarding(navController)
                         /**
                          * common ui
                          */
                         dialog("normal_tips") {
-                            NormalTipsView(tips = NormalTips(
-                                title = stringResource(id = R.string.two_fa_view__2_factor_authentication),
-                                message = stringResource(id = R.string.wallet_protect__2fa_desc),
-                                iconRes = R.drawable.ic_shell
+                            NormalTipsView(
+                                tips = NormalTips(
+                                    title = stringResource(id = R.string.two_fa_view__2_factor_authentication),
+                                    message = stringResource(id = R.string.wallet_protect__2fa_desc),
+                                    iconRes = R.drawable.ic_shell
                             ))
                         }
                     }

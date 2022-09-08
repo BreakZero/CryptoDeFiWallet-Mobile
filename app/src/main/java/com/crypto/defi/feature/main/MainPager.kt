@@ -73,7 +73,7 @@ fun MainPager(
         ) { page ->
             when (page) {
                 0 -> {
-                    MainAssetsPager()
+                    MainAssetsPager(navigateTo = onNavigateTo)
                 }
                 1 -> {
                     MainDappsPager()

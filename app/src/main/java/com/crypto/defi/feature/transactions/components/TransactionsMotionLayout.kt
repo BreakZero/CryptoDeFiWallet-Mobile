@@ -1,12 +1,10 @@
-package com.crypto.defi.feature.assets.components
+package com.crypto.defi.feature.transactions.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,7 +14,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.ExperimentalMotionApi
@@ -25,13 +22,13 @@ import com.crypto.resource.R
 
 @OptIn(ExperimentalMotionApi::class)
 @Composable
-fun MotionLayoutHeader(
+fun TransactionsMotionLayout(
     targetValue: Float,
     scrollableBody: @Composable () -> Unit
 ) {
     val progress by animateFloatAsState(
         targetValue = targetValue,
-        tween(50)
+        tween(100)
     )
     MotionLayout(
         start = startConstraintSet(),
@@ -43,7 +40,6 @@ fun MotionLayoutHeader(
     ) {
         Box(
             modifier = Modifier
-                .zIndex(1.0f)
                 .layoutId("header-content")
         ) {
             Image(
@@ -77,62 +73,6 @@ fun MotionLayoutHeader(
         }
     }
 }
-
-/*@Composable
-private fun JsonConstraintSetStart() = ConstraintSet(
-    """ {
-	poster: {
-		width: "spread",
-		start: ['parent', 'start', 0],
-		end: ['parent', 'end', 0],
-		top: ['parent', 'top', 0],
-	},
-	title: {
-		top: ['poster', 'bottom', 16],
-		start: ['parent', 'start', 16],
-		custom: {
-			textColor: "#000000",
-			textSize: 40
-		}
-	},
-	content: {
-		width: "spread",
-		start: ['parent', 'start', 0],
-		end: ['parent', 'end', 0],
-		top: ['title', 'bottom', 16],
-	}
-} """
-)*/
-
-/*@Composable
-private fun JsonConstraintSetEnd() = ConstraintSet(
-    """ {
-	poster: {
-		width: "spread",
-		height: 56,
-		start: ['parent', 'start', 0],
-		end: ['parent', 'end', 0],
-		top: ['parent', 'top', 0],
-	},
-	title: {
-		top: ['parent', 'top', 0],
-		start: ['parent', 'start', 0],
-		end: ['parent', 'end', 0],
-		bottom: ['poster', 'bottom', 0],
-		custom: {
-			textColor: "#ffffff",
-			textSize: 20
-        }
-	},
-	content: {
-		width: "spread",
-		start: ['parent', 'start', 0],
-		end: ['parent', 'end', 0],
-		top: ['poster', 'bottom', 0],
-	}
-
-} """
-)*/
 
 // Constraint Sets defined by using Kotlin DSL option
 private fun startConstraintSet() = ConstraintSet {
