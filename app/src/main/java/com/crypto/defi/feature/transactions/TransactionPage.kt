@@ -61,7 +61,10 @@ fun TransactionPager(
                             .background(MaterialTheme.colorScheme.surface),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = "mock $assetCode transaction history")
+                        Text(
+                            text = "mock $assetCode transaction history",
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
                     }
                 }
             }

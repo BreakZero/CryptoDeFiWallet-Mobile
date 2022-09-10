@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -47,16 +48,18 @@ fun SplashPager(
     }
 
     // Image
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_wallet_logo),
-            contentDescription = null,
-            modifier = Modifier
-                .scale(scale.value)
-                .fillMaxWidth()
-        )
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_wallet_logo),
+                contentDescription = null,
+                modifier = Modifier
+                    .scale(scale.value)
+                    .fillMaxWidth()
+            )
+        }
     }
 }

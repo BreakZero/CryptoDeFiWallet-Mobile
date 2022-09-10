@@ -67,8 +67,8 @@ fun AssetCard(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = "88888", textAlign = TextAlign.End)
-                Text(text = "$88.88", textAlign = TextAlign.End)
+                Text(text = "${asset.nativeBalance} ${asset.symbol}", textAlign = TextAlign.End)
+                Text(text = "$ ${asset.fiatBalance}", textAlign = TextAlign.End)
             }
         }
     }

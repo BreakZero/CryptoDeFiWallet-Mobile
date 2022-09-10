@@ -3,6 +3,7 @@ package com.crypto.defi.di
 import android.app.Application
 import android.util.Log
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.crypto.defi.chains.ChainRepository
 import com.crypto.defi.models.local.CryptoDeFiDatabase
 import dagger.Module
@@ -61,7 +62,8 @@ object SingleModule {
     fun provideDeFiDatabase(
         application: Application
     ): CryptoDeFiDatabase {
-        return Room.databaseBuilder(application, CryptoDeFiDatabase::class.java, "defi_wallet.db").build()
+        return Room.databaseBuilder(application, CryptoDeFiDatabase::class.java, "defi_wallet.db")
+            .build()
     }
 
     @Provides

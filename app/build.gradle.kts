@@ -7,7 +7,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
-    kotlin("plugin.serialization") version "1.7.10"
+    kotlin("plugin.serialization") version "1.7.10" apply true
 }
 android {
     compileSdk = AndroidBuildConfig.compileSdkVersion
@@ -85,7 +85,6 @@ dependencies {
     implementation(AndroidDeps.appcompat)
     implementation(AndroidDeps.activity_compose)
 
-    implementation(AndroidDeps.material)
     implementation(ComposeDeps.constraintlayout)
 
     implementation(project(":resource"))
@@ -93,6 +92,10 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":core-ui"))
     implementation(project(":wallet"))
+
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
+    implementation(AndroidDeps.Hilt.hilt_work)
+    kapt(AndroidDeps.Hilt.hilt_compiler)
 
     composeUI()
     hiltDependencies()
