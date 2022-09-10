@@ -119,7 +119,9 @@ fun MainAssetsPager(
                                 SwipeRefresh(
                                     state = rememberSwipeRefreshState(assetState.onRefreshing),
                                     swipeEnabled = isExpanded,
-                                    onRefresh = { }
+                                    onRefresh = {
+                                        assetsViewModel.onRefresh()
+                                    }
                                 ) {
                                     LazyColumn(
                                         modifier = Modifier.fillMaxHeight(),

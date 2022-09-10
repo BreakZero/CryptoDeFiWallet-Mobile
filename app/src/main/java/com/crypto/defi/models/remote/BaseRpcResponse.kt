@@ -5,10 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BaseRpcResponse<T>(
-    @SerialName("jsonrpc")
-    val jsonrpc: String,
     @SerialName("id")
     val id: Int,
+    @SerialName("jsonrpc")
+    val jsonrpc: String,
     @SerialName("result")
     val result: T
 )

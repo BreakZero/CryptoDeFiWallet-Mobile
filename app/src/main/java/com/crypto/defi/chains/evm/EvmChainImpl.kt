@@ -17,7 +17,7 @@ class EvmChainImpl(
     }
     override suspend fun balance(contract: String?): BigInteger {
         return try {
-            val response = httpClient.get("http://192.168.1.105:8080/ethereum/balance/${address()}") {
+            val response = httpClient.get("http://192.168.1.105:8080/ethereum/balance/${address()}}") {
                 contract?.also {
                     parameter("contract", it)
                 }

@@ -93,9 +93,7 @@ dependencies {
     implementation(project(":core-ui"))
     implementation(project(":wallet"))
 
-    implementation("androidx.work:work-runtime-ktx:2.7.1")
-    implementation(AndroidDeps.Hilt.hilt_work)
-    kapt(AndroidDeps.Hilt.hilt_compiler)
+    implementation("androidx.work:work-runtime-ktx:2.8.0-alpha04")
 
     composeUI()
     hiltDependencies()
