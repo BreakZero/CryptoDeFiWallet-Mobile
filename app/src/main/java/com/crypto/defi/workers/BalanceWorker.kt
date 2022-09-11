@@ -1,30 +1,31 @@
 package com.crypto.defi.workers
 
 import android.content.Context
-import android.util.Log
 import androidx.work.CoroutineWorker
+import androidx.work.Data
 import androidx.work.WorkerParameters
-import com.crypto.defi.models.local.CryptoDeFiDatabase
-import io.ktor.client.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
+import com.crypto.defi.chains.ChainRepository
+import com.crypto.defi.feature.assets.MainAssetsViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class BalanceWorker(
     appContext: Context,
     workerParams: WorkerParameters,
-    val database: CryptoDeFiDatabase,
-    val client: HttpClient
+    private val chainRepository: ChainRepository
 ) : CoroutineWorker(appContext, workerParams) {
     override suspend fun doWork(): Result {
+        setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, true).build())
         withContext(Dispatchers.IO) {
-            client.get(
-                "http://192.168.1.105:8080/ethereum/balance/0x81080a7e991bcdddba8c2302a70f45d6bd369ab5"
-            ).bodyAsText().also {
-                Log.d("=====", it)
+            chainRepository.localAssets().filter { it.chainName == "Ethereum" }.take(10).onEach {
+                launch {
+                    val balance = chainRepository.getChainByKey(it.code).balance(it.contract)
+                    chainRepository.updateBalance(it.slug, balance.toString())
+                }
             }
         }
+        setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, false).build())
         return Result.success()
     }
 }

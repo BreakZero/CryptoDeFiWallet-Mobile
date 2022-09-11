@@ -9,7 +9,10 @@ interface AssetDao {
     @Query("SELECT * FROM TB_ASSET")
     fun assetsFlow(): Flow<List<AssetEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Query("SELECT * FROM TB_ASSET")
+    suspend fun assets(): List<AssetEntity>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(chains: List<AssetEntity>)
 
     @Query("DELETE FROM TB_ASSET")

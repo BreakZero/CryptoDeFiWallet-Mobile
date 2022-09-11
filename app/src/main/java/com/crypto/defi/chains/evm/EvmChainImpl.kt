@@ -7,7 +7,14 @@ import com.crypto.defi.models.remote.BaseRpcResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json
 import java.math.BigInteger
+
+private val json = Json {
+    ignoreUnknownKeys = true
+}
 
 class EvmChainImpl(
     private val httpClient: HttpClient
@@ -17,14 +24,14 @@ class EvmChainImpl(
     }
     override suspend fun balance(contract: String?): BigInteger {
         return try {
-            val response = httpClient.get("http://192.168.1.105:8080/ethereum/balance/${address()}}") {
+            val response = httpClient.get("http://192.168.1.105:8080/ethereum/balance/${address()}") {
                 contract?.also {
                     parameter("contract", it)
                 }
-            }.body<BaseRpcResponse<String>>()
-            response.result.clearHexPrefix().toBigInteger(16)
+            }.bodyAsText()
+            val resule = json.decodeFromString(BaseRpcResponse.serializer(String.serializer()), response).result
+            resule.clearHexPrefix().toBigInteger(16)
         } catch (e: Exception) {
-            Log.d("=====", "${e.message}")
             BigInteger.ZERO
         }
     }

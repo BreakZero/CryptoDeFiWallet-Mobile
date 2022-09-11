@@ -1,5 +1,6 @@
 package com.crypto.defi.feature.assets
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,8 +14,9 @@ import com.crypto.defi.workers.BalanceWorker
 import com.crypto.resource.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -26,15 +28,17 @@ class MainAssetsViewModel @Inject constructor(
 
     companion object {
         private const val WORKER_NAME = "update-balance-worker"
+        const val KEY_WORKER_PROGRESS = "in_progressing"
     }
 
     private val balanceWorkerRequest = PeriodicWorkRequestBuilder<BalanceWorker>(
         15, TimeUnit.MINUTES
-    ).setConstraints(
-        Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-    ).build()
+    ).setId(UUID.fromString("d5b42914-cb0f-442c-a800-1532f52a5ed8"))
+        .setConstraints(
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+        ).build()
 
     var assetState by mutableStateOf(
         MainAssetState(
@@ -57,18 +61,26 @@ class MainAssetsViewModel @Inject constructor(
         private set
 
     init {
-        workManager.enqueueUniquePeriodicWork(
-            WORKER_NAME,
-            ExistingPeriodicWorkPolicy.UPDATE,
-            balanceWorkerRequest
-        )
         viewModelScope.launch(Dispatchers.IO) {
-            chainRepository.fetching()
-
-            chainRepository.assetsFlow().collect {
-                assetState = assetState.copy(
-                    onRefreshing = false, assetsResult = NetworkStatus.Success(it)
+            chainRepository.fetching {
+                workManager.enqueueUniquePeriodicWork(
+                    WORKER_NAME,
+                    ExistingPeriodicWorkPolicy.UPDATE,
+                    balanceWorkerRequest
                 )
+
+                withContext(Dispatchers.Main) {
+                    workManager.getWorkInfoByIdLiveData(balanceWorkerRequest.id).observeForever {
+                        val inProgress = it.progress.getBoolean(KEY_WORKER_PROGRESS, false)
+                        assetState = assetState.copy(onRefreshing = inProgress)
+                    }
+                }
+
+                chainRepository.assetsFlow().collect {
+                    assetState = assetState.copy(
+                        onRefreshing = false, assetsResult = NetworkStatus.Success(it)
+                    )
+                }
             }
         }
     }
@@ -79,14 +91,5 @@ class MainAssetsViewModel @Inject constructor(
             ExistingPeriodicWorkPolicy.UPDATE,
             balanceWorkerRequest
         )
-        viewModelScope.launch {
-            assetState = assetState.copy(
-                onRefreshing = true
-            )
-            delay(1000)
-            assetState = assetState.copy(
-                onRefreshing = false
-            )
-        }
     }
 }
