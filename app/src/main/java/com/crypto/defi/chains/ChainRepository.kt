@@ -8,9 +8,8 @@ import com.crypto.defi.models.local.CryptoDeFiDatabase
 import com.crypto.defi.models.local.entities.ChainEntity
 import com.crypto.defi.models.mapper.toAsset
 import com.crypto.defi.models.mapper.toAssetEntity
+import com.crypto.defi.models.remote.*
 import com.crypto.defi.models.remote.AssetDto
-import com.crypto.defi.models.remote.BaseResponse
-import com.crypto.defi.models.remote.BaseRpcResponse
 import com.crypto.defi.models.remote.ChainDto
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -36,7 +35,7 @@ class ChainRepository @Inject constructor(
         onFinish: suspend () -> Unit = {}
     ) {
         try {
-            val chains = client.get("http://192.168.1.105:8080/chains")
+            val chains = client.get("http://192.168.1.109:8080/chains")
                 .body<BaseResponse<List<ChainDto>>>().data.map {
                 ChainEntity(
                     code = it.code,
@@ -65,7 +64,7 @@ class ChainRepository @Inject constructor(
 
     suspend fun fetchingAssets() = withContext(Dispatchers.IO) {
         try {
-            client.get("http://192.168.1.105:8080/currencies")
+            client.get("http://192.168.1.109:8080/currencies")
                 .body<BaseResponse<AssetDto>>()
                 .data.currencies.map {
                     it.toAssetEntity()
@@ -105,8 +104,18 @@ class ChainRepository @Inject constructor(
         }
     }
 
-    suspend fun updateBalance(slug: String, balance: String) {
-        database.assetDao.updateBalance(slug = slug, balance = balance)
+    suspend fun tokenHoldings(): List<TokenHolding> {
+        return try {
+            val result = client.get("http://192.168.1.109:8080/chain/0x81080a7e991bcdddba8c2302a70f45d6bd369ab5/tokenholdings")
+                .body<BaseResponse<List<TokenHolding>>>()
+            result.data
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    suspend fun updateBalance(contract: String, balance: String) {
+        database.assetDao.updateBalance(contract = contract, balance = balance)
     }
 
     fun getChainByKey(code: String): IChain {

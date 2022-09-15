@@ -1,5 +1,6 @@
 package com.crypto.defi.models.local.dao
 
+import android.util.Log
 import androidx.room.*
 import com.crypto.defi.models.local.entities.AssetEntity
 import kotlinx.coroutines.flow.Flow
@@ -18,15 +19,15 @@ interface AssetDao {
     @Query("DELETE FROM TB_ASSET")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM TB_ASSET WHERE SLUG = :slug")
-    suspend fun findBySlug(slug: String): AssetEntity?
+    @Query("SELECT * FROM TB_ASSET WHERE CONTRACT_ADDRESS = :contract")
+    suspend fun findByContractAddress(contract: String): AssetEntity?
 
     @Update
     suspend fun update(entity: AssetEntity)
 
     @Transaction
-    suspend fun updateBalance(slug: String, balance: String) {
-        findBySlug(slug)?.also {
+    suspend fun updateBalance(contract: String, balance: String) {
+        findByContractAddress(contract)?.also {
             // only do update when the balance has changed
             if (it.balance != balance) {
                 update(it.copy(balance = balance))

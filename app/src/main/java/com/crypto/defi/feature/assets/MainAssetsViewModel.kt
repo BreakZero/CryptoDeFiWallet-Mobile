@@ -16,6 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -78,7 +79,9 @@ class MainAssetsViewModel @Inject constructor(
 
                 chainRepository.assetsFlow().collect {
                     assetState = assetState.copy(
-                        onRefreshing = false, assetsResult = NetworkStatus.Success(it)
+                        onRefreshing = false, assetsResult = NetworkStatus.Success(it.filter {
+                            it.nativeBalance.toBigDecimal() > BigDecimal.ZERO
+                        })
                     )
                 }
             }

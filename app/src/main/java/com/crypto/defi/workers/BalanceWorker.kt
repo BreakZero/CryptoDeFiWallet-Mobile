@@ -7,7 +7,8 @@ import androidx.work.WorkerParameters
 import com.crypto.defi.chains.ChainRepository
 import com.crypto.defi.feature.assets.MainAssetsViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.withContext
 
 class BalanceWorker(
@@ -18,11 +19,8 @@ class BalanceWorker(
     override suspend fun doWork(): Result {
         setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, true).build())
         withContext(Dispatchers.IO) {
-            chainRepository.localAssets().filter { it.chainName == "Ethereum" }.take(10).onEach {
-                launch {
-                    val balance = chainRepository.getChainByKey(it.code).balance(it.contract)
-                    chainRepository.updateBalance(it.slug, balance.toString())
-                }
+            chainRepository.tokenHoldings().onEach {
+                chainRepository.updateBalance(it.contractAddress, it.amount)
             }
         }
         setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, false).build())

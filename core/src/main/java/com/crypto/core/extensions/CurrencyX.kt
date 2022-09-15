@@ -5,7 +5,7 @@ import java.math.RoundingMode
 
 fun BigInteger.byDecimal(
     decimal: Int,
-    display: Int
+    display: Int = 8
 ): String {
     return this.toBigDecimal()
         .movePointLeft(decimal)
