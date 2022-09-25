@@ -5,16 +5,16 @@ import androidx.navigation.navArgument
 import com.crypto.core.ui.routers.NavigationCommand
 
 object TransactionListNavigation {
-    const val KEY_CODE = "asset-code"
+    const val KEY_CODE = "asset-slug"
     const val ROUTE = "transaction_list?${KEY_CODE}={${KEY_CODE}}"
     val args = listOf(
         navArgument(KEY_CODE) { type = NavType.StringType }
     )
     fun destination(
-        code: String
+        slug: String
     ) = object : NavigationCommand {
         override val arguments
             get() = args
-        override val destination = "transaction_list?${KEY_CODE}=$code"
+        override val destination = "transaction_list?${KEY_CODE}=$slug"
     }
 }

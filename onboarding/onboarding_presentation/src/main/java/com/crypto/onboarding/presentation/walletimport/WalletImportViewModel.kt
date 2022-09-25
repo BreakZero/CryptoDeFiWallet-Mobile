@@ -35,7 +35,7 @@ class WalletImportViewModel @Inject constructor(
     fun onEvent(event: ImportEvent) {
         when (event) {
             is ImportEvent.OnImportClick -> {
-                val isValid = Mnemonic.isValid("ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal")
+                val isValid = Mnemonic.isValid(state.phrase)
                 if (isValid) {
                     state = state.copy(inProgress = true)
                     preferences.edit {
@@ -48,7 +48,7 @@ class WalletImportViewModel @Inject constructor(
                                 mnemonic = state.phrase, 1, passphrase = ""
                             )*/
                             WalletEntity(
-                                mnemonic = "ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal",
+                                mnemonic = state.phrase,
                                 1,
                                 passphrase = ""
                             )

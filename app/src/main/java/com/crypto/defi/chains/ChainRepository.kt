@@ -1,11 +1,11 @@
 package com.crypto.defi.chains
 
-import android.util.Log
 import com.crypto.core.extensions.orElse
 import com.crypto.defi.chains.evm.EvmChainImpl
 import com.crypto.defi.common.UrlConstant
 import com.crypto.defi.models.domain.Asset
 import com.crypto.defi.models.local.CryptoDeFiDatabase
+import com.crypto.defi.models.local.entities.AssetEntity
 import com.crypto.defi.models.local.entities.ChainEntity
 import com.crypto.defi.models.local.entities.CoinVersionShaEntity
 import com.crypto.defi.models.mapper.toAsset
@@ -109,6 +109,10 @@ class ChainRepository @Inject constructor(
         } catch (e: Exception) {
             flow { emptyList<Asset>() }
         }
+    }
+
+    suspend fun assetBySlug(slug: String): Asset? {
+        return database.assetDao.assetBySlug(slug)?.toAsset()
     }
 
     suspend fun getChainByKey(code: String): IChain {

@@ -12,9 +12,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.DeFiBoxWithConstraints
@@ -24,10 +26,14 @@ import com.crypto.defi.feature.transactions.components.TransactionsMotionLayout
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun TransactionPager(
-    assetCode: String,
+    slug: String,
+    txnListViewModel: TransactionListViewModel = hiltViewModel(),
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {
+    LaunchedEffect(key1 = slug, block = {
+        txnListViewModel.init(slug)
+    })
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -62,7 +68,7 @@ fun TransactionPager(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "mock $assetCode transaction history",
+                            text = "mock $slug transaction history",
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }

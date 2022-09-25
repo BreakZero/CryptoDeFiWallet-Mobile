@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.crypto.core.ui.Spacing
@@ -56,13 +57,15 @@ fun AssetCard(
             )
             Text(
                 text = asset.name,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
+                    .weight(1f)
                     .padding(start = MaterialTheme.Spacing.small)
             )
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(1f)
                     .wrapContentWidth(Alignment.End),
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.Center

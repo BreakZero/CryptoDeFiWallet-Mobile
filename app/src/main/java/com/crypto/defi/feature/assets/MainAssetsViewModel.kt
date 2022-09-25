@@ -60,6 +60,8 @@ class MainAssetsViewModel @Inject constructor(
     )
         private set
 
+
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             chainRepository.fetching {
@@ -77,7 +79,9 @@ class MainAssetsViewModel @Inject constructor(
                 }
                 chainRepository.assetsFlow().collect {
                     assetState = assetState.copy(
-                        onRefreshing = false, assetsResult = NetworkStatus.Success(it)
+                        onRefreshing = false, assetsResult = NetworkStatus.Success(it.filter {
+                            it.nativeBalance.toBigDecimal() > BigDecimal.ZERO
+                        })
                     )
                 }
             }

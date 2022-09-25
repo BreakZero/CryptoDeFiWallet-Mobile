@@ -5,14 +5,23 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.RemoveRedEye
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
@@ -54,16 +63,37 @@ fun HomeAssetsMotionLayout(
                     .padding(top = 32.dp, bottom = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(
-                    modifier = Modifier.height(128.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        modifier = Modifier.size(66.dp),
-                        painter = painterResource(id = R.drawable.avatar_generic_1),
-                        contentDescription = null
+                Row(modifier = Modifier) {
+                    Text(
+                        text = stringResource(id = R.string.wallet_asset__total_balance_big),
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Icon(
+                        imageVector = Icons.Default.RemoveRedEye, contentDescription = null,
+                        modifier = Modifier.align(Alignment.CenterVertically)
                     )
                 }
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = Color.Gray)) {
+                            append("$ ")
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                                fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
+                                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                                fontWeight = MaterialTheme.typography.titleLarge.fontWeight
+                            )
+                        ) {
+                            append("888.88")
+                        }
+                        withStyle(style = SpanStyle(color = Color.Gray)) {
+                            append(" USD")
+                        }
+                    }
+                )
             }
         }
         Box(

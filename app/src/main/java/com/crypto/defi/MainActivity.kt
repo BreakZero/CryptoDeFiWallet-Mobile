@@ -127,7 +127,7 @@ class MainActivity : ComponentActivity() {
                             }
                         ) {
                             val code = it.arguments?.getString(TransactionListNavigation.KEY_CODE) ?: ""
-                            TransactionPager(assetCode = code, navigateUp = {
+                            TransactionPager(slug = code, navigateUp = {
                                 navController.navigateUp()
                             }) {
 

@@ -13,6 +13,9 @@ interface AssetDao {
     @Query("SELECT * FROM TB_ASSET")
     suspend fun assets(): List<AssetEntity>
 
+    @Query("select * from tb_asset where slug = :slug")
+    suspend fun assetBySlug(slug: String): AssetEntity?
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(chains: List<AssetEntity>)
 

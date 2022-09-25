@@ -137,7 +137,7 @@ fun MainAssetsPager(
                                                     .fillMaxWidth(),
                                                 asset = asset
                                             ) {
-                                                navigateTo(TransactionListNavigation.destination(it.code))
+                                                navigateTo(TransactionListNavigation.destination(it.slug))
                                             }
                                         }
                                         item {
