@@ -10,6 +10,8 @@ dependencies {
     api(AndroidDeps.coreKtx)
     api(AndroidDeps.securitys)
 
+    api(AndroidDeps.timber)
+
     api(KotlinDeps.Coroutine.core)
     api(KotlinDeps.Coroutine.android)
     api(KotlinDeps.Ktor.core)

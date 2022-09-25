@@ -8,6 +8,7 @@ object AndroidDeps {
     const val securitys = "androidx.security:security-crypto:1.0.0"
 
     const val zxing = "com.google.zxing:core:3.5.0"
+    const val timber = "com.jakewharton.timber:timber:5.0.1"
 
     object Lifecycle {
         private const val lifecycle_version = "2.5.1"

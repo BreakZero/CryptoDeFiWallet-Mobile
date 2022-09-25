@@ -5,7 +5,9 @@ import android.util.Log
 import androidx.room.Room
 import androidx.work.WorkManager
 import com.crypto.defi.chains.ChainRepository
+import com.crypto.defi.chains.usecase.BalanceUseCase
 import com.crypto.defi.models.local.CryptoDeFiDatabase
+import com.crypto.wallet.WalletRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,6 +21,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import javax.inject.Singleton
 
 @Module
@@ -46,7 +49,7 @@ object SingleModule {
             install(Logging) {
                 logger = object : Logger {
                     override fun log(message: String) {
-                        Log.d("Http", message)
+                        Timber.v(message)
                     }
                 }
                 level = LogLevel.BODY
@@ -70,11 +73,25 @@ object SingleModule {
     @Singleton
     fun provideChainRepository(
         database: CryptoDeFiDatabase,
-        client: HttpClient
+        client: HttpClient,
+        walletRepository: WalletRepository,
     ): ChainRepository {
         return ChainRepository(
             database = database,
-            client = client
+            client = client,
+            walletRepository = walletRepository
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideBalanceUseCase(
+        database: CryptoDeFiDatabase,
+        client: HttpClient
+    ): BalanceUseCase {
+        return BalanceUseCase(
+            client = client,
+            database = database
         )
     }
 }

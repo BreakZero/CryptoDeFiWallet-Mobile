@@ -1,89 +1,102 @@
 package com.crypto.defi.chains
 
 import android.util.Log
-import com.crypto.core.extensions.clearHexPrefix
+import com.crypto.core.extensions.orElse
 import com.crypto.defi.chains.evm.EvmChainImpl
+import com.crypto.defi.common.UrlConstant
 import com.crypto.defi.models.domain.Asset
 import com.crypto.defi.models.local.CryptoDeFiDatabase
 import com.crypto.defi.models.local.entities.ChainEntity
+import com.crypto.defi.models.local.entities.CoinVersionShaEntity
 import com.crypto.defi.models.mapper.toAsset
 import com.crypto.defi.models.mapper.toAssetEntity
-import com.crypto.defi.models.remote.*
 import com.crypto.defi.models.remote.AssetDto
+import com.crypto.defi.models.remote.BaseResponse
 import com.crypto.defi.models.remote.ChainDto
+import com.crypto.wallet.WalletRepository
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.json.Json
+import timber.log.Timber
 import javax.inject.Inject
 
 class ChainRepository @Inject constructor(
     private val database: CryptoDeFiDatabase,
-    private val client: HttpClient
+    private val client: HttpClient,
+    private val walletRepository: WalletRepository
 ) {
     private val chain = hashMapOf<String, IChain>()
+    private val lock = Mutex()
 
-    suspend fun fetchingChain(
-        onFinish: suspend () -> Unit = {}
-    ) {
-        try {
-            val chains = client.get("http://192.168.1.109:8080/chains")
+    private suspend fun fetchingChain() {
+        val chains = try {
+            client.get("${UrlConstant.BASE_URL}/chains")
                 .body<BaseResponse<List<ChainDto>>>().data.map {
-                ChainEntity(
-                    code = it.code,
-                    chainType = it.chainTypes?.let {
-                        "evm"
-                    } ?: it.parentChain,
-                    chainId = it.details?.chainId,
-                    isTestNet = it.isTestnet,
-                    name = it.name
-                )
-            }
-            withContext(Dispatchers.Default) {
-                database.chainDao.insertAll(chains)
-            }
+                    ChainEntity(
+                        code = it.code,
+                        chainType = it.chainTypes?.let {
+                            "evm"
+                        } ?: it.parentChain,
+                        chainId = it.details?.chainId,
+                        isTestNet = it.isTestnet,
+                        name = it.name
+                    )
+                }.also {
+                    withContext(Dispatchers.Default) {
+                        database.chainDao.insertAll(it)
+                    }
+                }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            database.chainDao.chains()
+        }
+        lock.withLock {
             chains.onEach {
                 chain[it.code] = when (it.chainType) {
-                    "evm" -> EvmChainImpl(client)
+                    "evm" -> EvmChainImpl(client, walletRepository)
                     else -> EmptyChain()
                 }
             }
-            onFinish()
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
-    suspend fun fetchingAssets() = withContext(Dispatchers.IO) {
+    private suspend fun fetchingAssets(
+        initial: suspend () -> Unit
+    ) = withContext(Dispatchers.IO) {
         try {
-            client.get("http://192.168.1.109:8080/currencies")
-                .body<BaseResponse<AssetDto>>()
-                .data.currencies.map {
-                    it.toAssetEntity()
-                }.also {
-                    database.assetDao.insertAll(it)
-                }
+            val lastSha256 = database.versionDao.lastVersion()?.sha256.orElse("==")
+            val response = client.get("${UrlConstant.BASE_URL}/currencies") {
+                parameter("sha256", lastSha256)
+            }.body<BaseResponse<AssetDto>>()
+            if (response.data.sha256 != lastSha256) {
+                database.versionDao.insert(
+                    CoinVersionShaEntity(
+                        sha256 = response.data.sha256,
+                        createAt = System.currentTimeMillis()
+                    )
+                )
+            }
+            database.assetDao.insertAll(response.data.currencies.map { it.toAssetEntity() })
         } catch (e: Exception) {
-            e.printStackTrace()
+            Timber.e(e)
         }
+        initial()
     }
 
     suspend fun fetching(
         initial: suspend () -> Unit
     ) {
-        fetchingChain {
+        fetchingChain()
+        fetchingAssets {
             initial()
         }
-        // will do not call when currency hash not changed
-        fetchingAssets()
     }
 
     fun assetsFlow(): Flow<List<Asset>> {
@@ -98,27 +111,9 @@ class ChainRepository @Inject constructor(
         }
     }
 
-    suspend fun localAssets(): List<Asset> {
-        return database.assetDao.assets().map {
-            it.toAsset()
+    suspend fun getChainByKey(code: String): IChain {
+        return lock.withLock {
+            chain[code] ?: EmptyChain()
         }
-    }
-
-    suspend fun tokenHoldings(): List<TokenHolding> {
-        return try {
-            val result = client.get("http://192.168.1.109:8080/chain/0x81080a7e991bcdddba8c2302a70f45d6bd369ab5/tokenholdings")
-                .body<BaseResponse<List<TokenHolding>>>()
-            result.data
-        } catch (e: Exception) {
-            emptyList()
-        }
-    }
-
-    suspend fun updateBalance(contract: String, balance: String) {
-        database.assetDao.updateBalance(contract = contract, balance = balance)
-    }
-
-    fun getChainByKey(code: String): IChain {
-        return chain[code] ?: EmptyChain()
     }
 }

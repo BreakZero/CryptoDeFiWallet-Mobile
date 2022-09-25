@@ -5,23 +5,27 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.crypto.defi.chains.ChainRepository
+import com.crypto.defi.chains.usecase.BalanceUseCase
 import com.crypto.defi.feature.assets.MainAssetsViewModel
+import com.crypto.wallet.WalletRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.withContext
+import wallet.core.jni.CoinType
 
 class BalanceWorker(
     appContext: Context,
     workerParams: WorkerParameters,
-    private val chainRepository: ChainRepository
+    private val walletRepository: WalletRepository,
+    private val balanceUseCase: BalanceUseCase
 ) : CoroutineWorker(appContext, workerParams) {
     override suspend fun doWork(): Result {
         setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, true).build())
         withContext(Dispatchers.IO) {
-            chainRepository.tokenHoldings().onEach {
-                chainRepository.updateBalance(it.contractAddress, it.amount)
-            }
+            balanceUseCase.tokenHolding(
+                address = walletRepository.hdWallet.getAddressForCoin(CoinType.ETHEREUM)
+            )
         }
         setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, false).build())
         return Result.success()

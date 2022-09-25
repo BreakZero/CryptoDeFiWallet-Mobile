@@ -26,6 +26,7 @@ import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.resource.R
+import timber.log.Timber
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +46,7 @@ fun ImportWordsPager(
                     navigateMain()
                 }
                 is UiEvent.ShowSnackbar -> {
-                    Log.d("=====", event.message.asString(context))
+                    Timber.v(event.message.asString(context))
                 }
                 is UiEvent.NavigateUp -> {
                     navigateUp()

@@ -7,6 +7,7 @@ import com.crypto.wallet.WalletRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import wallet.core.jni.HDWallet
 import javax.inject.Inject
 
@@ -17,7 +18,7 @@ class MainViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             walletRepository.activeOne()?.let {
-                Log.d("=====", it.mnemonic)
+                Timber.v(it.mnemonic)
                 try {
                     walletRepository.inject(HDWallet(it.mnemonic, it.passphrase))
                 } catch (e: Exception) {

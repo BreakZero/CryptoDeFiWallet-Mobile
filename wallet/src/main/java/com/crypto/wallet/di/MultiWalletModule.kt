@@ -13,6 +13,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
+import timber.log.Timber
 import javax.inject.Singleton
 import kotlin.text.toCharArray
 
@@ -26,7 +27,7 @@ object MultiWalletModule {
         sharedPreferences: SharedPreferences
     ): WalletDatabase {
         val passcode = sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "").orEmpty().also {
-            Log.d("=====", it)
+            Timber.v(it)
         }
 
         val passPhrase = SQLiteDatabase.getBytes(

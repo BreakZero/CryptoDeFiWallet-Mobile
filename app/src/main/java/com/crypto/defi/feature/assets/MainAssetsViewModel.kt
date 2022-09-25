@@ -1,6 +1,5 @@
 package com.crypto.defi.feature.assets
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -76,12 +75,9 @@ class MainAssetsViewModel @Inject constructor(
                         assetState = assetState.copy(onRefreshing = inProgress)
                     }
                 }
-
                 chainRepository.assetsFlow().collect {
                     assetState = assetState.copy(
-                        onRefreshing = false, assetsResult = NetworkStatus.Success(it.filter {
-                            it.nativeBalance.toBigDecimal() > BigDecimal.ZERO
-                        })
+                        onRefreshing = false, assetsResult = NetworkStatus.Success(it)
                     )
                 }
             }
