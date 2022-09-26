@@ -1,5 +1,6 @@
 package com.crypto.defi.models.domain
 
+@kotlinx.serialization.Serializable
 data class Asset(
     val slug: String,
     val code: String,

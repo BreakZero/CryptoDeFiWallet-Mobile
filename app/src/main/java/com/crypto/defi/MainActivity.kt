@@ -14,16 +14,19 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.dialog
 import com.crypto.core.ui.composables.NormalTipsView
 import com.crypto.core.ui.models.NormalTips
 import com.crypto.defi.feature.main.MainPager
 import com.crypto.defi.feature.splash.SplashPager
-import com.crypto.defi.feature.transactions.TransactionPager
+import com.crypto.defi.feature.transactions.TransactionListPager
+import com.crypto.defi.feature.transactions.TransactionListViewModel
 import com.crypto.defi.navigations.MainNavigation
 import com.crypto.defi.navigations.SplashNavigation
 import com.crypto.defi.navigations.TransactionListNavigation
@@ -125,9 +128,10 @@ class MainActivity : ComponentActivity() {
                             popExitTransition = {
                                 fadeOut(animationSpec = tween(500))
                             }
-                        ) {
-                            val code = it.arguments?.getString(TransactionListNavigation.KEY_CODE) ?: ""
-                            TransactionPager(slug = code, navigateUp = {
+                        ) { backStackEntry ->
+                            val code = backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE) ?: ""
+                            TransactionListPager(slug = code,
+                                navigateUp = {
                                 navController.navigateUp()
                             }) {
 
