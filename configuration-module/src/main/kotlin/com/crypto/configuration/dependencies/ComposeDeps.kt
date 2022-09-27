@@ -6,9 +6,10 @@ object ComposeDeps {
     const val ui = "androidx.compose.ui:ui:$version"
     const val preview = "androidx.compose.ui:ui-tooling-preview:$version"
     const val icons = "androidx.compose.material:material-icons-extended:$version"
-    const val coil = "io.coil-kt:coil-compose:2.0.0"
+    const val coil = "io.coil-kt:coil-compose:2.2.0"
     const val navigation = "androidx.navigation:navigation-compose:2.4.2"
     const val paging = "androidx.paging:paging-compose:1.0.0-alpha14"
+    const val constraintlayout = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 
     const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
     const val uiTooling = "androidx.compose.ui:ui-tooling:$version"

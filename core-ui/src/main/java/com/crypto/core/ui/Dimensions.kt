@@ -17,7 +17,8 @@ data class Dimensions(
 
     val space12: Dp = 12.dp,
     val space24: Dp = 24.dp,
-    val space48: Dp = 48.dp
+    val space48: Dp = 48.dp,
+    val space128: Dp = 128.dp
 )
 
 val LocalSpacing = compositionLocalOf { Dimensions() }

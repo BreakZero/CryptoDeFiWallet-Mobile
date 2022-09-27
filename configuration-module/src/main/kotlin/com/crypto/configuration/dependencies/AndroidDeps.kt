@@ -5,10 +5,10 @@ object AndroidDeps {
     const val coreKtx = "androidx.core:core-ktx:1.8.0"
     const val appcompat = "androidx.appcompat:appcompat:1.5.0"
     const val activity_compose = "androidx.activity:activity-compose:1.5.1"
-    const val material = "com.google.android.material:material:1.6.1"
     const val securitys = "androidx.security:security-crypto:1.0.0"
 
     const val zxing = "com.google.zxing:core:3.5.0"
+    const val timber = "com.jakewharton.timber:timber:5.0.1"
 
     object Lifecycle {
         private const val lifecycle_version = "2.5.1"
@@ -25,7 +25,9 @@ object AndroidDeps {
         private const val version = "2.43.2"
         const val hilt_android = "com.google.dagger:hilt-android:$version"
         const val hilt_android_compiler = "com.google.dagger:hilt-android-compiler:$version"
+        const val hilt_compiler = "androidx.hilt:hilt-compiler:1.0.0"
         const val hilt_nav_compose = "androidx.hilt:hilt-navigation-compose:1.0.0"
+        const val hilt_work = "androidx.hilt:hilt-work:1.0.0"
     }
 
     object Room {

@@ -23,10 +23,6 @@ class WalletRepository @Inject constructor(
         return database.get().walletDao.activeWallet()
     }
 
-    fun hdWallet(): HDWallet {
-        return hdWallet
-    }
-
     fun inject(hdWallet: HDWallet) {
         this.hdWallet = hdWallet
     }

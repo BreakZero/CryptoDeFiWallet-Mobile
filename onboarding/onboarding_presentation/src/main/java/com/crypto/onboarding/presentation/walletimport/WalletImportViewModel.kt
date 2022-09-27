@@ -1,13 +1,13 @@
 package com.crypto.onboarding.presentation.walletimport
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.crypto.core.ConfigurationKeys
 import com.crypto.core.common.UiEvent
 import com.crypto.core.common.UiText
 import com.crypto.wallet.WalletRepository
@@ -18,8 +18,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import wallet.core.jni.HDWallet
+import wallet.core.jni.Mnemonic
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,26 +35,30 @@ class WalletImportViewModel @Inject constructor(
     fun onEvent(event: ImportEvent) {
         when (event) {
             is ImportEvent.OnImportClick -> {
-                kotlin.runCatching {
-//                    HDWallet(state.phrase, "")
-                    HDWallet("ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal", "")
-                }.onFailure {
-                    viewModelScope.launch {
-                        _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString("invalid mnemonic, please try another")))
-                    }
-                }.onSuccess {
+                val isValid = Mnemonic.isValid(state.phrase)
+                if (isValid) {
+                    state = state.copy(inProgress = true)
                     preferences.edit {
-                        putString("passcode", event.passcode)
+                        putString(ConfigurationKeys.KEY_FOR_PASSCODE, event.passcode)
                     }
-                    walletRepository.inject(it)
-                    viewModelScope.launch {
+                    viewModelScope.launch(Dispatchers.IO) {
                         delay(1000L)
                         walletRepository.insertWallet(
-                            WalletEntity(
+                            /*WalletEntity(
                                 mnemonic = state.phrase, 1, passphrase = ""
+                            )*/
+                            WalletEntity(
+                                mnemonic = state.phrase,
+                                1,
+                                passphrase = ""
                             )
                         )
+                        state = state.copy(inProgress = false)
                         _uiEvent.send(UiEvent.Success)
+                    }
+                } else {
+                    viewModelScope.launch {
+                        _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString("invalid mnemonic, please try another")))
                     }
                 }
             }
@@ -72,12 +75,7 @@ class WalletImportViewModel @Inject constructor(
 
     fun onNavigateUp() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                walletRepository.activeOne()?.also {
-                    Log.d("=====", it.mnemonic)
-                }
-                _uiEvent.send(UiEvent.NavigateUp)
-            }
+            _uiEvent.send(UiEvent.NavigateUp)
         }
     }
 }

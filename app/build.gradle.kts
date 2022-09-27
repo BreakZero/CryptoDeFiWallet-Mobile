@@ -1,12 +1,13 @@
 import com.crypto.configuration.*
 import com.crypto.configuration.dependencies.AndroidDeps
+import com.crypto.configuration.dependencies.ComposeDeps
 
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
-    id("com.google.firebase.firebase-perf")
+    kotlin("plugin.serialization") version "1.7.10" apply true
 }
 android {
     compileSdk = AndroidBuildConfig.compileSdkVersion
@@ -22,6 +23,11 @@ android {
 //        vectorDrawables {
 //            useSupportLibrary true
 //        }
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
     }
 
     val keyProperties = keyStoreProperties()
@@ -84,7 +90,7 @@ dependencies {
     implementation(AndroidDeps.appcompat)
     implementation(AndroidDeps.activity_compose)
 
-    implementation(AndroidDeps.material)
+    implementation(ComposeDeps.constraintlayout)
 
     implementation(project(":resource"))
     implementation(project(":onboarding:onboarding_presentation"))
@@ -92,8 +98,11 @@ dependencies {
     implementation(project(":core-ui"))
     implementation(project(":wallet"))
 
+    implementation("androidx.work:work-runtime-ktx:2.8.0-alpha04")
+
     composeUI()
     hiltDependencies()
+    roomDependencies()
 
     unitTestDependencies()
     androidTestDependencies()
