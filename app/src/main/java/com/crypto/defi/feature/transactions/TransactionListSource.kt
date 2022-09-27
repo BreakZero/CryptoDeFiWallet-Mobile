@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.crypto.defi.common.UrlConstant
 import com.crypto.defi.models.domain.EvmTransaction
+import com.crypto.defi.models.mapper.toEvmTransaction
 import com.crypto.defi.models.remote.BaseResponse
 import com.crypto.defi.models.remote.EvmTransactionDto
 import io.ktor.client.*
@@ -33,7 +34,7 @@ class TransactionListSource(
             }.body<BaseResponse<List<EvmTransactionDto>>>().data
             LoadResult.Page(
                 data = transactionList.map {
-                    EvmTransaction(hash = it.hash)
+                    it.toEvmTransaction(address)
                 },
                 prevKey = if (nextPage == 1) null else nextPage - 1,
                 nextKey = if (transactionList.isEmpty()) null else nextPage + 1

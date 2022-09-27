@@ -5,19 +5,32 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.RemoveRedEye
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.crypto.core.ui.Spacing
 import com.crypto.resource.R
 
 @OptIn(ExperimentalMotionApi::class)
@@ -54,15 +67,61 @@ fun TransactionsMotionLayout(
                     .padding(top = 32.dp, bottom = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(
-                    modifier = Modifier.height(128.dp),
-                    contentAlignment = Alignment.Center
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        modifier = Modifier.size(66.dp),
-                        painter = painterResource(id = R.drawable.avatar_generic_1),
-                        contentDescription = null
+                    AsyncImage(
+                        modifier = Modifier.size(MaterialTheme.Spacing.space24),
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data("")
+                            .placeholder(R.drawable.avatar_generic_1)
+                            .error(R.drawable.avatar_generic_1)
+                            .crossfade(true)
+                            .build(), contentDescription = null
                     )
+                    Text(
+                        modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.extraSmall),
+                        text = "SOL BALANCE",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Icon(imageVector = Icons.Default.RemoveRedEye, contentDescription = null)
+                }
+                Text(text = buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                            fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
+                            fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                            fontWeight = MaterialTheme.typography.titleLarge.fontWeight
+                        )
+                    ) {
+                        append("888.88")
+                    }
+                    withStyle(style = SpanStyle(color = Color.Gray)) {
+                        append(" USD")
+                    }
+                })
+                Text(text = " ~ 82.30 USD")
+                Row() {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_send),
+                            contentDescription = null
+                        )
+                        Text(text = stringResource(id = R.string.transaction_list__send))
+                    }
+                    Spacer(modifier = Modifier.size(MaterialTheme.Spacing.medium))
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_receive),
+                            contentDescription = null
+                        )
+                        Text(text = stringResource(id = R.string.transaction_list__receive))
+                    }
                 }
             }
         }
