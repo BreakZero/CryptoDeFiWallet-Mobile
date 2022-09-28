@@ -2,7 +2,7 @@ name: Checking For Push
 on: [push]
 jobs:
   Build:
-    runs-on: ubuntu-latest
+    runs-on: macos-12
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
