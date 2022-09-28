@@ -14,6 +14,7 @@ import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.feature.assets.MainAssetsPager
 import com.crypto.defi.feature.dapps.MainDappsPager
 import com.crypto.defi.feature.defi.MainDeFiPager
+import com.crypto.defi.feature.nfts.MainNFTsPager
 import com.crypto.resource.R
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -29,6 +30,9 @@ data class NavMenu(
 val navMenus = listOf(
     NavMenu(
         icon = R.drawable.ic_nav_wallet, label = "Wallet"
+    ),
+    NavMenu(
+        icon = R.drawable.ic_nav_nft, label = "NFT"
     ),
     NavMenu(
         icon = R.drawable.ic_nav_dapp, label = "Dapps"
@@ -76,9 +80,12 @@ fun MainPager(
                     MainAssetsPager(navigateTo = onNavigateTo)
                 }
                 1 -> {
-                    MainDappsPager()
+                    MainNFTsPager()
                 }
                 2 -> {
+                    MainDappsPager()
+                }
+                3 -> {
                     MainDeFiPager()
                 }
                 else -> Unit

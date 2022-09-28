@@ -88,7 +88,9 @@ fun TransactionListPager(
                                         modifier = Modifier.fillMaxSize(),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        Text(text = "loading...")
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally)
+                                        )
                                     }
                                 }
                             }

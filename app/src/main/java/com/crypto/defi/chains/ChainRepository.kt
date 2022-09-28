@@ -8,6 +8,7 @@ import com.crypto.defi.models.local.CryptoDeFiDatabase
 import com.crypto.defi.models.local.entities.AssetEntity
 import com.crypto.defi.models.local.entities.ChainEntity
 import com.crypto.defi.models.local.entities.CoinVersionShaEntity
+import com.crypto.defi.models.local.entities.TierEntity
 import com.crypto.defi.models.mapper.toAsset
 import com.crypto.defi.models.mapper.toAssetEntity
 import com.crypto.defi.models.remote.AssetDto
@@ -99,15 +100,21 @@ class ChainRepository @Inject constructor(
         }
     }
 
-    fun assetsFlow(): Flow<List<Asset>> {
+    fun assetsFlow(): Flow<List<AssetEntity>> {
         return try {
             database.assetDao.assetsFlow().map {
-                it.filter { it.chainName == "Ethereum" }.take(200).map {
-                    it.toAsset()
-                }
+                it.filter { it.chainName == "Ethereum" }.take(200)
             }
         } catch (e: Exception) {
             flow { emptyList<Asset>() }
+        }
+    }
+
+    fun tiersFlow(): Flow<List<TierEntity>> {
+        return try {
+            database.tierDao.allTiers("USD")
+        } catch (e: Exception) {
+            flow { emptyList<TierEntity>() }
         }
     }
 

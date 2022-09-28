@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.crypto.core.extensions.byDecimal
+import com.crypto.core.extensions.byDecimal2String
 import com.crypto.core.ui.Spacing
 import com.crypto.defi.models.domain.EvmTransaction
 import com.crypto.defi.models.domain.TransactionDirection
@@ -19,7 +20,7 @@ import timber.log.Timber
 fun TransactionItemView(
     data: EvmTransaction
 ) {
-    Surface(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = MaterialTheme.Spacing.space48)
@@ -46,7 +47,7 @@ fun TransactionItemView(
                 Text(text = data.hash, overflow = TextOverflow.Ellipsis, maxLines = 1)
                 Text(text = data.timeStamp, overflow = TextOverflow.Ellipsis, maxLines = 1)
             }
-            Text(text = data.value.byDecimal(18, 6))
+            Text(text = data.value.byDecimal2String(18, 6))
         }
     }
 }

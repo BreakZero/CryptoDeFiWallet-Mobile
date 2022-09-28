@@ -2,6 +2,7 @@ package com.crypto.defi.di
 
 import android.app.Application
 import android.util.Log
+import androidx.room.AutoMigration
 import androidx.room.Room
 import androidx.work.WorkManager
 import com.crypto.defi.chains.ChainRepository

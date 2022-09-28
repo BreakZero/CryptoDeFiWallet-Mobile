@@ -16,3 +16,4 @@ local.properties
 keystore/*
 configuration-module/build/*
 configuration-module/.gradle/*
+/app/schemas/*

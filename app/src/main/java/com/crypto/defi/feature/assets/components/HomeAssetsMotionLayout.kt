@@ -32,6 +32,7 @@ import com.crypto.resource.R
 @OptIn(ExperimentalMotionApi::class)
 @Composable
 fun HomeAssetsMotionLayout(
+    totalBalance: String,
     targetValue: Float,
     scrollableBody: @Composable () -> Unit
 ) {
@@ -87,7 +88,7 @@ fun HomeAssetsMotionLayout(
                                 fontWeight = MaterialTheme.typography.titleLarge.fontWeight
                             )
                         ) {
-                            append("888.88")
+                            append(totalBalance)
                         }
                         withStyle(style = SpanStyle(color = Color.Gray)) {
                             append(" USD")

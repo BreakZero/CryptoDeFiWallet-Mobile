@@ -11,7 +11,8 @@ data class PromoCart(
 )
 
 data class MainAssetState(
-    val assetsResult: NetworkStatus<List<Asset>> = NetworkStatus.Loading,
+    val assets: List<Asset> = emptyList(),
     val promoCard: List<PromoCart> = emptyList(),
+    val totalBalance: String = "0.0",
     val onRefreshing: Boolean = true
 )

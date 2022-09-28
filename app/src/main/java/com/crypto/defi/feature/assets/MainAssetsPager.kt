@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.crypto.core.model.NetworkStatus
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiBoxWithConstraints
 import com.crypto.core.ui.routers.NavigationCommand
@@ -42,7 +41,7 @@ fun MainAssetsPager(
     navigateTo: (NavigationCommand) -> Unit
 ) {
     val context = LocalContext.current
-    val assetState = assetsViewModel.assetState
+    val assetsUiState = assetsViewModel.assetState
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -84,7 +83,7 @@ fun MainAssetsPager(
             )
         }) {
         DeFiBoxWithConstraints { progress, isExpanded ->
-            HomeAssetsMotionLayout(targetValue = progress) {
+            HomeAssetsMotionLayout(totalBalance = assetsUiState.totalBalance, targetValue = progress) {
                 AnimatedContent(targetState = true, transitionSpec = {
                     fadeIn(animationSpec = tween(300, 300)) with fadeOut(
                         animationSpec = tween(
@@ -93,78 +92,73 @@ fun MainAssetsPager(
                         )
                     )
                 }) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(
-                                RoundedCornerShape(
-                                    topEnd = MaterialTheme.Spacing.space24,
-                                    topStart = MaterialTheme.Spacing.space24
-                                )
-                            )
-                            .background(MaterialTheme.colorScheme.surface),
-                        contentAlignment = Alignment.Center
+                    SwipeRefresh(
+                        state = rememberSwipeRefreshState(assetsUiState.onRefreshing),
+                        swipeEnabled = isExpanded,
+                        onRefresh = {
+                            assetsViewModel.onRefresh()
+                        }
                     ) {
-                        when (assetState.assetsResult) {
-                            is NetworkStatus.Loading -> {
-                                CircularProgressIndicator()
-                            }
-                            is NetworkStatus.Error -> {
-                                Text(
-                                    text = assetState.assetsResult.message,
-                                    color = MaterialTheme.colorScheme.onSurface
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(
+                                    RoundedCornerShape(
+                                        topEnd = MaterialTheme.Spacing.space24,
+                                        topStart = MaterialTheme.Spacing.space24
+                                    )
                                 )
-                            }
-                            is NetworkStatus.Success -> {
-                                SwipeRefresh(
-                                    state = rememberSwipeRefreshState(assetState.onRefreshing),
-                                    swipeEnabled = isExpanded,
-                                    onRefresh = {
-                                        assetsViewModel.onRefresh()
-                                    }
-                                ) {
-                                    LazyColumn(
-                                        modifier = Modifier.fillMaxHeight(),
-                                        contentPadding = PaddingValues(
-                                            vertical = MaterialTheme.Spacing.medium,
-                                            horizontal = MaterialTheme.Spacing.small
-                                        ),
-                                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+                                .background(MaterialTheme.colorScheme.surface),
+                            contentPadding = PaddingValues(
+                                vertical = MaterialTheme.Spacing.medium,
+                                horizontal = MaterialTheme.Spacing.small
+                            ),
+                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+                        ) {
+                            if (assetsUiState.assets.isEmpty()) {
+                                item {
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center
                                     ) {
-                                        items(assetState.assetsResult.data) { asset ->
-                                            AssetCard(
-                                                modifier = Modifier
-                                                    .fillMaxWidth(),
-                                                asset = asset
-                                            ) {
-                                                navigateTo(TransactionListNavigation.destination(it.slug))
-                                            }
-                                        }
-                                        item {
-                                            LazyRow(
-                                                horizontalArrangement = Arrangement.spacedBy(
-                                                    MaterialTheme.Spacing.space12
-                                                )
-                                            ) {
-                                                items(assetState.promoCard) {
-                                                    Box(
-                                                        modifier = Modifier
-                                                            .size(MaterialTheme.Spacing.space128)
-                                                    ) {
-                                                        Image(
-                                                            painter = painterResource(id = it.backgroundRes),
-                                                            contentDescription = null
-                                                        )
-                                                        Text(
-                                                            modifier = Modifier.padding(
-                                                                MaterialTheme.Spacing.extraSmall
-                                                            ),
-                                                            text = it.title.asString(context),
-                                                            color = Color.White
-                                                        )
-                                                    }
-                                                }
-                                            }
+                                        androidx.compose.material.CircularProgressIndicator(
+                                            modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally)
+                                        )
+                                    }
+                                }
+                            } else {
+                                items(assetsUiState.assets) { asset ->
+                                    AssetCard(
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        asset = asset
+                                    ) {
+                                        navigateTo(TransactionListNavigation.destination(it.slug))
+                                    }
+                                }
+                            }
+                            item {
+                                LazyRow(
+                                    horizontalArrangement = Arrangement.spacedBy(
+                                        MaterialTheme.Spacing.space12
+                                    )
+                                ) {
+                                    items(assetsUiState.promoCard) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(MaterialTheme.Spacing.space128)
+                                        ) {
+                                            Image(
+                                                painter = painterResource(id = it.backgroundRes),
+                                                contentDescription = null
+                                            )
+                                            Text(
+                                                modifier = Modifier.padding(
+                                                    MaterialTheme.Spacing.extraSmall
+                                                ),
+                                                text = it.title.asString(context),
+                                                color = Color.White
+                                            )
                                         }
                                     }
                                 }
