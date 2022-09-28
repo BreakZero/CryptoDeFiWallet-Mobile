@@ -24,7 +24,8 @@ import kotlinx.coroutines.launch
 
 data class NavMenu(
     @DrawableRes val icon: Int,
-    val label: String
+    val label: String,
+    val visitable: Boolean = true
 )
 
 val navMenus = listOf(
@@ -52,7 +53,7 @@ fun MainPager(
     val tabIndex = pageState.currentPage
     val scope = rememberCoroutineScope()
     val menus by remember {
-        mutableStateOf(navMenus)
+        mutableStateOf(navMenus.filter { it.visitable })
     }
 
     val systemUIController = rememberSystemUiController()
@@ -75,17 +76,17 @@ fun MainPager(
             count = menus.size, state = pageState,
             userScrollEnabled = false
         ) { page ->
-            when (page) {
-                0 -> {
+            when (menus[page].label) {
+                "Wallet" -> {
                     MainAssetsPager(navigateTo = onNavigateTo)
                 }
-                1 -> {
+                "NFT" -> {
                     MainNFTsPager()
                 }
-                2 -> {
+                "Dapps" -> {
                     MainDappsPager()
                 }
-                3 -> {
+                "Earn" -> {
                     MainDeFiPager()
                 }
                 else -> Unit

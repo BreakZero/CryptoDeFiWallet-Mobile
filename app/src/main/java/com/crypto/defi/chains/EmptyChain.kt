@@ -1,5 +1,6 @@
 package com.crypto.defi.chains
 
+import com.crypto.defi.models.domain.EvmTransaction
 import java.math.BigInteger
 
 class EmptyChain: IChain {
@@ -10,7 +11,11 @@ class EmptyChain: IChain {
         return BigInteger.ZERO
     }
 
-    override suspend fun transactions(contract: String?): List<String> {
+    override suspend fun transactions(
+        page: Int,
+        offset: Int,
+        contract: String?
+    ): List<EvmTransaction> {
         return emptyList()
     }
 }

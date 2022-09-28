@@ -12,10 +12,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,9 +35,8 @@ fun TransactionListPager(
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {
-    val tnxUiState =
-        txnListViewModel.tnxState.collectAsState(initial = TransactionListState())
-    val transactionList = tnxUiState.value.transactionList.collectAsLazyPagingItems()
+    val txnUiState = txnListViewModel.txnState
+    val transactionList = txnUiState.transactionList.collectAsLazyPagingItems()
     LaunchedEffect(key1 = slug, block = {
         txnListViewModel.init(slug)
     })
@@ -57,7 +53,8 @@ fun TransactionListPager(
         }) {
         DeFiBoxWithConstraints { progress, isExpanded ->
             TransactionsMotionLayout(
-                asset = tnxUiState.value.asset, targetValue = progress
+                asset = txnUiState.asset, targetValue = progress,
+                navigateTo = navigateTo
             ) {
                 AnimatedContent(targetState = true, transitionSpec = {
                     fadeIn(animationSpec = tween(300, 300)) with fadeOut(

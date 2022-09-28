@@ -1,6 +1,7 @@
 package com.crypto.defi.chains.solana
 
 import com.crypto.defi.chains.IChain
+import com.crypto.defi.models.domain.EvmTransaction
 import java.math.BigInteger
 
 class SolanaChainImpl: IChain {
@@ -11,7 +12,11 @@ class SolanaChainImpl: IChain {
         return BigInteger.ZERO
     }
 
-    override suspend fun transactions(ccontract: String?): List<String> {
+    override suspend fun transactions(
+        page: Int,
+        offset: Int,
+        contract: String?
+    ): List<EvmTransaction> {
         return emptyList()
     }
 }

@@ -39,7 +39,7 @@ fun TransactionItemView(
             val isSend = data.direction == TransactionDirection.RECEIVE
             Icon(
                 painter = painterResource(
-                    id = if (isSend) R.drawable.ic_receive else R.drawable.ic_send
+                    id = if (isSend) R.drawable.ic_send else R.drawable.ic_receive
                 ),
                 contentDescription = null
             )

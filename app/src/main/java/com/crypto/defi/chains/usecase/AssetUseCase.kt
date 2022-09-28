@@ -69,7 +69,7 @@ class AssetUseCase @Inject constructor(
         }
     }
 
-    suspend fun findAssetBySlug(slug: String): Flow<Asset?> {
+    fun findAssetBySlug(slug: String): Flow<Asset?> {
         val assetEntity = flow { emit(database.assetDao.assetBySlug(slug)) }
         val rateEntity = database.tierDao.findBySlug(slug)
         return combine(assetEntity, rateEntity) { asset, rate ->

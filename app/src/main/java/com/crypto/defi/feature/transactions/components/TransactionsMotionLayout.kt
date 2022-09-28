@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material3.Icon
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
@@ -34,7 +36,9 @@ import coil.request.ImageRequest
 import com.crypto.core.extensions.byDecimal2String
 import com.crypto.core.extensions.orElse
 import com.crypto.core.ui.Spacing
+import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.models.domain.Asset
+import com.crypto.defi.navigations.SendFormNavigation
 import com.crypto.resource.R
 import timber.log.Timber
 import java.math.BigInteger
@@ -44,6 +48,7 @@ import java.math.BigInteger
 fun TransactionsMotionLayout(
     asset: Asset?,
     targetValue: Float,
+    navigateTo: (NavigationCommand) -> Unit,
     scrollableBody: @Composable () -> Unit
 ) {
     val progress by animateFloatAsState(
@@ -117,26 +122,46 @@ fun TransactionsMotionLayout(
                 Text(text = " ~ ${asset?.fiatBalance()?.toPlainString() ?: "--"} USD")
                 Row {
                     Column(
-                        modifier = Modifier.clickable {
-
-                        },
+                        modifier = Modifier
+                            .width(MaterialTheme.Spacing.extraLarge)
+                            .clickable {
+                                asset?.slug?.also {
+                                    navigateTo.invoke(SendFormNavigation.destination(it))
+                                }
+                            },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_send),
-                            contentDescription = null
-                        )
+                        Box(
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.secondary)
+                                .padding(MaterialTheme.Spacing.extraSmall)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_send),
+                                contentDescription = null
+                            )
+                        }
                         Text(text = stringResource(id = R.string.transaction_list__send))
                     }
                     Spacer(modifier = Modifier.size(MaterialTheme.Spacing.medium))
                     Column(
-                        modifier = Modifier.clickable {  },
+                        modifier = Modifier
+                            .width(MaterialTheme.Spacing.extraLarge)
+                            .clickable { },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_receive),
-                            contentDescription = null
-                        )
+                        Box(
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.secondary)
+                                .padding(MaterialTheme.Spacing.extraSmall)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_receive),
+                                contentDescription = null
+                            )
+                        }
                         Text(text = stringResource(id = R.string.transaction_list__receive))
                     }
                 }
