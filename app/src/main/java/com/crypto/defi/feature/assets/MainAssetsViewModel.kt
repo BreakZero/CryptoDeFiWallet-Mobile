@@ -7,16 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.crypto.core.common.UiText
-import com.crypto.core.model.NetworkStatus
-import com.crypto.defi.chains.ChainRepository
+import com.crypto.defi.chains.usecase.AssetUseCase
 import com.crypto.defi.models.mapper.toAsset
 import com.crypto.defi.workers.BalanceWorker
 import com.crypto.resource.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapMerge
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -26,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainAssetsViewModel @Inject constructor(
-    private val chainRepository: ChainRepository,
+    private val assetUseCase: AssetUseCase,
     private val workManager: WorkManager
 ) : ViewModel() {
 
@@ -67,7 +64,7 @@ class MainAssetsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            chainRepository.fetching {
+            assetUseCase.fetchingAssets {
                 workManager.enqueueUniquePeriodicWork(
                     WORKER_NAME,
                     ExistingPeriodicWorkPolicy.UPDATE,
@@ -81,8 +78,8 @@ class MainAssetsViewModel @Inject constructor(
                     }
                 }
                 combine(
-                    chainRepository.assetsFlow(),
-                    chainRepository.tiersFlow()
+                    assetUseCase.assetsFlow(),
+                    assetUseCase.tiersFlow()
                 ) { assets, tiers ->
                     assets.map { asset ->
                         val rate = tiers.find { tier ->
@@ -104,7 +101,6 @@ class MainAssetsViewModel @Inject constructor(
             }
         }
     }
-
     fun onRefresh() {
         workManager.enqueueUniquePeriodicWork(
             WORKER_NAME,

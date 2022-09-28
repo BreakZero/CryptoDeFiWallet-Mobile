@@ -11,6 +11,7 @@ import io.ktor.client.statement.*
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import wallet.core.jni.CoinType
+import wallet.core.jni.HDWallet
 import java.math.BigInteger
 
 private val json = Json {
@@ -19,10 +20,10 @@ private val json = Json {
 
 class EvmChainImpl(
     private val httpClient: HttpClient,
-    private val walletRepository: WalletRepository
+    private val hdWallet: HDWallet
 ): IChain {
     override fun address(): String {
-        return walletRepository.hdWallet.getAddressForCoin(CoinType.ETHEREUM)
+        return hdWallet.getAddressForCoin(CoinType.ETHEREUM)
     }
     override suspend fun balance(contract: String?): BigInteger {
         return try {

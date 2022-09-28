@@ -1,14 +1,11 @@
 package com.crypto.defi.di
 
 import android.app.Application
-import android.util.Log
-import androidx.room.AutoMigration
 import androidx.room.Room
-import androidx.work.WorkManager
-import com.crypto.defi.chains.ChainRepository
+import com.crypto.defi.chains.ChainManager
+import com.crypto.defi.chains.usecase.AssetUseCase
 import com.crypto.defi.chains.usecase.BalanceUseCase
 import com.crypto.defi.models.local.CryptoDeFiDatabase
-import com.crypto.wallet.WalletRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -72,15 +69,13 @@ object SingleModule {
 
     @Provides
     @Singleton
-    fun provideChainRepository(
+    fun provideChainManager(
         database: CryptoDeFiDatabase,
-        client: HttpClient,
-        walletRepository: WalletRepository,
-    ): ChainRepository {
-        return ChainRepository(
+        client: HttpClient
+    ): ChainManager {
+        return ChainManager(
             database = database,
-            client = client,
-            walletRepository = walletRepository
+            client = client
         )
     }
 
@@ -94,5 +89,14 @@ object SingleModule {
             client = client,
             database = database
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideAssetUseCase(
+        client: HttpClient,
+        database: CryptoDeFiDatabase
+    ): AssetUseCase {
+        return AssetUseCase(client = client, database = database)
     }
 }

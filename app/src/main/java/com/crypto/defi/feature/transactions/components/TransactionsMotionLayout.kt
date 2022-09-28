@@ -50,7 +50,6 @@ fun TransactionsMotionLayout(
         targetValue = targetValue,
         tween(100)
     )
-    Timber.v(asset?.toString())
     MotionLayout(
         start = startConstraintSet(),
         end = endConstraintSet(),
@@ -115,6 +114,7 @@ fun TransactionsMotionLayout(
                     },
                     modifier = Modifier.padding(MaterialTheme.Spacing.small)
                 )
+                Text(text = " ~ ${asset?.fiatBalance()?.toPlainString() ?: "--"} USD")
                 Row {
                     Column(
                         modifier = Modifier.clickable {
