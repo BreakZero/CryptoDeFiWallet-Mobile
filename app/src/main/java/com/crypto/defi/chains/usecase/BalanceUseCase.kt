@@ -16,18 +16,18 @@ class BalanceUseCase @Inject constructor(
     private val client: HttpClient,
     private val database: CryptoDeFiDatabase
 ) {
-    suspend fun tokenHolding(
+    suspend fun fetchingTokenHolding(
         chain: String = "ethereum",
         address: String
-    ): List<TokenHolding> {
-        return try {
+    ) {
+        try {
             val result = client.get("${UrlConstant.BASE_URL}/$chain/$address/tokenholdings")
                 .body<BaseResponse<List<TokenHolding>>>()
             result.data.onEach {
                 database.assetDao.updateBalance(contract = it.contractAddress, balance = it.amount)
             }
         } catch (e: Exception) {
-            emptyList()
+            Timber.e(e)
         }
     }
 
@@ -49,10 +49,12 @@ class BalanceUseCase @Inject constructor(
         }
     }
 
-    fun mainCoinBalance(
-        chain: String = "",
+    suspend fun fetchingEthMainCoin(
+        chain: String = "ethereum",
         address: String
     ) {
-
+        val result = client.get("${UrlConstant.BASE_URL}/$chain/balance/${address}")
+            .body<BaseResponse<String>>()
+        database.assetDao.updateBalanceViaSlug("ethereum", result.data)
     }
 }

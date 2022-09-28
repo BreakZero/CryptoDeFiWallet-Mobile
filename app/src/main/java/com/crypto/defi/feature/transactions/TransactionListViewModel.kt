@@ -7,6 +7,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.crypto.core.extensions.launchWithHandler
 import com.crypto.defi.chains.ChainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.*
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,6 +25,7 @@ class TransactionListViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     fun init(slug: String) {
+        if (savedStateHandle.get<String>("slug") == slug) return;
         savedStateHandle["slug"] = slug
     }
 

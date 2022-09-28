@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RemoveRedEye
@@ -30,12 +31,18 @@ import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.crypto.core.extensions.byDecimal2String
+import com.crypto.core.extensions.orElse
 import com.crypto.core.ui.Spacing
+import com.crypto.defi.models.domain.Asset
 import com.crypto.resource.R
+import timber.log.Timber
+import java.math.BigInteger
 
 @OptIn(ExperimentalMotionApi::class)
 @Composable
 fun TransactionsMotionLayout(
+    asset: Asset?,
     targetValue: Float,
     scrollableBody: @Composable () -> Unit
 ) {
@@ -43,6 +50,7 @@ fun TransactionsMotionLayout(
         targetValue = targetValue,
         tween(100)
     )
+    Timber.v(asset?.toString())
     MotionLayout(
         start = startConstraintSet(),
         end = endConstraintSet(),
@@ -73,7 +81,7 @@ fun TransactionsMotionLayout(
                     AsyncImage(
                         modifier = Modifier.size(MaterialTheme.Spacing.space24),
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data("")
+                            .data(asset?.iconUrl)
                             .placeholder(R.drawable.avatar_generic_1)
                             .error(R.drawable.avatar_generic_1)
                             .crossfade(true)
@@ -81,29 +89,37 @@ fun TransactionsMotionLayout(
                     )
                     Text(
                         modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.extraSmall),
-                        text = "SOL BALANCE",
+                        text = "${asset?.symbol ?: "--"} BALANCE",
                         style = MaterialTheme.typography.titleLarge
                     )
                     Icon(imageVector = Icons.Default.RemoveRedEye, contentDescription = null)
                 }
-                Text(text = buildAnnotatedString {
-                    withStyle(
-                        style = SpanStyle(
-                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                            fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
-                            fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                            fontWeight = MaterialTheme.typography.titleLarge.fontWeight
-                        )
-                    ) {
-                        append("888.88")
-                    }
-                    withStyle(style = SpanStyle(color = Color.Gray)) {
-                        append(" USD")
-                    }
-                })
-                Text(text = " ~ 82.30 USD")
-                Row() {
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                                fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
+                                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                                fontWeight = MaterialTheme.typography.titleLarge.fontWeight
+                            )
+                        ) {
+                            append(
+                                (asset?.nativeBalance
+                                    ?: BigInteger.ZERO).byDecimal2String(asset?.decimal ?: 0)
+                            )
+                        }
+                        withStyle(style = SpanStyle(color = Color.Gray)) {
+                            append(" ${asset?.symbol ?: "--"}")
+                        }
+                    },
+                    modifier = Modifier.padding(MaterialTheme.Spacing.small)
+                )
+                Row {
                     Column(
+                        modifier = Modifier.clickable {
+
+                        },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
@@ -114,6 +130,7 @@ fun TransactionsMotionLayout(
                     }
                     Spacer(modifier = Modifier.size(MaterialTheme.Spacing.medium))
                     Column(
+                        modifier = Modifier.clickable {  },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(

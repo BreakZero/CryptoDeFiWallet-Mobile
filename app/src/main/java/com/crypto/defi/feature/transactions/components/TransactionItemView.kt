@@ -6,9 +6,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import com.crypto.core.extensions.byDecimal
 import com.crypto.core.extensions.byDecimal2String
 import com.crypto.core.ui.Spacing
 import com.crypto.defi.models.domain.EvmTransaction
@@ -36,10 +36,10 @@ fun TransactionItemView(
                     vertical = MaterialTheme.Spacing.extraSmall
                 ), verticalAlignment = Alignment.CenterVertically
         ) {
+            val isSend = data.direction == TransactionDirection.RECEIVE
             Icon(
                 painter = painterResource(
-                    id = if (data.direction == TransactionDirection.RECEIVE) R.drawable.ic_nav_defi
-                    else R.drawable.avatar_generic_1
+                    id = if (isSend) R.drawable.ic_receive else R.drawable.ic_send
                 ),
                 contentDescription = null
             )
@@ -47,7 +47,10 @@ fun TransactionItemView(
                 Text(text = data.hash, overflow = TextOverflow.Ellipsis, maxLines = 1)
                 Text(text = data.timeStamp, overflow = TextOverflow.Ellipsis, maxLines = 1)
             }
-            Text(text = data.value.byDecimal2String(18, 6))
+            Text(
+                text = "${if (isSend) "-" else "+"} ${data.value.byDecimal2String(18, 6)}",
+                color = if (isSend) Color.Red else Color.Green
+            )
         }
     }
 }

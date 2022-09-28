@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
+import com.crypto.core.extensions.launchWithHandler
 import com.crypto.defi.chains.usecase.BalanceUseCase
 import com.crypto.defi.feature.assets.MainAssetsViewModel
 import com.crypto.wallet.WalletRepository
@@ -22,13 +23,17 @@ class BalanceWorker(
     override suspend fun doWork(): Result {
         setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, true).build())
         supervisorScope {
-            launch(Dispatchers.Default) {
+            val evmAddress = walletRepository.hdWallet.getAddressForCoin(CoinType.ETHEREUM)
+            launchWithHandler(Dispatchers.Default) {
                 balanceUseCase.fetchingTiers()
             }
-            launch(Dispatchers.Default) {
-                balanceUseCase.tokenHolding(
-                    address = walletRepository.hdWallet.getAddressForCoin(CoinType.ETHEREUM)
+            launchWithHandler(Dispatchers.Default) {
+                balanceUseCase.fetchingTokenHolding(
+                    address = evmAddress
                 )
+            }
+            launchWithHandler(Dispatchers.Default) {
+                balanceUseCase.fetchingEthMainCoin(address = evmAddress)
             }
         }
         setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, false).build())

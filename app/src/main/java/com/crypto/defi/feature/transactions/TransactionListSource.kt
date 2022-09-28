@@ -27,9 +27,9 @@ class TransactionListSource(
                 urlString = "${UrlConstant.BASE_URL}/ethereum/transactions/$address"
             ) {
                 parameter("page", nextPage)
-                parameter("offset", params.loadSize)
-                contractAddress?.also {
-                    parameter("contract", it)
+                parameter("offset", 20)
+                if (!contractAddress.isNullOrEmpty()) {
+                    parameter("contract", contractAddress)
                 }
             }.body<BaseResponse<List<EvmTransactionDto>>>().data
             LoadResult.Page(

@@ -29,6 +29,15 @@ interface AssetDao {
     suspend fun update(entity: AssetEntity)
 
     @Transaction
+    suspend fun updateBalanceViaSlug(slug: String, balance: String) {
+        assetBySlug(slug)?.also {
+            if (it.balance != balance) {
+                update(it.copy(balance = balance))
+            }
+        }
+    }
+
+    @Transaction
     suspend fun updateBalance(contract: String, balance: String) {
         findByContractAddress(contract)?.also {
             // only do update when the balance has changed
