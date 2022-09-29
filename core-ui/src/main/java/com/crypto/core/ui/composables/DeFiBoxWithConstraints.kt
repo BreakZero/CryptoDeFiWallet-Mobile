@@ -73,7 +73,7 @@ fun DeFiBoxWithConstraints(
                 .fillMaxSize()
                 .swipeable(
                     state = swipingState,
-                    thresholds = { _, _ -> FractionalThreshold(0.5f) },
+                    thresholds = { _, _ -> FractionalThreshold(0.3f) },
                     orientation = Orientation.Vertical,
                     anchors = mapOf(
                         // Maps anchor points (in px) to states

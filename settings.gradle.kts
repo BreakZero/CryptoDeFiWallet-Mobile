@@ -21,7 +21,7 @@ dependencyResolutionManagement {
 
 fun userProperty(): java.util.Properties {
     val properties = java.util.Properties()
-    val localProperties = File(rootDir, "local.properties")
+    val localProperties = File("./keystore", "github_token.properties")
 
     if (localProperties.isFile) {
         java.io.InputStreamReader(

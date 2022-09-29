@@ -23,11 +23,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.dialog
 import com.crypto.core.ui.composables.NormalTipsView
 import com.crypto.core.ui.models.NormalTips
+import com.crypto.defi.feature.assets.send.SendingPager
 import com.crypto.defi.feature.main.MainPager
 import com.crypto.defi.feature.splash.SplashPager
 import com.crypto.defi.feature.transactions.TransactionListPager
 import com.crypto.defi.feature.transactions.TransactionListViewModel
 import com.crypto.defi.navigations.MainNavigation
+import com.crypto.defi.navigations.SendFormNavigation
 import com.crypto.defi.navigations.SplashNavigation
 import com.crypto.defi.navigations.TransactionListNavigation
 import com.crypto.defi.ui.theme.DeFiWalletTheme
@@ -134,8 +136,29 @@ class MainActivity : ComponentActivity() {
                                 navigateUp = {
                                 navController.navigateUp()
                             }) {
-
+                                navController.navigate(it.destination)
                             }
+                        }
+
+                        composable(
+                            route = SendFormNavigation.ROUTE,
+                            arguments = SendFormNavigation.args,
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(500))
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(500))
+                            },
+                            popEnterTransition = {
+                                fadeIn(animationSpec = tween(500))
+                            },
+                            popExitTransition = {
+                                fadeOut(animationSpec = tween(500))
+                            }
+                        ) {
+                                backStackEntry ->
+                            val code = backStackEntry.arguments?.getString(SendFormNavigation.KEY_SLUG) ?: ""
+                            SendingPager(code)
                         }
 
                         onboarding(navController)

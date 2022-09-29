@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.crypto.core.extensions.byDecimal
 import com.crypto.core.ui.Spacing
 import com.crypto.defi.models.domain.Asset
 import com.crypto.resource.R
@@ -70,8 +71,8 @@ fun AssetCard(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = "${asset.nativeBalance} ${asset.symbol}", textAlign = TextAlign.End)
-                Text(text = "$ ${asset.fiatBalance}", textAlign = TextAlign.End)
+                Text(text = "${asset.nativeBalance.byDecimal(asset.decimal)} ${asset.symbol}", textAlign = TextAlign.End)
+                Text(text = "$ ${asset.fiatBalance().toPlainString()}", textAlign = TextAlign.End)
             }
         }
     }

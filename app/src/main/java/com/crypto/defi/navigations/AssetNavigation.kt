@@ -18,3 +18,18 @@ object TransactionListNavigation {
         override val destination = "transaction_list?${KEY_CODE}=$slug"
     }
 }
+
+object SendFormNavigation {
+    const val KEY_SLUG = "asset-slug"
+    const val ROUTE = "sending_form?${KEY_SLUG}={${KEY_SLUG}}"
+    val args = listOf(
+        navArgument(TransactionListNavigation.KEY_CODE) { type = NavType.StringType }
+    )
+    fun destination(
+        slug: String
+    ) = object : NavigationCommand {
+        override val arguments
+            get() = args
+        override val destination = "sending_form?${KEY_SLUG}=$slug"
+    }
+}

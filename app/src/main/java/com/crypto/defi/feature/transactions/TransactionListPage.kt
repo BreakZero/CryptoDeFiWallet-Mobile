@@ -12,13 +12,10 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -38,9 +35,8 @@ fun TransactionListPager(
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {
-    val transactionState =
-        txnListViewModel.tnxState.collectAsState(initial = TransactionListState())
-    val transactionList = transactionState.value.transactionList.collectAsLazyPagingItems()
+    val txnUiState = txnListViewModel.txnState
+    val transactionList = txnUiState.transactionList.collectAsLazyPagingItems()
     LaunchedEffect(key1 = slug, block = {
         txnListViewModel.init(slug)
     })
@@ -56,7 +52,10 @@ fun TransactionListPager(
             }
         }) {
         DeFiBoxWithConstraints { progress, isExpanded ->
-            TransactionsMotionLayout(targetValue = progress) {
+            TransactionsMotionLayout(
+                asset = txnUiState.asset, targetValue = progress,
+                navigateTo = navigateTo
+            ) {
                 AnimatedContent(targetState = true, transitionSpec = {
                     fadeIn(animationSpec = tween(300, 300)) with fadeOut(
                         animationSpec = tween(
@@ -88,7 +87,9 @@ fun TransactionListPager(
                                         modifier = Modifier.fillMaxSize(),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        Text(text = "loading...")
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally)
+                                        )
                                     }
                                 }
                             }

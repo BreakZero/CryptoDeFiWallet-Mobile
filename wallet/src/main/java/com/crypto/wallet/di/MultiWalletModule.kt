@@ -2,7 +2,6 @@ package com.crypto.wallet.di
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.room.Room
 import com.crypto.core.ConfigurationKeys
 import com.crypto.wallet.WalletRepository

@@ -8,9 +8,6 @@ import javax.inject.Inject
 class WalletRepository @Inject constructor(
     private val database: dagger.Lazy<WalletDatabase>
 ) {
-    lateinit var hdWallet: HDWallet
-        private set
-
     suspend fun insertWallet(wallet: WalletEntity) {
         database.get().walletDao.insertWallet(wallet)
     }
@@ -21,9 +18,5 @@ class WalletRepository @Inject constructor(
 
     suspend fun activeOne(): WalletEntity? {
         return database.get().walletDao.activeWallet()
-    }
-
-    fun inject(hdWallet: HDWallet) {
-        this.hdWallet = hdWallet
     }
 }

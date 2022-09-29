@@ -11,8 +11,9 @@ import java.time.ZoneId
 fun EvmTransactionDto.toEvmTransaction(
     owner: String
 ): EvmTransaction {
-    val direction =
-        if (this.from == owner) TransactionDirection.SEND else TransactionDirection.RECEIVE
+    val direction = if (this.from.equals(owner, true))
+        TransactionDirection.RECEIVE else TransactionDirection.SEND
+
     val timestamp = Timestamp(this.timeStamp.toLong().times(1000L))
     return EvmTransaction(
         hash = this.hash,

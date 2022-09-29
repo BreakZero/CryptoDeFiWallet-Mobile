@@ -1,9 +1,8 @@
-package com.crypto.defi.feature.defi
+package com.crypto.defi.feature.nfts
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,7 +14,7 @@ import com.crypto.resource.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainDeFiPager() {
+fun MainNFTsPager() {
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
             SmallTopAppBar(
@@ -59,7 +58,7 @@ fun MainDeFiPager() {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "DeFi dapps")
+            Text(text = "NFTs dapps")
         }
     }
 }

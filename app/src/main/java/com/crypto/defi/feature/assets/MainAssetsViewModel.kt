@@ -7,12 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.crypto.core.common.UiText
-import com.crypto.core.model.NetworkStatus
-import com.crypto.defi.chains.ChainRepository
+import com.crypto.defi.chains.usecase.AssetUseCase
+import com.crypto.defi.models.mapper.toAsset
 import com.crypto.defi.workers.BalanceWorker
 import com.crypto.resource.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainAssetsViewModel @Inject constructor(
-    private val chainRepository: ChainRepository,
+    private val assetUseCase: AssetUseCase,
     private val workManager: WorkManager
 ) : ViewModel() {
 
@@ -61,10 +62,9 @@ class MainAssetsViewModel @Inject constructor(
         private set
 
 
-
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            chainRepository.fetching {
+            assetUseCase.fetchingAssets {
                 workManager.enqueueUniquePeriodicWork(
                     WORKER_NAME,
                     ExistingPeriodicWorkPolicy.UPDATE,
@@ -77,17 +77,30 @@ class MainAssetsViewModel @Inject constructor(
                         assetState = assetState.copy(onRefreshing = inProgress)
                     }
                 }
-                chainRepository.assetsFlow().collect {
+                combine(
+                    assetUseCase.assetsFlow(),
+                    assetUseCase.tiersFlow()
+                ) { assets, tiers ->
+                    assets.map { asset ->
+                        val rate = tiers.find { tier ->
+                            asset.slug == tier.fromSlug
+                        }?.rate ?: "0.0"
+                        asset.toAsset().copy(
+                            rate = rate.toBigDecimalOrNull() ?: BigDecimal.ZERO
+                        )
+                    }
+                }.collect { assets ->
                     assetState = assetState.copy(
-                        onRefreshing = false, assetsResult = NetworkStatus.Success(it.filter {
+                        onRefreshing = false,
+                        assets = assets.filter {
                             it.nativeBalance.toBigDecimal() > BigDecimal.ZERO
-                        })
+                        }.sortedByDescending { it.fiatBalance() },
+                        totalBalance = assets.sumOf { it.fiatBalance() }.toPlainString()
                     )
                 }
             }
         }
     }
-
     fun onRefresh() {
         workManager.enqueueUniquePeriodicWork(
             WORKER_NAME,

@@ -8,7 +8,9 @@ plugins {
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
     kotlin("plugin.serialization") version "1.7.10" apply true
+    jacoco apply true
 }
+//apply(from = "${rootProject.rootDir}/jacoco.gradle.kts")
 android {
     compileSdk = AndroidBuildConfig.compileSdkVersion
 
@@ -60,6 +62,7 @@ android {
         debug {
             signingConfig = signingConfigs.getByName("debug")
             isDebuggable = true
+            isTestCoverageEnabled = true
         }
     }
     compileOptions {
@@ -87,6 +90,7 @@ android {
 dependencies {
     implementation(AndroidDeps.coreKtx)
     implementation(AndroidDeps.Lifecycle.runtime)
+    implementation(AndroidDeps.Lifecycle.viewmodel_ktx)
     implementation(AndroidDeps.appcompat)
     implementation(AndroidDeps.activity_compose)
 
@@ -106,4 +110,58 @@ dependencies {
 
     unitTestDependencies()
     androidTestDependencies()
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+    reportsDirectory.set(layout.buildDirectory.dir("jacoco"))
+}
+
+tasks.register("jacocoTestReport", JacocoReport::class) {
+    dependsOn(listOf("testDebugUnitTest", "createDebugCoverageReport"))
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
+    }
+    val fileFilter = listOf(
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "**/*Test*.*",
+        "android/**/*.*",
+        "**/*_Factory.*",
+        "**/*_Provide*Factory*.*"
+    )
+    val kClasses = "${project.buildDir}/tmp/kotlin-classes/debug"
+    val debugTree = fileTree(
+        mapOf(
+            "dir" to kClasses,
+            "excludes" to fileFilter
+        )
+    )
+    val mainSrc = "${project.projectDir}/src/main/java"
+    sourceDirectories.from(files(mainSrc))
+    classDirectories.from(files(debugTree))
+    executionData.from(
+        fileTree(
+            mapOf(
+                "dir" to buildDir, "includes" to listOf(
+                    "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+                    "outputs/code_coverage/debugAndroidTest/connected/*coverage.ec"
+                )
+            )
+        )
+    )
+}
+
+tasks.withType(Test::class.java) {
+    configure<JacocoTaskExtension> {
+        isEnabled = true
+        excludes = listOf("jdk.internal.*")
+        isIncludeNoLocationClasses = true
+        setDestinationFile(layout.buildDirectory.file("jacoco/jacocoTest.exec").get().asFile)
+        classDumpDir = layout.buildDirectory.dir("jacoco/classpathdumps").get().asFile
+    }
 }

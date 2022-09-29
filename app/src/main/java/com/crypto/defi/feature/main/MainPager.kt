@@ -14,6 +14,7 @@ import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.feature.assets.MainAssetsPager
 import com.crypto.defi.feature.dapps.MainDappsPager
 import com.crypto.defi.feature.defi.MainDeFiPager
+import com.crypto.defi.feature.nfts.MainNFTsPager
 import com.crypto.resource.R
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -23,12 +24,16 @@ import kotlinx.coroutines.launch
 
 data class NavMenu(
     @DrawableRes val icon: Int,
-    val label: String
+    val label: String,
+    val visitable: Boolean = true
 )
 
 val navMenus = listOf(
     NavMenu(
         icon = R.drawable.ic_nav_wallet, label = "Wallet"
+    ),
+    NavMenu(
+        icon = R.drawable.ic_nav_nft, label = "NFT"
     ),
     NavMenu(
         icon = R.drawable.ic_nav_dapp, label = "Dapps"
@@ -48,7 +53,7 @@ fun MainPager(
     val tabIndex = pageState.currentPage
     val scope = rememberCoroutineScope()
     val menus by remember {
-        mutableStateOf(navMenus)
+        mutableStateOf(navMenus.filter { it.visitable })
     }
 
     val systemUIController = rememberSystemUiController()
@@ -71,14 +76,17 @@ fun MainPager(
             count = menus.size, state = pageState,
             userScrollEnabled = false
         ) { page ->
-            when (page) {
-                0 -> {
+            when (menus[page].label) {
+                "Wallet" -> {
                     MainAssetsPager(navigateTo = onNavigateTo)
                 }
-                1 -> {
+                "NFT" -> {
+                    MainNFTsPager()
+                }
+                "Dapps" -> {
                     MainDappsPager()
                 }
-                2 -> {
+                "Earn" -> {
                     MainDeFiPager()
                 }
                 else -> Unit
