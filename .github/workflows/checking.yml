@@ -1,5 +1,8 @@
 name: Test Report
 on: [push]
+env:
+  JAVA_OPTS: "-Xmx4096m"
+  GRADLE_OPTS: -Xmx4096m -Xms512m -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.caching=true -Dorg.gradle.configureondemand=true -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false
 jobs:
   Build:
     runs-on: macos-12
@@ -13,7 +16,9 @@ jobs:
         run: |
           mkdir keystore
           cd . > keystore/keystore.properties
+          cd . > keystore/github_token.properties
           cd . > keystore/defi_wallet.jks
+          echo ${{ secrets.GITHUB_TOKEN_INFO }} | base64 --decode > keystore/github_token.properties
           echo ${{ secrets.KEYSTORE_PROPERTIES }} | base64 --decode > keystore/keystore.properties
           echo ${{ secrets.KEYSTORE_FILE }} | base64 --decode > keystore/defi_wallet.jks
 
@@ -21,7 +26,17 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
-          cache: 'gradle'
+
+      - name: Generate cache key
+        run: ./scripts/checksum.sh . checksum.txt
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: gradle-${{ hashFiles('checksum.txt') }}
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
