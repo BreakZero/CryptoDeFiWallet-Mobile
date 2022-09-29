@@ -1,8 +1,9 @@
 tasks.register("jacocoTestReport", JacocoReport::class) {
-    dependsOn(listOf("testDebugUnitTest", "createDebugCoverageReport"))
+    dependsOn(listOf("testDebugUnitTest"))
     reports {
         xml.required.set(true)
         html.required.set(true)
+        html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
     }
     val fileFilter = listOf(
         "**/R.class",
