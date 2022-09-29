@@ -134,11 +134,14 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
         "**/BuildConfig.*",
         "**/Manifest*.*",
         "**/*Test*.*",
-        "android/**/*.*"
+        "android/**/*.*",
+        "**/*_Factory.*",
+        "**/*_Provide*Factory*.*"
     )
+    val kClasses = "${project.buildDir}/tmp/kotlin-classes/debug"
     val debugTree = fileTree(
         mapOf(
-            "dir" to "${buildDir}/intermediates/classes/debug",
+            "dir" to kClasses,
             "excludes" to fileFilter
         )
     )
