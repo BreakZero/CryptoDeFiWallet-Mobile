@@ -18,7 +18,7 @@ jobs:
           cd . > keystore/keystore.properties
           cd . > keystore/github_token.properties
           cd . > keystore/defi_wallet.jks
-          echo ${{ secrets.GITHUB_TOKEN_INFO }} | base64 --decode > keystore/github_token.properties
+          echo ${{ secrets.TOKEN_INFO }} | base64 --decode > keystore/github_token.properties
           echo ${{ secrets.KEYSTORE_PROPERTIES }} | base64 --decode > keystore/keystore.properties
           echo ${{ secrets.KEYSTORE_FILE }} | base64 --decode > keystore/defi_wallet.jks
 
