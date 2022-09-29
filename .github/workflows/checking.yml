@@ -42,6 +42,11 @@ jobs:
         uses: ReactiveCircus/android-emulator-runner@v2.14.3
         with:
           api-level: 33
+          arch: x86
+          profile: Nexus 6
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          emulator-build: 6110076
           script: ./gradlew app:jacocoTestReport
 
       - name: Upload coverage to Codecov
