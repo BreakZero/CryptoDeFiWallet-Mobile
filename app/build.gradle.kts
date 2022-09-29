@@ -10,7 +10,7 @@ plugins {
     kotlin("plugin.serialization") version "1.7.10" apply true
     jacoco apply true
 }
-
+//apply(from = "${rootProject.rootDir}/jacoco.gradle.kts")
 android {
     compileSdk = AndroidBuildConfig.compileSdkVersion
 
@@ -45,12 +45,6 @@ android {
             storePassword = keyProperties.getProperty("storePassword")
             keyAlias = keyProperties.getProperty("keyAlias")
             keyPassword = keyProperties.getProperty("keyPassword")
-        }
-    }
-
-    testOptions {
-        unitTests.all {
-
         }
     }
 
@@ -120,6 +114,7 @@ dependencies {
 
 jacoco {
     toolVersion = "0.8.7"
+    reportsDirectory.set(layout.buildDirectory.dir("jacoco"))
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {
@@ -127,6 +122,7 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
     reports {
         xml.required.set(true)
         html.required.set(true)
+        html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
     }
     val fileFilter = listOf(
         "**/R.class",
@@ -152,10 +148,20 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
         fileTree(
             mapOf(
                 "dir" to buildDir, "includes" to listOf(
-                    "jacoco/testDebugUnitTest.exec",
-                    "outputs/code-coverage/connected/*coverage.ec"
+                    "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+                    "outputs/code_coverage/debugAndroidTest/connected/*coverage.ec"
                 )
             )
         )
     )
+}
+
+tasks.withType(Test::class.java) {
+    configure<JacocoTaskExtension> {
+        isEnabled = true
+        excludes = listOf("jdk.internal.*")
+        isIncludeNoLocationClasses = true
+        setDestinationFile(layout.buildDirectory.file("jacoco/jacocoTest.exec").get().asFile)
+        classDumpDir = layout.buildDirectory.dir("jacoco/classpathdumps").get().asFile
+    }
 }

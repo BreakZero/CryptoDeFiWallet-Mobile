@@ -14,9 +14,10 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
         "**/*_Factory.*",
         "**/*_Provide*Factory*.*"
     )
+    val kClasses = "${project.buildDir}/tmp/kotlin-classes/debug"
     val debugTree = fileTree(
         mapOf(
-            "dir" to "${buildDir}/intermediates/classes/debug",
+            "dir" to kClasses,
             "excludes" to fileFilter
         )
     )
@@ -27,11 +28,10 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
         fileTree(
             mapOf(
                 "dir" to buildDir, "includes" to listOf(
-                    "jacoco/testDebugUnitTest.exec",
-                    "outputs/code-coverage/connected/*coverage.ec"
+                    "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+                    "outputs/code_coverage/debugAndroidTest/connected/*coverage.ec"
                 )
             )
         )
     )
 }
-

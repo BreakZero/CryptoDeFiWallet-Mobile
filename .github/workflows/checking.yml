@@ -71,4 +71,4 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{secrets.CODECOV_TOKEN}}
-          files: "app/build/reports/coverage/androidTest/debug/report.xml"
+          files: "app/build/jacoco/jacocoTestReport/jacocoTestReport.xml"
