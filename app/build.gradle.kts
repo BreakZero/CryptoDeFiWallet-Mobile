@@ -73,6 +73,13 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            unitTests.isReturnDefaultValues = true
+        }
+    }
+
     buildFeatures {
         compose = true
     }
@@ -134,22 +141,32 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
         "**/*_Factory.*",
         "**/*_Provide*Factory*.*"
     )
+    val jClasses = "${project.buildDir}/intermediates/javac/debug/classes"
     val kClasses = "${project.buildDir}/tmp/kotlin-classes/debug"
-    val debugTree = fileTree(
+
+    val javaClasses = fileTree(
+        mapOf(
+            "dir" to jClasses,
+            "excludes" to fileFilter
+        )
+    )
+
+    val kotlinClasses = fileTree(
         mapOf(
             "dir" to kClasses,
             "excludes" to fileFilter
         )
     )
-    val mainSrc = "${project.projectDir}/src/main/java"
-    sourceDirectories.from(files(mainSrc))
-    classDirectories.from(files(debugTree))
-    executionData.from(
+
+    val mainSrc = "${projectDir}/src/main/java"
+    sourceDirectories.setFrom(files(mainSrc))
+    classDirectories.setFrom(files(javaClasses, kotlinClasses))
+    executionData.setFrom(
         fileTree(
             mapOf(
-                "dir" to buildDir, "includes" to listOf(
+                "dir" to project.buildDir, "includes" to listOf(
                     "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
-                    "outputs/code_coverage/debugAndroidTest/connected/*coverage.ec"
+                    "outputs/code_coverage/debugAndroidTest/connected/*/coverage.ec"
                 )
             )
         )
@@ -163,5 +180,6 @@ tasks.withType(Test::class.java) {
         isIncludeNoLocationClasses = true
         setDestinationFile(layout.buildDirectory.file("jacoco/jacocoTest.exec").get().asFile)
         classDumpDir = layout.buildDirectory.dir("jacoco/classpathdumps").get().asFile
+        output = JacocoTaskExtension.Output.FILE
     }
 }
