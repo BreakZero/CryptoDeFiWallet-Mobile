@@ -46,7 +46,7 @@ class CryptoModuleConfigPlugin : Plugin<Project> {
         defaultConfig {
             minSdk = AndroidBuildConfig.minSdkVersion
             targetSdk = AndroidBuildConfig.targetSdkVersion
-            testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
         buildTypes {
             release {

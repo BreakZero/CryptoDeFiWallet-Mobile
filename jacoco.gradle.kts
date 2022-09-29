@@ -1,5 +1,5 @@
 tasks.register("jacocoTestReport", JacocoReport::class) {
-    dependsOn(listOf("testDebugUnitTest"))
+    dependsOn(listOf("testDebugUnitTest", "createDebugCoverageReport"))
     reports {
         xml.required.set(true)
         html.required.set(true)
