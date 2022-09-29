@@ -38,11 +38,11 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-      - name: Execute Gradle Build
-        run: ./gradlew app:jacocoTestReport
+      - name: Unit Test with Android Emulator Runner
+        uses: ReactiveCircus/android-emulator-runner@v2.14.3
+        with:
+          api-level: 33
+          script: ./gradlew app:jacocoTestReport
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
