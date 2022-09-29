@@ -41,7 +41,7 @@ jobs:
       - name: Unit Test with Android Emulator Runner
         uses: ReactiveCircus/android-emulator-runner@v2.14.3
         with:
-          api-level: 31
+          api-level: 29
           arch: x86
           profile: Nexus 6
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
