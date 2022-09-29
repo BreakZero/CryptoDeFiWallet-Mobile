@@ -6,6 +6,12 @@ plugins {
     kotlin("plugin.serialization") version "1.7.10"
 }
 
+configurations {
+    all {
+        exclude("androidx.lifecycle", module = "lifecycle-viewmodel-ktx")
+    }
+}
+
 dependencies {
     api(AndroidDeps.coreKtx)
     api(AndroidDeps.securitys)

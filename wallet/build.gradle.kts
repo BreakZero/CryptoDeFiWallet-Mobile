@@ -6,6 +6,11 @@ import com.crypto.configuration.androidTestDependencies
 plugins {
     kotlin("plugin.serialization") version "1.7.10"
 }
+configurations {
+    all {
+        exclude("androidx.lifecycle", module = "lifecycle-viewmodel-ktx")
+    }
+}
 
 dependencies {
     implementation(project(":core"))
