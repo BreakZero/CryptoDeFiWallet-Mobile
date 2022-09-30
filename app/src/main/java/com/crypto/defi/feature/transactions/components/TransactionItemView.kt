@@ -11,6 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.crypto.core.extensions.byDecimal2String
 import com.crypto.core.ui.Spacing
+import com.crypto.defi.models.domain.BaseTransaction
 import com.crypto.defi.models.domain.EvmTransaction
 import com.crypto.defi.models.domain.TransactionDirection
 import com.crypto.resource.R
@@ -18,14 +19,14 @@ import timber.log.Timber
 
 @Composable
 fun TransactionItemView(
-    data: EvmTransaction
+    data: BaseTransaction
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = MaterialTheme.Spacing.space48)
             .clickable {
-                Timber.v(data.timeStamp)
+                Timber.v("${data.timeStamp}, ${data is EvmTransaction}")
             }
     ) {
         Row(

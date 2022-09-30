@@ -6,22 +6,13 @@ import com.crypto.defi.common.UrlConstant
 import com.crypto.defi.models.domain.EvmTransaction
 import com.crypto.defi.models.mapper.toEvmTransaction
 import com.crypto.defi.models.remote.BaseResponse
-import com.crypto.defi.models.remote.BaseRpcResponse
 import com.crypto.defi.models.remote.EvmTransactionDto
-import com.crypto.wallet.WalletRepository
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.json.Json
 import wallet.core.jni.CoinType
 import wallet.core.jni.HDWallet
 import java.math.BigInteger
-
-private val json = Json {
-    ignoreUnknownKeys = true
-}
 
 class EvmChainImpl(
     private val httpClient: HttpClient,
@@ -36,9 +27,8 @@ class EvmChainImpl(
                 contract?.also {
                     parameter("contract", it)
                 }
-            }.bodyAsText()
-            val resule = json.decodeFromString(BaseRpcResponse.serializer(String.serializer()), response).result
-            resule.clearHexPrefix().toBigInteger(16)
+            }.body<BaseResponse<String>>()
+            response.data.clearHexPrefix().toBigInteger(16)
         } catch (e: Exception) {
             BigInteger.ZERO
         }

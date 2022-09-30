@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.crypto.defi.chains.IChain
 import com.crypto.defi.common.UrlConstant
+import com.crypto.defi.models.domain.BaseTransaction
 import com.crypto.defi.models.domain.EvmTransaction
 import com.crypto.defi.models.mapper.toEvmTransaction
 import com.crypto.defi.models.remote.BaseResponse
@@ -15,12 +16,12 @@ import io.ktor.client.request.*
 class TransactionListSource(
     private val iChain: IChain,
     private val contractAddress: String?
-) : PagingSource<Int, EvmTransaction>() {
-    override fun getRefreshKey(state: PagingState<Int, EvmTransaction>): Int? {
+) : PagingSource<Int, BaseTransaction>() {
+    override fun getRefreshKey(state: PagingState<Int, BaseTransaction>): Int? {
         return state.anchorPosition
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, EvmTransaction> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BaseTransaction> {
         return try {
             val nextPage = params.key ?: 1
             val transactionList = iChain.transactions(

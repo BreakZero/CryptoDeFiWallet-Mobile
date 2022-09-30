@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.crypto.core.ConfigurationKeys
+import com.crypto.core.annotations.ExcludeFromJacocoGeneratedReport
 import com.crypto.wallet.WalletRepository
 import com.crypto.wallet.model.WalletDatabase
 import dagger.Module
@@ -16,6 +17,7 @@ import timber.log.Timber
 import javax.inject.Singleton
 import kotlin.text.toCharArray
 
+@ExcludeFromJacocoGeneratedReport
 @Module
 @InstallIn(SingletonComponent::class)
 object MultiWalletModule {
