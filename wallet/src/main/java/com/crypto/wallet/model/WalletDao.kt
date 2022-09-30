@@ -3,7 +3,7 @@ package com.crypto.wallet.model
 import androidx.room.*
 
 @Dao
-interface WalletDao {
+internal interface WalletDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWallet(entity: WalletEntity)
 

@@ -13,7 +13,8 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
         "**/*Test*.*",
         "android/**/*.*",
         "**/*_Factory.*",
-        "**/*_Provide*Factory*.*"
+        "**/*_Provide*Factory*.*",
+        "**/*Database_Impl*.*"
     )
     val jClasses = "${project.buildDir}/intermediates/javac/debug/classes"
     val kClasses = "${project.buildDir}/tmp/kotlin-classes/debug"

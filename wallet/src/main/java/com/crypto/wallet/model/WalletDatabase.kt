@@ -10,7 +10,7 @@ import timber.log.Timber
     version = 1
 )
 abstract class WalletDatabase : RoomDatabase() {
-    abstract val walletDao: WalletDao
+    internal abstract val walletDao: WalletDao
 
     init {
         Timber.v("init database")

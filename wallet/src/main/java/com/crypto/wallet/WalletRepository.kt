@@ -1,22 +1,21 @@
 package com.crypto.wallet
 
-import com.crypto.wallet.model.WalletDatabase
-import com.crypto.wallet.model.WalletEntity
-import wallet.core.jni.HDWallet
+import com.crypto.wallet.model.*
+import com.crypto.wallet.model.toWallet
 import javax.inject.Inject
 
 class WalletRepository @Inject constructor(
     private val database: dagger.Lazy<WalletDatabase>
 ) {
-    suspend fun insertWallet(wallet: WalletEntity) {
-        database.get().walletDao.insertWallet(wallet)
+    suspend fun insertWallet(wallet: Wallet) {
+        database.get().walletDao.insertWallet(wallet.toWalletEntity())
     }
 
-    suspend fun deleteOne(wallet: WalletEntity) {
-        database.get().walletDao.deleteWallet(wallet)
+    suspend fun deleteOne(wallet: Wallet) {
+        database.get().walletDao.deleteWallet(wallet.toWalletEntity())
     }
 
-    suspend fun activeOne(): WalletEntity? {
-        return database.get().walletDao.activeWallet()
+    suspend fun activeOne(): Wallet? {
+        return database.get().walletDao.activeWallet()?.toWallet()
     }
 }

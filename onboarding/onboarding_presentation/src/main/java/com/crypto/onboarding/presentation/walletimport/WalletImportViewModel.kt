@@ -11,7 +11,7 @@ import com.crypto.core.ConfigurationKeys
 import com.crypto.core.common.UiEvent
 import com.crypto.core.common.UiText
 import com.crypto.wallet.WalletRepository
-import com.crypto.wallet.model.WalletEntity
+import com.crypto.wallet.model.Wallet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -44,10 +44,7 @@ class WalletImportViewModel @Inject constructor(
                     viewModelScope.launch(Dispatchers.IO) {
                         delay(1000L)
                         walletRepository.insertWallet(
-                            /*WalletEntity(
-                                mnemonic = state.phrase, 1, passphrase = ""
-                            )*/
-                            WalletEntity(
+                            Wallet(
                                 mnemonic = state.phrase,
                                 1,
                                 passphrase = ""

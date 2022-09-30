@@ -7,15 +7,16 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.crypto.wallet.model.WalletDao
 import com.crypto.wallet.model.WalletDatabase
 import com.crypto.wallet.model.WalletEntity
-import io.ktor.utils.io.errors.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -53,5 +54,20 @@ class WalletEntityReadWriteTest {
         val activeOne = walletDao.activeWallet()
 
         assertEquals(activeOne?.active, 1)
+    }
+
+    @Test
+    @kotlin.jvm.Throws(Exception::class)
+    fun deleteEntityInList() = runTest {
+        val walletEntity = WalletEntity(
+            mnemonic = "mock mnemonic",
+            active = 1,
+            passphrase = ""
+        )
+
+        walletDao.insertWallet(walletEntity)
+        walletDao.deleteWallet(walletEntity)
+        val activeOne = walletDao.activeWallet()
+        assertNull(activeOne)
     }
 }
