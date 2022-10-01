@@ -1,6 +1,5 @@
 package com.crypto.onboarding.presentation.walletimport
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -24,7 +23,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.common.UiEvent
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
-import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.resource.R
 import timber.log.Timber
 
@@ -95,7 +93,6 @@ fun ImportWordsPager(
             )
             Button(
                 modifier = Modifier
-                    .height(MaterialTheme.Spacing.extraLarge)
                     .fillMaxWidth()
                     .padding(MaterialTheme.Spacing.medium),
                 shape = RoundedCornerShape(MaterialTheme.Spacing.space24),

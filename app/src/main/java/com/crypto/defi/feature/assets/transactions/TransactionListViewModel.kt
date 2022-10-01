@@ -32,7 +32,7 @@ class TransactionListViewModel @AssistedInject constructor(
 
     val txnState = _txnState.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
+        started = SharingStarted.Lazily,
         initialValue = TransactionListState(
             asset = null,
             transactionList = flow { emit(PagingData.empty()) }

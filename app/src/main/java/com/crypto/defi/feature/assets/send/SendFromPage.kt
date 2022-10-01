@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
-
 package com.crypto.defi.feature.assets.send
 
 import android.app.Activity
@@ -16,17 +14,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -59,6 +56,11 @@ fun sendFormViewModel(
     )
 }
 
+@OptIn(
+    ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 fun SendFormPager(
     savedStateHandle: SavedStateHandle?,
@@ -69,11 +71,13 @@ fun SendFormPager(
     savedStateHandle?.also { handler ->
         LaunchedEffect(key1 = handler) {
             handler.getStateFlow(MapKeyConstants.KEY_OF_QR_CODE_CONTENT, "").collect {
-                Timber.tag("=====").v(it)
+                sendFormViewModel.onToChanged(it)
                 handler.remove<String>(MapKeyConstants.KEY_OF_QR_CODE_CONTENT)
             }
         }
     }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val formUiState by sendFormViewModel.sendFormState.collectAsState()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
@@ -81,25 +85,37 @@ fun SendFormPager(
     BottomSheetScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            DeFiAppBar(title = stringResource(id = R.string.send_address__send),
-            actions = {
-                Icon(
-                    modifier = Modifier
-                        .padding(end = MaterialTheme.Spacing.medium)
-                        .clickable {
-                            navigateTo(ScannerNavigation.Scanner)
-                        },
-                    painter = painterResource(id = R.drawable.ic_scanner),
-                    contentDescription = null
-                )
-            }) {
+            DeFiAppBar(
+                title = stringResource(id = R.string.send_address__send),
+                actions = {
+                    Icon(
+                        modifier = Modifier
+                            .padding(end = MaterialTheme.Spacing.medium)
+                            .clickable {
+                                navigateTo(ScannerNavigation.Scanner)
+                            },
+                        painter = painterResource(id = R.drawable.ic_scanner),
+                        contentDescription = null
+                    )
+                }) {
                 navigateUp()
             }
         },
         scaffoldState = bottomSheetScaffoldState,
         sheetContent = {
-            ConfirmFormView {
+            if (formUiState.plan.isEmptyPlan()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(128.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                ConfirmFormView(formUiState.plan) {
 
+                }
             }
         },
         sheetShape = RoundedCornerShape(
@@ -117,14 +133,31 @@ fun SendFormPager(
                 )
         ) {
             Column() {
-                TextField(modifier = Modifier.fillMaxWidth(), value = "", onValueChange = {})
-                Text("")
-                TextField(modifier = Modifier.fillMaxWidth(), value = "", onValueChange = {})
-                TextField(modifier = Modifier.fillMaxWidth(), value = "", onValueChange = {})
+                Text(text = stringResource(id = R.string.send_address__to))
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = formUiState.formInfo.to,
+                    onValueChange = {
+                        sendFormViewModel.onToChanged(it)
+                    })
+                Text(text = stringResource(id = R.string.send_amount__send))
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = formUiState.formInfo.amount,
+                    onValueChange = {
+                        sendFormViewModel.onAmountChanged(it)
+                    })
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = formUiState.formInfo.memo,
+                    onValueChange = {
+                        sendFormViewModel.onMemoChanged(it)
+                    })
 
                 Text(text = "Miner Fee")
             }
             Button(modifier = Modifier.fillMaxWidth(), onClick = {
+                keyboardController?.hide()
                 coroutineScope.launch {
                     if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
                         bottomSheetScaffoldState.bottomSheetState.collapse()
@@ -132,6 +165,14 @@ fun SendFormPager(
                         bottomSheetScaffoldState.bottomSheetState.expand()
                     }
                 }
+                sendFormViewModel.sign(
+                    onSuccess = {
+
+                    },
+                    onFailed = {
+                        Timber.e("somethings went wrong")
+                    }
+                )
             }) {
                 Text(text = "Next")
             }
@@ -141,6 +182,7 @@ fun SendFormPager(
 
 @Composable
 fun ConfirmFormView(
+    plan: TransactionPlan,
     onConfirm: () -> Unit
 ) {
     Surface(modifier = Modifier.fillMaxWidth()) {
@@ -166,10 +208,11 @@ fun ConfirmFormView(
                 )
                 Spacer(modifier = Modifier.size(MaterialTheme.Spacing.space48))
             }
+            Divider()
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                text = "10.0ETH",
+                text = "${plan.amount} ${plan.symbol}",
                 style = MaterialTheme.typography.titleMedium
             )
             Row(
@@ -182,7 +225,11 @@ fun ConfirmFormView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(modifier = Modifier.fillMaxWidth(0.3f), text = "Payment Info")
-                Text(modifier = Modifier.fillMaxWidth(0.7f), text = "Eth Transfer")
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = MaterialTheme.Spacing.small)
+                        .weight(1.0F), text = plan.action
+                )
             }
             Row(
                 modifier = Modifier
@@ -194,8 +241,13 @@ fun ConfirmFormView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(modifier = Modifier.fillMaxWidth(0.3f), text = "To")
-                Text(modifier = Modifier.fillMaxWidth(0.7f), text = "Eth Transfer")
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = MaterialTheme.Spacing.small)
+                        .weight(1.0F), text = plan.to
+                )
             }
+            Divider(startIndent = MaterialTheme.Spacing.medium, thickness = 0.2.dp)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -206,8 +258,13 @@ fun ConfirmFormView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(modifier = Modifier.fillMaxWidth(0.3f), text = "From")
-                Text(modifier = Modifier.fillMaxWidth(0.7f), text = "Eth Transfer")
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = MaterialTheme.Spacing.small)
+                        .weight(1.0F), text = plan.from
+                )
             }
+            Divider(startIndent = MaterialTheme.Spacing.medium, thickness = 0.2.dp)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -218,7 +275,11 @@ fun ConfirmFormView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(modifier = Modifier.fillMaxWidth(0.3f), text = "Miner Fee")
-                Text(modifier = Modifier.fillMaxWidth(0.7f), text = "Eth Transfer")
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = MaterialTheme.Spacing.small)
+                        .weight(1.0F), text = "${plan.fee} ${plan.symbol}"
+                )
             }
             Button(
                 modifier = Modifier
