@@ -4,6 +4,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -26,6 +27,8 @@ import com.crypto.core.ui.composables.DeFiBoxWithConstraints
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.feature.assets.components.AssetCard
 import com.crypto.defi.feature.assets.components.HomeAssetsMotionLayout
+import com.crypto.defi.navigations.ScannerNavigation
+import com.crypto.defi.navigations.SettingsNavigation
 import com.crypto.defi.navigations.TransactionListNavigation
 import com.crypto.resource.R
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -51,7 +54,7 @@ fun MainAssetsPager(
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
-                        //
+                        navigateTo(SettingsNavigation.Settings)
                     }) {
                         Image(
                             modifier = Modifier.size(MaterialTheme.Spacing.space48),
@@ -62,7 +65,11 @@ fun MainAssetsPager(
                 },
                 actions = {
                     Icon(
-                        modifier = Modifier.padding(end = MaterialTheme.Spacing.medium),
+                        modifier = Modifier
+                            .padding(end = MaterialTheme.Spacing.medium)
+                            .clickable {
+                                navigateTo(ScannerNavigation.Scanner)
+                            },
                         painter = painterResource(id = R.drawable.ic_scanner),
                         contentDescription = null
                     )

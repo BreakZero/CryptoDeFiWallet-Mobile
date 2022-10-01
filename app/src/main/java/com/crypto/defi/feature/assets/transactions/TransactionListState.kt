@@ -1,4 +1,4 @@
-package com.crypto.defi.feature.transactions
+package com.crypto.defi.feature.assets.transactions
 
 import androidx.paging.PagingData
 import com.crypto.defi.models.domain.Asset
@@ -8,5 +8,6 @@ import kotlinx.coroutines.flow.flow
 
 data class TransactionListState(
     val asset: Asset? = null,
+    val address: String = "",
     val transactionList: Flow<PagingData<BaseTransaction>> = flow { emit(PagingData.empty()) }
 )

@@ -12,7 +12,8 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -50,37 +51,33 @@ fun ScannerView(
     LaunchedEffect(key1 = true) {
         launcher.launch(Manifest.permission.CAMERA)
     }
-    Column(
+    Box(
         modifier = Modifier.fillMaxSize()
     ) {
         if (hasCamPermission) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-            ) {
-                AndroidView(
-                    factory = { context ->
-                        val previewView = PreviewView(context)
-                        val preview = Preview.Builder().build()
-                        val selector = CameraSelector.Builder()
-                            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                            .build()
-                        preview.setSurfaceProvider(previewView.surfaceProvider)
-                        val imageAnalysis = ImageAnalysis.Builder()
-                            .setTargetResolution(Size(480, 480))
-                            .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
-                            .build()
-                        imageAnalysis.setAnalyzer(
-                            ContextCompat.getMainExecutor(context),
-                            QRCodeAnalyzer { result ->
-                                if (result.isNotEmpty()) onResult.invoke(result)
-                            }
-                        )
-                        kotlin.runCatching {
-                            cameraProviderFuture.get().bindToLifecycle(
-                                lifecycleOwner,
-                                selector,
-                                preview,
+            AndroidView(
+                factory = { context ->
+                    val previewView = PreviewView(context)
+                    val preview = Preview.Builder().build()
+                    val selector = CameraSelector.Builder()
+                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                        .build()
+                    preview.setSurfaceProvider(previewView.surfaceProvider)
+                    val imageAnalysis = ImageAnalysis.Builder()
+                        .setTargetResolution(Size(480, 480))
+                        .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
+                        .build()
+                    imageAnalysis.setAnalyzer(
+                        ContextCompat.getMainExecutor(context),
+                        QRCodeAnalyzer { result ->
+                            if (result.isNotEmpty()) onResult.invoke(result)
+                        }
+                    )
+                    kotlin.runCatching {
+                        cameraProviderFuture.get().bindToLifecycle(
+                            lifecycleOwner,
+                            selector,
+                            preview,
                                 imageAnalysis
                             )
                         }.onFailure {
@@ -103,7 +100,6 @@ fun ScannerView(
                         style = Stroke(width = 2.0f)
                     )
                 }
-            }
         }
     }
 }

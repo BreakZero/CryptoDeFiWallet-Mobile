@@ -1,4 +1,4 @@
-package com.crypto.defi.feature.transactions.components
+package com.crypto.defi.feature.assets.transactions.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

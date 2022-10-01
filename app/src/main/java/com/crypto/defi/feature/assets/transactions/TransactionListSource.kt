@@ -1,4 +1,4 @@
-package com.crypto.defi.feature.transactions
+package com.crypto.defi.feature.assets.transactions
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

@@ -1,21 +1,26 @@
-package com.crypto.defi.feature.transactions
+package com.crypto.defi.feature.assets.transactions
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -24,8 +29,11 @@ import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.DeFiBoxWithConstraints
 import com.crypto.core.ui.routers.NavigationCommand
-import com.crypto.defi.feature.transactions.components.TransactionItemView
-import com.crypto.defi.feature.transactions.components.TransactionsMotionLayout
+import com.crypto.core.ui.utils.QRCodeEncoder
+import com.crypto.defi.feature.assets.transactions.components.TransactionItemView
+import com.crypto.defi.feature.assets.transactions.components.TransactionsMotionLayout
+import com.crypto.defi.navigations.SendFormNavigation
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
@@ -37,24 +45,47 @@ fun TransactionListPager(
 ) {
     val txnUiState = txnListViewModel.txnState
     val transactionList = txnUiState.transactionList.collectAsLazyPagingItems()
+
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
+    )
+    val coroutineScope = rememberCoroutineScope()
+
     LaunchedEffect(key1 = slug, block = {
         txnListViewModel.init(slug)
     })
-    Scaffold(
+    BottomSheetScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            DeFiAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            ) {
+            DeFiAppBar {
                 navigateUp()
             }
-        }) {
-        DeFiBoxWithConstraints { progress, isExpanded ->
+        },
+        scaffoldState = bottomSheetScaffoldState,
+        sheetContent = {
+            QRCodeContent(content = txnUiState.address)
+        },
+        sheetPeekHeight = 0.dp,
+        sheetShape = RoundedCornerShape(
+            topEnd = MaterialTheme.Spacing.space24,
+            topStart = MaterialTheme.Spacing.space24
+        )
+    ) {
+        DeFiBoxWithConstraints { progress, _ ->
             TransactionsMotionLayout(
                 asset = txnUiState.asset, targetValue = progress,
-                navigateTo = navigateTo
+                onSend = {
+                    navigateTo.invoke(SendFormNavigation.destination(slug))
+                },
+                onReceive = {
+                    coroutineScope.launch {
+                        if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
+                            bottomSheetScaffoldState.bottomSheetState.collapse()
+                        } else {
+                            bottomSheetScaffoldState.bottomSheetState.expand()
+                        }
+                    }
+                }
             ) {
                 AnimatedContent(targetState = true, transitionSpec = {
                     fadeIn(animationSpec = tween(300, 300)) with fadeOut(
@@ -124,6 +155,48 @@ fun TransactionListPager(
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun QRCodeContent(
+    content: String
+) {
+    val image = QRCodeEncoder.encodeQRCode(content)
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Column {
+            Text(
+                text = content,
+                modifier = Modifier.padding(MaterialTheme.Spacing.space12),
+                textAlign = TextAlign.Center
+            )
+            image?.also {
+                Image(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    bitmap = it.asImageBitmap(),
+                    contentDescription = null,
+                    alignment = Alignment.Center
+                )
+            }
+            Divider(modifier = Modifier.padding(top = MaterialTheme.Spacing.space12))
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .clickable {
+                    }
+            ) {
+                Text(
+                    text = "Copy",
+                    lineHeight = 48.sp,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
