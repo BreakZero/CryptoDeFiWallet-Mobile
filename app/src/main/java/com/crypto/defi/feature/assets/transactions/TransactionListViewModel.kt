@@ -1,6 +1,5 @@
 package com.crypto.defi.feature.assets.transactions
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -9,43 +8,36 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.crypto.defi.chains.ChainManager
 import com.crypto.defi.chains.usecase.AssetUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.*
 
-@HiltViewModel
-class TransactionListViewModel @Inject constructor(
+class TransactionListViewModel @AssistedInject constructor(
     private val chainManager: ChainManager,
-    private val assetUseCase: AssetUseCase,
-    private val savedStateHandle: SavedStateHandle
+    assetUseCase: AssetUseCase,
+    @Assisted private val coinSlug: String
 ) : ViewModel() {
-    var txnState: TransactionListState = TransactionListState(
-        asset = null, transactionList = flow { emit(PagingData.empty()) })
-        private set
-
-    fun init(slug: String) {
-        if (savedStateHandle.get<String>("slug") == slug) return
-        savedStateHandle["slug"] = slug
-        assetUseCase.findAssetBySlug(slug)
-            .map {
-                txnState = it?.let { asset ->
-                    val iChain = chainManager.getChainByKey(asset.code)
-                    TransactionListState(
-                        asset = it,
-                        address = iChain.address(),
-                        transactionList = Pager(PagingConfig(pageSize = 20)) {
-                            TransactionListSource(
-                                contractAddress = asset.contract,
-                                iChain = iChain
-                            )
-                        }.flow.cachedIn(viewModelScope)
-                    )
-                } ?: TransactionListState(
-                    asset = null,
-                    transactionList = flow { emit(PagingData.empty()) }
+    private val _txnState = assetUseCase.findAssetBySlug(coinSlug).filterNotNull().map { asset ->
+        val iChain = chainManager.getChainByKey(asset.code)
+        TransactionListState(
+            asset = asset,
+            address = iChain.address(),
+            transactionList = Pager(PagingConfig(pageSize = 20)) {
+                TransactionListSource(
+                    contractAddress = asset.contract, iChain = iChain
                 )
-            }.launchIn(viewModelScope)
+            }.flow.cachedIn(viewModelScope)
+        )
     }
+
+    val txnState = _txnState.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = TransactionListState(
+            asset = null,
+            transactionList = flow { emit(PagingData.empty()) }
+        )
+    )
+
+    fun coinSlug() = coinSlug
 }

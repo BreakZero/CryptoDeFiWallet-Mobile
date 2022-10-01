@@ -23,7 +23,9 @@ import com.crypto.core.ui.composables.NormalTipsView
 import com.crypto.core.ui.models.NormalTips
 import com.crypto.defi.common.MapKeyConstants
 import com.crypto.defi.feature.assets.send.SendFormPager
+import com.crypto.defi.feature.assets.send.sendFormViewModel
 import com.crypto.defi.feature.assets.transactions.TransactionListPager
+import com.crypto.defi.feature.assets.transactions.transactionListViewModel
 import com.crypto.defi.feature.common.DeFiScannerScreen
 import com.crypto.defi.feature.main.MainPager
 import com.crypto.defi.feature.settings.SettingsPager
@@ -130,11 +132,13 @@ class MainActivity : ComponentActivity() {
                                 fadeOut(animationSpec = tween(500))
                             }
                         ) { backStackEntry ->
-                            val code = backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE) ?: ""
-                            TransactionListPager(slug = code,
+                            val coinSlug = backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE) ?: ""
+                            TransactionListPager(
+                                txnListViewModel = transactionListViewModel(slug = coinSlug),
                                 navigateUp = {
-                                navController.navigateUp()
-                            }) {
+                                    navController.navigateUp()
+                                }
+                            ) {
                                 navController.navigate(it.destination)
                             }
                         }
@@ -158,8 +162,8 @@ class MainActivity : ComponentActivity() {
                             val coinSlug = backStackEntry.arguments
                                 ?.getString(SendFormNavigation.KEY_SLUG) ?: ""
                             SendFormPager(
-                                coinSlug = coinSlug,
                                 savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
+                                sendFormViewModel = sendFormViewModel(coinSlug),
                                 navigateUp = {
                                     navController.navigateUp()
                                 }) {

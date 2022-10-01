@@ -1,13 +1,15 @@
 package com.crypto.defi.feature.assets.send
 
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import timber.log.Timber
 
-@HiltViewModel
-class SendFormViewModel @Inject constructor(): ViewModel() {
+class SendFormViewModel @AssistedInject constructor(
+    @Assisted private val slug: String
+): ViewModel() {
     init {
-
+        Timber.tag("=====").v(slug)
     }
     fun onEvent() {
 

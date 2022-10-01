@@ -1,5 +1,6 @@
 package com.crypto.defi.feature.assets.transactions
 
+import android.app.Activity
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -12,16 +13,20 @@ import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -30,20 +35,39 @@ import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.DeFiBoxWithConstraints
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.core.ui.utils.QRCodeEncoder
+import com.crypto.defi.di.ViewModelFactoryProvider
 import com.crypto.defi.feature.assets.transactions.components.TransactionItemView
 import com.crypto.defi.feature.assets.transactions.components.TransactionsMotionLayout
 import com.crypto.defi.navigations.SendFormNavigation
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
+
+@Composable
+fun transactionListViewModel(
+    slug: String
+): TransactionListViewModel {
+    val assistedFactory = EntryPointAccessors.fromActivity(
+        LocalContext.current as Activity,
+        ViewModelFactoryProvider::class.java
+    ).transactionListAssistedViewModelFactory()
+
+    return viewModel(
+        factory = object: ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.createTransactionListViewModel(slug) as T
+            }
+        }
+    )
+}
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun TransactionListPager(
-    slug: String,
-    txnListViewModel: TransactionListViewModel = hiltViewModel(),
+    txnListViewModel: TransactionListViewModel,
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {
-    val txnUiState = txnListViewModel.txnState
+    val txnUiState by txnListViewModel.txnState.collectAsState()
     val transactionList = txnUiState.transactionList.collectAsLazyPagingItems()
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
@@ -51,9 +75,6 @@ fun TransactionListPager(
     )
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(key1 = slug, block = {
-        txnListViewModel.init(slug)
-    })
     BottomSheetScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -75,7 +96,7 @@ fun TransactionListPager(
             TransactionsMotionLayout(
                 asset = txnUiState.asset, targetValue = progress,
                 onSend = {
-                    navigateTo.invoke(SendFormNavigation.destination(slug))
+                    navigateTo.invoke(SendFormNavigation.destination(txnListViewModel.coinSlug()))
                 },
                 onReceive = {
                     coroutineScope.launch {
