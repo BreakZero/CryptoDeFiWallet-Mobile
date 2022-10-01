@@ -1,5 +1,6 @@
 package com.crypto.defi.feature.assets.send
 
+import com.crypto.defi.models.domain.Asset
 import java.math.BigInteger
 
 data class SendFormInfo(
@@ -9,7 +10,7 @@ data class SendFormInfo(
 )
 
 data class SendFormState(
-    val symbol: String = "",
+    val asset: Asset? = null,
     val formInfo: SendFormInfo = SendFormInfo(),
     val plan: TransactionPlan = TransactionPlan.EmptyPlan
 )
@@ -17,19 +18,21 @@ data class SendFormState(
 data class ReadyToSign(
     val to: String,
     val amount: BigInteger,
-    val memo: String,
+    val memo: String? = null,
+    val contract: String? = null,
+    val chainId: Int = 1
 )
 
 data class TransactionPlan(
+    val rawData: String,
     val action: String,
-    val amount: String,
-    val symbol: String,
+    val amount: BigInteger,
     val to: String,
     val from: String,
-    val fee: String
+    val fee: BigInteger
 ) {
     companion object {
-        val EmptyPlan = TransactionPlan("","","","","","")
+        val EmptyPlan = TransactionPlan("", "", BigInteger.ZERO, "", "", BigInteger.ZERO)
     }
 
     fun isEmptyPlan(): Boolean {

@@ -1,5 +1,7 @@
 package com.crypto.defi.chains
 
+import com.crypto.defi.feature.assets.send.ReadyToSign
+import com.crypto.defi.feature.assets.send.TransactionPlan
 import com.crypto.defi.models.domain.EvmTransaction
 import java.math.BigInteger
 
@@ -17,5 +19,9 @@ class EmptyChain: IChain {
         contract: String?
     ): List<EvmTransaction> {
         return emptyList()
+    }
+
+    override suspend fun signTransaction(readyToSign: ReadyToSign): TransactionPlan {
+        return TransactionPlan.EmptyPlan
     }
 }

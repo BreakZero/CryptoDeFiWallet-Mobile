@@ -1,5 +1,7 @@
 package com.crypto.core.extensions
 
+import java.math.BigInteger
+
 private const val HEX_PREFIX = "0x"
 fun String?.orElse(default: String): String {
     return this ?: default
@@ -9,6 +11,12 @@ fun String.clearHexPrefix(): String {
     return if (startsWith(HEX_PREFIX)) substring(2)
     else this
 }
+
+fun String._16toNumber(): BigInteger {
+    return this.clearHexPrefix().toBigInteger(16)
+}
+
+
 
 fun String.mark(
     size: Int,

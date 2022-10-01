@@ -56,7 +56,6 @@ fun MainPager(
     savedStateHandle?.also { handler ->
         LaunchedEffect(key1 = handler) {
             handler.getStateFlow(MapKeyConstants.KEY_OF_QR_CODE_CONTENT, "").collect {
-                Timber.tag("=====").v(it)
                 handler.remove<String>(MapKeyConstants.KEY_OF_QR_CODE_CONTENT)
             }
         }

@@ -1,6 +1,8 @@
 package com.crypto.defi.chains.solana
 
 import com.crypto.defi.chains.IChain
+import com.crypto.defi.feature.assets.send.ReadyToSign
+import com.crypto.defi.feature.assets.send.TransactionPlan
 import com.crypto.defi.models.domain.EvmTransaction
 import io.ktor.client.*
 import wallet.core.jni.CoinType
@@ -24,5 +26,9 @@ class SolanaChainImpl(
         contract: String?
     ): List<EvmTransaction> {
         return emptyList()
+    }
+
+    override suspend fun signTransaction(readyToSign: ReadyToSign): TransactionPlan {
+        return TransactionPlan.EmptyPlan
     }
 }

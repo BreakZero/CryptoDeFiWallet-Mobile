@@ -1,9 +1,12 @@
 package com.crypto.defi.feature.assets.send
 
 import android.app.Activity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -13,25 +16,28 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.crypto.core.extensions.byDecimal2String
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.common.MapKeyConstants
 import com.crypto.defi.di.ViewModelFactoryProvider
+import com.crypto.defi.models.domain.Asset
 import com.crypto.defi.navigations.ScannerNavigation
 import com.crypto.resource.R
 import dagger.hilt.android.EntryPointAccessors
@@ -79,7 +85,12 @@ fun SendFormPager(
     val keyboardController = LocalSoftwareKeyboardController.current
     val formUiState by sendFormViewModel.sendFormState.collectAsState()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
+        bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed, confirmStateChange = {
+            if (it == BottomSheetValue.Collapsed) {
+                sendFormViewModel.clearPlan()
+            }
+            true
+        })
     )
     val coroutineScope = rememberCoroutineScope()
     BottomSheetScaffold(
@@ -113,7 +124,7 @@ fun SendFormPager(
                     CircularProgressIndicator()
                 }
             } else {
-                ConfirmFormView(formUiState.plan) {
+                ConfirmFormView(formUiState.asset!!, formUiState.plan) {
 
                 }
             }
@@ -132,28 +143,97 @@ fun SendFormPager(
                     vertical = MaterialTheme.Spacing.medium
                 )
         ) {
-            Column() {
+            Column {
                 Text(text = stringResource(id = R.string.send_address__to))
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
+                Spacer(modifier = Modifier.height(MaterialTheme.Spacing.extraSmall))
+                BasicTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .defaultMinSize(
+                            minWidth = TextFieldDefaults.MinWidth,
+                            minHeight = TextFieldDefaults.MinHeight
+                        )
+                        .clip(RoundedCornerShape(MaterialTheme.Spacing.small))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .padding(
+                            vertical = MaterialTheme.Spacing.medium,
+                            horizontal = MaterialTheme.Spacing.medium
+                        ),
+                    textStyle = LocalTextStyle.current,
+                    maxLines = 2,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text
+                    ),
                     value = formUiState.formInfo.to,
                     onValueChange = {
                         sendFormViewModel.onToChanged(it)
                     })
-                Text(text = stringResource(id = R.string.send_amount__send))
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = MaterialTheme.Spacing.extraSmall),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = stringResource(id = R.string.send_amount__enter_another_amount))
+                    Text(text = "")
+                }
+                BasicTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .defaultMinSize(
+                            minWidth = TextFieldDefaults.MinWidth,
+                            minHeight = TextFieldDefaults.MinHeight
+                        )
+                        .clip(
+                            RoundedCornerShape(
+                                topStart = MaterialTheme.Spacing.small,
+                                topEnd = MaterialTheme.Spacing.small
+                            )
+                        )
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .padding(
+                            vertical = MaterialTheme.Spacing.medium,
+                            horizontal = MaterialTheme.Spacing.medium
+                        ),
+                    textStyle = LocalTextStyle.current,
+                    maxLines = 1,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number
+                    ),
                     value = formUiState.formInfo.amount,
                     onValueChange = {
                         sendFormViewModel.onAmountChanged(it)
                     })
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
+                Divider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),)
+                BasicTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .defaultMinSize(
+                            minWidth = TextFieldDefaults.MinWidth,
+                            minHeight = TextFieldDefaults.MinHeight
+                        )
+                        .clip(
+                            RoundedCornerShape(
+                                bottomStart = MaterialTheme.Spacing.small,
+                                bottomEnd = MaterialTheme.Spacing.small
+                            )
+                        )
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .padding(
+                            vertical = MaterialTheme.Spacing.medium,
+                            horizontal = MaterialTheme.Spacing.medium
+                        ),
+                    textStyle = LocalTextStyle.current,
+                    maxLines = 5,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text
+                    ),
                     value = formUiState.formInfo.memo,
                     onValueChange = {
                         sendFormViewModel.onMemoChanged(it)
-                    })
+                    }) {
 
+                }
                 Text(text = "Miner Fee")
             }
             Button(modifier = Modifier.fillMaxWidth(), onClick = {
@@ -166,11 +246,12 @@ fun SendFormPager(
                     }
                 }
                 sendFormViewModel.sign(
-                    onSuccess = {
-
-                    },
+                    onSuccess = {},
                     onFailed = {
-                        Timber.e("somethings went wrong")
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.bottomSheetState.collapse()
+                        }
+                        Timber.e(it)
                     }
                 )
             }) {
@@ -182,6 +263,7 @@ fun SendFormPager(
 
 @Composable
 fun ConfirmFormView(
+    asset: Asset,
     plan: TransactionPlan,
     onConfirm: () -> Unit
 ) {
@@ -212,8 +294,8 @@ fun ConfirmFormView(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                text = "${plan.amount} ${plan.symbol}",
-                style = MaterialTheme.typography.titleMedium
+                text = "${plan.amount.byDecimal2String(asset.decimal)} ${asset.symbol}",
+                style = MaterialTheme.typography.titleLarge
             )
             Row(
                 modifier = Modifier
@@ -231,6 +313,7 @@ fun ConfirmFormView(
                         .weight(1.0F), text = plan.action
                 )
             }
+            Divider(startIndent = MaterialTheme.Spacing.medium, thickness = 0.2.dp)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -278,7 +361,7 @@ fun ConfirmFormView(
                 Text(
                     modifier = Modifier
                         .padding(horizontal = MaterialTheme.Spacing.small)
-                        .weight(1.0F), text = "${plan.fee} ${plan.symbol}"
+                        .weight(1.0F), text = "${plan.fee.byDecimal2String(asset.decimal)} ${asset.symbol}"
                 )
             }
             Button(
