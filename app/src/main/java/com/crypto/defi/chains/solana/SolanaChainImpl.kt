@@ -17,8 +17,7 @@ class SolanaChainImpl(
         return hdWallet.getAddressForCoin(CoinType.SOLANA)
     }
     override suspend fun balance(contract: String?): BigInteger {
-        val balance = BigInteger.ZERO
-        return balance
+        return BigInteger.ZERO
     }
 
     override suspend fun transactions(
