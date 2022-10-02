@@ -66,7 +66,7 @@ class SendFormViewModel @AssistedInject constructor(
                         val plan = iChain.signTransaction(
                             ReadyToSign(
                                 to = this.formInfo.to,
-                                memo = this.formInfo.memo,
+                                memo = this.formInfo.memo.ifBlank { null },
                                 contract = it.contract,
                                 amount = this.formInfo.amount.toBigDecimal().upWithDecimal(asset.decimal)
                             )
@@ -76,6 +76,26 @@ class SendFormViewModel @AssistedInject constructor(
                         }
                         onSuccess()
                     } catch (e: Exception) {
+                        onFailed.invoke(e.message.orElse("something went wrong..."))
+                    }
+                }
+            }
+        }
+    }
+
+    fun broadcast(
+        onFailed: (String) -> Unit,
+        onSuccess: () -> Unit
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            with(sendFormState.value) {
+                this.asset?.also {
+                    val iChain = chainManager.getChainByKey(it.code)
+                    try {
+                        iChain.broadcast(this.plan.rawData)
+                        onSuccess()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                         onFailed.invoke(e.message.orElse("something went wrong..."))
                     }
                 }

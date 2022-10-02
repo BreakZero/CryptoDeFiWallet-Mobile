@@ -1,7 +1,6 @@
 package com.crypto.defi.chains.evm
 
 import androidx.annotation.Keep
-import com.crypto.core.common.hex
 import com.crypto.core.extensions.*
 import com.crypto.defi.chains.IChain
 import com.crypto.defi.common.UrlConstant
@@ -127,7 +126,7 @@ class EvmChainImpl(
                 Ethereum.SigningOutput.parser()
             )
             TransactionPlan(
-                rawData = output.encoded.toByteArray().hex,
+                rawData = output.encoded.toByteArray().toHex(),
                 action = "ETH Transfer",
                 amount = readyToSign.amount,
                 to = readyToSign.to,
@@ -135,6 +134,13 @@ class EvmChainImpl(
                 fee = gasLimit.toBigInteger().times(baseFee)
             )
         }
+    }
+
+    override suspend fun broadcast(rawData: String) = withContext(Dispatchers.IO) {
+        httpClient.post {
+            url("${UrlConstant.BASE_URL}/ethereum/transaction/broadcast")
+            setBody(rawData)
+        }.body<BaseResponse<String>>().data
     }
 
     private suspend fun estimateGasLimit(

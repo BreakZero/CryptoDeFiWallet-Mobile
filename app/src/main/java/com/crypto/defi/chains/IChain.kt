@@ -12,4 +12,6 @@ interface IChain {
     suspend fun transactions(page: Int, offset:Int, contract: String? = null): List<BaseTransaction>
 
     suspend fun signTransaction(readyToSign: ReadyToSign): TransactionPlan
+
+    suspend fun broadcast(rawData: String): String
 }

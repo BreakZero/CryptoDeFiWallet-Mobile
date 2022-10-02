@@ -127,7 +127,14 @@ fun SendFormPager(
                 }
             } else {
                 ConfirmFormView(formUiState.asset!!, formUiState.plan) {
-
+                    sendFormViewModel.broadcast(
+                        onFailed = {
+                            Timber.e(it)
+                        },
+                        onSuccess = {
+                            Timber.v("broadcast success")
+                        }
+                    )
                 }
             }
         },
@@ -375,10 +382,11 @@ fun ConfirmFormView(
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.Spacing.medium),
                 loading = loading,
-                enabled = !loading,
                 onClick = {
-                    loading = true
-                    onConfirm()
+                    if (!loading) {
+                        loading = true
+                        onConfirm()
+                    }
                 }) {
                 Text(text = "Confirm")
             }

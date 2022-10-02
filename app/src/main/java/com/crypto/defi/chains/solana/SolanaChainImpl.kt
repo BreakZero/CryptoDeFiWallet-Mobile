@@ -31,4 +31,7 @@ class SolanaChainImpl(
     override suspend fun signTransaction(readyToSign: ReadyToSign): TransactionPlan {
         return TransactionPlan.EmptyPlan
     }
+    override suspend fun broadcast(rawData: String): String {
+        return ""
+    }
 }
