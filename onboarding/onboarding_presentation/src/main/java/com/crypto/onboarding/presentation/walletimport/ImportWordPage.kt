@@ -1,8 +1,9 @@
 package com.crypto.onboarding.presentation.walletimport
 
-import android.util.Log
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -24,7 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.common.UiEvent
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
-import com.crypto.core.ui.routers.NavigationCommand
+import com.crypto.core.ui.composables.LoadingButton
 import com.crypto.resource.R
 import timber.log.Timber
 
@@ -93,25 +94,17 @@ fun ImportWordsPager(
                         viewModel.onEvent(ImportEvent.OnFocusChange(it.isFocused))
                     }
             )
-            Button(
+            LoadingButton(
                 modifier = Modifier
-                    .height(MaterialTheme.Spacing.extraLarge)
                     .fillMaxWidth()
                     .padding(MaterialTheme.Spacing.medium),
-                shape = RoundedCornerShape(MaterialTheme.Spacing.space24),
+                loading = viewModel.state.inProgress,
                 onClick = {
                     viewModel.onEvent(ImportEvent.OnImportClick(passcode))
                     keyboardController?.hide()
                 }
             ) {
-                if (viewModel.state.inProgress) {
-                    Row {
-                        CircularProgressIndicator(modifier = Modifier.size(MaterialTheme.Spacing.large))
-                        Text(text = stringResource(id = R.string.import_wallet__restoring))
-                    }
-                } else {
-                    Text(text = stringResource(id = R.string.import_wallet__restore))
-                }
+                Text(text = stringResource(id = R.string.import_wallet__restore))
             }
         }
     }

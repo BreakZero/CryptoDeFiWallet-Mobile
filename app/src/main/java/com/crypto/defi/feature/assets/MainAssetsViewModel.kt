@@ -102,6 +102,9 @@ class MainAssetsViewModel @Inject constructor(
         }
     }
     fun onRefresh() {
+        assetState = assetState.copy(
+            onRefreshing = true
+        )
         workManager.enqueueUniquePeriodicWork(
             WORKER_NAME,
             ExistingPeriodicWorkPolicy.UPDATE,

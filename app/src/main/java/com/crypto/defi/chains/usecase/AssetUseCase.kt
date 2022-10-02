@@ -54,7 +54,7 @@ class AssetUseCase @Inject constructor(
     fun assetsFlow(): Flow<List<AssetEntity>> {
         return try {
             database.assetDao.assetsFlow().map {
-                it.filter { it.chainName == "Ethereum" }.take(200)
+                it.filter { it.chainName == "Ethereum" }
             }
         } catch (e: Exception) {
             flow { emptyList<Asset>() }

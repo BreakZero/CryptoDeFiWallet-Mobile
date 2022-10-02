@@ -1,4 +1,4 @@
-package com.crypto.defi.feature.transactions.components
+package com.crypto.defi.feature.assets.transactions.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -34,13 +34,9 @@ import androidx.constraintlayout.compose.MotionLayout
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.crypto.core.extensions.byDecimal2String
-import com.crypto.core.extensions.orElse
 import com.crypto.core.ui.Spacing
-import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.models.domain.Asset
-import com.crypto.defi.navigations.SendFormNavigation
 import com.crypto.resource.R
-import timber.log.Timber
 import java.math.BigInteger
 
 @OptIn(ExperimentalMotionApi::class)
@@ -48,7 +44,8 @@ import java.math.BigInteger
 fun TransactionsMotionLayout(
     asset: Asset?,
     targetValue: Float,
-    navigateTo: (NavigationCommand) -> Unit,
+    onSend: () -> Unit,
+    onReceive: () -> Unit,
     scrollableBody: @Composable () -> Unit
 ) {
     val progress by animateFloatAsState(
@@ -125,9 +122,7 @@ fun TransactionsMotionLayout(
                         modifier = Modifier
                             .width(MaterialTheme.Spacing.extraLarge)
                             .clickable {
-                                asset?.slug?.also {
-                                    navigateTo.invoke(SendFormNavigation.destination(it))
-                                }
+                                onSend()
                             },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -148,7 +143,9 @@ fun TransactionsMotionLayout(
                     Column(
                         modifier = Modifier
                             .width(MaterialTheme.Spacing.extraLarge)
-                            .clickable { },
+                            .clickable {
+                                onReceive()
+                            },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Box(

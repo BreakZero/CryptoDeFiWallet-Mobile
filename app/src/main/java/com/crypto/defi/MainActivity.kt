@@ -14,24 +14,23 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.dialog
 import com.crypto.core.ui.composables.NormalTipsView
 import com.crypto.core.ui.models.NormalTips
-import com.crypto.defi.feature.assets.send.SendingPager
+import com.crypto.defi.common.MapKeyConstants
+import com.crypto.defi.feature.assets.send.SendFormPager
+import com.crypto.defi.feature.assets.send.sendFormViewModel
+import com.crypto.defi.feature.assets.transactions.TransactionListPager
+import com.crypto.defi.feature.assets.transactions.transactionListViewModel
+import com.crypto.defi.feature.common.DeFiScannerScreen
 import com.crypto.defi.feature.main.MainPager
+import com.crypto.defi.feature.settings.SettingsPager
 import com.crypto.defi.feature.splash.SplashPager
-import com.crypto.defi.feature.transactions.TransactionListPager
-import com.crypto.defi.feature.transactions.TransactionListViewModel
-import com.crypto.defi.navigations.MainNavigation
-import com.crypto.defi.navigations.SendFormNavigation
-import com.crypto.defi.navigations.SplashNavigation
-import com.crypto.defi.navigations.TransactionListNavigation
+import com.crypto.defi.navigations.*
 import com.crypto.defi.ui.theme.DeFiWalletTheme
 import com.crypto.onboarding.presentation.onboarding
 import com.crypto.resource.R
@@ -110,7 +109,9 @@ class MainActivity : ComponentActivity() {
                                 fadeOut(animationSpec = tween(500))
                             }
                         ) {
-                            MainPager {
+                            MainPager(
+                                savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+                            ) {
                                 navController.navigate(it.destination)
                             }
                         }
@@ -131,11 +132,13 @@ class MainActivity : ComponentActivity() {
                                 fadeOut(animationSpec = tween(500))
                             }
                         ) { backStackEntry ->
-                            val code = backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE) ?: ""
-                            TransactionListPager(slug = code,
+                            val coinSlug = backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE) ?: ""
+                            TransactionListPager(
+                                txnListViewModel = transactionListViewModel(slug = coinSlug),
                                 navigateUp = {
-                                navController.navigateUp()
-                            }) {
+                                    navController.navigateUp()
+                                }
+                            ) {
                                 navController.navigate(it.destination)
                             }
                         }
@@ -155,10 +158,66 @@ class MainActivity : ComponentActivity() {
                             popExitTransition = {
                                 fadeOut(animationSpec = tween(500))
                             }
-                        ) {
-                                backStackEntry ->
-                            val code = backStackEntry.arguments?.getString(SendFormNavigation.KEY_SLUG) ?: ""
-                            SendingPager(code)
+                        ) { backStackEntry ->
+                            val coinSlug = backStackEntry.arguments
+                                ?.getString(SendFormNavigation.KEY_SLUG) ?: ""
+                            SendFormPager(
+                                savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
+                                sendFormViewModel = sendFormViewModel(coinSlug),
+                                navigateUp = {
+                                    navController.navigateUp()
+                                }) {
+                                navController.navigate(it.destination)
+                            }
+                        }
+
+                        composable(
+                            route = SettingsNavigation.Settings.destination,
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(500))
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(500))
+                            },
+                            popEnterTransition = {
+                                fadeIn(animationSpec = tween(500))
+                            },
+                            popExitTransition = {
+                                fadeOut(animationSpec = tween(500))
+                            }
+                        ) { _ ->
+                            SettingsPager(
+                                navigateUp = {
+                                    navController.navigateUp()
+                                }
+                            ) {
+                                navController.navigate(it.destination)
+                            }
+                        }
+
+                        composable(
+                            route = ScannerNavigation.Scanner.destination,
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(500))
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(500))
+                            },
+                            popEnterTransition = {
+                                fadeIn(animationSpec = tween(500))
+                            },
+                            popExitTransition = {
+                                fadeOut(animationSpec = tween(500))
+                            }
+                        ) { _ ->
+                            DeFiScannerScreen { content ->
+                                content?.also { qr_code ->
+                                    navController.previousBackStackEntry?.savedStateHandle?.let {
+                                        it[MapKeyConstants.KEY_OF_QR_CODE_CONTENT] = qr_code
+                                    }
+                                }
+                                navController.navigateUp()
+                            }
                         }
 
                         onboarding(navController)

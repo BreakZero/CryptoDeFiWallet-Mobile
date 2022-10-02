@@ -13,7 +13,7 @@ fun AssetEntity.toAsset(): Asset {
         symbol = this.symbol,
         decimal = this.decimal,
         chainName = this.chainName,
-        contract = this.contractAddress,
+        contract = this.contractAddress.ifBlank { null },
         nativeBalance = this.balance.toBigInteger()
     )
 }

@@ -20,3 +20,9 @@ fun BigInteger.byDecimal(
         .movePointLeft(decimal)
         .setScale(display, RoundingMode.DOWN)
 }
+
+fun BigDecimal.upWithDecimal(
+    decimal: Int
+): BigInteger {
+    return this.movePointRight(decimal).toBigInteger()
+}

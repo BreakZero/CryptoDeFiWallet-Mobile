@@ -10,7 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.SavedStateHandle
 import com.crypto.core.ui.routers.NavigationCommand
+import com.crypto.defi.common.MapKeyConstants
 import com.crypto.defi.feature.assets.MainAssetsPager
 import com.crypto.defi.feature.dapps.MainDappsPager
 import com.crypto.defi.feature.defi.MainDeFiPager
@@ -21,6 +23,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 data class NavMenu(
     @DrawableRes val icon: Int,
@@ -46,9 +49,17 @@ val navMenus = listOf(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MainPager(
+    savedStateHandle: SavedStateHandle?,
     mainViewModel: MainViewModel = hiltViewModel(),
     onNavigateTo: (NavigationCommand) -> Unit
 ) {
+    savedStateHandle?.also { handler ->
+        LaunchedEffect(key1 = handler) {
+            handler.getStateFlow(MapKeyConstants.KEY_OF_QR_CODE_CONTENT, "").collect {
+                handler.remove<String>(MapKeyConstants.KEY_OF_QR_CODE_CONTENT)
+            }
+        }
+    }
     val pageState = rememberPagerState()
     val tabIndex = pageState.currentPage
     val scope = rememberCoroutineScope()

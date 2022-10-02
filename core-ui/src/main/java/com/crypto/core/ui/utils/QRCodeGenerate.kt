@@ -6,8 +6,8 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 
-object QRCodeGenerate {
-    fun genQRCode(
+object QRCodeEncoder {
+    fun encodeQRCode(
         content: String,
         width: Int = 500,
         height: Int = 500
