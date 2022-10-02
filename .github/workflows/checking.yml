@@ -75,4 +75,4 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{secrets.CODECOV_TOKEN}}
-          files: "wallet/build/jacoco/jacocoTestReport/jacocoTestReport.xml"
+          files: "wallet/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
