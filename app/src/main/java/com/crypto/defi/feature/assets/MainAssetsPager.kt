@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiBoxWithConstraints
+import com.crypto.core.ui.composables.LoadingIndicator
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.feature.assets.components.AssetCard
 import com.crypto.defi.feature.assets.components.HomeAssetsMotionLayout
@@ -100,7 +101,7 @@ fun MainAssetsPager(
                     )
                 }) {
                     SwipeRefresh(
-                        state = rememberSwipeRefreshState(assetsUiState.onRefreshing),
+                        state = rememberSwipeRefreshState(false),
                         swipeEnabled = isExpanded,
                         onRefresh = {
                             assetsViewModel.onRefresh()
@@ -122,26 +123,25 @@ fun MainAssetsPager(
                             ),
                             verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
                         ) {
-                            if (assetsUiState.assets.isEmpty()) {
+                            if (assetsUiState.onRefreshing) {
                                 item {
                                     Box(
-                                        modifier = Modifier.fillMaxSize(),
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(top = MaterialTheme.Spacing.medium),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        androidx.compose.material.CircularProgressIndicator(
-                                            modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally)
-                                        )
+                                        LoadingIndicator(animating = true)
                                     }
                                 }
-                            } else {
-                                items(assetsUiState.assets) { asset ->
-                                    AssetCard(
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        asset = asset
-                                    ) {
-                                        navigateTo(TransactionListNavigation.destination(it.slug))
-                                    }
+                            }
+                            items(assetsUiState.assets) { asset ->
+                                AssetCard(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    asset = asset
+                                ) {
+                                    navigateTo(TransactionListNavigation.destination(it.slug))
                                 }
                             }
                             item {

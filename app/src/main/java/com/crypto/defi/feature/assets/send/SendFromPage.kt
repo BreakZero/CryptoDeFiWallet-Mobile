@@ -34,6 +34,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.crypto.core.extensions.byDecimal2String
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
+import com.crypto.core.ui.composables.LoadingButton
+import com.crypto.core.ui.composables.LoadingIndicator
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.common.MapKeyConstants
 import com.crypto.defi.di.ViewModelFactoryProvider
@@ -121,7 +123,7 @@ fun SendFormPager(
                         .height(128.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    LoadingIndicator(animating = true)
                 }
             } else {
                 ConfirmFormView(formUiState.asset!!, formUiState.plan) {
@@ -268,6 +270,9 @@ fun ConfirmFormView(
     onConfirm: () -> Unit
 ) {
     Surface(modifier = Modifier.fillMaxWidth()) {
+        var loading by remember {
+            mutableStateOf(false)
+        }
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(
                 modifier = Modifier
@@ -361,14 +366,18 @@ fun ConfirmFormView(
                 Text(
                     modifier = Modifier
                         .padding(horizontal = MaterialTheme.Spacing.small)
-                        .weight(1.0F), text = "${plan.fee.byDecimal2String(asset.decimal)} ${asset.symbol}"
+                        .weight(1.0F),
+                    text = "${plan.fee.byDecimal2String(asset.feeDecimal())} ${asset.feeSymbol()}"
                 )
             }
-            Button(
+            LoadingButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.Spacing.medium),
+                loading = loading,
+                enabled = !loading,
                 onClick = {
+                    loading = true
                     onConfirm()
                 }) {
                 Text(text = "Confirm")

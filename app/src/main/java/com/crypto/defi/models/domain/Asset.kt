@@ -25,4 +25,16 @@ data class Asset(
     fun fiatBalance(): BigDecimal {
         return nativeBalance.byDecimal(decimal).times(rate).setScale(2, RoundingMode.DOWN)
     }
+
+    fun feeDecimal(): Int {
+        return contract?.let {
+            18
+        } ?: decimal
+    }
+
+    fun feeSymbol(): String {
+        return contract?.let {
+            "ETH"
+        } ?: symbol
+    }
 }

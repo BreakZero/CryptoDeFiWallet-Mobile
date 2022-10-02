@@ -33,6 +33,7 @@ import androidx.paging.compose.items
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.DeFiBoxWithConstraints
+import com.crypto.core.ui.composables.LoadingIndicator
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.core.ui.utils.QRCodeEncoder
 import com.crypto.defi.di.ViewModelFactoryProvider
@@ -139,9 +140,7 @@ fun TransactionListPager(
                                         modifier = Modifier.fillMaxSize(),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        CircularProgressIndicator(
-                                            modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally)
-                                        )
+                                        LoadingIndicator(animating = true)
                                     }
                                 }
                             }
@@ -168,9 +167,7 @@ fun TransactionListPager(
                                     modifier = Modifier.fillMaxWidth(),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally)
-                                    )
+                                    LoadingIndicator(animating = true)
                                 }
                             }
                         }
