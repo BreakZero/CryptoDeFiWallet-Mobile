@@ -69,10 +69,10 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: ./gradlew app:jacocoTestReport
+          script: ./gradlew wallet:jacocoTestReport
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{secrets.CODECOV_TOKEN}}
-          files: "app/build/jacoco/jacocoTestReport/jacocoTestReport.xml"
+          files: "wallet/build/jacoco/jacocoTestReport/jacocoTestReport.xml"
