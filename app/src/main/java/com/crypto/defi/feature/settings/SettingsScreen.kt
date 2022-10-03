@@ -12,7 +12,7 @@ import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.routers.NavigationCommand
 
 @Composable
-fun SettingsPager(
+fun SettingsScreen(
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {

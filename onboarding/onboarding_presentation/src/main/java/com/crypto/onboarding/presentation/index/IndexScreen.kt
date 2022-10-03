@@ -47,7 +47,7 @@ private val banners = listOf(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun OnboardPager(
+fun OnboardScreen(
     navigateTo: (NavigationCommand) -> Unit
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {

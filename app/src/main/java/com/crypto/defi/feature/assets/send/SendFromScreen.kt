@@ -70,7 +70,7 @@ fun sendFormViewModel(
     ExperimentalMaterialApi::class
 )
 @Composable
-fun SendFormPager(
+fun SendFormScren(
     savedStateHandle: SavedStateHandle?,
     sendFormViewModel: SendFormViewModel,
     navigateUp: () -> Unit,

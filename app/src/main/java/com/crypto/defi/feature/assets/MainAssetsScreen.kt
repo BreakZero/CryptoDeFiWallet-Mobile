@@ -40,7 +40,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
     ExperimentalMaterial3Api::class
 )
 @Composable
-fun MainAssetsPager(
+fun MainAssetsScreen(
     assetsViewModel: MainAssetsViewModel = hiltViewModel(),
     navigateTo: (NavigationCommand) -> Unit
 ) {

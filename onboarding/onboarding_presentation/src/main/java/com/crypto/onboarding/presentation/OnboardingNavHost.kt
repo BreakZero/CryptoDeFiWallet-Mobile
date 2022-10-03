@@ -6,10 +6,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import com.crypto.onboarding.presentation.index.OnboardPager
-import com.crypto.onboarding.presentation.legal.LegalPager
-import com.crypto.onboarding.presentation.passcode.CreatePasscodePager
-import com.crypto.onboarding.presentation.walletimport.ImportWordsPager
+import com.crypto.onboarding.presentation.index.OnboardScreen
+import com.crypto.onboarding.presentation.legal.LegalScreen
+import com.crypto.onboarding.presentation.passcode.CreatePasscodeScreen
+import com.crypto.onboarding.presentation.walletimport.ImportWordsScreen
 import com.google.accompanist.navigation.animation.composable
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -29,7 +29,7 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
             fadeOut(animationSpec = tween(500))
         }
     ) {
-        OnboardPager {
+        OnboardScreen {
             navController.navigate(it.destination)
         }
     }
@@ -52,7 +52,7 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
     ) {
         val forCreate =
             it.arguments?.getBoolean(OnboardingNavigations.KEY_IS_CREATE) ?: false
-        LegalPager(
+        LegalScreen(
             forCreate = forCreate,
             navigateUp = { navController.navigateUp() },
             navigateTo = {
@@ -79,7 +79,7 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
         val forCreate =
             it.arguments?.getBoolean(OnboardingNavigations.KEY_IS_CREATE)
                 ?: false
-        CreatePasscodePager(
+        CreatePasscodeScreen(
             forCreate = forCreate,
             navigateUp = {
                 navController.navigateUp()
@@ -105,7 +105,7 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
     ) {
         val passcode =
             it.arguments?.getString(OnboardingNavigations.KEY_PASSCODE)!!
-        ImportWordsPager(
+        ImportWordsScreen(
             passcode = passcode,
             navigateUp = {
                 navController.navigateUp()

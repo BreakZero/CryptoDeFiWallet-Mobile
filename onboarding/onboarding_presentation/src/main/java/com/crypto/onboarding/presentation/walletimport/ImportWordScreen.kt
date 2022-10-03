@@ -31,7 +31,7 @@ import timber.log.Timber
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ImportWordsPager(
+fun ImportWordsScreen(
     passcode: String,
     viewModel: WalletImportViewModel = hiltViewModel(),
     navigateUp: () -> Unit,

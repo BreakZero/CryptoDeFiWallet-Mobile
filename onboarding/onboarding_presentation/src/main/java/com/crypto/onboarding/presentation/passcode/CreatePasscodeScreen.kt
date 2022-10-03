@@ -26,7 +26,7 @@ import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.resource.R
 
 @Composable
-fun CreatePasscodePager(
+fun CreatePasscodeScreen(
     forCreate: Boolean,
     viewModel: PasscodeViewModel = hiltViewModel(),
     navigateUp: () -> Unit,

@@ -22,14 +22,14 @@ import androidx.navigation.compose.dialog
 import com.crypto.core.ui.composables.NormalTipsView
 import com.crypto.core.ui.models.NormalTips
 import com.crypto.defi.common.MapKeyConstants
-import com.crypto.defi.feature.assets.send.SendFormPager
+import com.crypto.defi.feature.assets.send.SendFormScren
 import com.crypto.defi.feature.assets.send.sendFormViewModel
-import com.crypto.defi.feature.assets.transactions.TransactionListPager
+import com.crypto.defi.feature.assets.transactions.TransactionListScreen
 import com.crypto.defi.feature.assets.transactions.transactionListViewModel
 import com.crypto.defi.feature.common.DeFiScannerScreen
 import com.crypto.defi.feature.main.MainPager
-import com.crypto.defi.feature.settings.SettingsPager
-import com.crypto.defi.feature.splash.SplashPager
+import com.crypto.defi.feature.settings.SettingsScreen
+import com.crypto.defi.feature.splash.SplashScreen
 import com.crypto.defi.navigations.*
 import com.crypto.defi.ui.theme.DeFiWalletTheme
 import com.crypto.onboarding.presentation.onboarding
@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
                                 fadeOut(animationSpec = tween(500))
                             }
                         ) {
-                            SplashPager {
+                            SplashScreen {
                                 navController.navigate(it.destination) {
                                     popUpTo(SplashNavigation.Splashing.destination) {
                                         inclusive = true
@@ -133,7 +133,7 @@ class MainActivity : ComponentActivity() {
                             }
                         ) { backStackEntry ->
                             val coinSlug = backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE) ?: ""
-                            TransactionListPager(
+                            TransactionListScreen(
                                 txnListViewModel = transactionListViewModel(slug = coinSlug),
                                 navigateUp = {
                                     navController.navigateUp()
@@ -161,7 +161,7 @@ class MainActivity : ComponentActivity() {
                         ) { backStackEntry ->
                             val coinSlug = backStackEntry.arguments
                                 ?.getString(SendFormNavigation.KEY_SLUG) ?: ""
-                            SendFormPager(
+                            SendFormScren(
                                 savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
                                 sendFormViewModel = sendFormViewModel(coinSlug),
                                 navigateUp = {
@@ -186,7 +186,7 @@ class MainActivity : ComponentActivity() {
                                 fadeOut(animationSpec = tween(500))
                             }
                         ) { _ ->
-                            SettingsPager(
+                            SettingsScreen(
                                 navigateUp = {
                                     navController.navigateUp()
                                 }

@@ -21,7 +21,7 @@ import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.resource.R
 
 @Composable
-fun SplashPager(
+fun SplashScreen(
     splashViewModel: SplashViewModel = hiltViewModel(),
     navigateTo: (NavigationCommand) -> Unit
 ) {

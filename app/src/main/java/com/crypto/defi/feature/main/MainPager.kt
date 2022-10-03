@@ -13,17 +13,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.common.MapKeyConstants
-import com.crypto.defi.feature.assets.MainAssetsPager
-import com.crypto.defi.feature.dapps.MainDappsPager
-import com.crypto.defi.feature.defi.MainDeFiPager
-import com.crypto.defi.feature.nfts.MainNFTsPager
+import com.crypto.defi.feature.assets.MainAssetsScreen
+import com.crypto.defi.feature.dapps.MainDappsScreen
+import com.crypto.defi.feature.defi.MainDeFiScreen
+import com.crypto.defi.feature.nfts.MainNFTsScreen
 import com.crypto.resource.R
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 data class NavMenu(
     @DrawableRes val icon: Int,
@@ -89,16 +88,16 @@ fun MainPager(
         ) { page ->
             when (menus[page].label) {
                 "Wallet" -> {
-                    MainAssetsPager(navigateTo = onNavigateTo)
+                    MainAssetsScreen(navigateTo = onNavigateTo)
                 }
                 "NFT" -> {
-                    MainNFTsPager()
+                    MainNFTsScreen()
                 }
                 "Dapps" -> {
-                    MainDappsPager()
+                    MainDappsScreen()
                 }
                 "Earn" -> {
-                    MainDeFiPager()
+                    MainDeFiScreen()
                 }
                 else -> Unit
             }

@@ -21,7 +21,7 @@ import com.crypto.resource.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LegalPager(
+fun LegalScreen(
     forCreate: Boolean,
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit

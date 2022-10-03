@@ -63,7 +63,7 @@ fun transactionListViewModel(
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun TransactionListPager(
+fun TransactionListScreen(
     txnListViewModel: TransactionListViewModel,
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit

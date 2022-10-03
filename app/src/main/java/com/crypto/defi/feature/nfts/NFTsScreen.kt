@@ -14,7 +14,7 @@ import com.crypto.resource.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainNFTsPager() {
+fun MainNFTsScreen() {
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
             SmallTopAppBar(
