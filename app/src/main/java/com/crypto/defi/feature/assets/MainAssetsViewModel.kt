@@ -65,13 +65,12 @@ class MainAssetsViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             assetUseCase.fetchingAssets {
-                workManager.enqueueUniquePeriodicWork(
-                    WORKER_NAME,
-                    ExistingPeriodicWorkPolicy.UPDATE,
-                    balanceWorkerRequest
-                )
-
                 withContext(Dispatchers.Main) {
+                    workManager.enqueueUniquePeriodicWork(
+                        WORKER_NAME,
+                        ExistingPeriodicWorkPolicy.UPDATE,
+                        balanceWorkerRequest
+                    )
                     workManager.getWorkInfoByIdLiveData(balanceWorkerRequest.id).observeForever {
                         val inProgress = it.progress.getBoolean(KEY_WORKER_PROGRESS, false)
                         assetState = assetState.copy(onRefreshing = inProgress)

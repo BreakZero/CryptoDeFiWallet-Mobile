@@ -17,35 +17,40 @@ class SendFormViewModel @AssistedInject constructor(
     private val chainManager: ChainManager,
     assetUseCase: AssetUseCase,
     @Assisted private val coinSlug: String
-): ViewModel() {
+) : ViewModel() {
     private val _asset = assetUseCase.findAssetBySlug(coinSlug).filterNotNull()
-    private val _sendForm = MutableStateFlow(SendFormInfo())
+    private val _to = MutableStateFlow("")
+    private val _amount = MutableStateFlow("")
+    private val _memo = MutableStateFlow("")
 
     private val _planState = MutableStateFlow(TransactionPlan.EmptyPlan)
 
-    val sendFormState = combine(_asset, _sendForm, _planState) { asset, form, plan ->
+    val sendFormState = combine(
+        _asset,
+        _planState,
+        _to,
+        _amount,
+        _memo
+    ) { asset, plan, to, amount, memo ->
         SendFormState(
             asset = asset,
-            formInfo = form,
+            to = to,
+            amount = amount,
+            memo = memo.ifBlank { null },
             plan = plan
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SendFormState())
 
     fun onToChanged(newTo: String) {
-        _sendForm.update {
-            it.copy(to = newTo)
-        }
+        _to.update { newTo }
     }
+
     fun onAmountChanged(newAmount: String) {
-        _sendForm.update {
-            it.copy(amount = newAmount)
-        }
+        _amount.update { newAmount }
     }
 
     fun onMemoChanged(newMemo: String) {
-        _sendForm.update {
-            it.copy(memo = newMemo)
-        }
+        _memo.update { newMemo }
     }
 
     fun clearPlan() {
@@ -65,10 +70,11 @@ class SendFormViewModel @AssistedInject constructor(
                     try {
                         val plan = iChain.signTransaction(
                             ReadyToSign(
-                                to = this.formInfo.to,
-                                memo = this.formInfo.memo.ifBlank { null },
+                                to = this.to,
+                                memo = this.memo,
                                 contract = it.contract,
-                                amount = this.formInfo.amount.toBigDecimal().upWithDecimal(asset.decimal)
+                                amount = this.amount.toBigDecimal()
+                                    .upWithDecimal(asset.decimal)
                             )
                         )
                         _planState.update {

@@ -47,7 +47,7 @@ val navMenus = listOf(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun MainPager(
+fun MainScreen(
     savedStateHandle: SavedStateHandle?,
     mainViewModel: MainViewModel = hiltViewModel(),
     onNavigateTo: (NavigationCommand) -> Unit

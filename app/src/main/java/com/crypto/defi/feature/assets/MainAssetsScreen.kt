@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.crypto.defi.feature.assets
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,7 +39,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @OptIn(
-    ExperimentalAnimationApi::class, ExperimentalMaterialApi::class,
+    ExperimentalMaterialApi::class,
     ExperimentalMaterial3Api::class
 )
 @Composable
@@ -91,82 +94,77 @@ fun MainAssetsScreen(
             )
         }) {
         DeFiBoxWithConstraints { progress, isExpanded ->
-            HomeAssetsMotionLayout(totalBalance = assetsUiState.totalBalance, targetValue = progress) {
-                AnimatedContent(targetState = true, transitionSpec = {
-                    fadeIn(animationSpec = tween(300, 300)) with fadeOut(
-                        animationSpec = tween(
-                            300,
-                            300
-                        )
-                    )
-                }) {
-                    SwipeRefresh(
-                        state = rememberSwipeRefreshState(false),
-                        swipeEnabled = isExpanded,
-                        onRefresh = {
-                            assetsViewModel.onRefresh()
-                        }
-                    ) {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(
-                                    RoundedCornerShape(
-                                        topEnd = MaterialTheme.Spacing.space24,
-                                        topStart = MaterialTheme.Spacing.space24
-                                    )
+            HomeAssetsMotionLayout(
+                totalBalance = assetsUiState.totalBalance,
+                targetValue = progress
+            ) {
+                SwipeRefresh(
+                    state = rememberSwipeRefreshState(false),
+                    swipeEnabled = isExpanded,
+                    onRefresh = {
+                        assetsViewModel.onRefresh()
+                    }
+                ) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(
+                                RoundedCornerShape(
+                                    topEnd = MaterialTheme.Spacing.space24,
+                                    topStart = MaterialTheme.Spacing.space24
                                 )
-                                .background(MaterialTheme.colorScheme.surface),
-                            contentPadding = PaddingValues(
-                                vertical = MaterialTheme.Spacing.medium,
-                                horizontal = MaterialTheme.Spacing.small
-                            ),
-                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
-                        ) {
-                            if (assetsUiState.onRefreshing) {
-                                item {
+                            )
+                            .background(MaterialTheme.colorScheme.surface),
+                        contentPadding = PaddingValues(
+                            vertical = MaterialTheme.Spacing.medium,
+                            horizontal = MaterialTheme.Spacing.small
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+                    ) {
+                        if (assetsUiState.onRefreshing) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(top = MaterialTheme.Spacing.medium),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    LoadingIndicator(animating = true)
+                                }
+                            }
+                        }
+                        items(assetsUiState.assets) { asset ->
+                            AssetCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .animateItemPlacement(),
+                                asset = asset
+                            ) {
+                                navigateTo(TransactionListNavigation.destination(it.slug))
+                            }
+                        }
+                        item {
+                            LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    MaterialTheme.Spacing.space12
+                                )
+                            ) {
+                                items(assetsUiState.promoCard) {
                                     Box(
                                         modifier = Modifier
-                                            .fillMaxSize()
-                                            .padding(top = MaterialTheme.Spacing.medium),
-                                        contentAlignment = Alignment.Center
+                                            .size(MaterialTheme.Spacing.space128)
                                     ) {
-                                        LoadingIndicator(animating = true)
-                                    }
-                                }
-                            }
-                            items(assetsUiState.assets) { asset ->
-                                AssetCard(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    asset = asset
-                                ) {
-                                    navigateTo(TransactionListNavigation.destination(it.slug))
-                                }
-                            }
-                            item {
-                                LazyRow(
-                                    horizontalArrangement = Arrangement.spacedBy(
-                                        MaterialTheme.Spacing.space12
-                                    )
-                                ) {
-                                    items(assetsUiState.promoCard) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(MaterialTheme.Spacing.space128)
-                                        ) {
-                                            Image(
-                                                painter = painterResource(id = it.backgroundRes),
-                                                contentDescription = null
-                                            )
-                                            Text(
-                                                modifier = Modifier.padding(
-                                                    MaterialTheme.Spacing.extraSmall
-                                                ),
-                                                text = it.title.asString(context),
-                                                color = Color.White
-                                            )
-                                        }
+                                        Image(
+                                            painter = painterResource(id = it.backgroundRes),
+                                            contentDescription = null
+                                        )
+                                        Text(
+                                            modifier = Modifier.padding(
+                                                MaterialTheme.Spacing.extraSmall
+                                            ),
+                                            text = it.title.asString(context),
+                                            color = Color.White
+                                        )
                                     }
                                 }
                             }

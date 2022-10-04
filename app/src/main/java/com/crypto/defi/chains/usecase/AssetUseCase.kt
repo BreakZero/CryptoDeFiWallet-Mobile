@@ -1,5 +1,6 @@
 package com.crypto.defi.chains.usecase
 
+import com.crypto.core.common.DateTimeUtil
 import com.crypto.core.extensions.orElse
 import com.crypto.defi.common.UrlConstant
 import com.crypto.defi.models.domain.Asset
@@ -40,7 +41,7 @@ class AssetUseCase @Inject constructor(
                 database.versionDao.insert(
                     CoinVersionShaEntity(
                         sha256 = response.data.sha256,
-                        createAt = System.currentTimeMillis()
+                        createAt = DateTimeUtil.toEpochMillis(DateTimeUtil.now())
                     )
                 )
             }
@@ -73,7 +74,7 @@ class AssetUseCase @Inject constructor(
         val assetEntity = flow { emit(database.assetDao.assetBySlug(slug)) }
         val rateEntity = database.tierDao.findBySlug(slug)
         return combine(assetEntity, rateEntity) { asset, rate ->
-            asset?.toAsset()?.copy(rate = rate.rate.toBigDecimalOrNull() ?: BigDecimal.ZERO)
+            asset?.toAsset()?.copy(rate = rate?.rate?.toBigDecimalOrNull() ?: BigDecimal.ZERO)
         }
     }
 }

@@ -11,7 +11,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -66,11 +65,10 @@ fun sendFormViewModel(
 
 @OptIn(
     ExperimentalComposeUiApi::class,
-    ExperimentalMaterial3Api::class,
     ExperimentalMaterialApi::class
 )
 @Composable
-fun SendFormScren(
+fun SendFormScreen(
     savedStateHandle: SavedStateHandle?,
     sendFormViewModel: SendFormViewModel,
     navigateUp: () -> Unit,
@@ -129,10 +127,12 @@ fun SendFormScren(
                 ConfirmFormView(formUiState.asset!!, formUiState.plan) {
                     sendFormViewModel.broadcast(
                         onFailed = {
-                            Timber.e(it)
+                            coroutineScope.launch {
+                                bottomSheetScaffoldState.bottomSheetState.collapse()
+                            }
                         },
                         onSuccess = {
-                            Timber.v("broadcast success")
+                            navigateUp()
                         }
                     )
                 }
@@ -173,7 +173,7 @@ fun SendFormScren(
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text
                     ),
-                    value = formUiState.formInfo.to,
+                    value = formUiState.to,
                     onValueChange = {
                         sendFormViewModel.onToChanged(it)
                     })
@@ -209,7 +209,7 @@ fun SendFormScren(
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Number
                     ),
-                    value = formUiState.formInfo.amount,
+                    value = formUiState.amount,
                     onValueChange = {
                         sendFormViewModel.onAmountChanged(it)
                     })
@@ -237,7 +237,7 @@ fun SendFormScren(
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text
                     ),
-                    value = formUiState.formInfo.memo,
+                    value = formUiState.memo.orEmpty(),
                     onValueChange = {
                         sendFormViewModel.onMemoChanged(it)
                     }) {
@@ -287,13 +287,16 @@ fun ConfirmFormView(
                     .height(MaterialTheme.Spacing.space48),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
+                IconButton(
+                    onClick = {
+
+                    },
                     modifier = Modifier
                         .size(MaterialTheme.Spacing.space48)
-                        .padding(MaterialTheme.Spacing.small),
-                    imageVector = Icons.Default.Close,
-                    contentDescription = null
-                )
+                        .padding(MaterialTheme.Spacing.small)
+                ) {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = null)
+                }
                 Text(
                     modifier = Modifier
                         .weight(1.0f),
@@ -388,7 +391,7 @@ fun ConfirmFormView(
                         onConfirm()
                     }
                 }) {
-                Text(text = "Confirm")
+                Text(text = stringResource(id = R.string.passcode_verify__confirm))
             }
         }
     }

@@ -4,9 +4,7 @@ import com.crypto.core.extensions.clearHexPrefix
 import com.crypto.defi.models.domain.EvmTransaction
 import com.crypto.defi.models.domain.TransactionDirection
 import com.crypto.defi.models.remote.EvmTransactionDto
-import java.sql.Timestamp
-import java.time.Instant
-import java.time.ZoneId
+import kotlinx.datetime.Instant
 
 fun EvmTransactionDto.toEvmTransaction(
     owner: String
@@ -14,7 +12,7 @@ fun EvmTransactionDto.toEvmTransaction(
     val direction = if (this.from.equals(owner, true))
         TransactionDirection.RECEIVE else TransactionDirection.SEND
 
-    val timestamp = Timestamp(this.timeStamp.toLong().times(1000L))
+    val timestamp = this.timeStamp.toLong()
     return EvmTransaction(
         hash = this.hash,
         direction = direction,
@@ -24,7 +22,6 @@ fun EvmTransactionDto.toEvmTransaction(
         gas = this.gas.clearHexPrefix().toBigInteger(16),
         gasPrice = this.gasPrice.clearHexPrefix().toBigInteger(16),
         value = this.value.toBigInteger(),
-        timeStamp = Instant.ofEpochMilli(timestamp.time).atZone(ZoneId.systemDefault())
-            .toLocalDateTime().toString()
+        timeStamp = Instant.fromEpochSeconds(timestamp).toString()
     )
 }

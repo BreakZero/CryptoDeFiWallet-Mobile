@@ -61,6 +61,9 @@ fun ImportWordsScreen(
         topBar = {
             DeFiAppBar(
                 title = stringResource(id = R.string.import_wallet__import_wallet),
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = Color.Transparent
+                ),
                 actions = {
                     Icon(imageVector = Icons.Default.QrCode, contentDescription = null)
                 }

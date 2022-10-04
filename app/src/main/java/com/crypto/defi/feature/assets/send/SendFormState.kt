@@ -3,15 +3,11 @@ package com.crypto.defi.feature.assets.send
 import com.crypto.defi.models.domain.Asset
 import java.math.BigInteger
 
-data class SendFormInfo(
-    val to: String = "",
-    val memo: String = "",
-    val amount: String = ""
-)
-
 data class SendFormState(
     val asset: Asset? = null,
-    val formInfo: SendFormInfo = SendFormInfo(),
+    val to: String = "",
+    val amount: String = "",
+    val memo: String? = null,
     val plan: TransactionPlan = TransactionPlan.EmptyPlan
 )
 
