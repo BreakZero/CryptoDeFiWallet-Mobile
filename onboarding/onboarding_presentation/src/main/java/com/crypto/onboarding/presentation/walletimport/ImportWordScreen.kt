@@ -26,17 +26,19 @@ import com.crypto.core.common.UiEvent
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.LoadingButton
+import com.crypto.core.ui.utils.setStatusColor
 import com.crypto.resource.R
 import timber.log.Timber
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ImportWordsPager(
+fun ImportWordsScreen(
     passcode: String,
     viewModel: WalletImportViewModel = hiltViewModel(),
     navigateUp: () -> Unit,
     navigateMain: () -> Unit,
 ) {
+    setStatusColor(statusColor = MaterialTheme.colorScheme.surface)
     val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
     val importState = viewModel.state
@@ -61,6 +63,9 @@ fun ImportWordsPager(
         topBar = {
             DeFiAppBar(
                 title = stringResource(id = R.string.import_wallet__import_wallet),
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = Color.Transparent
+                ),
                 actions = {
                     Icon(imageVector = Icons.Default.QrCode, contentDescription = null)
                 }

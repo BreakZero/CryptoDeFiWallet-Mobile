@@ -8,12 +8,8 @@ import com.crypto.core.extensions.launchWithHandler
 import com.crypto.defi.chains.ChainManager
 import com.crypto.defi.chains.usecase.BalanceUseCase
 import com.crypto.defi.feature.assets.MainAssetsViewModel
-import com.crypto.wallet.WalletRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
-import kotlinx.coroutines.withContext
-import wallet.core.jni.CoinType
 
 class BalanceWorker(
     appContext: Context,

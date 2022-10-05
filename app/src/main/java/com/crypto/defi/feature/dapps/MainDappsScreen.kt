@@ -1,9 +1,9 @@
-package com.crypto.defi.feature.defi
+package com.crypto.defi.feature.dapps
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -11,11 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.crypto.core.ui.Spacing
+import com.crypto.defi.navigations.ScannerNavigation
+import com.crypto.defi.navigations.SettingsNavigation
 import com.crypto.resource.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainDeFiPager() {
+fun MainDappsScreen() {
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
             SmallTopAppBar(
@@ -24,7 +26,6 @@ fun MainDeFiPager() {
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
-                        //
                     }) {
                         Image(
                             modifier = Modifier.size(MaterialTheme.Spacing.space48),
@@ -35,21 +36,26 @@ fun MainDeFiPager() {
                 },
                 actions = {
                     Icon(
-                        modifier = Modifier.padding(end = MaterialTheme.Spacing.medium),
+                        modifier = Modifier
+                            .padding(end = MaterialTheme.Spacing.medium)
+                            .clickable {
+                            },
                         painter = painterResource(id = R.drawable.ic_scanner),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primaryContainer
                     )
                 },
                 title = {
                     Column {
                         Text(
                             text = "Wallet Name",
-                            style = MaterialTheme.typography.titleSmall
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.primaryContainer
                         )
                         Text(
                             text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.outline
+                            color = MaterialTheme.colorScheme.surfaceVariant
                         )
                     }
                 }
@@ -59,7 +65,7 @@ fun MainDeFiPager() {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "DeFi dapps")
+            Text(text = "main dapps")
         }
     }
 }

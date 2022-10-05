@@ -21,8 +21,8 @@ class BalanceUseCase @Inject constructor(
         address: String
     ) {
         try {
-            val result = client.get("${UrlConstant.BASE_URL}/$chain/$address/tokenholdings")
-                .body<BaseResponse<List<TokenHolding>>>()
+            val result: BaseResponse<List<TokenHolding>> =
+                client.get("${UrlConstant.BASE_URL}/$chain/$address/tokenholdings").body()
             result.data.onEach {
                 database.assetDao.updateBalance(contract = it.contractAddress, balance = it.amount)
             }
@@ -33,7 +33,8 @@ class BalanceUseCase @Inject constructor(
 
     suspend fun fetchingTiers() {
         try {
-            val result = client.get("${UrlConstant.BASE_URL}/tiers").body<BaseResponse<List<TierDto>>>()
+            val result =
+                client.get("${UrlConstant.BASE_URL}/tiers").body<BaseResponse<List<TierDto>>>()
             database.tierDao.insertAll(result.data.map { tier ->
                 TierEntity(
                     timeStamp = tier.timeStamp.toString(),

@@ -1,8 +1,8 @@
 package com.crypto.defi.feature.assets.transactions
 
 import android.app.Activity
-import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +36,7 @@ import com.crypto.core.ui.composables.DeFiBoxWithConstraints
 import com.crypto.core.ui.composables.LoadingIndicator
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.core.ui.utils.QRCodeEncoder
+import com.crypto.core.ui.utils.setStatusColor
 import com.crypto.defi.di.ViewModelFactoryProvider
 import com.crypto.defi.feature.assets.transactions.components.TransactionItemView
 import com.crypto.defi.feature.assets.transactions.components.TransactionsMotionLayout
@@ -53,7 +54,7 @@ fun transactionListViewModel(
     ).transactionListAssistedViewModelFactory()
 
     return viewModel(
-        factory = object: ViewModelProvider.Factory {
+        factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return assistedFactory.createTransactionListViewModel(slug) as T
             }
@@ -61,13 +62,16 @@ fun transactionListViewModel(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
-fun TransactionListPager(
+fun TransactionListScreen(
     txnListViewModel: TransactionListViewModel,
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {
+    setStatusColor(statusColor = MaterialTheme.colorScheme.primary)
     val txnUiState by txnListViewModel.txnState.collectAsState()
     val transactionList = txnUiState.transactionList.collectAsLazyPagingItems()
 
@@ -109,66 +113,57 @@ fun TransactionListPager(
                     }
                 }
             ) {
-                AnimatedContent(targetState = true, transitionSpec = {
-                    fadeIn(animationSpec = tween(300, 300)) with fadeOut(
-                        animationSpec = tween(
-                            300,
-                            300
-                        )
-                    )
-                }) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(
-                                    topEnd = MaterialTheme.Spacing.space24,
-                                    topStart = MaterialTheme.Spacing.space24
-                                )
+                LazyColumn(
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(
+                                topEnd = MaterialTheme.Spacing.space24,
+                                topStart = MaterialTheme.Spacing.space24
                             )
-                            .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.surface),
-                        contentPadding = PaddingValues(
-                            vertical = MaterialTheme.Spacing.medium,
-                            horizontal = MaterialTheme.Spacing.small
-                        ),
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
-                    ) {
-                        when (transactionList.loadState.refresh) {
-                            is LoadState.Loading -> {
-                                item {
-                                    Box(
-                                        modifier = Modifier.fillMaxSize(),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        LoadingIndicator(animating = true)
-                                    }
-                                }
-                            }
-                            is LoadState.Error -> {
-                                item {
-                                    Box(
-                                        modifier = Modifier.fillMaxSize(),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(text = "somethings went wrong")
-                                    }
-                                }
-                            }
-                            else -> Unit
-                        }
-                        items(transactionList) {
-                            it?.let {
-                                TransactionItemView(data = it)
-                            }
-                        }
-                        if (transactionList.loadState.append is LoadState.Loading) {
+                        )
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surface),
+                    contentPadding = PaddingValues(
+                        vertical = MaterialTheme.Spacing.medium,
+                        horizontal = MaterialTheme.Spacing.small
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+                ) {
+                    when (transactionList.loadState.refresh) {
+                        is LoadState.Loading -> {
                             item {
                                 Box(
-                                    modifier = Modifier.fillMaxWidth(),
+                                    modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     LoadingIndicator(animating = true)
                                 }
+                            }
+                        }
+                        is LoadState.Error -> {
+                            item {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(text = "somethings went wrong")
+                                }
+                            }
+                        }
+                        else -> Unit
+                    }
+                    items(transactionList) {
+                        it?.let {
+                            TransactionItemView(data = it, modifier = Modifier.animateItemPlacement())
+                        }
+                    }
+                    if (transactionList.loadState.append is LoadState.Loading) {
+                        item {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                LoadingIndicator(animating = true)
                             }
                         }
                     }

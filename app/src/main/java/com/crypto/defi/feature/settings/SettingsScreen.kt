@@ -2,17 +2,22 @@ package com.crypto.defi.feature.settings
 
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.routers.NavigationCommand
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun SettingsPager(
+fun SettingsScreen(
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {

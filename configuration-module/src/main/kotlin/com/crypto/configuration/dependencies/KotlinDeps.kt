@@ -2,7 +2,7 @@ package com.crypto.configuration.dependencies
 
 object KotlinDeps {
     const val kotlinx_serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3"
-
+    const val kotlinx_datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
     object Coroutine {
         private const val version = "1.6.0"
         const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"

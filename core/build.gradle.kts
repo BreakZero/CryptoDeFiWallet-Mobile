@@ -18,6 +18,7 @@ dependencies {
 
     api(AndroidDeps.timber)
 
+    api(KotlinDeps.kotlinx_datetime)
     api(KotlinDeps.Coroutine.core)
     api(KotlinDeps.Coroutine.android)
     api(KotlinDeps.Ktor.core)

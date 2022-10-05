@@ -1,6 +1,7 @@
-package com.crypto.defi.feature.nfts
+package com.crypto.defi.feature.defi
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.*
@@ -14,7 +15,7 @@ import com.crypto.resource.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainNFTsPager() {
+fun MainDeFiScreen() {
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
             SmallTopAppBar(
@@ -23,7 +24,6 @@ fun MainNFTsPager() {
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
-                        //
                     }) {
                         Image(
                             modifier = Modifier.size(MaterialTheme.Spacing.space48),
@@ -34,21 +34,26 @@ fun MainNFTsPager() {
                 },
                 actions = {
                     Icon(
-                        modifier = Modifier.padding(end = MaterialTheme.Spacing.medium),
+                        modifier = Modifier
+                            .padding(end = MaterialTheme.Spacing.medium)
+                            .clickable {
+                            },
                         painter = painterResource(id = R.drawable.ic_scanner),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primaryContainer
                     )
                 },
                 title = {
                     Column {
                         Text(
                             text = "Wallet Name",
-                            style = MaterialTheme.typography.titleSmall
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.primaryContainer
                         )
                         Text(
                             text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.outline
+                            color = MaterialTheme.colorScheme.surfaceVariant
                         )
                     }
                 }
@@ -58,7 +63,7 @@ fun MainNFTsPager() {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "NFTs dapps")
+            Text(text = "DeFi dapps")
         }
     }
 }

@@ -68,20 +68,23 @@ fun HomeAssetsMotionLayout(
                     Text(
                         text = stringResource(id = R.string.wallet_asset__total_balance_big),
                         modifier = Modifier.align(Alignment.CenterVertically),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primaryContainer
                     )
                     Icon(
                         imageVector = Icons.Default.RemoveRedEye, contentDescription = null,
-                        modifier = Modifier.align(Alignment.CenterVertically)
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        tint = MaterialTheme.colorScheme.primaryContainer
                     )
                 }
                 Text(
                     text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = Color.Gray)) {
+                        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
                             append("$ ")
                         }
                         withStyle(
                             style = SpanStyle(
+                                color = MaterialTheme.colorScheme.primaryContainer,
                                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
                                 fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
                                 fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
@@ -90,7 +93,7 @@ fun HomeAssetsMotionLayout(
                         ) {
                             append(totalBalance)
                         }
-                        withStyle(style = SpanStyle(color = Color.Gray)) {
+                        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
                             append(" USD")
                         }
                     }

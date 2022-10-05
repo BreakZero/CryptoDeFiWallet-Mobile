@@ -11,9 +11,9 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.runtime.SideEffect
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -21,15 +21,16 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.dialog
 import com.crypto.core.ui.composables.NormalTipsView
 import com.crypto.core.ui.models.NormalTips
+import com.crypto.core.ui.utils.setStatusColor
 import com.crypto.defi.common.MapKeyConstants
-import com.crypto.defi.feature.assets.send.SendFormPager
+import com.crypto.defi.feature.assets.send.SendFormScreen
 import com.crypto.defi.feature.assets.send.sendFormViewModel
-import com.crypto.defi.feature.assets.transactions.TransactionListPager
+import com.crypto.defi.feature.assets.transactions.TransactionListScreen
 import com.crypto.defi.feature.assets.transactions.transactionListViewModel
 import com.crypto.defi.feature.common.DeFiScannerScreen
-import com.crypto.defi.feature.main.MainPager
-import com.crypto.defi.feature.settings.SettingsPager
-import com.crypto.defi.feature.splash.SplashPager
+import com.crypto.defi.feature.main.MainScreen
+import com.crypto.defi.feature.settings.SettingsScreen
+import com.crypto.defi.feature.splash.SplashScreen
 import com.crypto.defi.navigations.*
 import com.crypto.defi.ui.theme.DeFiWalletTheme
 import com.crypto.onboarding.presentation.onboarding
@@ -48,22 +49,13 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             DeFiWalletTheme {
-                val systemUIController = rememberSystemUiController()
-                val useDarkIcons = !isSystemInDarkTheme()
-                SideEffect {
-                    systemUIController.setStatusBarColor(
-                        Color.Transparent,
-                        darkIcons = useDarkIcons
-                    )
-                }
                 val navController = rememberAnimatedNavController()
-                // A surface container using the 'background' color from the theme
+                setStatusColor(statusColor = MaterialTheme.colorScheme.primary)
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
                         .statusBarsPadding()
-                        .navigationBarsPadding(),
-                    color = MaterialTheme.colors.background
+                        .navigationBarsPadding()
                 ) {
                     AnimatedNavHost(
                         navController = navController,
@@ -85,7 +77,7 @@ class MainActivity : ComponentActivity() {
                                 fadeOut(animationSpec = tween(500))
                             }
                         ) {
-                            SplashPager {
+                            SplashScreen {
                                 navController.navigate(it.destination) {
                                     popUpTo(SplashNavigation.Splashing.destination) {
                                         inclusive = true
@@ -109,7 +101,7 @@ class MainActivity : ComponentActivity() {
                                 fadeOut(animationSpec = tween(500))
                             }
                         ) {
-                            MainPager(
+                            MainScreen(
                                 savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
                             ) {
                                 navController.navigate(it.destination)
@@ -132,11 +124,13 @@ class MainActivity : ComponentActivity() {
                                 fadeOut(animationSpec = tween(500))
                             }
                         ) { backStackEntry ->
-                            val coinSlug = backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE) ?: ""
-                            TransactionListPager(
+                            val coinSlug =
+                                backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE)
+                                    ?: ""
+                            TransactionListScreen(
                                 txnListViewModel = transactionListViewModel(slug = coinSlug),
                                 navigateUp = {
-                                    navController.navigateUp()
+                                    navController.popBackStack()
                                 }
                             ) {
                                 navController.navigate(it.destination)
@@ -161,11 +155,11 @@ class MainActivity : ComponentActivity() {
                         ) { backStackEntry ->
                             val coinSlug = backStackEntry.arguments
                                 ?.getString(SendFormNavigation.KEY_SLUG) ?: ""
-                            SendFormPager(
+                            SendFormScreen(
                                 savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
                                 sendFormViewModel = sendFormViewModel(coinSlug),
                                 navigateUp = {
-                                    navController.navigateUp()
+                                    navController.popBackStack()
                                 }) {
                                 navController.navigate(it.destination)
                             }
@@ -186,9 +180,9 @@ class MainActivity : ComponentActivity() {
                                 fadeOut(animationSpec = tween(500))
                             }
                         ) { _ ->
-                            SettingsPager(
+                            SettingsScreen(
                                 navigateUp = {
-                                    navController.navigateUp()
+                                    navController.popBackStack()
                                 }
                             ) {
                                 navController.navigate(it.destination)
@@ -216,7 +210,7 @@ class MainActivity : ComponentActivity() {
                                         it[MapKeyConstants.KEY_OF_QR_CODE_CONTENT] = qr_code
                                     }
                                 }
-                                navController.navigateUp()
+                                navController.popBackStack()
                             }
                         }
 
@@ -230,7 +224,8 @@ class MainActivity : ComponentActivity() {
                                     title = stringResource(id = R.string.two_fa_view__2_factor_authentication),
                                     message = stringResource(id = R.string.wallet_protect__2fa_desc),
                                     iconRes = R.drawable.ic_shell
-                            ))
+                                )
+                            )
                         }
                     }
                 }

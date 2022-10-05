@@ -1,5 +1,6 @@
 package com.crypto.defi.feature.assets.transactions.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -17,12 +18,14 @@ import com.crypto.defi.models.domain.TransactionDirection
 import com.crypto.resource.R
 import timber.log.Timber
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TransactionItemView(
+    modifier: Modifier,
     data: BaseTransaction
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = MaterialTheme.Spacing.space48)
             .clickable {

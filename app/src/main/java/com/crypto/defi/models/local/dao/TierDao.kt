@@ -16,5 +16,5 @@ interface TierDao {
     fun allTiers(toCurrency: String): Flow<List<TierEntity>>
 
     @Query("SELECT * FROM TB_TIER WHERE from_slug = :slug")
-    fun findBySlug(slug: String): Flow<TierEntity>
+    fun findBySlug(slug: String): Flow<TierEntity?>
 }

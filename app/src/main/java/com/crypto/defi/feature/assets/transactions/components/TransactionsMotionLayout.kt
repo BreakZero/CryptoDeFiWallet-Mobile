@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
@@ -91,14 +92,19 @@ fun TransactionsMotionLayout(
                     Text(
                         modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.extraSmall),
                         text = "${asset?.symbol ?: "--"} BALANCE",
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.primaryContainer
                     )
-                    Icon(imageVector = Icons.Default.RemoveRedEye, contentDescription = null)
+                    Icon(
+                        imageVector = Icons.Default.RemoveRedEye, contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primaryContainer
+                    )
                 }
                 Text(
                     text = buildAnnotatedString {
                         withStyle(
                             style = SpanStyle(
+                                color = MaterialTheme.colorScheme.primaryContainer,
                                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
                                 fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
                                 fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
@@ -110,7 +116,7 @@ fun TransactionsMotionLayout(
                                     ?: BigInteger.ZERO).byDecimal2String(asset?.decimal ?: 0)
                             )
                         }
-                        withStyle(style = SpanStyle(color = Color.Gray)) {
+                        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
                             append(" ${asset?.symbol ?: "--"}")
                         }
                     },
@@ -129,15 +135,19 @@ fun TransactionsMotionLayout(
                         Box(
                             modifier = Modifier
                                 .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.secondary)
+                                .background(MaterialTheme.colorScheme.onPrimaryContainer)
                                 .padding(MaterialTheme.Spacing.extraSmall)
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_send),
-                                contentDescription = null
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primaryContainer)
                             )
                         }
-                        Text(text = stringResource(id = R.string.transaction_list__send))
+                        Text(
+                            text = stringResource(id = R.string.transaction_list__send),
+                            color = MaterialTheme.colorScheme.primaryContainer
+                        )
                     }
                     Spacer(modifier = Modifier.size(MaterialTheme.Spacing.medium))
                     Column(
@@ -151,15 +161,19 @@ fun TransactionsMotionLayout(
                         Box(
                             modifier = Modifier
                                 .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.secondary)
+                                .background(MaterialTheme.colorScheme.onPrimaryContainer)
                                 .padding(MaterialTheme.Spacing.extraSmall)
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_receive),
-                                contentDescription = null
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primaryContainer)
                             )
                         }
-                        Text(text = stringResource(id = R.string.transaction_list__receive))
+                        Text(
+                            text = stringResource(id = R.string.transaction_list__receive),
+                            color = MaterialTheme.colorScheme.primaryContainer
+                        )
                     }
                 }
             }

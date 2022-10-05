@@ -1,8 +1,15 @@
 package com.crypto.defi
 
 import android.app.Application
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.work.Configuration
+import coil.ImageLoader
+import coil.ImageLoaderFactory
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import coil.disk.DiskCache
+import coil.memory.MemoryCache
 import com.crypto.defi.workers.DeFiWorkerFactory
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -11,7 +18,7 @@ import javax.inject.Inject
 
 
 @HiltAndroidApp
-class DeFiApplication : Application(), Configuration.Provider {
+class DeFiApplication : Application(), Configuration.Provider, ImageLoaderFactory {
     init {
         System.loadLibrary("TrustWalletCore")
     }
@@ -31,8 +38,30 @@ class DeFiApplication : Application(), Configuration.Provider {
     override fun getWorkManagerConfiguration(): Configuration =
         Configuration.Builder()
             .setWorkerFactory(workerFactory)
-            .setMinimumLoggingLevel(android.util.Log.INFO)
+            .setMinimumLoggingLevel(Log.INFO)
             .build()
+
+    override fun newImageLoader(): ImageLoader {
+        return ImageLoader.Builder(this)
+            .components {
+                // GIFs
+                if (SDK_INT >= 28) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    add(GifDecoder.Factory())
+                }
+            }.memoryCache {
+                MemoryCache.Builder(this)
+                    // Set the max size to 25% of the app's available memory.
+                    .maxSizePercent(0.25)
+                    .build()
+            }.diskCache {
+                DiskCache.Builder()
+                    .directory(filesDir.resolve("image_cache"))
+                    .maxSizeBytes(512L * 1024 * 1024) // 512MB
+                    .build()
+            }.build()
+    }
 }
 
 private class CrashReportingTree : Tree() {

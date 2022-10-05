@@ -18,7 +18,7 @@ import com.crypto.resource.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateSetupPager(
+fun CreateSetupScreen(
     navigateUp: () -> Unit
 ) {
     Scaffold(

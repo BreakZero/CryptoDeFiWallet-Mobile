@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.crypto.core.ui.Spacing
@@ -16,20 +17,26 @@ import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.AdvanceMenu
 import com.crypto.core.ui.composables.MenuItemView
 import com.crypto.core.ui.routers.NavigationCommand
+import com.crypto.core.ui.utils.setStatusColor
 import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.resource.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LegalPager(
+fun LegalScreen(
     forCreate: Boolean,
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {
+    setStatusColor(statusColor = MaterialTheme.colorScheme.surface)
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            DeFiAppBar() {
+            DeFiAppBar(
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = Color.Transparent
+                )
+            ) {
                 navigateUp()
             }
         }
