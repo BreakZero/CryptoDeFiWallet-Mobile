@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.ui.composables.ActionType
 import com.crypto.core.ui.composables.NumberKeyboard
 import com.crypto.core.ui.routers.NavigationCommand
+import com.crypto.core.ui.utils.setStatusColor
 import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.resource.R
 
@@ -32,6 +33,7 @@ fun CreatePasscodeScreen(
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {
+    setStatusColor(statusColor = MaterialTheme.colorScheme.surface)
     LaunchedEffect(key1 = null) {
         viewModel.uiEvent.collect {
             val passcode = it.getOrNull().orEmpty()

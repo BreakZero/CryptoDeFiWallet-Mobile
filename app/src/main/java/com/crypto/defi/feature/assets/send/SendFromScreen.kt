@@ -106,7 +106,8 @@ fun SendFormScreen(
                                 navigateTo(ScannerNavigation.Scanner)
                             },
                         painter = painterResource(id = R.drawable.ic_scanner),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primaryContainer
                     )
                 }) {
                 navigateUp()

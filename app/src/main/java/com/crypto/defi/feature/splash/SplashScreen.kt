@@ -6,7 +6,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Surface
+import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -16,6 +17,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.ui.routers.NavigationCommand
+import com.crypto.core.ui.utils.setStatusColor
 import com.crypto.defi.navigations.MainNavigation
 import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.resource.R
@@ -28,7 +30,7 @@ fun SplashScreen(
     val scale = remember {
         androidx.compose.animation.core.Animatable(0f)
     }
-
+    setStatusColor(statusColor = MaterialTheme.colorScheme.surface)
     // AnimationEffect
     LaunchedEffect(key1 = true) {
         scale.animateTo(

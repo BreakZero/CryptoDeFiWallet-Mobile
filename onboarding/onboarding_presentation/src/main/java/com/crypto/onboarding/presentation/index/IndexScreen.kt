@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.routers.NavigationCommand
+import com.crypto.core.ui.utils.setStatusColor
 import com.crypto.resource.R
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -50,6 +52,7 @@ private val banners = listOf(
 fun OnboardScreen(
     navigateTo: (NavigationCommand) -> Unit
 ) {
+    setStatusColor(statusColor = MaterialTheme.colorScheme.surface)
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier

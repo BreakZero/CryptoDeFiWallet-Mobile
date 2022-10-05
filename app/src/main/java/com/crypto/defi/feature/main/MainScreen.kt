@@ -67,7 +67,7 @@ fun MainScreen(
     }
 
     val systemUIController = rememberSystemUiController()
-    val useDartIcons = isSystemInDarkTheme()
+    val useDartIcons = !isSystemInDarkTheme()
     val statusColor = MaterialTheme.colorScheme.primary
 
     LaunchedEffect(key1 = pageState.currentPage) {

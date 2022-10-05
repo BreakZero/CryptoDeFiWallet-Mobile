@@ -75,19 +75,21 @@ fun MainAssetsScreen(
                                 navigateTo(ScannerNavigation.Scanner)
                             },
                         painter = painterResource(id = R.drawable.ic_scanner),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primaryContainer
                     )
                 },
                 title = {
                     Column {
                         Text(
                             text = "Wallet Name",
-                            style = MaterialTheme.typography.titleSmall
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.primaryContainer
                         )
                         Text(
                             text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.outline
+                            color = MaterialTheme.colorScheme.surfaceVariant
                         )
                     }
                 }

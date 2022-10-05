@@ -72,7 +72,7 @@ private val DeFiLightColorScheme = lightColorScheme(
 @Composable
 fun DeFiWalletTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    isDynamicColor: Boolean = true,
+    isDynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val dynamicColor = isDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S

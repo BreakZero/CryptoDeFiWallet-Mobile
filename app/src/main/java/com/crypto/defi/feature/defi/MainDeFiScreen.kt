@@ -1,6 +1,7 @@
 package com.crypto.defi.feature.defi
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.*
@@ -23,7 +24,6 @@ fun MainDeFiScreen() {
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
-                        //
                     }) {
                         Image(
                             modifier = Modifier.size(MaterialTheme.Spacing.space48),
@@ -34,21 +34,26 @@ fun MainDeFiScreen() {
                 },
                 actions = {
                     Icon(
-                        modifier = Modifier.padding(end = MaterialTheme.Spacing.medium),
+                        modifier = Modifier
+                            .padding(end = MaterialTheme.Spacing.medium)
+                            .clickable {
+                            },
                         painter = painterResource(id = R.drawable.ic_scanner),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primaryContainer
                     )
                 },
                 title = {
                     Column {
                         Text(
                             text = "Wallet Name",
-                            style = MaterialTheme.typography.titleSmall
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.primaryContainer
                         )
                         Text(
                             text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.outline
+                            color = MaterialTheme.colorScheme.surfaceVariant
                         )
                     }
                 }

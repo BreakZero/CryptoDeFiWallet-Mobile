@@ -28,14 +28,14 @@ fun DeFiAppBar(
                 Icon(
                     imageVector = navIcon,
                     contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onBackground
+                    tint = MaterialTheme.colorScheme.primaryContainer
                 )
             }
         },
         title = {
             title?.let {
                 Text(
-                    text = title, color = MaterialTheme.colorScheme.onBackground,
+                    text = title, color = MaterialTheme.colorScheme.primaryContainer,
                     style = MaterialTheme.typography.titleMedium
                 )
             }
