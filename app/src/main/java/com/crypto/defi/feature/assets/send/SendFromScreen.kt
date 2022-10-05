@@ -55,7 +55,7 @@ fun sendFormViewModel(
     ).sendFormAssistedViewModelFactory()
 
     return viewModel(
-        factory = object: ViewModelProvider.Factory {
+        factory = object : ViewModelProvider.Factory {
             override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                 return assistedFactory.createSendFormViewModel(slug) as T
             }
@@ -214,7 +214,7 @@ fun SendFormScreen(
                     onValueChange = {
                         sendFormViewModel.onAmountChanged(it)
                     })
-                Divider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),)
+                Divider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
                 BasicTextField(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -238,12 +238,11 @@ fun SendFormScreen(
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text
                     ),
-                    value = formUiState.memo.orEmpty(),
+                    value = formUiState.memo,
                     onValueChange = {
                         sendFormViewModel.onMemoChanged(it)
-                    }) {
-
-                }
+                    }
+                )
                 Text(text = "Miner Fee")
             }
             Button(modifier = Modifier.fillMaxWidth(), onClick = {

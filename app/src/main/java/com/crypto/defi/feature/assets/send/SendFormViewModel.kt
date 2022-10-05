@@ -36,7 +36,7 @@ class SendFormViewModel @AssistedInject constructor(
             asset = asset,
             to = to,
             amount = amount,
-            memo = memo.ifBlank { null },
+            memo = memo,
             plan = plan
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SendFormState())
@@ -71,7 +71,7 @@ class SendFormViewModel @AssistedInject constructor(
                         val plan = iChain.signTransaction(
                             ReadyToSign(
                                 to = this.to,
-                                memo = this.memo,
+                                memo = this.memo.ifBlank { null },
                                 contract = it.contract,
                                 amount = this.amount.toBigDecimal()
                                     .upWithDecimal(asset.decimal)

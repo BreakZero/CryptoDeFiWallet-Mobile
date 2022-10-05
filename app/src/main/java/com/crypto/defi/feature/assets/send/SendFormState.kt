@@ -7,7 +7,7 @@ data class SendFormState(
     val asset: Asset? = null,
     val to: String = "",
     val amount: String = "",
-    val memo: String? = null,
+    val memo: String = "",
     val plan: TransactionPlan = TransactionPlan.EmptyPlan
 )
 
