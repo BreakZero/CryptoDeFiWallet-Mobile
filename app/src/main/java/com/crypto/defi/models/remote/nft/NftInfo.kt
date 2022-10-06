@@ -25,6 +25,16 @@ data class NftAssetGroup(
 )
 
 @Serializable
+data class NftOwnerAssets(
+    @SerialName("content")
+    val content: List<NftInfo>,
+    @SerialName("next")
+    val next: String,
+    @SerialName("total")
+    val total: Int
+)
+
+@Serializable
 data class NftAttribute(
     @SerialName("attribute_name")
     val attributeName: String,

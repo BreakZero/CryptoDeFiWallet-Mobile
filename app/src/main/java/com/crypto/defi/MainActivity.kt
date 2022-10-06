@@ -206,7 +206,7 @@ class MainActivity : ComponentActivity() {
                             }
                         ) {
                             NftGroupScreen() {
-
+                                navController.popBackStack()
                             }
                         }
 

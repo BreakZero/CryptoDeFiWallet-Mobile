@@ -32,17 +32,6 @@ fun MainDeFiScreen() {
                         )
                     }
                 },
-                actions = {
-                    Icon(
-                        modifier = Modifier
-                            .padding(end = MaterialTheme.Spacing.medium)
-                            .clickable {
-                            },
-                        painter = painterResource(id = R.drawable.ic_scanner),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primaryContainer
-                    )
-                },
                 title = {
                     Column {
                         Text(

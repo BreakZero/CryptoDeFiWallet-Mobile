@@ -8,6 +8,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,7 +26,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -56,17 +58,6 @@ fun MainNFTsScreen(
                         )
                     }
                 },
-                actions = {
-                    Icon(
-                        modifier = Modifier
-                            .padding(end = MaterialTheme.Spacing.medium)
-                            .clickable {
-                            },
-                        painter = painterResource(id = R.drawable.ic_scanner),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primaryContainer
-                    )
-                },
                 title = {
                     Column {
                         Text(
@@ -84,23 +75,63 @@ fun MainNFTsScreen(
             )
         }
     ) { _ ->
-        AnimatedContent(targetState = true, transitionSpec = {
-            fadeIn(animationSpec = tween(300, 300)) with fadeOut(
-                animationSpec = tween(
-                    300,
-                    300
-                )
-            )
-        }) {
-            Box(
-                contentAlignment = Alignment.Center,
+        val nftAssetsUiState by nftsViewModel.ownerAssetState.collectAsState()
+        Column(modifier = Modifier.fillMaxSize()) {
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .clickable {
-                        navigateTo(NftNavigation.groupDestination)
-                    }
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.Spacing.medium),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                LoadingIndicator(animating = true)
+                Text(text = "Your NFTs")
+                Button(onClick = {
+                    navigateTo(NftNavigation.groupDestination)
+                }) {
+                    Text(text = "All")
+                }
+            }
+            AnimatedContent(targetState = true, transitionSpec = {
+                fadeIn(animationSpec = tween(300, 300)) with fadeOut(
+                    animationSpec = tween(
+                        300,
+                        300
+                    )
+                )
+            }) {
+                if (nftAssetsUiState.isLoading) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        LoadingIndicator(animating = true)
+                    }
+                } else {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(3),
+                        contentPadding = PaddingValues(MaterialTheme.Spacing.medium),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small),
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+                    ) {
+                        items(nftAssetsUiState.nfts) { asset ->
+                            AsyncImage(
+                                modifier = Modifier
+                                    .size(MaterialTheme.Spacing.space128)
+                                    .clip(RoundedCornerShape(MaterialTheme.Spacing.space24))
+                                    .background(color = MaterialTheme.colorScheme.surface),
+                                contentScale = ContentScale.Crop,
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(asset.nftscanUri ?: asset.imageUri)
+                                    .placeholder(R.drawable.avatar_generic_1)
+                                    .error(R.drawable.avatar_generic_1)
+                                    .crossfade(true)
+                                    .build(),
+                                contentDescription = null
+                            )
+                        }
+                    }
+                }
             }
         }
     }

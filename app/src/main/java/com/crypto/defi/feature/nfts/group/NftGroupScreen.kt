@@ -2,10 +2,7 @@ package com.crypto.defi.feature.nfts.group
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,7 +19,8 @@ import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.LoadingIndicator
 import com.google.accompanist.pager.ExperimentalPagerApi
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class,
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalPagerApi::class,
     ExperimentalAnimationApi::class
 )
 @Composable
@@ -39,14 +37,18 @@ fun NftGroupScreen(
         }
     ) {
         val nftGroupsUiState by nftGroupViewModel.assetsByGroup.collectAsState()
-        AnimatedContent(targetState = true, transitionSpec = {
-            fadeIn(animationSpec = tween(300, 300)) with fadeOut(
-                animationSpec = tween(
-                    300,
-                    300
+        AnimatedContent(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
+            targetState = true, transitionSpec = {
+                fadeIn(animationSpec = tween(300, 300)) with fadeOut(
+                    animationSpec = tween(
+                        300,
+                        300
+                    )
                 )
-            )
-        }) {
+            }) {
             if (nftGroupsUiState.isLoading) {
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                     LoadingIndicator(animating = true)
