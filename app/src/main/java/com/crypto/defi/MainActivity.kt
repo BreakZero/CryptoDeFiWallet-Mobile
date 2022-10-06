@@ -29,6 +29,7 @@ import com.crypto.defi.feature.assets.transactions.TransactionListScreen
 import com.crypto.defi.feature.assets.transactions.transactionListViewModel
 import com.crypto.defi.feature.common.DeFiScannerScreen
 import com.crypto.defi.feature.main.MainScreen
+import com.crypto.defi.feature.nfts.group.NftGroupScreen
 import com.crypto.defi.feature.settings.SettingsScreen
 import com.crypto.defi.feature.splash.SplashScreen
 import com.crypto.defi.navigations.*
@@ -186,6 +187,26 @@ class MainActivity : ComponentActivity() {
                                 }
                             ) {
                                 navController.navigate(it.destination)
+                            }
+                        }
+
+                        composable(
+                            route = NftNavigation.groupDestination.destination,
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(500))
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(500))
+                            },
+                            popEnterTransition = {
+                                fadeIn(animationSpec = tween(500))
+                            },
+                            popExitTransition = {
+                                fadeOut(animationSpec = tween(500))
+                            }
+                        ) {
+                            NftGroupScreen() {
+
                             }
                         }
 

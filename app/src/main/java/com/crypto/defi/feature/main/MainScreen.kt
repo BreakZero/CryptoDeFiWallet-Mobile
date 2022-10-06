@@ -91,7 +91,7 @@ fun MainScreen(
                     MainAssetsScreen(navigateTo = onNavigateTo)
                 }
                 "NFT" -> {
-                    MainNFTsScreen()
+                    MainNFTsScreen(navigateTo = onNavigateTo)
                 }
                 "Dapps" -> {
                     MainDappsScreen()

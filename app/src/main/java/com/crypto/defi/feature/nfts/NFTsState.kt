@@ -1,8 +1,8 @@
 package com.crypto.defi.feature.nfts
 
-import com.crypto.defi.models.remote.nft.AssetGroup
+import com.crypto.defi.models.remote.nft.NftAssetGroup
 
 data class NFTsState(
     val isLoading: Boolean = true,
-    val ntfs: List<AssetGroup> = emptyList()
+    val ntfs: List<NftAssetGroup> = emptyList()
 )

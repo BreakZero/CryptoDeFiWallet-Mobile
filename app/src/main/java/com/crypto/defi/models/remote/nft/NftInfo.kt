@@ -5,9 +5,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AssetGroup(
+data class NftAssetGroup(
     @SerialName("assets")
-    val assets: List<Asset>,
+    val assets: List<NftInfo>,
     @SerialName("contract_address")
     val contractAddress: String,
     @SerialName("contract_name")
@@ -25,7 +25,7 @@ data class AssetGroup(
 )
 
 @Serializable
-data class Attribute(
+data class NftAttribute(
     @SerialName("attribute_name")
     val attributeName: String,
     @SerialName("attribute_value")
@@ -35,11 +35,11 @@ data class Attribute(
 )
 
 @Serializable
-data class Asset(
+data class NftInfo(
     @SerialName("amount")
     val amount: String,
     @SerialName("attributes")
-    val attributes: List<Attribute>?,
+    val attributes: List<NftAttribute>?,
     @SerialName("content_type")
     val contentType: String?,
     @SerialName("content_uri")
