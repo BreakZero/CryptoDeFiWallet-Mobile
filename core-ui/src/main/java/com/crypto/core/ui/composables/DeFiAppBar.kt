@@ -10,35 +10,35 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeFiAppBar(
-    navIcon: ImageVector = Icons.Filled.ArrowBack,
-    title: String? = null,
-    colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(
-        containerColor = MaterialTheme.colorScheme.primary
-    ),
-    actions: @Composable RowScope.() -> Unit = {},
-    navigateUp: () -> Unit
+  navIcon: ImageVector = Icons.Filled.ArrowBack,
+  title: String? = null,
+  colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(
+    containerColor = MaterialTheme.colorScheme.primary
+  ),
+  actions: @Composable RowScope.() -> Unit = {},
+  navigateUp: () -> Unit
 ) {
   SmallTopAppBar(
-      colors = colors,
-      navigationIcon = {
-        IconButton(onClick = {
-          navigateUp()
-        }) {
-          Icon(
-              imageVector = navIcon,
-              contentDescription = "",
-              tint = MaterialTheme.colorScheme.primaryContainer
-          )
-        }
-      },
-      title = {
-        title?.let {
-          Text(
-              text = title, color = MaterialTheme.colorScheme.primaryContainer,
-              style = MaterialTheme.typography.titleMedium
-          )
-        }
-      },
-      actions = actions
+    colors = colors,
+    navigationIcon = {
+      IconButton(onClick = {
+        navigateUp()
+      }) {
+        Icon(
+          imageVector = navIcon,
+          contentDescription = "",
+          tint = MaterialTheme.colorScheme.primaryContainer
+        )
+      }
+    },
+    title = {
+      title?.let {
+        Text(
+          text = title, color = MaterialTheme.colorScheme.primaryContainer,
+          style = MaterialTheme.typography.titleMedium
+        )
+      }
+    },
+    actions = actions
   )
 }

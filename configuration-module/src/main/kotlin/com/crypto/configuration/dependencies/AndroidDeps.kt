@@ -16,7 +16,7 @@ object AndroidDeps {
     const val livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     const val viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     const val viewmodel_savedstate =
-        "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+      "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
     const val common_java8 = "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     const val service = "androidx.lifecycle:lifecycle-service:$lifecycle_version"
   }

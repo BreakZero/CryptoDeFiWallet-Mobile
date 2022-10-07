@@ -13,16 +13,16 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class BalanceUseCase @Inject constructor(
-    private val client: HttpClient,
-    private val database: CryptoDeFiDatabase
+  private val client: HttpClient,
+  private val database: CryptoDeFiDatabase
 ) {
   suspend fun fetchingTokenHolding(
-      chain: String = "ethereum",
-      address: String
+    chain: String = "ethereum",
+    address: String
   ) {
     try {
       val result: BaseResponse<List<TokenHolding>> =
-          client.get("${UrlConstant.BASE_URL}/$chain/$address/tokenholdings").body()
+        client.get("${UrlConstant.BASE_URL}/$chain/$address/tokenholdings").body()
       result.data.onEach {
         database.assetDao.updateBalance(contract = it.contractAddress, balance = it.amount)
       }
@@ -34,15 +34,15 @@ class BalanceUseCase @Inject constructor(
   suspend fun fetchingTiers() {
     try {
       val result =
-          client.get("${UrlConstant.BASE_URL}/tiers").body<BaseResponse<List<TierDto>>>()
+        client.get("${UrlConstant.BASE_URL}/tiers").body<BaseResponse<List<TierDto>>>()
       database.tierDao.insertAll(result.data.map { tier ->
         TierEntity(
-            timeStamp = tier.timeStamp.toString(),
-            fromCurrency = tier.fromCurrency,
-            toCurrency = tier.toCurrency,
-            rate = tier.rates.minByOrNull { it.amount }?.rate
-                ?: "0.00",
-            fromSlug = tier.fromSlug
+          timeStamp = tier.timeStamp.toString(),
+          fromCurrency = tier.fromCurrency,
+          toCurrency = tier.toCurrency,
+          rate = tier.rates.minByOrNull { it.amount }?.rate
+            ?: "0.00",
+          fromSlug = tier.fromSlug
         )
       })
     } catch (e: Exception) {
@@ -51,11 +51,11 @@ class BalanceUseCase @Inject constructor(
   }
 
   suspend fun fetchingEthMainCoin(
-      chain: String = "ethereum",
-      address: String
+    chain: String = "ethereum",
+    address: String
   ) {
     val result = client.get("${UrlConstant.BASE_URL}/$chain/balance/${address}")
-        .body<BaseResponse<String>>()
+      .body<BaseResponse<String>>()
     database.assetDao.updateBalanceViaSlug("ethereum", result.data)
   }
 }

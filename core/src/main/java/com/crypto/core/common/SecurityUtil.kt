@@ -39,15 +39,15 @@ class SecurityUtil @Inject constructor() {
   private fun generateSecretKey(keyAlias: String): SecretKey {
     return keyGenerator.apply {
       init(
-          KeyGenParameterSpec
-              .Builder(keyAlias, PURPOSE_ENCRYPT or PURPOSE_DECRYPT)
-              .setBlockModes(BLOCK_MODE_GCM)
-              .setEncryptionPaddings(ENCRYPTION_PADDING_NONE)
-              .build()
+        KeyGenParameterSpec
+          .Builder(keyAlias, PURPOSE_ENCRYPT or PURPOSE_DECRYPT)
+          .setBlockModes(BLOCK_MODE_GCM)
+          .setEncryptionPaddings(ENCRYPTION_PADDING_NONE)
+          .build()
       )
     }.generateKey()
   }
 
   private fun getSecretKey(keyAlias: String) =
-      (keyStore.getEntry(keyAlias, null) as KeyStore.SecretKeyEntry).secretKey
+    (keyStore.getEntry(keyAlias, null) as KeyStore.SecretKeyEntry).secretKey
 }

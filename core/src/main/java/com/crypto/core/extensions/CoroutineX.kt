@@ -12,8 +12,8 @@ private val handler = CoroutineExceptionHandler { _, exception ->
 }
 
 fun CoroutineScope.launchWithHandler(
-    context: CoroutineContext = EmptyCoroutineContext,
-    block: suspend CoroutineScope.() -> Unit
+  context: CoroutineContext = EmptyCoroutineContext,
+  block: suspend CoroutineScope.() -> Unit
 ) {
   launch(context + handler) {
     block()

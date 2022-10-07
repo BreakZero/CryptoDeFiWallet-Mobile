@@ -23,8 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WalletImportViewModel @Inject constructor(
-    private val preferences: SharedPreferences,
-    private val walletRepository: WalletRepository
+  private val preferences: SharedPreferences,
+  private val walletRepository: WalletRepository
 ) : ViewModel() {
   var state by mutableStateOf(ImportState())
     private set
@@ -44,11 +44,11 @@ class WalletImportViewModel @Inject constructor(
           viewModelScope.launch(Dispatchers.IO) {
             delay(1000L)
             walletRepository.insertWallet(
-                Wallet(
-                    mnemonic = state.phrase,
-                    1,
-                    passphrase = ""
-                )
+              Wallet(
+                mnemonic = state.phrase,
+                1,
+                passphrase = ""
+              )
             )
             state = state.copy(inProgress = false)
             _uiEvent.send(UiEvent.Success)
@@ -61,7 +61,7 @@ class WalletImportViewModel @Inject constructor(
       }
       is ImportEvent.OnFocusChange -> {
         state = state.copy(
-            isHintVisible = !event.isFocused && state.phrase.isBlank()
+          isHintVisible = !event.isFocused && state.phrase.isBlank()
         )
       }
       is ImportEvent.OnPhraseChange -> {

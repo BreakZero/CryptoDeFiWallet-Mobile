@@ -40,35 +40,35 @@ private const val AnimationDelayMillis = AnimationDurationMillis / NumIndicators
 
 @Composable
 private fun LoadingDot(
-    color: Color,
-    modifier: Modifier = Modifier,
+  color: Color,
+  modifier: Modifier = Modifier,
 ) {
   Box(
-      modifier = modifier
-          .clip(shape = CircleShape)
-          .background(color = color)
+    modifier = modifier
+      .clip(shape = CircleShape)
+      .background(color = color)
   )
 }
 
 @Composable
 fun LoadingIndicator(
-    animating: Boolean,
-    modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.primary,
-    indicatorSpacing: Dp = MaterialTheme.Spacing.small,
+  animating: Boolean,
+  modifier: Modifier = Modifier,
+  color: Color = MaterialTheme.colorScheme.primary,
+  indicatorSpacing: Dp = MaterialTheme.Spacing.small,
 ) {
   val animatedValues = List(NumIndicators) { index ->
     var animatedValue by remember(key1 = animating) { mutableStateOf(0f) }
     LaunchedEffect(key1 = animating) {
       if (animating) {
         animate(
-            initialValue = IndicatorSize / 2f,
-            targetValue = -IndicatorSize / 2f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(durationMillis = AnimationDurationMillis),
-                repeatMode = RepeatMode.Reverse,
-                initialStartOffset = StartOffset(AnimationDelayMillis * index),
-            ),
+          initialValue = IndicatorSize / 2f,
+          targetValue = -IndicatorSize / 2f,
+          animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = AnimationDurationMillis),
+            repeatMode = RepeatMode.Reverse,
+            initialStartOffset = StartOffset(AnimationDelayMillis * index),
+          ),
         ) { value, _ -> animatedValue = value }
       }
     }
@@ -77,12 +77,12 @@ fun LoadingIndicator(
   Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
     animatedValues.forEach { animatedValue ->
       LoadingDot(
-          modifier = Modifier
-              .padding(horizontal = indicatorSpacing)
-              .width(IndicatorSize.dp)
-              .aspectRatio(1f)
-              .offset(y = animatedValue.dp),
-          color = color,
+        modifier = Modifier
+          .padding(horizontal = indicatorSpacing)
+          .width(IndicatorSize.dp)
+          .aspectRatio(1f)
+          .offset(y = animatedValue.dp),
+        color = color,
       )
     }
   }
@@ -90,33 +90,33 @@ fun LoadingIndicator(
 
 @Composable
 fun LoadingButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    loading: Boolean = false,
-    colors: ButtonColors = ButtonDefaults.buttonColors(),
-    indicatorSpacing: Dp = MaterialTheme.Spacing.small,
-    content: @Composable () -> Unit,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  loading: Boolean = false,
+  colors: ButtonColors = ButtonDefaults.buttonColors(),
+  indicatorSpacing: Dp = MaterialTheme.Spacing.small,
+  content: @Composable () -> Unit,
 ) {
   val contentAlpha by animateFloatAsState(targetValue = if (loading) 0f else 1f)
   val loadingAlpha by animateFloatAsState(targetValue = if (loading) 1f else 0f)
   Button(
-      onClick = onClick,
-      modifier = modifier,
-      enabled = enabled,
-      colors = colors,
+    onClick = onClick,
+    modifier = modifier,
+    enabled = enabled,
+    colors = colors,
   ) {
     Box(
-        contentAlignment = Alignment.Center,
+      contentAlignment = Alignment.Center,
     ) {
       LoadingIndicator(
-          animating = loading,
-          modifier = Modifier.graphicsLayer { alpha = loadingAlpha },
-          color = colors.contentColor(enabled = enabled).value,
-          indicatorSpacing = indicatorSpacing,
+        animating = loading,
+        modifier = Modifier.graphicsLayer { alpha = loadingAlpha },
+        color = colors.contentColor(enabled = enabled).value,
+        indicatorSpacing = indicatorSpacing,
       )
       Box(
-          modifier = Modifier.graphicsLayer { alpha = contentAlpha }
+        modifier = Modifier.graphicsLayer { alpha = contentAlpha }
       ) {
         content()
       }

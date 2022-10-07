@@ -26,11 +26,11 @@ import java.math.BigDecimal
 import javax.inject.Inject
 
 class AssetUseCase @Inject constructor(
-    private val client: HttpClient,
-    private val database: CryptoDeFiDatabase
+  private val client: HttpClient,
+  private val database: CryptoDeFiDatabase
 ) {
   suspend fun fetchingAssets(
-      initial: suspend () -> Unit
+    initial: suspend () -> Unit
   ) = withContext(Dispatchers.IO) {
     try {
       val lastSha256 = database.versionDao.lastVersion()?.sha256.orElse("==")
@@ -39,10 +39,10 @@ class AssetUseCase @Inject constructor(
       }.body<BaseResponse<AssetDto>>()
       if (response.data.sha256 != lastSha256) {
         database.versionDao.insert(
-            CoinVersionShaEntity(
-                sha256 = response.data.sha256,
-                createAt = DateTimeUtil.toEpochMillis(DateTimeUtil.now())
-            )
+          CoinVersionShaEntity(
+            sha256 = response.data.sha256,
+            createAt = DateTimeUtil.toEpochMillis(DateTimeUtil.now())
+          )
         )
       }
       database.assetDao.insertAll(response.data.currencies.map { it.toAssetEntity() })

@@ -37,12 +37,12 @@ object SingleModule {
       }
       install(ContentNegotiation) {
         json(
-            Json {
-              ignoreUnknownKeys = true
-              useArrayPolymorphism = true
-              prettyPrint = true
-              allowStructuredMapKeys = true
-            }
+          Json {
+            ignoreUnknownKeys = true
+            useArrayPolymorphism = true
+            prettyPrint = true
+            allowStructuredMapKeys = true
+          }
         )
       }
       install(Logging) {
@@ -62,41 +62,41 @@ object SingleModule {
   @Provides
   @Singleton
   fun provideDeFiDatabase(
-      application: Application
+    application: Application
   ): CryptoDeFiDatabase {
     return Room.databaseBuilder(application, CryptoDeFiDatabase::class.java, "defi_wallet.db")
-        .build()
+      .build()
   }
 
   @Provides
   @Singleton
   fun provideChainManager(
-      database: CryptoDeFiDatabase,
-      client: HttpClient
+    database: CryptoDeFiDatabase,
+    client: HttpClient
   ): ChainManager {
     return ChainManager(
-        database = database,
-        client = client
+      database = database,
+      client = client
     )
   }
 
   @Provides
   @Singleton
   fun provideBalanceUseCase(
-      database: CryptoDeFiDatabase,
-      client: HttpClient
+    database: CryptoDeFiDatabase,
+    client: HttpClient
   ): BalanceUseCase {
     return BalanceUseCase(
-        client = client,
-        database = database
+      client = client,
+      database = database
     )
   }
 
   @Provides
   @Singleton
   fun provideAssetUseCase(
-      client: HttpClient,
-      database: CryptoDeFiDatabase
+    client: HttpClient,
+    database: CryptoDeFiDatabase
   ): AssetUseCase {
     return AssetUseCase(client = client, database = database)
   }

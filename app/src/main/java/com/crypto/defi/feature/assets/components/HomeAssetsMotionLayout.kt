@@ -35,76 +35,76 @@ import com.crypto.resource.R
 @OptIn(ExperimentalMotionApi::class)
 @Composable
 fun HomeAssetsMotionLayout(
-    totalBalance: String,
-    targetValue: Float,
-    scrollableBody: @Composable () -> Unit
+  totalBalance: String,
+  targetValue: Float,
+  scrollableBody: @Composable () -> Unit
 ) {
   val progress by animateFloatAsState(
-      targetValue = targetValue,
-      tween(100)
+    targetValue = targetValue,
+    tween(100)
   )
   MotionLayout(
-      start = startConstraintSet(),
-      end = endConstraintSet(),
-      progress = progress,
-      modifier = Modifier
-          .fillMaxWidth()
-          .background(MaterialTheme.colorScheme.primary)
+    start = startConstraintSet(),
+    end = endConstraintSet(),
+    progress = progress,
+    modifier = Modifier
+      .fillMaxWidth()
+      .background(MaterialTheme.colorScheme.primary)
   ) {
     Box(
-        modifier = Modifier
-            .layoutId("header-content")
+      modifier = Modifier
+        .layoutId("header-content")
     ) {
       Image(
-          painter = painterResource(id = R.drawable.backgroud_stars),
-          contentDescription = "poster",
-          contentScale = ContentScale.FillWidth,
-          alpha = 1f - progress
+        painter = painterResource(id = R.drawable.backgroud_stars),
+        contentDescription = "poster",
+        contentScale = ContentScale.FillWidth,
+        alpha = 1f - progress
       )
       Column(
-          modifier = Modifier
-              .fillMaxWidth()
-              .padding(top = 32.dp, bottom = 24.dp),
-          horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(top = 32.dp, bottom = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
       ) {
         Row(modifier = Modifier) {
           Text(
-              text = stringResource(id = R.string.wallet_asset__total_balance_big),
-              modifier = Modifier.align(Alignment.CenterVertically),
-              style = MaterialTheme.typography.titleMedium,
-              color = MaterialTheme.colorScheme.primaryContainer
+            text = stringResource(id = R.string.wallet_asset__total_balance_big),
+            modifier = Modifier.align(Alignment.CenterVertically),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primaryContainer
           )
           Icon(
-              imageVector = Icons.Default.RemoveRedEye, contentDescription = null,
-              modifier = Modifier.align(Alignment.CenterVertically),
-              tint = MaterialTheme.colorScheme.primaryContainer
+            imageVector = Icons.Default.RemoveRedEye, contentDescription = null,
+            modifier = Modifier.align(Alignment.CenterVertically),
+            tint = MaterialTheme.colorScheme.primaryContainer
           )
         }
         Text(
-            text = buildAnnotatedString {
-              withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
-                append("$ ")
-              }
-              withStyle(
-                  style = SpanStyle(
-                      color = MaterialTheme.colorScheme.primaryContainer,
-                      fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                      fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
-                      fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                      fontWeight = MaterialTheme.typography.titleLarge.fontWeight
-                  )
-              ) {
-                append(totalBalance)
-              }
-              withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
-                append(" USD")
-              }
+          text = buildAnnotatedString {
+            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
+              append("$ ")
             }
+            withStyle(
+              style = SpanStyle(
+                color = MaterialTheme.colorScheme.primaryContainer,
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
+                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                fontWeight = MaterialTheme.typography.titleLarge.fontWeight
+              )
+            ) {
+              append(totalBalance)
+            }
+            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
+              append(" USD")
+            }
+          }
         )
       }
     }
     Box(
-        modifier = Modifier.layoutId("content")
+      modifier = Modifier.layoutId("content")
     ) {
       scrollableBody()
     }

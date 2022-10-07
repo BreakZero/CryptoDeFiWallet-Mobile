@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NFTsViewModel @Inject constructor(
-    private val client: HttpClient
+  private val client: HttpClient
 ) : ViewModel() {
   val ownerAssetState = MutableStateFlow(NFTsState())
 

@@ -7,7 +7,7 @@ import com.crypto.wallet.model.toWalletEntity
 import javax.inject.Inject
 
 class WalletRepository @Inject constructor(
-    private val database: dagger.Lazy<WalletDatabase>
+  private val database: dagger.Lazy<WalletDatabase>
 ) {
   suspend fun insertWallet(wallet: Wallet) {
     database.get().walletDao.insertWallet(wallet.toWalletEntity())

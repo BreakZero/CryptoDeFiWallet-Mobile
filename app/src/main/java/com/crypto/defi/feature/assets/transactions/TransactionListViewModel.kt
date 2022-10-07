@@ -17,30 +17,30 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class TransactionListViewModel @AssistedInject constructor(
-    private val chainManager: ChainManager,
-    assetUseCase: AssetUseCase,
-    @Assisted private val coinSlug: String
+  private val chainManager: ChainManager,
+  assetUseCase: AssetUseCase,
+  @Assisted private val coinSlug: String
 ) : ViewModel() {
   private val _txnState = assetUseCase.findAssetBySlug(coinSlug).filterNotNull().map { asset ->
     val iChain = chainManager.getChainByKey(asset.code)
     TransactionListState(
-        asset = asset,
-        address = iChain.address(),
-        transactionList = Pager(PagingConfig(pageSize = 20)) {
-          TransactionListSource(
-              contractAddress = asset.contract, iChain = iChain
-          )
-        }.flow.cachedIn(viewModelScope)
+      asset = asset,
+      address = iChain.address(),
+      transactionList = Pager(PagingConfig(pageSize = 20)) {
+        TransactionListSource(
+          contractAddress = asset.contract, iChain = iChain
+        )
+      }.flow.cachedIn(viewModelScope)
     )
   }
 
   val txnState = _txnState.stateIn(
-      scope = viewModelScope,
-      started = SharingStarted.Lazily,
-      initialValue = TransactionListState(
-          asset = null,
-          transactionList = flow { emit(PagingData.empty()) }
-      )
+    scope = viewModelScope,
+    started = SharingStarted.Lazily,
+    initialValue = TransactionListState(
+      asset = null,
+      transactionList = flow { emit(PagingData.empty()) }
+    )
   )
 
   fun coinSlug() = coinSlug

@@ -13,8 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val chainManager: ChainManager,
-    private val walletRepository: WalletRepository
+  private val chainManager: ChainManager,
+  private val walletRepository: WalletRepository
 ) : ViewModel() {
   init {
     viewModelScope.launch(Dispatchers.IO) {

@@ -30,8 +30,8 @@ import wallet.core.jni.proto.Ethereum
 import java.math.BigInteger
 
 class EvmChainImpl(
-    private val httpClient: HttpClient,
-    private val hdWallet: HDWallet
+  private val httpClient: HttpClient,
+  private val hdWallet: HDWallet
 ) : IChain {
   override fun address(): String {
     return hdWallet.getAddressForCoin(CoinType.ETHEREUM)
@@ -51,13 +51,13 @@ class EvmChainImpl(
   }
 
   override suspend fun transactions(
-      page: Int,
-      offset: Int,
-      contract: String?
+    page: Int,
+    offset: Int,
+    contract: String?
   ): List<EvmTransaction> {
     return try {
       httpClient.get(
-          urlString = "${UrlConstant.BASE_URL}/ethereum/transactions/${address()}"
+        urlString = "${UrlConstant.BASE_URL}/ethereum/transactions/${address()}"
       ) {
         parameter("page", page)
         parameter("offset", 20)
@@ -79,13 +79,13 @@ class EvmChainImpl(
       val nonce = fetchNonce()
       val (baseFee, priorityFee) = feeHistory()
       val gasLimit = estimateGasLimit(
-          from = address(),
-          to = readyToSign.contract.orElse(readyToSign.to),
-          input = readyToSign.contract?.let {
-            "0x70a08231000000000000000000000000${address().clearHexPrefix()}"
-          })
+        from = address(),
+        to = readyToSign.contract.orElse(readyToSign.to),
+        input = readyToSign.contract?.let {
+          "0x70a08231000000000000000000000000${address().clearHexPrefix()}"
+        })
       val prvKey =
-          ByteString.copyFrom(hdWallet.getKeyForCoin(CoinType.ETHEREUM).data())
+        ByteString.copyFrom(hdWallet.getKeyForCoin(CoinType.ETHEREUM).data())
       val signer = readyToSign.contract?.let {
         val tokenTransfer = Ethereum.Transaction.ERC20Transfer.newBuilder().apply {
           to = readyToSign.to
@@ -99,7 +99,7 @@ class EvmChainImpl(
           this.txMode = Ethereum.TransactionMode.Enveloped
           this.maxFeePerGas = ByteString.copyFrom(baseFee.toHexByteArray())
           this.maxInclusionFeePerGas =
-              ByteString.copyFrom(priorityFee.toHexByteArray())
+            ByteString.copyFrom(priorityFee.toHexByteArray())
           this.gasLimit = ByteString.copyFrom(gasLimit.toBigInteger().toHexByteArray())
           this.transaction = Ethereum.Transaction.newBuilder().apply {
             erc20Transfer = tokenTransfer.build()
@@ -127,17 +127,17 @@ class EvmChainImpl(
         }
       }
       val output = AnySigner.sign(
-          signer.build(),
-          CoinType.ETHEREUM,
-          Ethereum.SigningOutput.parser()
+        signer.build(),
+        CoinType.ETHEREUM,
+        Ethereum.SigningOutput.parser()
       )
       TransactionPlan(
-          rawData = output.encoded.toByteArray().toHex(),
-          action = "ETH Transfer",
-          amount = readyToSign.amount,
-          to = readyToSign.to,
-          from = address(),
-          fee = gasLimit.toBigInteger().times(baseFee)
+        rawData = output.encoded.toByteArray().toHex(),
+        action = "ETH Transfer",
+        amount = readyToSign.amount,
+        to = readyToSign.to,
+        from = address(),
+        fee = gasLimit.toBigInteger().times(baseFee)
       )
     }
   }
@@ -150,10 +150,10 @@ class EvmChainImpl(
   }
 
   private suspend fun estimateGasLimit(
-      chain: String = "ethereum",
-      from: String,
-      to: String,
-      input: String? = null
+    chain: String = "ethereum",
+    from: String,
+    to: String,
+    input: String? = null
   ) = withContext(Dispatchers.IO) {
     return@withContext input?.let {
       val response = httpClient.get("${UrlConstant.BASE_URL}/$chain/estimateGas") {
@@ -166,17 +166,17 @@ class EvmChainImpl(
   }
 
   private suspend fun fetchNonce(
-      chain: String = "ethereum"
+    chain: String = "ethereum"
   ) = withContext(Dispatchers.IO) {
     httpClient.get("${UrlConstant.BASE_URL}/$chain/${address()}/nonce")
-        .body<BaseResponse<Long>>().data
+      .body<BaseResponse<Long>>().data
   }
 
   private suspend fun feeHistory(
-      chain: String = "ethereum"
+    chain: String = "ethereum"
   ) = withContext(Dispatchers.Default) {
     val history = httpClient.get("${UrlConstant.BASE_URL}/$chain/feeHistory")
-        .body<BaseResponse<FeeHistoryDto>>()
+      .body<BaseResponse<FeeHistoryDto>>()
     val baseFee = formatFeeHistory(history.data)
     Pair(baseFee, baseFee)
   }
@@ -185,11 +185,11 @@ class EvmChainImpl(
     val oldestBlock = historyDto.oldestBlock
     val blocks = historyDto.baseFeePerGas.mapIndexed { index, value ->
       BlockInfo(
-          number = oldestBlock._16toNumber().plus(index.toBigInteger()),
-          baseFeePerGas = value._16toNumber(),
-          gasUsedRatio = historyDto.gasUsedRatio.getOrNull(index) ?: 0.0,
-          priorityFeePerGas = historyDto.reward.getOrNull(index)?.map { it._16toNumber() }
-              ?: emptyList()
+        number = oldestBlock._16toNumber().plus(index.toBigInteger()),
+        baseFeePerGas = value._16toNumber(),
+        gasUsedRatio = historyDto.gasUsedRatio.getOrNull(index) ?: 0.0,
+        priorityFeePerGas = historyDto.reward.getOrNull(index)?.map { it._16toNumber() }
+          ?: emptyList()
       )
     }
     val firstPercentialPriorityFees = blocks.first().priorityFeePerGas
@@ -201,8 +201,8 @@ class EvmChainImpl(
 
 @Keep
 internal data class BlockInfo(
-    val number: BigInteger,
-    val baseFeePerGas: BigInteger,
-    val gasUsedRatio: Double,
-    val priorityFeePerGas: List<BigInteger>
+  val number: BigInteger,
+  val baseFeePerGas: BigInteger,
+  val gasUsedRatio: Double,
+  val priorityFeePerGas: List<BigInteger>
 )

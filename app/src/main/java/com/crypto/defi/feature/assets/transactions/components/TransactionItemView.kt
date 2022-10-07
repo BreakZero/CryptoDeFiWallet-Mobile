@@ -28,39 +28,39 @@ import timber.log.Timber
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TransactionItemView(
-    modifier: Modifier,
-    data: BaseTransaction
+  modifier: Modifier,
+  data: BaseTransaction
 ) {
   Card(
-      modifier = modifier
-          .fillMaxWidth()
-          .defaultMinSize(minHeight = MaterialTheme.Spacing.space48)
-          .clickable {
-            Timber.v("${data.timeStamp}, ${data is EvmTransaction}")
-          }
+    modifier = modifier
+      .fillMaxWidth()
+      .defaultMinSize(minHeight = MaterialTheme.Spacing.space48)
+      .clickable {
+        Timber.v("${data.timeStamp}, ${data is EvmTransaction}")
+      }
   ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                horizontal = MaterialTheme.Spacing.small,
-                vertical = MaterialTheme.Spacing.extraSmall
-            ), verticalAlignment = Alignment.CenterVertically
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(
+          horizontal = MaterialTheme.Spacing.small,
+          vertical = MaterialTheme.Spacing.extraSmall
+        ), verticalAlignment = Alignment.CenterVertically
     ) {
       val isSend = data.direction == TransactionDirection.RECEIVE
       Icon(
-          painter = painterResource(
-              id = if (isSend) R.drawable.ic_send else R.drawable.ic_receive
-          ),
-          contentDescription = null
+        painter = painterResource(
+          id = if (isSend) R.drawable.ic_send else R.drawable.ic_receive
+        ),
+        contentDescription = null
       )
       Column(modifier = Modifier.weight(1f)) {
         Text(text = data.hash, overflow = TextOverflow.Ellipsis, maxLines = 1)
         Text(text = data.timeStamp, overflow = TextOverflow.Ellipsis, maxLines = 1)
       }
       Text(
-          text = "${if (isSend) "-" else "+"} ${data.value.byDecimal2String(18, 6)}",
-          color = if (isSend) Color.Red else Color.Green
+        text = "${if (isSend) "-" else "+"} ${data.value.byDecimal2String(18, 6)}",
+        color = if (isSend) Color.Red else Color.Green
       )
     }
   }

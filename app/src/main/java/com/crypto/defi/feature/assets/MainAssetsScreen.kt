@@ -43,97 +43,97 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @OptIn(
-    ExperimentalMaterialApi::class,
-    ExperimentalMaterial3Api::class
+  ExperimentalMaterialApi::class,
+  ExperimentalMaterial3Api::class
 )
 @Composable
 fun MainAssetsScreen(
-    assetsViewModel: MainAssetsViewModel = hiltViewModel(),
-    navigateTo: (NavigationCommand) -> Unit
+  assetsViewModel: MainAssetsViewModel = hiltViewModel(),
+  navigateTo: (NavigationCommand) -> Unit
 ) {
   val context = LocalContext.current
   val assetsUiState = assetsViewModel.assetState
   Scaffold(
-      modifier = Modifier.fillMaxSize(),
-      topBar = {
-        SmallTopAppBar(
-            colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary
-            ),
-            navigationIcon = {
-              IconButton(onClick = {
-                navigateTo(SettingsNavigation.Settings)
-              }) {
-                Image(
-                    modifier = Modifier.size(MaterialTheme.Spacing.space48),
-                    painter = painterResource(id = R.drawable.avatar_generic_1),
-                    contentDescription = null
-                )
-              }
-            },
-            actions = {
-              Icon(
-                  modifier = Modifier
-                      .padding(end = MaterialTheme.Spacing.medium)
-                      .clickable {
-                        navigateTo(ScannerNavigation.Scanner)
-                      },
-                  painter = painterResource(id = R.drawable.ic_scanner),
-                  contentDescription = null,
-                  tint = MaterialTheme.colorScheme.primaryContainer
-              )
-            },
-            title = {
-              Column {
-                Text(
-                    text = "Wallet Name",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.primaryContainer
-                )
-                Text(
-                    text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.surfaceVariant
-                )
-              }
-            }
-        )
-      }) {
+    modifier = Modifier.fillMaxSize(),
+    topBar = {
+      SmallTopAppBar(
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+          containerColor = MaterialTheme.colorScheme.primary
+        ),
+        navigationIcon = {
+          IconButton(onClick = {
+            navigateTo(SettingsNavigation.Settings)
+          }) {
+            Image(
+              modifier = Modifier.size(MaterialTheme.Spacing.space48),
+              painter = painterResource(id = R.drawable.avatar_generic_1),
+              contentDescription = null
+            )
+          }
+        },
+        actions = {
+          Icon(
+            modifier = Modifier
+              .padding(end = MaterialTheme.Spacing.medium)
+              .clickable {
+                navigateTo(ScannerNavigation.Scanner)
+              },
+            painter = painterResource(id = R.drawable.ic_scanner),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primaryContainer
+          )
+        },
+        title = {
+          Column {
+            Text(
+              text = "Wallet Name",
+              style = MaterialTheme.typography.titleSmall,
+              color = MaterialTheme.colorScheme.primaryContainer
+            )
+            Text(
+              text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
+              style = MaterialTheme.typography.labelSmall,
+              color = MaterialTheme.colorScheme.surfaceVariant
+            )
+          }
+        }
+      )
+    }) {
     DeFiBoxWithConstraints { progress, isExpanded ->
       HomeAssetsMotionLayout(
-          totalBalance = assetsUiState.totalBalance,
-          targetValue = progress
+        totalBalance = assetsUiState.totalBalance,
+        targetValue = progress
       ) {
         SwipeRefresh(
-            state = rememberSwipeRefreshState(false),
-            swipeEnabled = isExpanded,
-            onRefresh = {
-              assetsViewModel.onRefresh()
-            }
+          state = rememberSwipeRefreshState(false),
+          swipeEnabled = isExpanded,
+          onRefresh = {
+            assetsViewModel.onRefresh()
+          }
         ) {
           LazyColumn(
-              modifier = Modifier
-                  .fillMaxSize()
-                  .clip(
-                      RoundedCornerShape(
-                          topEnd = MaterialTheme.Spacing.space24,
-                          topStart = MaterialTheme.Spacing.space24
-                      )
-                  )
-                  .background(MaterialTheme.colorScheme.surface),
-              contentPadding = PaddingValues(
-                  vertical = MaterialTheme.Spacing.medium,
-                  horizontal = MaterialTheme.Spacing.small
-              ),
-              verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+            modifier = Modifier
+              .fillMaxSize()
+              .clip(
+                RoundedCornerShape(
+                  topEnd = MaterialTheme.Spacing.space24,
+                  topStart = MaterialTheme.Spacing.space24
+                )
+              )
+              .background(MaterialTheme.colorScheme.surface),
+            contentPadding = PaddingValues(
+              vertical = MaterialTheme.Spacing.medium,
+              horizontal = MaterialTheme.Spacing.small
+            ),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
           ) {
             if (assetsUiState.onRefreshing) {
               item {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = MaterialTheme.Spacing.medium),
-                    contentAlignment = Alignment.Center
+                  modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = MaterialTheme.Spacing.medium),
+                  contentAlignment = Alignment.Center
                 ) {
                   LoadingIndicator(animating = true)
                 }
@@ -141,35 +141,35 @@ fun MainAssetsScreen(
             }
             items(assetsUiState.assets) { asset ->
               AssetCard(
-                  modifier = Modifier
-                      .fillMaxWidth()
-                      .animateItemPlacement(),
-                  asset = asset
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .animateItemPlacement(),
+                asset = asset
               ) {
                 navigateTo(TransactionListNavigation.destination(it.slug))
               }
             }
             item {
               LazyRow(
-                  horizontalArrangement = Arrangement.spacedBy(
-                      MaterialTheme.Spacing.space12
-                  )
+                horizontalArrangement = Arrangement.spacedBy(
+                  MaterialTheme.Spacing.space12
+                )
               ) {
                 items(assetsUiState.promoCard) {
                   Box(
-                      modifier = Modifier
-                          .size(MaterialTheme.Spacing.space128)
+                    modifier = Modifier
+                      .size(MaterialTheme.Spacing.space128)
                   ) {
                     Image(
-                        painter = painterResource(id = it.backgroundRes),
-                        contentDescription = null
+                      painter = painterResource(id = it.backgroundRes),
+                      contentDescription = null
                     )
                     Text(
-                        modifier = Modifier.padding(
-                            MaterialTheme.Spacing.extraSmall
-                        ),
-                        text = it.title.asString(context),
-                        color = Color.White
+                      modifier = Modifier.padding(
+                        MaterialTheme.Spacing.extraSmall
+                      ),
+                      text = it.title.asString(context),
+                      color = Color.White
                     )
                   }
                 }

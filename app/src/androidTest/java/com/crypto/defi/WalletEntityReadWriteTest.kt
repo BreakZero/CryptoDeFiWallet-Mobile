@@ -30,7 +30,7 @@ class WalletEntityReadWriteTest {
   fun createDb() {
     val context = ApplicationProvider.getApplicationContext<Context>()
     db = Room.inMemoryDatabaseBuilder(context, CryptoDeFiDatabase::class.java)
-        .build()
+      .build()
     versionDao = db.versionDao
   }
 
@@ -44,8 +44,8 @@ class WalletEntityReadWriteTest {
   @Throws(Exception::class)
   fun writeWalletAndReadInList() = runTest {
     val versionEntity = CoinVersionShaEntity(
-        sha256 = "mocksha256",
-        createAt = 10000L
+      sha256 = "mocksha256",
+      createAt = 10000L
     )
 
     versionDao.insert(versionEntity)

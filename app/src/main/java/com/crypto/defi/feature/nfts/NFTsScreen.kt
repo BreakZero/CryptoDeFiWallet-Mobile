@@ -43,51 +43,51 @@ import com.crypto.resource.R
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun MainNFTsScreen(
-    nftsViewModel: NFTsViewModel = hiltViewModel(),
-    navigateTo: (NavigationCommand) -> Unit
+  nftsViewModel: NFTsViewModel = hiltViewModel(),
+  navigateTo: (NavigationCommand) -> Unit
 ) {
   Scaffold(
-      modifier = Modifier.fillMaxSize(),
-      topBar = {
-        SmallTopAppBar(
-            colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary
-            ),
-            navigationIcon = {
-              IconButton(onClick = {
-              }) {
-                Image(
-                    modifier = Modifier.size(MaterialTheme.Spacing.space48),
-                    painter = painterResource(id = R.drawable.avatar_generic_1),
-                    contentDescription = null
-                )
-              }
-            },
-            title = {
-              Column {
-                Text(
-                    text = "Wallet Name",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.primaryContainer
-                )
-                Text(
-                    text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.surfaceVariant
-                )
-              }
-            }
-        )
-      }
+    modifier = Modifier.fillMaxSize(),
+    topBar = {
+      SmallTopAppBar(
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+          containerColor = MaterialTheme.colorScheme.primary
+        ),
+        navigationIcon = {
+          IconButton(onClick = {
+          }) {
+            Image(
+              modifier = Modifier.size(MaterialTheme.Spacing.space48),
+              painter = painterResource(id = R.drawable.avatar_generic_1),
+              contentDescription = null
+            )
+          }
+        },
+        title = {
+          Column {
+            Text(
+              text = "Wallet Name",
+              style = MaterialTheme.typography.titleSmall,
+              color = MaterialTheme.colorScheme.primaryContainer
+            )
+            Text(
+              text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
+              style = MaterialTheme.typography.labelSmall,
+              color = MaterialTheme.colorScheme.surfaceVariant
+            )
+          }
+        }
+      )
+    }
   ) { _ ->
     val nftAssetsUiState by nftsViewModel.ownerAssetState.collectAsState()
     Column(modifier = Modifier.fillMaxSize()) {
       Row(
-          modifier = Modifier
-              .fillMaxWidth()
-              .padding(horizontal = MaterialTheme.Spacing.medium),
-          verticalAlignment = Alignment.CenterVertically,
-          horizontalArrangement = Arrangement.SpaceBetween
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(horizontal = MaterialTheme.Spacing.medium),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
       ) {
         Text(text = "Your NFTs")
         Button(onClick = {
@@ -98,41 +98,41 @@ fun MainNFTsScreen(
       }
       AnimatedContent(targetState = true, transitionSpec = {
         fadeIn(animationSpec = tween(300, 300)) with fadeOut(
-            animationSpec = tween(
-                300,
-                300
-            )
+          animationSpec = tween(
+            300,
+            300
+          )
         )
       }) {
         if (nftAssetsUiState.isLoading) {
           Box(
-              contentAlignment = Alignment.Center,
-              modifier = Modifier
-                  .fillMaxSize()
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+              .fillMaxSize()
           ) {
             LoadingIndicator(animating = true)
           }
         } else {
           LazyVerticalGrid(
-              columns = GridCells.Fixed(3),
-              contentPadding = PaddingValues(MaterialTheme.Spacing.medium),
-              horizontalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small),
-              verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+            columns = GridCells.Fixed(3),
+            contentPadding = PaddingValues(MaterialTheme.Spacing.medium),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
           ) {
             items(nftAssetsUiState.nfts) { asset ->
               AsyncImage(
-                  modifier = Modifier
-                      .size(MaterialTheme.Spacing.space128)
-                      .clip(RoundedCornerShape(MaterialTheme.Spacing.space24))
-                      .background(color = MaterialTheme.colorScheme.surface),
-                  contentScale = ContentScale.Crop,
-                  model = ImageRequest.Builder(LocalContext.current)
-                      .data(asset.nftscanUri ?: asset.imageUri)
-                      .placeholder(R.drawable.avatar_generic_1)
-                      .error(R.drawable.avatar_generic_1)
-                      .crossfade(true)
-                      .build(),
-                  contentDescription = null
+                modifier = Modifier
+                  .size(MaterialTheme.Spacing.space128)
+                  .clip(RoundedCornerShape(MaterialTheme.Spacing.space24))
+                  .background(color = MaterialTheme.colorScheme.surface),
+                contentScale = ContentScale.Crop,
+                model = ImageRequest.Builder(LocalContext.current)
+                  .data(asset.nftscanUri ?: asset.imageUri)
+                  .placeholder(R.drawable.avatar_generic_1)
+                  .error(R.drawable.avatar_generic_1)
+                  .crossfade(true)
+                  .build(),
+                contentDescription = null
               )
             }
           }

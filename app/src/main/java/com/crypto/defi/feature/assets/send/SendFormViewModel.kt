@@ -18,9 +18,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SendFormViewModel @AssistedInject constructor(
-    private val chainManager: ChainManager,
-    assetUseCase: AssetUseCase,
-    @Assisted private val coinSlug: String
+  private val chainManager: ChainManager,
+  assetUseCase: AssetUseCase,
+  @Assisted private val coinSlug: String
 ) : ViewModel() {
   private val _asset = assetUseCase.findAssetBySlug(coinSlug).filterNotNull()
   private val _to = MutableStateFlow("")
@@ -30,18 +30,18 @@ class SendFormViewModel @AssistedInject constructor(
   private val _planState = MutableStateFlow(TransactionPlan.EmptyPlan)
 
   val sendFormState = combine(
-      _asset,
-      _planState,
-      _to,
-      _amount,
-      _memo
+    _asset,
+    _planState,
+    _to,
+    _amount,
+    _memo
   ) { asset, plan, to, amount, memo ->
     SendFormState(
-        asset = asset,
-        to = to,
-        amount = amount,
-        memo = memo,
-        plan = plan
+      asset = asset,
+      to = to,
+      amount = amount,
+      memo = memo,
+      plan = plan
     )
   }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SendFormState())
 
@@ -64,8 +64,8 @@ class SendFormViewModel @AssistedInject constructor(
   }
 
   fun sign(
-      onSuccess: () -> Unit,
-      onFailed: (String) -> Unit
+    onSuccess: () -> Unit,
+    onFailed: (String) -> Unit
   ) {
     viewModelScope.launch(Dispatchers.IO) {
       with(sendFormState.value) {
@@ -73,13 +73,13 @@ class SendFormViewModel @AssistedInject constructor(
           val iChain = chainManager.getChainByKey(it.code)
           try {
             val plan = iChain.signTransaction(
-                ReadyToSign(
-                    to = this.to,
-                    memo = this.memo.ifBlank { null },
-                    contract = it.contract,
-                    amount = this.amount.toBigDecimal()
-                        .upWithDecimal(asset.decimal)
-                )
+              ReadyToSign(
+                to = this.to,
+                memo = this.memo.ifBlank { null },
+                contract = it.contract,
+                amount = this.amount.toBigDecimal()
+                  .upWithDecimal(asset.decimal)
+              )
             )
             _planState.update {
               plan
@@ -94,8 +94,8 @@ class SendFormViewModel @AssistedInject constructor(
   }
 
   fun broadcast(
-      onFailed: (String) -> Unit,
-      onSuccess: () -> Unit
+    onFailed: (String) -> Unit,
+    onSuccess: () -> Unit
   ) {
     viewModelScope.launch(Dispatchers.IO) {
       with(sendFormState.value) {

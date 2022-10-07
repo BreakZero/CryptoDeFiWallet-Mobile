@@ -24,40 +24,40 @@ import com.crypto.resource.R
 @Composable
 fun MainDeFiScreen() {
   Scaffold(modifier = Modifier.fillMaxSize(),
-      topBar = {
-        SmallTopAppBar(
-            colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary
-            ),
-            navigationIcon = {
-              IconButton(onClick = {
-              }) {
-                Image(
-                    modifier = Modifier.size(MaterialTheme.Spacing.space48),
-                    painter = painterResource(id = R.drawable.avatar_generic_1),
-                    contentDescription = null
-                )
-              }
-            },
-            title = {
-              Column {
-                Text(
-                    text = "Wallet Name",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.primaryContainer
-                )
-                Text(
-                    text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.surfaceVariant
-                )
-              }
-            }
-        )
-      }) {
+    topBar = {
+      SmallTopAppBar(
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+          containerColor = MaterialTheme.colorScheme.primary
+        ),
+        navigationIcon = {
+          IconButton(onClick = {
+          }) {
+            Image(
+              modifier = Modifier.size(MaterialTheme.Spacing.space48),
+              painter = painterResource(id = R.drawable.avatar_generic_1),
+              contentDescription = null
+            )
+          }
+        },
+        title = {
+          Column {
+            Text(
+              text = "Wallet Name",
+              style = MaterialTheme.typography.titleSmall,
+              color = MaterialTheme.colorScheme.primaryContainer
+            )
+            Text(
+              text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
+              style = MaterialTheme.typography.labelSmall,
+              color = MaterialTheme.colorScheme.surfaceVariant
+            )
+          }
+        }
+      )
+    }) {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+      modifier = Modifier.fillMaxSize(),
+      contentAlignment = Alignment.Center
     ) {
       Text(text = "DeFi dapps")
     }

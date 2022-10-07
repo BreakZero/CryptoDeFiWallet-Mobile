@@ -47,32 +47,32 @@ import timber.log.Timber
 
 @Composable
 fun sendFormViewModel(
-    slug: String
+  slug: String
 ): SendFormViewModel {
   val assistedFactory = EntryPointAccessors.fromActivity(
-      LocalContext.current as Activity,
-      ViewModelFactoryProvider::class.java
+    LocalContext.current as Activity,
+    ViewModelFactoryProvider::class.java
   ).sendFormAssistedViewModelFactory()
 
   return viewModel(
-      factory = object : ViewModelProvider.Factory {
-        override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-          return assistedFactory.createSendFormViewModel(slug) as T
-        }
+    factory = object : ViewModelProvider.Factory {
+      override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+        return assistedFactory.createSendFormViewModel(slug) as T
       }
+    }
   )
 }
 
 @OptIn(
-    ExperimentalComposeUiApi::class,
-    ExperimentalMaterialApi::class
+  ExperimentalComposeUiApi::class,
+  ExperimentalMaterialApi::class
 )
 @Composable
 fun SendFormScreen(
-    savedStateHandle: SavedStateHandle?,
-    sendFormViewModel: SendFormViewModel,
-    navigateUp: () -> Unit,
-    navigateTo: (NavigationCommand) -> Unit
+  savedStateHandle: SavedStateHandle?,
+  sendFormViewModel: SendFormViewModel,
+  navigateUp: () -> Unit,
+  navigateTo: (NavigationCommand) -> Unit
 ) {
   savedStateHandle?.also { handler ->
     LaunchedEffect(key1 = handler) {
@@ -85,163 +85,163 @@ fun SendFormScreen(
   val keyboardController = LocalSoftwareKeyboardController.current
   val formUiState by sendFormViewModel.sendFormState.collectAsState()
   val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-      bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed, confirmStateChange = {
-        if (it == BottomSheetValue.Collapsed) {
-          sendFormViewModel.clearPlan()
-        }
-        true
-      })
+    bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed, confirmStateChange = {
+      if (it == BottomSheetValue.Collapsed) {
+        sendFormViewModel.clearPlan()
+      }
+      true
+    })
   )
   val coroutineScope = rememberCoroutineScope()
   BottomSheetScaffold(
-      modifier = Modifier.fillMaxSize(),
-      topBar = {
-        DeFiAppBar(
-            title = stringResource(id = R.string.send_address__send),
-            actions = {
-              Icon(
-                  modifier = Modifier
-                      .padding(end = MaterialTheme.Spacing.medium)
-                      .clickable {
-                        navigateTo(ScannerNavigation.Scanner)
-                      },
-                  painter = painterResource(id = R.drawable.ic_scanner),
-                  contentDescription = null,
-                  tint = MaterialTheme.colorScheme.primaryContainer
-              )
-            }) {
-          navigateUp()
+    modifier = Modifier.fillMaxSize(),
+    topBar = {
+      DeFiAppBar(
+        title = stringResource(id = R.string.send_address__send),
+        actions = {
+          Icon(
+            modifier = Modifier
+              .padding(end = MaterialTheme.Spacing.medium)
+              .clickable {
+                navigateTo(ScannerNavigation.Scanner)
+              },
+            painter = painterResource(id = R.drawable.ic_scanner),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primaryContainer
+          )
+        }) {
+        navigateUp()
+      }
+    },
+    scaffoldState = bottomSheetScaffoldState,
+    sheetContent = {
+      if (formUiState.plan.isEmptyPlan()) {
+        Box(
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(128.dp),
+          contentAlignment = Alignment.Center
+        ) {
+          LoadingIndicator(animating = true)
         }
-      },
-      scaffoldState = bottomSheetScaffoldState,
-      sheetContent = {
-        if (formUiState.plan.isEmptyPlan()) {
-          Box(
-              modifier = Modifier
-                  .fillMaxWidth()
-                  .height(128.dp),
-              contentAlignment = Alignment.Center
-          ) {
-            LoadingIndicator(animating = true)
-          }
-        } else {
-          ConfirmFormView(formUiState.asset!!, formUiState.plan) {
-            sendFormViewModel.broadcast(
-                onFailed = {
-                  coroutineScope.launch {
-                    bottomSheetScaffoldState.bottomSheetState.collapse()
-                  }
-                },
-                onSuccess = {
-                  navigateUp()
-                }
-            )
-          }
+      } else {
+        ConfirmFormView(formUiState.asset!!, formUiState.plan) {
+          sendFormViewModel.broadcast(
+            onFailed = {
+              coroutineScope.launch {
+                bottomSheetScaffoldState.bottomSheetState.collapse()
+              }
+            },
+            onSuccess = {
+              navigateUp()
+            }
+          )
         }
-      },
-      sheetShape = RoundedCornerShape(
-          topEnd = MaterialTheme.Spacing.space24,
-          topStart = MaterialTheme.Spacing.space24
-      ),
-      sheetPeekHeight = 0.dp
+      }
+    },
+    sheetShape = RoundedCornerShape(
+      topEnd = MaterialTheme.Spacing.space24,
+      topStart = MaterialTheme.Spacing.space24
+    ),
+    sheetPeekHeight = 0.dp
   ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                horizontal = MaterialTheme.Spacing.medium,
-                vertical = MaterialTheme.Spacing.medium
-            )
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(
+          horizontal = MaterialTheme.Spacing.medium,
+          vertical = MaterialTheme.Spacing.medium
+        )
     ) {
       Column {
         Text(text = stringResource(id = R.string.send_address__to))
         Spacer(modifier = Modifier.height(MaterialTheme.Spacing.extraSmall))
         BasicTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .defaultMinSize(
-                    minWidth = TextFieldDefaults.MinWidth,
-                    minHeight = TextFieldDefaults.MinHeight
-                )
-                .clip(RoundedCornerShape(MaterialTheme.Spacing.small))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(
-                    vertical = MaterialTheme.Spacing.medium,
-                    horizontal = MaterialTheme.Spacing.medium
-                ),
-            textStyle = LocalTextStyle.current,
-            maxLines = 2,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text
+          modifier = Modifier
+            .fillMaxWidth()
+            .defaultMinSize(
+              minWidth = TextFieldDefaults.MinWidth,
+              minHeight = TextFieldDefaults.MinHeight
+            )
+            .clip(RoundedCornerShape(MaterialTheme.Spacing.small))
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(
+              vertical = MaterialTheme.Spacing.medium,
+              horizontal = MaterialTheme.Spacing.medium
             ),
-            value = formUiState.to,
-            onValueChange = {
-              sendFormViewModel.onToChanged(it)
-            })
+          textStyle = LocalTextStyle.current,
+          maxLines = 2,
+          keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Text
+          ),
+          value = formUiState.to,
+          onValueChange = {
+            sendFormViewModel.onToChanged(it)
+          })
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = MaterialTheme.Spacing.extraSmall),
-            horizontalArrangement = Arrangement.SpaceBetween
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = MaterialTheme.Spacing.extraSmall),
+          horizontalArrangement = Arrangement.SpaceBetween
         ) {
           Text(text = stringResource(id = R.string.send_amount__enter_another_amount))
           Text(text = "")
         }
         BasicTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .defaultMinSize(
-                    minWidth = TextFieldDefaults.MinWidth,
-                    minHeight = TextFieldDefaults.MinHeight
-                )
-                .clip(
-                    RoundedCornerShape(
-                        topStart = MaterialTheme.Spacing.small,
-                        topEnd = MaterialTheme.Spacing.small
-                    )
-                )
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(
-                    vertical = MaterialTheme.Spacing.medium,
-                    horizontal = MaterialTheme.Spacing.medium
-                ),
-            textStyle = LocalTextStyle.current,
-            maxLines = 1,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number
+          modifier = Modifier
+            .fillMaxWidth()
+            .defaultMinSize(
+              minWidth = TextFieldDefaults.MinWidth,
+              minHeight = TextFieldDefaults.MinHeight
+            )
+            .clip(
+              RoundedCornerShape(
+                topStart = MaterialTheme.Spacing.small,
+                topEnd = MaterialTheme.Spacing.small
+              )
+            )
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(
+              vertical = MaterialTheme.Spacing.medium,
+              horizontal = MaterialTheme.Spacing.medium
             ),
-            value = formUiState.amount,
-            onValueChange = {
-              sendFormViewModel.onAmountChanged(it)
-            })
+          textStyle = LocalTextStyle.current,
+          maxLines = 1,
+          keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number
+          ),
+          value = formUiState.amount,
+          onValueChange = {
+            sendFormViewModel.onAmountChanged(it)
+          })
         Divider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
         BasicTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .defaultMinSize(
-                    minWidth = TextFieldDefaults.MinWidth,
-                    minHeight = TextFieldDefaults.MinHeight
-                )
-                .clip(
-                    RoundedCornerShape(
-                        bottomStart = MaterialTheme.Spacing.small,
-                        bottomEnd = MaterialTheme.Spacing.small
-                    )
-                )
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(
-                    vertical = MaterialTheme.Spacing.medium,
-                    horizontal = MaterialTheme.Spacing.medium
-                ),
-            textStyle = LocalTextStyle.current,
-            maxLines = 5,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text
+          modifier = Modifier
+            .fillMaxWidth()
+            .defaultMinSize(
+              minWidth = TextFieldDefaults.MinWidth,
+              minHeight = TextFieldDefaults.MinHeight
+            )
+            .clip(
+              RoundedCornerShape(
+                bottomStart = MaterialTheme.Spacing.small,
+                bottomEnd = MaterialTheme.Spacing.small
+              )
+            )
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(
+              vertical = MaterialTheme.Spacing.medium,
+              horizontal = MaterialTheme.Spacing.medium
             ),
-            value = formUiState.memo,
-            onValueChange = {
-              sendFormViewModel.onMemoChanged(it)
-            }
+          textStyle = LocalTextStyle.current,
+          maxLines = 5,
+          keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Text
+          ),
+          value = formUiState.memo,
+          onValueChange = {
+            sendFormViewModel.onMemoChanged(it)
+          }
         )
         Text(text = "Miner Fee")
       }
@@ -255,13 +255,13 @@ fun SendFormScreen(
           }
         }
         sendFormViewModel.sign(
-            onSuccess = {},
-            onFailed = {
-              coroutineScope.launch {
-                bottomSheetScaffoldState.bottomSheetState.collapse()
-              }
-              Timber.e(it)
+          onSuccess = {},
+          onFailed = {
+            coroutineScope.launch {
+              bottomSheetScaffoldState.bottomSheetState.collapse()
             }
+            Timber.e(it)
+          }
         )
       }) {
         Text(text = "Next")
@@ -272,9 +272,9 @@ fun SendFormScreen(
 
 @Composable
 fun ConfirmFormView(
-    asset: Asset,
-    plan: TransactionPlan,
-    onConfirm: () -> Unit
+  asset: Asset,
+  plan: TransactionPlan,
+  onConfirm: () -> Unit
 ) {
   Surface(modifier = Modifier.fillMaxWidth()) {
     var loading by remember {
@@ -282,115 +282,115 @@ fun ConfirmFormView(
     }
     Column(modifier = Modifier.fillMaxWidth()) {
       Row(
-          modifier = Modifier
-              .fillMaxWidth()
-              .height(MaterialTheme.Spacing.space48),
-          verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+          .fillMaxWidth()
+          .height(MaterialTheme.Spacing.space48),
+        verticalAlignment = Alignment.CenterVertically
       ) {
         IconButton(
-            onClick = {
+          onClick = {
 
-            },
-            modifier = Modifier
-                .size(MaterialTheme.Spacing.space48)
-                .padding(MaterialTheme.Spacing.small)
+          },
+          modifier = Modifier
+            .size(MaterialTheme.Spacing.space48)
+            .padding(MaterialTheme.Spacing.small)
         ) {
           Icon(imageVector = Icons.Default.Close, contentDescription = null)
         }
         Text(
-            modifier = Modifier
-                .weight(1.0f),
-            text = "Payment Details",
-            textAlign = TextAlign.Center
+          modifier = Modifier
+            .weight(1.0f),
+          text = "Payment Details",
+          textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.size(MaterialTheme.Spacing.space48))
       }
       Divider()
       Text(
-          modifier = Modifier.fillMaxWidth(),
-          textAlign = TextAlign.Center,
-          text = "${plan.amount.byDecimal2String(asset.decimal)} ${asset.symbol}",
-          style = MaterialTheme.typography.titleLarge
+        modifier = Modifier.fillMaxWidth(),
+        textAlign = TextAlign.Center,
+        text = "${plan.amount.byDecimal2String(asset.decimal)} ${asset.symbol}",
+        style = MaterialTheme.typography.titleLarge
       )
       Row(
-          modifier = Modifier
-              .fillMaxWidth()
-              .padding(
-                  vertical = MaterialTheme.Spacing.small,
-                  horizontal = MaterialTheme.Spacing.medium
-              ),
-          verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(
+            vertical = MaterialTheme.Spacing.small,
+            horizontal = MaterialTheme.Spacing.medium
+          ),
+        verticalAlignment = Alignment.CenterVertically
       ) {
         Text(modifier = Modifier.fillMaxWidth(0.3f), text = "Payment Info")
         Text(
-            modifier = Modifier
-                .padding(horizontal = MaterialTheme.Spacing.small)
-                .weight(1.0F), text = plan.action
+          modifier = Modifier
+            .padding(horizontal = MaterialTheme.Spacing.small)
+            .weight(1.0F), text = plan.action
         )
       }
       Divider(startIndent = MaterialTheme.Spacing.medium, thickness = 0.2.dp)
       Row(
-          modifier = Modifier
-              .fillMaxWidth()
-              .padding(
-                  vertical = MaterialTheme.Spacing.small,
-                  horizontal = MaterialTheme.Spacing.medium
-              ),
-          verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(
+            vertical = MaterialTheme.Spacing.small,
+            horizontal = MaterialTheme.Spacing.medium
+          ),
+        verticalAlignment = Alignment.CenterVertically
       ) {
         Text(modifier = Modifier.fillMaxWidth(0.3f), text = "To")
         Text(
-            modifier = Modifier
-                .padding(horizontal = MaterialTheme.Spacing.small)
-                .weight(1.0F), text = plan.to
+          modifier = Modifier
+            .padding(horizontal = MaterialTheme.Spacing.small)
+            .weight(1.0F), text = plan.to
         )
       }
       Divider(startIndent = MaterialTheme.Spacing.medium, thickness = 0.2.dp)
       Row(
-          modifier = Modifier
-              .fillMaxWidth()
-              .padding(
-                  vertical = MaterialTheme.Spacing.small,
-                  horizontal = MaterialTheme.Spacing.medium
-              ),
-          verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(
+            vertical = MaterialTheme.Spacing.small,
+            horizontal = MaterialTheme.Spacing.medium
+          ),
+        verticalAlignment = Alignment.CenterVertically
       ) {
         Text(modifier = Modifier.fillMaxWidth(0.3f), text = "From")
         Text(
-            modifier = Modifier
-                .padding(horizontal = MaterialTheme.Spacing.small)
-                .weight(1.0F), text = plan.from
+          modifier = Modifier
+            .padding(horizontal = MaterialTheme.Spacing.small)
+            .weight(1.0F), text = plan.from
         )
       }
       Divider(startIndent = MaterialTheme.Spacing.medium, thickness = 0.2.dp)
       Row(
-          modifier = Modifier
-              .fillMaxWidth()
-              .padding(
-                  vertical = MaterialTheme.Spacing.small,
-                  horizontal = MaterialTheme.Spacing.medium
-              ),
-          verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(
+            vertical = MaterialTheme.Spacing.small,
+            horizontal = MaterialTheme.Spacing.medium
+          ),
+        verticalAlignment = Alignment.CenterVertically
       ) {
         Text(modifier = Modifier.fillMaxWidth(0.3f), text = "Miner Fee")
         Text(
-            modifier = Modifier
-                .padding(horizontal = MaterialTheme.Spacing.small)
-                .weight(1.0F),
-            text = "${plan.fee.byDecimal2String(asset.feeDecimal())} ${asset.feeSymbol()}"
+          modifier = Modifier
+            .padding(horizontal = MaterialTheme.Spacing.small)
+            .weight(1.0F),
+          text = "${plan.fee.byDecimal2String(asset.feeDecimal())} ${asset.feeSymbol()}"
         )
       }
       LoadingButton(
-          modifier = Modifier
-              .fillMaxWidth()
-              .padding(horizontal = MaterialTheme.Spacing.medium),
-          loading = loading,
-          onClick = {
-            if (!loading) {
-              loading = true
-              onConfirm()
-            }
-          }) {
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(horizontal = MaterialTheme.Spacing.medium),
+        loading = loading,
+        onClick = {
+          if (!loading) {
+            loading = true
+            onConfirm()
+          }
+        }) {
         Text(text = stringResource(id = R.string.passcode_verify__confirm))
       }
     }

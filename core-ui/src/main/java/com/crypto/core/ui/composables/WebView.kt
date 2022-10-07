@@ -51,13 +51,13 @@ import kotlinx.coroutines.withContext
  */
 @Composable
 fun WebView(
-    state: WebViewState,
-    modifier: Modifier = Modifier,
-    captureBackPresses: Boolean = true,
-    navigator: WebViewNavigator = rememberWebViewNavigator(),
-    startScript: WebView.() -> Unit = {},
-    onCreated: (WebView) -> Unit = {},
-    onError: (request: WebResourceRequest?, error: WebResourceError?) -> Unit = { _, _ -> }
+  state: WebViewState,
+  modifier: Modifier = Modifier,
+  captureBackPresses: Boolean = true,
+  navigator: WebViewNavigator = rememberWebViewNavigator(),
+  startScript: WebView.() -> Unit = {},
+  onCreated: (WebView) -> Unit = {},
+  onError: (request: WebResourceRequest?, error: WebResourceError?) -> Unit = { _, _ -> }
 ) {
   var webView by remember { mutableStateOf<WebView?>(null) }
 
@@ -70,100 +70,100 @@ fun WebView(
   }
 
   AndroidView(
-      factory = { context ->
-        WebView(context).apply {
-          onCreated(this)
+    factory = { context ->
+      WebView(context).apply {
+        onCreated(this)
 
-          layoutParams = ViewGroup.LayoutParams(
-              ViewGroup.LayoutParams.MATCH_PARENT,
-              ViewGroup.LayoutParams.MATCH_PARENT
-          )
+        layoutParams = ViewGroup.LayoutParams(
+          ViewGroup.LayoutParams.MATCH_PARENT,
+          ViewGroup.LayoutParams.MATCH_PARENT
+        )
 
-          webChromeClient = object : WebChromeClient() {
-            override fun onReceivedTitle(view: WebView?, title: String?) {
-              super.onReceivedTitle(view, title)
-              state.pageTitle = title
-            }
+        webChromeClient = object : WebChromeClient() {
+          override fun onReceivedTitle(view: WebView?, title: String?) {
+            super.onReceivedTitle(view, title)
+            state.pageTitle = title
+          }
 
-            override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
-              super.onReceivedIcon(view, icon)
-              state.pageIcon = icon
-            }
+          override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
+            super.onReceivedIcon(view, icon)
+            state.pageIcon = icon
+          }
 
-            override fun onProgressChanged(view: WebView?, newProgress: Int) {
-              super.onProgressChanged(view, newProgress)
-              if (state.loadingState is LoadingState.Finished) return
-              state.loadingState = LoadingState.Loading(newProgress / 100.0f)
+          override fun onProgressChanged(view: WebView?, newProgress: Int) {
+            super.onProgressChanged(view, newProgress)
+            if (state.loadingState is LoadingState.Finished) return
+            state.loadingState = LoadingState.Loading(newProgress / 100.0f)
+          }
+        }
+
+        webViewClient = object : WebViewClient() {
+          override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            super.onPageStarted(view, url, favicon)
+            view?.apply(startScript)
+            state.loadingState = LoadingState.Loading(0.0f)
+            state.errorsForCurrentRequest.clear()
+            state.pageTitle = null
+            state.pageIcon = null
+          }
+
+          override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+            state.loadingState = LoadingState.Finished
+            navigator.canGoBack = view?.canGoBack() ?: false
+            navigator.canGoForward = view?.canGoForward() ?: false
+          }
+
+          override fun doUpdateVisitedHistory(
+            view: WebView?,
+            url: String?,
+            isReload: Boolean
+          ) {
+            super.doUpdateVisitedHistory(view, url, isReload)
+            // WebView will often update the current url itself.
+            // This happens in situations like redirects and navigating through
+            // history. We capture this change and update our state holder url.
+            // On older APIs (28 and lower), this method is called when loading
+            // html data. We don't want to update the state in this case as that will
+            // overwrite the html being loaded.
+            if (url != null &&
+              !url.startsWith("data:text/html") &&
+              state.content.getCurrentUrl() != url
+            ) {
+              state.content = WebContent.Url(url)
             }
           }
 
-          webViewClient = object : WebViewClient() {
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-              super.onPageStarted(view, url, favicon)
-              view?.apply(startScript)
-              state.loadingState = LoadingState.Loading(0.0f)
-              state.errorsForCurrentRequest.clear()
-              state.pageTitle = null
-              state.pageIcon = null
+          override fun onReceivedError(
+            view: WebView?,
+            request: WebResourceRequest?,
+            error: WebResourceError?
+          ) {
+            super.onReceivedError(view, request, error)
+
+            if (error != null) {
+              state.errorsForCurrentRequest.add(WebViewError(request, error))
             }
 
-            override fun onPageFinished(view: WebView?, url: String?) {
-              super.onPageFinished(view, url)
-              state.loadingState = LoadingState.Finished
-              navigator.canGoBack = view?.canGoBack() ?: false
-              navigator.canGoForward = view?.canGoForward() ?: false
-            }
-
-            override fun doUpdateVisitedHistory(
-                view: WebView?,
-                url: String?,
-                isReload: Boolean
-            ) {
-              super.doUpdateVisitedHistory(view, url, isReload)
-              // WebView will often update the current url itself.
-              // This happens in situations like redirects and navigating through
-              // history. We capture this change and update our state holder url.
-              // On older APIs (28 and lower), this method is called when loading
-              // html data. We don't want to update the state in this case as that will
-              // overwrite the html being loaded.
-              if (url != null &&
-                  !url.startsWith("data:text/html") &&
-                  state.content.getCurrentUrl() != url
-              ) {
-                state.content = WebContent.Url(url)
-              }
-            }
-
-            override fun onReceivedError(
-                view: WebView?,
-                request: WebResourceRequest?,
-                error: WebResourceError?
-            ) {
-              super.onReceivedError(view, request, error)
-
-              if (error != null) {
-                state.errorsForCurrentRequest.add(WebViewError(request, error))
-              }
-
-              onError(request, error)
-            }
-
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                request: WebResourceRequest?
-            ): Boolean {
-              // Override all url loads to make the single source of truth
-              // of the URL the state holder Url
-              request?.let {
-                val content = WebContent.Url(it.url.toString())
-                state.content = content
-              }
-              return true
-            }
+            onError(request, error)
           }
-        }.also { webView = it }
-      },
-      modifier = modifier
+
+          override fun shouldOverrideUrlLoading(
+            view: WebView?,
+            request: WebResourceRequest?
+          ): Boolean {
+            // Override all url loads to make the single source of truth
+            // of the URL the state holder Url
+            request?.let {
+              val content = WebContent.Url(it.url.toString())
+              state.content = content
+            }
+            return true
+          }
+        }
+      }.also { webView = it }
+    },
+    modifier = modifier
   ) { view ->
     when (val content = state.content) {
       is WebContent.Url -> {
@@ -329,7 +329,7 @@ class WebViewNavigator(private val coroutineScope: CoroutineScope) {
  */
 @Composable
 fun rememberWebViewNavigator(
-    coroutineScope: CoroutineScope = rememberCoroutineScope()
+  coroutineScope: CoroutineScope = rememberCoroutineScope()
 ) = remember(coroutineScope) { WebViewNavigator(coroutineScope) }
 
 /**
@@ -337,14 +337,14 @@ fun rememberWebViewNavigator(
  */
 @Immutable
 data class WebViewError(
-    /**
-     * The request the error came from.
-     */
-    val request: WebResourceRequest?,
-    /**
-     * The error that was reported.
-     */
-    val error: WebResourceError
+  /**
+   * The request the error came from.
+   */
+  val request: WebResourceRequest?,
+  /**
+   * The error that was reported.
+   */
+  val error: WebResourceError
 )
 
 /**
@@ -354,7 +354,7 @@ data class WebViewError(
  */
 @Composable
 fun rememberWebViewState(url: String) =
-    remember(url) { WebViewState(WebContent.Url(url)) }
+  remember(url) { WebViewState(WebContent.Url(url)) }
 
 /**
  * Creates a WebView state that is remembered across Compositions.
@@ -363,4 +363,4 @@ fun rememberWebViewState(url: String) =
  */
 @Composable
 fun rememberWebViewStateWithHTMLData(data: String, baseUrl: String? = null) =
-    remember(data, baseUrl) { WebViewState(WebContent.Data(data, baseUrl)) }
+  remember(data, baseUrl) { WebViewState(WebContent.Data(data, baseUrl)) }

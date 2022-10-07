@@ -18,32 +18,32 @@ fun String._16toNumber(): BigInteger {
 
 
 fun String.mark(
-    size: Int,
-    markChar: String = "***",
-    dir: MarkDir = MarkDir.MIDDLE
+  size: Int,
+  markChar: String = "***",
+  dir: MarkDir = MarkDir.MIDDLE
 ): String {
   when (dir) {
     MarkDir.MIDDLE -> {
       return if (length <= size * 2) this
       else StringBuilder()
-          .append(take(size))
-          .append(markChar)
-          .append(takeLast(size))
-          .toString()
+        .append(take(size))
+        .append(markChar)
+        .append(takeLast(size))
+        .toString()
     }
     MarkDir.START -> {
       return if (length <= size) this
       else StringBuilder()
-          .append(markChar)
-          .append(takeLast(size))
-          .toString()
+        .append(markChar)
+        .append(takeLast(size))
+        .toString()
     }
     MarkDir.END -> {
       return if (length <= size) this
       else StringBuilder()
-          .append(take(size))
-          .append(markChar)
-          .toString()
+        .append(take(size))
+        .append(markChar)
+        .toString()
     }
   }
 }

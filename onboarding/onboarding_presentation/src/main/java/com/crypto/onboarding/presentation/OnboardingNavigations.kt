@@ -20,11 +20,11 @@ object OnboardingNavigations {
   object Legal {
     const val ROUTE = "onboarding_legal?$KEY_IS_CREATE={$KEY_IS_CREATE}"
     val args = listOf(
-        navArgument(KEY_IS_CREATE) { type = NavType.BoolType }
+      navArgument(KEY_IS_CREATE) { type = NavType.BoolType }
     )
 
     fun destination(
-        forCreate: Boolean
+      forCreate: Boolean
     ) = object : NavigationCommand {
       override val arguments
         get() = args
@@ -35,11 +35,11 @@ object OnboardingNavigations {
   object CreatePasscode {
     const val ROUTE = "onboarding_create_passcode?$KEY_IS_CREATE={$KEY_IS_CREATE}"
     val args = listOf(
-        navArgument(KEY_IS_CREATE) { type = NavType.BoolType }
+      navArgument(KEY_IS_CREATE) { type = NavType.BoolType }
     )
 
     fun destination(
-        forCreate: Boolean
+      forCreate: Boolean
     ) = object : NavigationCommand {
       override val arguments
         get() = args
@@ -50,11 +50,11 @@ object OnboardingNavigations {
   object ImportWallet {
     const val ROUTE = "onboarding_import_wallet?$KEY_PASSCODE={$KEY_PASSCODE}"
     val args = listOf(
-        navArgument(KEY_PASSCODE) { type = NavType.StringType }
+      navArgument(KEY_PASSCODE) { type = NavType.StringType }
     )
 
     fun destination(
-        passcode: String
+      passcode: String
     ) = object : NavigationCommand {
       override val arguments
         get() = args

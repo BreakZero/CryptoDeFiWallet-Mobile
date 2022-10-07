@@ -15,9 +15,9 @@ class EmptyChain : IChain {
   }
 
   override suspend fun transactions(
-      page: Int,
-      offset: Int,
-      contract: String?
+    page: Int,
+    offset: Int,
+    contract: String?
   ): List<EvmTransaction> {
     return emptyList()
   }

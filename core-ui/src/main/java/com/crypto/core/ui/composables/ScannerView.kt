@@ -32,7 +32,7 @@ import com.crypto.core.ui.utils.QRCodeAnalyzer
 
 @Composable
 fun ScannerView(
-    onResult: (String) -> Unit
+  onResult: (String) -> Unit
 ) {
   val context = LocalContext.current
   val lifecycleOwner = LocalLifecycleOwner.current
@@ -41,68 +41,68 @@ fun ScannerView(
   }
   var hasCamPermission by remember {
     mutableStateOf(
-        ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+      ContextCompat.checkSelfPermission(
+        context,
+        Manifest.permission.CAMERA
+      ) == PackageManager.PERMISSION_GRANTED
     )
   }
   val launcher = rememberLauncherForActivityResult(
-      contract = ActivityResultContracts.RequestPermission(),
-      onResult = { granted ->
-        hasCamPermission = granted
-      }
+    contract = ActivityResultContracts.RequestPermission(),
+    onResult = { granted ->
+      hasCamPermission = granted
+    }
   )
   LaunchedEffect(key1 = true) {
     launcher.launch(Manifest.permission.CAMERA)
   }
   Box(
-      modifier = Modifier.fillMaxSize()
+    modifier = Modifier.fillMaxSize()
   ) {
     if (hasCamPermission) {
       AndroidView(
-          factory = { context ->
-            val previewView = PreviewView(context)
-            val preview = Preview.Builder().build()
-            val selector = CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                .build()
-            preview.setSurfaceProvider(previewView.surfaceProvider)
-            val imageAnalysis = ImageAnalysis.Builder()
-                .setTargetResolution(Size(480, 480))
-                .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-            imageAnalysis.setAnalyzer(
-                ContextCompat.getMainExecutor(context),
-                QRCodeAnalyzer { result ->
-                  if (result.isNotEmpty()) onResult.invoke(result)
-                }
-            )
-            kotlin.runCatching {
-              cameraProviderFuture.get().bindToLifecycle(
-                  lifecycleOwner,
-                  selector,
-                  preview,
-                  imageAnalysis
-              )
-            }.onFailure {
-              it.printStackTrace()
+        factory = { context ->
+          val previewView = PreviewView(context)
+          val preview = Preview.Builder().build()
+          val selector = CameraSelector.Builder()
+            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+            .build()
+          preview.setSurfaceProvider(previewView.surfaceProvider)
+          val imageAnalysis = ImageAnalysis.Builder()
+            .setTargetResolution(Size(480, 480))
+            .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+          imageAnalysis.setAnalyzer(
+            ContextCompat.getMainExecutor(context),
+            QRCodeAnalyzer { result ->
+              if (result.isNotEmpty()) onResult.invoke(result)
             }
-            previewView
-          },
-          modifier = Modifier.fillMaxSize()
+          )
+          kotlin.runCatching {
+            cameraProviderFuture.get().bindToLifecycle(
+              lifecycleOwner,
+              selector,
+              preview,
+              imageAnalysis
+            )
+          }.onFailure {
+            it.printStackTrace()
+          }
+          previewView
+        },
+        modifier = Modifier.fillMaxSize()
       )
       Canvas(modifier = Modifier.fillMaxSize()) {
         val startX = size.width / 4.0f
         val startY = size.height / 4.0f
         drawRect(
-            color = Color.Red,
-            topLeft = Offset(startX, startY),
-            size = androidx.compose.ui.geometry.Size(
-                width = size.width / 2.0f,
-                height = size.width / 2.0f
-            ),
-            style = Stroke(width = 2.0f)
+          color = Color.Red,
+          topLeft = Offset(startX, startY),
+          size = androidx.compose.ui.geometry.Size(
+            width = size.width / 2.0f,
+            height = size.width / 2.0f
+          ),
+          style = Stroke(width = 2.0f)
         )
       }
     }

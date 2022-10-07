@@ -42,143 +42,143 @@ import java.math.BigInteger
 @OptIn(ExperimentalMotionApi::class)
 @Composable
 fun TransactionsMotionLayout(
-    asset: Asset?,
-    targetValue: Float,
-    onSend: () -> Unit,
-    onReceive: () -> Unit,
-    scrollableBody: @Composable () -> Unit
+  asset: Asset?,
+  targetValue: Float,
+  onSend: () -> Unit,
+  onReceive: () -> Unit,
+  scrollableBody: @Composable () -> Unit
 ) {
   val progress by animateFloatAsState(
-      targetValue = targetValue,
-      tween(100)
+    targetValue = targetValue,
+    tween(100)
   )
   MotionLayout(
-      start = startConstraintSet(),
-      end = endConstraintSet(),
-      progress = progress,
-      modifier = Modifier
-          .fillMaxWidth()
-          .background(MaterialTheme.colorScheme.primary)
+    start = startConstraintSet(),
+    end = endConstraintSet(),
+    progress = progress,
+    modifier = Modifier
+      .fillMaxWidth()
+      .background(MaterialTheme.colorScheme.primary)
   ) {
     Box(
-        modifier = Modifier
-            .layoutId("header-content")
+      modifier = Modifier
+        .layoutId("header-content")
     ) {
       Image(
-          painter = painterResource(id = R.drawable.backgroud_stars),
-          contentDescription = "poster",
-          contentScale = ContentScale.FillWidth,
-          alpha = 1f - progress
+        painter = painterResource(id = R.drawable.backgroud_stars),
+        contentDescription = "poster",
+        contentScale = ContentScale.FillWidth,
+        alpha = 1f - progress
       )
       Column(
-          modifier = Modifier
-              .fillMaxWidth()
-              .padding(top = 32.dp, bottom = 24.dp),
-          horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(top = 32.dp, bottom = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
       ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+          verticalAlignment = Alignment.CenterVertically
         ) {
           AsyncImage(
-              modifier = Modifier.size(MaterialTheme.Spacing.space24),
-              model = ImageRequest.Builder(LocalContext.current)
-                  .data(asset?.iconUrl)
-                  .placeholder(R.drawable.avatar_generic_1)
-                  .error(R.drawable.avatar_generic_1)
-                  .crossfade(true)
-                  .build(), contentDescription = null
+            modifier = Modifier.size(MaterialTheme.Spacing.space24),
+            model = ImageRequest.Builder(LocalContext.current)
+              .data(asset?.iconUrl)
+              .placeholder(R.drawable.avatar_generic_1)
+              .error(R.drawable.avatar_generic_1)
+              .crossfade(true)
+              .build(), contentDescription = null
           )
           Text(
-              modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.extraSmall),
-              text = "${asset?.symbol ?: "--"} BALANCE",
-              style = MaterialTheme.typography.titleLarge,
-              color = MaterialTheme.colorScheme.primaryContainer
+            modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.extraSmall),
+            text = "${asset?.symbol ?: "--"} BALANCE",
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.primaryContainer
           )
           Icon(
-              imageVector = Icons.Default.RemoveRedEye, contentDescription = null,
-              tint = MaterialTheme.colorScheme.primaryContainer
+            imageVector = Icons.Default.RemoveRedEye, contentDescription = null,
+            tint = MaterialTheme.colorScheme.primaryContainer
           )
         }
         Text(
-            text = buildAnnotatedString {
-              withStyle(
-                  style = SpanStyle(
-                      color = MaterialTheme.colorScheme.primaryContainer,
-                      fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                      fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
-                      fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                      fontWeight = MaterialTheme.typography.titleLarge.fontWeight
-                  )
-              ) {
-                append(
-                    (asset?.nativeBalance
-                        ?: BigInteger.ZERO).byDecimal2String(asset?.decimal ?: 0)
-                )
-              }
-              withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
-                append(" ${asset?.symbol ?: "--"}")
-              }
-            },
-            modifier = Modifier.padding(MaterialTheme.Spacing.small)
+          text = buildAnnotatedString {
+            withStyle(
+              style = SpanStyle(
+                color = MaterialTheme.colorScheme.primaryContainer,
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
+                fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                fontWeight = MaterialTheme.typography.titleLarge.fontWeight
+              )
+            ) {
+              append(
+                (asset?.nativeBalance
+                  ?: BigInteger.ZERO).byDecimal2String(asset?.decimal ?: 0)
+              )
+            }
+            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
+              append(" ${asset?.symbol ?: "--"}")
+            }
+          },
+          modifier = Modifier.padding(MaterialTheme.Spacing.small)
         )
         Text(text = " ~ ${asset?.fiatBalance()?.toPlainString() ?: "--"} USD")
         Row {
           Column(
-              modifier = Modifier
-                  .width(MaterialTheme.Spacing.extraLarge)
-                  .clickable {
-                    onSend()
-                  },
-              horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+              .width(MaterialTheme.Spacing.extraLarge)
+              .clickable {
+                onSend()
+              },
+            horizontalAlignment = Alignment.CenterHorizontally
           ) {
             Box(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onPrimaryContainer)
-                    .padding(MaterialTheme.Spacing.extraSmall)
+              modifier = Modifier
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.onPrimaryContainer)
+                .padding(MaterialTheme.Spacing.extraSmall)
             ) {
               Image(
-                  painter = painterResource(id = R.drawable.ic_send),
-                  contentDescription = null,
-                  colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primaryContainer)
+                painter = painterResource(id = R.drawable.ic_send),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primaryContainer)
               )
             }
             Text(
-                text = stringResource(id = R.string.transaction_list__send),
-                color = MaterialTheme.colorScheme.primaryContainer
+              text = stringResource(id = R.string.transaction_list__send),
+              color = MaterialTheme.colorScheme.primaryContainer
             )
           }
           Spacer(modifier = Modifier.size(MaterialTheme.Spacing.medium))
           Column(
-              modifier = Modifier
-                  .width(MaterialTheme.Spacing.extraLarge)
-                  .clickable {
-                    onReceive()
-                  },
-              horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+              .width(MaterialTheme.Spacing.extraLarge)
+              .clickable {
+                onReceive()
+              },
+            horizontalAlignment = Alignment.CenterHorizontally
           ) {
             Box(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onPrimaryContainer)
-                    .padding(MaterialTheme.Spacing.extraSmall)
+              modifier = Modifier
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.onPrimaryContainer)
+                .padding(MaterialTheme.Spacing.extraSmall)
             ) {
               Image(
-                  painter = painterResource(id = R.drawable.ic_receive),
-                  contentDescription = null,
-                  colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primaryContainer)
+                painter = painterResource(id = R.drawable.ic_receive),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primaryContainer)
               )
             }
             Text(
-                text = stringResource(id = R.string.transaction_list__receive),
-                color = MaterialTheme.colorScheme.primaryContainer
+              text = stringResource(id = R.string.transaction_list__receive),
+              color = MaterialTheme.colorScheme.primaryContainer
             )
           }
         }
       }
     }
     Box(
-        modifier = Modifier.layoutId("content")
+      modifier = Modifier.layoutId("content")
     ) {
       scrollableBody()
     }

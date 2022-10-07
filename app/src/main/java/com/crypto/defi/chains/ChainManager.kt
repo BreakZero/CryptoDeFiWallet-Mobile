@@ -18,8 +18,8 @@ import wallet.core.jni.HDWallet
 import javax.inject.Inject
 
 class ChainManager @Inject constructor(
-    private val database: CryptoDeFiDatabase,
-    private val client: HttpClient
+  private val database: CryptoDeFiDatabase,
+  private val client: HttpClient
 ) {
   private lateinit var hdWallet: HDWallet
 
@@ -34,21 +34,21 @@ class ChainManager @Inject constructor(
     this.hdWallet = hdWallet
     val chains = try {
       client.get("${UrlConstant.BASE_URL}/chains")
-          .body<BaseResponse<List<ChainDto>>>().data.map {
-            ChainEntity(
-                code = it.code,
-                chainType = it.chainTypes?.let {
-                  "evm"
-                } ?: it.parentChain,
-                chainId = it.details?.chainId,
-                isTestNet = it.isTestnet,
-                name = it.name
-            )
-          }.also {
-            withContext(Dispatchers.Default) {
-              database.chainDao.insertAll(it)
-            }
+        .body<BaseResponse<List<ChainDto>>>().data.map {
+          ChainEntity(
+            code = it.code,
+            chainType = it.chainTypes?.let {
+              "evm"
+            } ?: it.parentChain,
+            chainId = it.details?.chainId,
+            isTestNet = it.isTestnet,
+            name = it.name
+          )
+        }.also {
+          withContext(Dispatchers.Default) {
+            database.chainDao.insertAll(it)
           }
+        }
     } catch (e: Exception) {
       e.printStackTrace()
       database.chainDao.chains()

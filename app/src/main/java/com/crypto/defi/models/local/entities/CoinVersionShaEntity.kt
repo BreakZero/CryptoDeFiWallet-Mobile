@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tb_version_sha256")
 data class CoinVersionShaEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    val sha256: String,
-    @ColumnInfo(name = "create_at")
-    val createAt: Long
+  @PrimaryKey
+  @ColumnInfo(name = "id")
+  val sha256: String,
+  @ColumnInfo(name = "create_at")
+  val createAt: Long
 )

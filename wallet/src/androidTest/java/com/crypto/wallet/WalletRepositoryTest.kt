@@ -28,16 +28,16 @@ class WalletRepositoryTest {
   private lateinit var walletDb: WalletDatabase
 
   private val wallet = Wallet(
-      mnemonic = "mock mnemonic",
-      active = 1,
-      passphrase = ""
+    mnemonic = "mock mnemonic",
+    active = 1,
+    passphrase = ""
   )
 
   @Before
   fun createDb() {
     val context = ApplicationProvider.getApplicationContext<Context>()
     walletDb = Room.inMemoryDatabaseBuilder(context, WalletDatabase::class.java)
-        .build()
+      .build()
     walletDao = walletDb.walletDao
   }
 

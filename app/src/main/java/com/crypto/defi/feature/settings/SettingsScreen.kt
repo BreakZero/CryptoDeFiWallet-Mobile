@@ -13,22 +13,22 @@ import com.crypto.core.ui.routers.NavigationCommand
 
 @Composable
 fun SettingsScreen(
-    navigateUp: () -> Unit,
-    navigateTo: (NavigationCommand) -> Unit
+  navigateUp: () -> Unit,
+  navigateTo: (NavigationCommand) -> Unit
 ) {
   Scaffold(
-      topBar = {
-        DeFiAppBar() {
-          navigateUp()
-        }
-      },
-      modifier = Modifier.fillMaxSize(),
+    topBar = {
+      DeFiAppBar() {
+        navigateUp()
+      }
+    },
+    modifier = Modifier.fillMaxSize(),
   ) {
     val scrollableState = rememberScrollState()
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .scrollable(state = scrollableState, orientation = Orientation.Vertical)
+      modifier = Modifier
+        .fillMaxSize()
+        .scrollable(state = scrollableState, orientation = Orientation.Vertical)
     ) {
 
     }

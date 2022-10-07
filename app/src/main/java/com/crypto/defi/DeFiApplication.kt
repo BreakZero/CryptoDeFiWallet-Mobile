@@ -37,31 +37,31 @@ class DeFiApplication : Application(), Configuration.Provider, ImageLoaderFactor
   }
 
   override fun getWorkManagerConfiguration(): Configuration =
-      Configuration.Builder()
-          .setWorkerFactory(workerFactory)
-          .setMinimumLoggingLevel(Log.INFO)
-          .build()
+    Configuration.Builder()
+      .setWorkerFactory(workerFactory)
+      .setMinimumLoggingLevel(Log.INFO)
+      .build()
 
   override fun newImageLoader(): ImageLoader {
     return ImageLoader.Builder(this)
-        .components {
-          // GIFs
-          if (SDK_INT >= 28) {
-            add(ImageDecoderDecoder.Factory())
-          } else {
-            add(GifDecoder.Factory())
-          }
-        }.memoryCache {
-          MemoryCache.Builder(this)
-              // Set the max size to 25% of the app's available memory.
-              .maxSizePercent(0.25)
-              .build()
-        }.diskCache {
-          DiskCache.Builder()
-              .directory(filesDir.resolve("image_cache"))
-              .maxSizeBytes(512L * 1024 * 1024) // 512MB
-              .build()
-        }.build()
+      .components {
+        // GIFs
+        if (SDK_INT >= 28) {
+          add(ImageDecoderDecoder.Factory())
+        } else {
+          add(GifDecoder.Factory())
+        }
+      }.memoryCache {
+        MemoryCache.Builder(this)
+          // Set the max size to 25% of the app's available memory.
+          .maxSizePercent(0.25)
+          .build()
+      }.diskCache {
+        DiskCache.Builder()
+          .directory(filesDir.resolve("image_cache"))
+          .maxSizeBytes(512L * 1024 * 1024) // 512MB
+          .build()
+      }.build()
   }
 }
 

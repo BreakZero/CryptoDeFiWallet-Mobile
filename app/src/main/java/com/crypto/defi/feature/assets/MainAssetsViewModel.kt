@@ -27,8 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainAssetsViewModel @Inject constructor(
-    private val assetUseCase: AssetUseCase,
-    private val workManager: WorkManager
+  private val assetUseCase: AssetUseCase,
+  private val workManager: WorkManager
 ) : ViewModel() {
 
   companion object {
@@ -37,31 +37,31 @@ class MainAssetsViewModel @Inject constructor(
   }
 
   private val balanceWorkerRequest = PeriodicWorkRequestBuilder<BalanceWorker>(
-      15, TimeUnit.MINUTES
+    15, TimeUnit.MINUTES
   ).setId(UUID.fromString("d5b42914-cb0f-442c-a800-1532f52a5ed8"))
-      .setConstraints(
-          Constraints.Builder()
-              .setRequiredNetworkType(NetworkType.CONNECTED)
-              .build()
-      ).build()
+    .setConstraints(
+      Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
+    ).build()
 
   var assetState by mutableStateOf(
-      MainAssetState(
-          promoCard = listOf(
-              PromoCart(
-                  backgroundRes = R.drawable.card_small_orange,
-                  title = UiText.StringResource(R.string.new_coins__new_coin)
-              ),
-              PromoCart(
-                  backgroundRes = R.drawable.card_small_black,
-                  title = UiText.StringResource(R.string.wallet_asset__get_eth_ready_for_gas_fees)
-              ),
-              PromoCart(
-                  backgroundRes = R.drawable.card_small_purple,
-                  title = UiText.StringResource(R.string.wallet_asset__enable_email)
-              )
-          )
+    MainAssetState(
+      promoCard = listOf(
+        PromoCart(
+          backgroundRes = R.drawable.card_small_orange,
+          title = UiText.StringResource(R.string.new_coins__new_coin)
+        ),
+        PromoCart(
+          backgroundRes = R.drawable.card_small_black,
+          title = UiText.StringResource(R.string.wallet_asset__get_eth_ready_for_gas_fees)
+        ),
+        PromoCart(
+          backgroundRes = R.drawable.card_small_purple,
+          title = UiText.StringResource(R.string.wallet_asset__enable_email)
+        )
       )
+    )
   )
     private set
 
@@ -71,9 +71,9 @@ class MainAssetsViewModel @Inject constructor(
       assetUseCase.fetchingAssets {
         withContext(Dispatchers.Main) {
           workManager.enqueueUniquePeriodicWork(
-              WORKER_NAME,
-              ExistingPeriodicWorkPolicy.UPDATE,
-              balanceWorkerRequest
+            WORKER_NAME,
+            ExistingPeriodicWorkPolicy.UPDATE,
+            balanceWorkerRequest
           )
           workManager.getWorkInfoByIdLiveData(balanceWorkerRequest.id).observeForever {
             val inProgress = it.progress.getBoolean(KEY_WORKER_PROGRESS, false)
@@ -81,24 +81,24 @@ class MainAssetsViewModel @Inject constructor(
           }
         }
         combine(
-            assetUseCase.assetsFlow(),
-            assetUseCase.tiersFlow()
+          assetUseCase.assetsFlow(),
+          assetUseCase.tiersFlow()
         ) { assets, tiers ->
           assets.map { asset ->
             val rate = tiers.find { tier ->
               asset.slug == tier.fromSlug
             }?.rate ?: "0.0"
             asset.toAsset().copy(
-                rate = rate.toBigDecimalOrNull() ?: BigDecimal.ZERO
+              rate = rate.toBigDecimalOrNull() ?: BigDecimal.ZERO
             )
           }
         }.collect { assets ->
           assetState = assetState.copy(
-              onRefreshing = false,
-              assets = assets.filter {
-                it.nativeBalance.toBigDecimal() > BigDecimal.ZERO
-              }.sortedByDescending { it.fiatBalance() },
-              totalBalance = assets.sumOf { it.fiatBalance() }.toPlainString()
+            onRefreshing = false,
+            assets = assets.filter {
+              it.nativeBalance.toBigDecimal() > BigDecimal.ZERO
+            }.sortedByDescending { it.fiatBalance() },
+            totalBalance = assets.sumOf { it.fiatBalance() }.toPlainString()
           )
         }
       }
@@ -107,12 +107,12 @@ class MainAssetsViewModel @Inject constructor(
 
   fun onRefresh() {
     assetState = assetState.copy(
-        onRefreshing = true
+      onRefreshing = true
     )
     workManager.enqueueUniquePeriodicWork(
-        WORKER_NAME,
-        ExistingPeriodicWorkPolicy.UPDATE,
-        balanceWorkerRequest
+      WORKER_NAME,
+      ExistingPeriodicWorkPolicy.UPDATE,
+      balanceWorkerRequest
     )
   }
 }

@@ -12,10 +12,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.supervisorScope
 
 class BalanceWorker(
-    appContext: Context,
-    workerParams: WorkerParameters,
-    private val chainManager: ChainManager,
-    private val balanceUseCase: BalanceUseCase
+  appContext: Context,
+  workerParams: WorkerParameters,
+  private val chainManager: ChainManager,
+  private val balanceUseCase: BalanceUseCase
 ) : CoroutineWorker(appContext, workerParams) {
   override suspend fun doWork(): Result {
     setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, true).build())
@@ -26,7 +26,7 @@ class BalanceWorker(
       }
       launchWithHandler(Dispatchers.Default) {
         balanceUseCase.fetchingTokenHolding(
-            address = evmAddress
+          address = evmAddress
         )
       }
       launchWithHandler(Dispatchers.Default) {

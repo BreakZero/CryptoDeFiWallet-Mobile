@@ -31,7 +31,7 @@ class WalletEntityReadWriteTest {
   fun createDb() {
     val context = ApplicationProvider.getApplicationContext<Context>()
     walletDb = Room.inMemoryDatabaseBuilder(context, WalletDatabase::class.java)
-        .build()
+      .build()
     walletDao = walletDb.walletDao
   }
 
@@ -45,9 +45,9 @@ class WalletEntityReadWriteTest {
   @Throws(Exception::class)
   fun writeWalletAndReadInList() = runTest {
     val walletEntity = WalletEntity(
-        mnemonic = "mock mnemonic",
-        active = 1,
-        passphrase = ""
+      mnemonic = "mock mnemonic",
+      active = 1,
+      passphrase = ""
     )
 
     walletDao.insertWallet(walletEntity)
@@ -60,9 +60,9 @@ class WalletEntityReadWriteTest {
   @kotlin.jvm.Throws(Exception::class)
   fun deleteEntityInList() = runTest {
     val walletEntity = WalletEntity(
-        mnemonic = "mock mnemonic",
-        active = 1,
-        passphrase = ""
+      mnemonic = "mock mnemonic",
+      active = 1,
+      passphrase = ""
     )
 
     walletDao.insertWallet(walletEntity)

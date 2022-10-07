@@ -31,12 +31,12 @@ object CoreModule {
   @Singleton
   fun providePreferencesDataStore(@ApplicationContext appContext: Context): DataStore<Preferences> {
     return PreferenceDataStoreFactory.create(
-        corruptionHandler = ReplaceFileCorruptionHandler(
-            produceNewData = { emptyPreferences() }
-        ),
-        migrations = listOf(SharedPreferencesMigration(appContext, USER_PREFERENCES)),
-        scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-        produceFile = { appContext.preferencesDataStoreFile(USER_PREFERENCES) }
+      corruptionHandler = ReplaceFileCorruptionHandler(
+        produceNewData = { emptyPreferences() }
+      ),
+      migrations = listOf(SharedPreferencesMigration(appContext, USER_PREFERENCES)),
+      scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+      produceFile = { appContext.preferencesDataStoreFile(USER_PREFERENCES) }
     )
   }
 
@@ -46,11 +46,11 @@ object CoreModule {
     val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
     val mainKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
     return EncryptedSharedPreferences.create(
-        "security_sharedPreferences",
-        mainKeyAlias,
-        appContext,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+      "security_sharedPreferences",
+      mainKeyAlias,
+      appContext,
+      EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+      EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
   }
 

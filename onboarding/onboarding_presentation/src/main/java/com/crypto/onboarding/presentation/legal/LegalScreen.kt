@@ -29,67 +29,67 @@ import com.crypto.resource.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LegalScreen(
-    forCreate: Boolean,
-    navigateUp: () -> Unit,
-    navigateTo: (NavigationCommand) -> Unit
+  forCreate: Boolean,
+  navigateUp: () -> Unit,
+  navigateTo: (NavigationCommand) -> Unit
 ) {
   setStatusColor(statusColor = MaterialTheme.colorScheme.surface)
   Scaffold(
-      modifier = Modifier.fillMaxSize(),
-      topBar = {
-        DeFiAppBar(
-            colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = Color.Transparent
-            )
-        ) {
-          navigateUp()
-        }
+    modifier = Modifier.fillMaxSize(),
+    topBar = {
+      DeFiAppBar(
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+          containerColor = Color.Transparent
+        )
+      ) {
+        navigateUp()
       }
+    }
   ) {
     Column(
-        modifier = Modifier.padding(it)
+      modifier = Modifier.padding(it)
     ) {
       Text(
-          modifier = Modifier.padding(start = MaterialTheme.Spacing.medium),
-          text = stringResource(id = R.string.legal__legal),
-          style = MaterialTheme.typography.titleLarge
+        modifier = Modifier.padding(start = MaterialTheme.Spacing.medium),
+        text = stringResource(id = R.string.legal__legal),
+        style = MaterialTheme.typography.titleLarge
       )
       Text(
-          modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.medium),
-          text = stringResource(
-              id = R.string.legal__legal_tips
-          )
+        modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.medium),
+        text = stringResource(
+          id = R.string.legal__legal_tips
+        )
       )
       Card(
-          modifier = Modifier
-              .fillMaxWidth()
-              .padding(MaterialTheme.Spacing.medium),
-          shape = RoundedCornerShape(8.dp)
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(MaterialTheme.Spacing.medium),
+        shape = RoundedCornerShape(8.dp)
       ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+          modifier = Modifier.fillMaxWidth()
         ) {
           MenuItemView(
-              modifier = Modifier.fillMaxWidth(),
-              data = AdvanceMenu(title = stringResource(id = R.string.legal__terms_of_service))
+            modifier = Modifier.fillMaxWidth(),
+            data = AdvanceMenu(title = stringResource(id = R.string.legal__terms_of_service))
           ) {
 
           }
           Divider()
           MenuItemView(
-              modifier = Modifier.fillMaxWidth(),
-              data = AdvanceMenu(title = stringResource(id = R.string.legal__privacy_notice))
+            modifier = Modifier.fillMaxWidth(),
+            data = AdvanceMenu(title = stringResource(id = R.string.legal__privacy_notice))
           ) {
 
           }
         }
       }
       Column(
-          modifier = Modifier
-              .weight(1.0F)
-              .fillMaxWidth()
-              .padding(horizontal = MaterialTheme.Spacing.medium),
-          verticalArrangement = Arrangement.SpaceBetween
+        modifier = Modifier
+          .weight(1.0F)
+          .fillMaxWidth()
+          .padding(horizontal = MaterialTheme.Spacing.medium),
+        verticalArrangement = Arrangement.SpaceBetween
       ) {
         var checked by rememberSaveable { mutableStateOf(false) }
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -99,12 +99,12 @@ fun LegalScreen(
           Text(text = stringResource(id = R.string.legal__legal_read_confirm_tip))
         }
         Button(
-            modifier = Modifier
-                .fillMaxWidth(),
-            enabled = checked,
-            onClick = {
-              navigateTo(OnboardingNavigations.CreatePasscode.destination(forCreate))
-            }) {
+          modifier = Modifier
+            .fillMaxWidth(),
+          enabled = checked,
+          onClick = {
+            navigateTo(OnboardingNavigations.CreatePasscode.destination(forCreate))
+          }) {
           Text(text = stringResource(id = R.string.legal__continue_text))
         }
       }

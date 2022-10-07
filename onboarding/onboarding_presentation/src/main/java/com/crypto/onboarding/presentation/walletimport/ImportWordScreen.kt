@@ -39,10 +39,10 @@ import timber.log.Timber
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ImportWordsScreen(
-    passcode: String,
-    viewModel: WalletImportViewModel = hiltViewModel(),
-    navigateUp: () -> Unit,
-    navigateMain: () -> Unit,
+  passcode: String,
+  viewModel: WalletImportViewModel = hiltViewModel(),
+  navigateUp: () -> Unit,
+  navigateMain: () -> Unit,
 ) {
   setStatusColor(statusColor = MaterialTheme.colorScheme.surface)
   val keyboardController = LocalSoftwareKeyboardController.current
@@ -65,55 +65,55 @@ fun ImportWordsScreen(
     }
   }
   Scaffold(
-      modifier = Modifier,
-      topBar = {
-        DeFiAppBar(
-            title = stringResource(id = R.string.import_wallet__import_wallet),
-            colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = Color.Transparent
-            ),
-            actions = {
-              Icon(imageVector = Icons.Default.QrCode, contentDescription = null)
-            }
-        ) {
-          viewModel.onNavigateUp()
+    modifier = Modifier,
+    topBar = {
+      DeFiAppBar(
+        title = stringResource(id = R.string.import_wallet__import_wallet),
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+          containerColor = Color.Transparent
+        ),
+        actions = {
+          Icon(imageVector = Icons.Default.QrCode, contentDescription = null)
         }
+      ) {
+        viewModel.onNavigateUp()
       }
+    }
   ) {
     Column(
-        modifier = Modifier.padding(it)
+      modifier = Modifier.padding(it)
     ) {
       TextField(
-          value = importState.phrase,
-          onValueChange = {
-            viewModel.onEvent(ImportEvent.OnPhraseChange(it))
-          },
-          textStyle = TextStyle(color = Color.Black),
-          keyboardActions = KeyboardActions(
-              onDone = {
-                keyboardController?.hide()
-              }
-          ),
-          keyboardOptions = KeyboardOptions(
-              imeAction = ImeAction.Done,
-          ),
-          modifier = Modifier
-              .padding(MaterialTheme.Spacing.medium)
-              .defaultMinSize(minHeight = 128.dp)
-              .fillMaxWidth()
-              .onFocusChanged {
-                viewModel.onEvent(ImportEvent.OnFocusChange(it.isFocused))
-              }
-      )
-      LoadingButton(
-          modifier = Modifier
-              .fillMaxWidth()
-              .padding(MaterialTheme.Spacing.medium),
-          loading = viewModel.state.inProgress,
-          onClick = {
-            viewModel.onEvent(ImportEvent.OnImportClick(passcode))
+        value = importState.phrase,
+        onValueChange = {
+          viewModel.onEvent(ImportEvent.OnPhraseChange(it))
+        },
+        textStyle = TextStyle(color = Color.Black),
+        keyboardActions = KeyboardActions(
+          onDone = {
             keyboardController?.hide()
           }
+        ),
+        keyboardOptions = KeyboardOptions(
+          imeAction = ImeAction.Done,
+        ),
+        modifier = Modifier
+          .padding(MaterialTheme.Spacing.medium)
+          .defaultMinSize(minHeight = 128.dp)
+          .fillMaxWidth()
+          .onFocusChanged {
+            viewModel.onEvent(ImportEvent.OnFocusChange(it.isFocused))
+          }
+      )
+      LoadingButton(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(MaterialTheme.Spacing.medium),
+        loading = viewModel.state.inProgress,
+        onClick = {
+          viewModel.onEvent(ImportEvent.OnImportClick(passcode))
+          keyboardController?.hide()
+        }
       ) {
         Text(text = stringResource(id = R.string.import_wallet__restore))
       }

@@ -37,32 +37,32 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
 data class NavMenu(
-    @DrawableRes val icon: Int,
-    val label: String,
-    val visitable: Boolean = true
+  @DrawableRes val icon: Int,
+  val label: String,
+  val visitable: Boolean = true
 )
 
 val navMenus = listOf(
-    NavMenu(
-        icon = R.drawable.ic_nav_wallet, label = "Wallet"
-    ),
-    NavMenu(
-        icon = R.drawable.ic_nav_nft, label = "NFT"
-    ),
-    NavMenu(
-        icon = R.drawable.ic_nav_dapp, label = "Dapps"
-    ),
-    NavMenu(
-        icon = R.drawable.ic_nav_defi, label = "Earn"
-    )
+  NavMenu(
+    icon = R.drawable.ic_nav_wallet, label = "Wallet"
+  ),
+  NavMenu(
+    icon = R.drawable.ic_nav_nft, label = "NFT"
+  ),
+  NavMenu(
+    icon = R.drawable.ic_nav_dapp, label = "Dapps"
+  ),
+  NavMenu(
+    icon = R.drawable.ic_nav_defi, label = "Earn"
+  )
 )
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MainScreen(
-    savedStateHandle: SavedStateHandle?,
-    mainViewModel: MainViewModel = hiltViewModel(),
-    onNavigateTo: (NavigationCommand) -> Unit
+  savedStateHandle: SavedStateHandle?,
+  mainViewModel: MainViewModel = hiltViewModel(),
+  onNavigateTo: (NavigationCommand) -> Unit
 ) {
   savedStateHandle?.also { handler ->
     LaunchedEffect(key1 = handler) {
@@ -84,19 +84,19 @@ fun MainScreen(
 
   LaunchedEffect(key1 = pageState.currentPage) {
     systemUIController.setStatusBarColor(
-        statusColor, useDartIcons
+      statusColor, useDartIcons
     )
   }
 
   Column(
-      modifier = Modifier.fillMaxSize()
+    modifier = Modifier.fillMaxSize()
   ) {
     HorizontalPager(
-        modifier = Modifier
-            .weight(1f)
-            .fillMaxWidth(),
-        count = menus.size, state = pageState,
-        userScrollEnabled = false
+      modifier = Modifier
+        .weight(1f)
+        .fillMaxWidth(),
+      count = menus.size, state = pageState,
+      userScrollEnabled = false
     ) { page ->
       when (menus[page].label) {
         "Wallet" -> {
@@ -115,28 +115,28 @@ fun MainScreen(
       }
     }
     TabRow(
-        selectedTabIndex = tabIndex,
-        modifier = Modifier.height(56.dp),
-        divider = {},
-        indicator = {}
+      selectedTabIndex = tabIndex,
+      modifier = Modifier.height(56.dp),
+      divider = {},
+      indicator = {}
     ) {
       menus.forEachIndexed { index, menu ->
         Tab(
-            selected = index == tabIndex,
-            selectedContentColor = MaterialTheme.colorScheme.primary,
-            unselectedContentColor = MaterialTheme.colorScheme.tertiary,
-            onClick = {
-              scope.launch {
-                pageState.animateScrollToPage(index)
-              }
+          selected = index == tabIndex,
+          selectedContentColor = MaterialTheme.colorScheme.primary,
+          unselectedContentColor = MaterialTheme.colorScheme.tertiary,
+          onClick = {
+            scope.launch {
+              pageState.animateScrollToPage(index)
             }
+          }
         ) {
           Column(
-              horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally
           ) {
             Icon(
-                painter = painterResource(id = menu.icon),
-                contentDescription = null
+              painter = painterResource(id = menu.icon),
+              contentDescription = null
             )
             Text(text = menu.label)
           }

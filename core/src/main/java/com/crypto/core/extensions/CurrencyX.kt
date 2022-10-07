@@ -5,24 +5,24 @@ import java.math.BigInteger
 import java.math.RoundingMode
 
 fun BigInteger.byDecimal2String(
-    decimal: Int,
-    display: Int = 8
+  decimal: Int,
+  display: Int = 8
 ): String {
   return byDecimal(decimal, display)
-      .toPlainString()
+    .toPlainString()
 }
 
 fun BigInteger.byDecimal(
-    decimal: Int,
-    display: Int = 8
+  decimal: Int,
+  display: Int = 8
 ): BigDecimal {
   return this.toBigDecimal()
-      .movePointLeft(decimal)
-      .setScale(display, RoundingMode.DOWN)
+    .movePointLeft(decimal)
+    .setScale(display, RoundingMode.DOWN)
 }
 
 fun BigDecimal.upWithDecimal(
-    decimal: Int
+  decimal: Int
 ): BigInteger {
   return this.movePointRight(decimal).toBigInteger()
 }

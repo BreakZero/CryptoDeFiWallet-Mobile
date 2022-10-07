@@ -23,26 +23,26 @@ object MultiWalletModule {
   @Provides
   @Singleton
   fun provideWalletDatabase(
-      app: Application,
-      sharedPreferences: SharedPreferences
+    app: Application,
+    sharedPreferences: SharedPreferences
   ): WalletDatabase {
     val passcode = sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "").orEmpty().also {
       Timber.v(it)
     }
 
     val passPhrase = SQLiteDatabase.getBytes(
-        passcode.toCharArray()
+      passcode.toCharArray()
     )
     val supportFactory = SupportFactory(passPhrase)
     return Room.databaseBuilder(app, WalletDatabase::class.java, "crypto_multi_wallet.db")
-        .openHelperFactory(supportFactory)
-        .build()
+      .openHelperFactory(supportFactory)
+      .build()
   }
 
   @Provides
   @Singleton
   fun provideWalletRepository(
-      database: dagger.Lazy<WalletDatabase>
+    database: dagger.Lazy<WalletDatabase>
   ): WalletRepository {
     return WalletRepository(database)
   }

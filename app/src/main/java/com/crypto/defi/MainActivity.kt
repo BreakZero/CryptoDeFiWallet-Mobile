@@ -55,30 +55,30 @@ class MainActivity : ComponentActivity() {
         val navController = rememberAnimatedNavController()
         setStatusColor(statusColor = MaterialTheme.colorScheme.primary)
         Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
+          modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding()
         ) {
           AnimatedNavHost(
-              navController = navController,
-              startDestination = SplashNavigation.Splashing.destination,
-              modifier = Modifier
+            navController = navController,
+            startDestination = SplashNavigation.Splashing.destination,
+            modifier = Modifier
           ) {
             composable(
-                SplashNavigation.Splashing.destination,
-                enterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                exitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                },
-                popEnterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                popExitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                }
+              SplashNavigation.Splashing.destination,
+              enterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              exitTransition = {
+                fadeOut(animationSpec = tween(500))
+              },
+              popEnterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              popExitTransition = {
+                fadeOut(animationSpec = tween(500))
+              }
             ) {
               SplashScreen {
                 navController.navigate(it.destination) {
@@ -90,122 +90,122 @@ class MainActivity : ComponentActivity() {
             }
 
             composable(
-                MainNavigation.Main.destination,
-                enterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                exitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                },
-                popEnterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                popExitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                }
+              MainNavigation.Main.destination,
+              enterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              exitTransition = {
+                fadeOut(animationSpec = tween(500))
+              },
+              popEnterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              popExitTransition = {
+                fadeOut(animationSpec = tween(500))
+              }
             ) {
               MainScreen(
-                  savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+                savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
               ) {
                 navController.navigate(it.destination)
               }
             }
 
             composable(
-                route = TransactionListNavigation.ROUTE,
-                arguments = TransactionListNavigation.args,
-                enterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                exitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                },
-                popEnterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                popExitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                }
+              route = TransactionListNavigation.ROUTE,
+              arguments = TransactionListNavigation.args,
+              enterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              exitTransition = {
+                fadeOut(animationSpec = tween(500))
+              },
+              popEnterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              popExitTransition = {
+                fadeOut(animationSpec = tween(500))
+              }
             ) { backStackEntry ->
               val coinSlug =
-                  backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE)
-                      ?: ""
+                backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE)
+                  ?: ""
               TransactionListScreen(
-                  txnListViewModel = transactionListViewModel(slug = coinSlug),
-                  navigateUp = {
-                    navController.popBackStack()
-                  }
+                txnListViewModel = transactionListViewModel(slug = coinSlug),
+                navigateUp = {
+                  navController.popBackStack()
+                }
               ) {
                 navController.navigate(it.destination)
               }
             }
 
             composable(
-                route = SendFormNavigation.ROUTE,
-                arguments = SendFormNavigation.args,
-                enterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                exitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                },
-                popEnterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                popExitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                }
+              route = SendFormNavigation.ROUTE,
+              arguments = SendFormNavigation.args,
+              enterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              exitTransition = {
+                fadeOut(animationSpec = tween(500))
+              },
+              popEnterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              popExitTransition = {
+                fadeOut(animationSpec = tween(500))
+              }
             ) { backStackEntry ->
               val coinSlug = backStackEntry.arguments
-                  ?.getString(SendFormNavigation.KEY_SLUG) ?: ""
+                ?.getString(SendFormNavigation.KEY_SLUG) ?: ""
               SendFormScreen(
-                  savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
-                  sendFormViewModel = sendFormViewModel(coinSlug),
-                  navigateUp = {
-                    navController.popBackStack()
-                  }) {
+                savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
+                sendFormViewModel = sendFormViewModel(coinSlug),
+                navigateUp = {
+                  navController.popBackStack()
+                }) {
                 navController.navigate(it.destination)
               }
             }
 
             composable(
-                route = SettingsNavigation.Settings.destination,
-                enterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                exitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                },
-                popEnterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                popExitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                }
+              route = SettingsNavigation.Settings.destination,
+              enterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              exitTransition = {
+                fadeOut(animationSpec = tween(500))
+              },
+              popEnterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              popExitTransition = {
+                fadeOut(animationSpec = tween(500))
+              }
             ) { _ ->
               SettingsScreen(
-                  navigateUp = {
-                    navController.popBackStack()
-                  }
+                navigateUp = {
+                  navController.popBackStack()
+                }
               ) {
                 navController.navigate(it.destination)
               }
             }
 
             composable(
-                route = NftNavigation.groupDestination.destination,
-                enterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                exitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                },
-                popEnterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                popExitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                }
+              route = NftNavigation.groupDestination.destination,
+              enterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              exitTransition = {
+                fadeOut(animationSpec = tween(500))
+              },
+              popEnterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              popExitTransition = {
+                fadeOut(animationSpec = tween(500))
+              }
             ) {
               NftGroupScreen() {
                 navController.popBackStack()
@@ -213,19 +213,19 @@ class MainActivity : ComponentActivity() {
             }
 
             composable(
-                route = ScannerNavigation.Scanner.destination,
-                enterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                exitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                },
-                popEnterTransition = {
-                  fadeIn(animationSpec = tween(500))
-                },
-                popExitTransition = {
-                  fadeOut(animationSpec = tween(500))
-                }
+              route = ScannerNavigation.Scanner.destination,
+              enterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              exitTransition = {
+                fadeOut(animationSpec = tween(500))
+              },
+              popEnterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              popExitTransition = {
+                fadeOut(animationSpec = tween(500))
+              }
             ) { _ ->
               DeFiScannerScreen { content ->
                 content?.also { qr_code ->
@@ -243,11 +243,11 @@ class MainActivity : ComponentActivity() {
              */
             dialog("normal_tips") {
               NormalTipsView(
-                  tips = NormalTips(
-                      title = stringResource(id = R.string.two_fa_view__2_factor_authentication),
-                      message = stringResource(id = R.string.wallet_protect__2fa_desc),
-                      iconRes = R.drawable.ic_shell
-                  )
+                tips = NormalTips(
+                  title = stringResource(id = R.string.two_fa_view__2_factor_authentication),
+                  message = stringResource(id = R.string.wallet_protect__2fa_desc),
+                  iconRes = R.drawable.ic_shell
+                )
               )
             }
           }

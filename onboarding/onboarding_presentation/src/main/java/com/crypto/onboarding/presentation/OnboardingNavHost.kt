@@ -15,19 +15,19 @@ import com.google.accompanist.navigation.animation.composable
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.onboarding(navController: NavController) {
   composable(
-      route = OnboardingNavigations.Index.destination,
-      enterTransition = {
-        fadeIn(animationSpec = tween(500))
-      },
-      exitTransition = {
-        fadeOut(animationSpec = tween(500))
-      },
-      popEnterTransition = {
-        fadeIn(animationSpec = tween(500))
-      },
-      popExitTransition = {
-        fadeOut(animationSpec = tween(500))
-      }
+    route = OnboardingNavigations.Index.destination,
+    enterTransition = {
+      fadeIn(animationSpec = tween(500))
+    },
+    exitTransition = {
+      fadeOut(animationSpec = tween(500))
+    },
+    popEnterTransition = {
+      fadeIn(animationSpec = tween(500))
+    },
+    popExitTransition = {
+      fadeOut(animationSpec = tween(500))
+    }
   ) {
     OnboardScreen {
       navController.navigate(it.destination)
@@ -35,81 +35,81 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
   }
 
   composable(
-      route = OnboardingNavigations.Legal.ROUTE,
-      arguments = OnboardingNavigations.Legal.args,
-      enterTransition = {
-        fadeIn(animationSpec = tween(500))
-      },
-      exitTransition = {
-        fadeOut(animationSpec = tween(500))
-      },
-      popEnterTransition = {
-        fadeIn(animationSpec = tween(500))
-      },
-      popExitTransition = {
-        fadeOut(animationSpec = tween(500))
-      }
+    route = OnboardingNavigations.Legal.ROUTE,
+    arguments = OnboardingNavigations.Legal.args,
+    enterTransition = {
+      fadeIn(animationSpec = tween(500))
+    },
+    exitTransition = {
+      fadeOut(animationSpec = tween(500))
+    },
+    popEnterTransition = {
+      fadeIn(animationSpec = tween(500))
+    },
+    popExitTransition = {
+      fadeOut(animationSpec = tween(500))
+    }
   ) {
     val forCreate =
-        it.arguments?.getBoolean(OnboardingNavigations.KEY_IS_CREATE) ?: false
+      it.arguments?.getBoolean(OnboardingNavigations.KEY_IS_CREATE) ?: false
     LegalScreen(
-        forCreate = forCreate,
-        navigateUp = { navController.navigateUp() },
-        navigateTo = {
-          navController.navigate(it.destination)
-        }
+      forCreate = forCreate,
+      navigateUp = { navController.navigateUp() },
+      navigateTo = {
+        navController.navigate(it.destination)
+      }
     )
   }
   composable(
-      route = OnboardingNavigations.CreatePasscode.ROUTE,
-      arguments = OnboardingNavigations.CreatePasscode.args,
-      enterTransition = {
-        fadeIn(animationSpec = tween(500))
-      },
-      exitTransition = {
-        fadeOut(animationSpec = tween(500))
-      },
-      popEnterTransition = {
-        fadeIn(animationSpec = tween(500))
-      },
-      popExitTransition = {
-        fadeOut(animationSpec = tween(500))
-      }
+    route = OnboardingNavigations.CreatePasscode.ROUTE,
+    arguments = OnboardingNavigations.CreatePasscode.args,
+    enterTransition = {
+      fadeIn(animationSpec = tween(500))
+    },
+    exitTransition = {
+      fadeOut(animationSpec = tween(500))
+    },
+    popEnterTransition = {
+      fadeIn(animationSpec = tween(500))
+    },
+    popExitTransition = {
+      fadeOut(animationSpec = tween(500))
+    }
   ) {
     val forCreate =
-        it.arguments?.getBoolean(OnboardingNavigations.KEY_IS_CREATE)
-            ?: false
+      it.arguments?.getBoolean(OnboardingNavigations.KEY_IS_CREATE)
+        ?: false
     CreatePasscodeScreen(
-        forCreate = forCreate,
-        navigateUp = {
-          navController.navigateUp()
-        }, navigateTo = {
+      forCreate = forCreate,
+      navigateUp = {
+        navController.navigateUp()
+      }, navigateTo = {
       navController.navigate(it.destination)
     })
   }
   composable(
-      route = OnboardingNavigations.ImportWallet.ROUTE,
-      arguments = OnboardingNavigations.ImportWallet.args,
-      enterTransition = {
-        fadeIn(animationSpec = tween(500))
-      },
-      exitTransition = {
-        fadeOut(animationSpec = tween(500))
-      },
-      popEnterTransition = {
-        fadeIn(animationSpec = tween(500))
-      },
-      popExitTransition = {
-        fadeOut(animationSpec = tween(500))
-      }
+    route = OnboardingNavigations.ImportWallet.ROUTE,
+    arguments = OnboardingNavigations.ImportWallet.args,
+    enterTransition = {
+      fadeIn(animationSpec = tween(500))
+    },
+    exitTransition = {
+      fadeOut(animationSpec = tween(500))
+    },
+    popEnterTransition = {
+      fadeIn(animationSpec = tween(500))
+    },
+    popExitTransition = {
+      fadeOut(animationSpec = tween(500))
+    }
   ) {
     val passcode =
-        it.arguments?.getString(OnboardingNavigations.KEY_PASSCODE)!!
+      it.arguments?.getString(OnboardingNavigations.KEY_PASSCODE)!!
     ImportWordsScreen(
-        passcode = passcode,
-        navigateUp = {
-          navController.navigateUp()
-        }, navigateMain = {
+      passcode = passcode,
+      navigateUp = {
+        navController.navigateUp()
+      }, navigateMain = {
       navController.navigate("main-home") {
         popUpTo(OnboardingNavigations.Index.destination) {
           inclusive = true

@@ -13,11 +13,11 @@ import com.crypto.defi.models.local.entities.CoinVersionShaEntity
 import com.crypto.defi.models.local.entities.TierEntity
 
 @Database(
-    entities = [AssetEntity::class, ChainEntity::class, CoinVersionShaEntity::class, TierEntity::class],
-    version = 2,
-    autoMigrations = [
-      AutoMigration(from = 1, to = 2)
-    ]
+  entities = [AssetEntity::class, ChainEntity::class, CoinVersionShaEntity::class, TierEntity::class],
+  version = 2,
+  autoMigrations = [
+    AutoMigration(from = 1, to = 2)
+  ]
 )
 abstract class CryptoDeFiDatabase : RoomDatabase() {
   abstract val chainDao: ChainDao

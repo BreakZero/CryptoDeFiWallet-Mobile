@@ -15,7 +15,7 @@ internal interface WalletDao {
   suspend fun deleteWallet(entity: WalletEntity)
 
   @Query(
-      """
+    """
         SELECT * 
         FROM TB_WALLET 
         WHERE active = 1

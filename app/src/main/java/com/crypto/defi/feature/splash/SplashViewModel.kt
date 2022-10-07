@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val sharedPreferences: SharedPreferences
+  private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
   private val _uiEvent = Channel<Boolean>()
   val uiEvent = _uiEvent.receiveAsFlow()

@@ -11,39 +11,39 @@ import androidx.core.app.ActivityCompat
 
 object BiometricUtil {
   fun launchBiometric(
-      context: Context,
-      title: String = "",
-      subtitle: String = "",
-      description: String = "",
-      authenticationCallback: BiometricPrompt.AuthenticationCallback,
-      onCancel: () -> Unit
+    context: Context,
+    title: String = "",
+    subtitle: String = "",
+    description: String = "",
+    authenticationCallback: BiometricPrompt.AuthenticationCallback,
+    onCancel: () -> Unit
   ) {
     if (checkBiometricSupport(context)) {
       val biometricPrompt = BiometricPrompt.Builder(context)
-          .apply {
-            setTitle(title)
-            setSubtitle(subtitle)
-            setDescription(description)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-              setConfirmationRequired(false)
-            }
-            setNegativeButton(
-                "Using App Password",
-                context.mainExecutor
-            ) { _, _ ->
-              onCancel.invoke()
-            }
-          }.build()
+        .apply {
+          setTitle(title)
+          setSubtitle(subtitle)
+          setDescription(description)
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            setConfirmationRequired(false)
+          }
+          setNegativeButton(
+            "Using App Password",
+            context.mainExecutor
+          ) { _, _ ->
+            onCancel.invoke()
+          }
+        }.build()
 
       biometricPrompt.authenticate(
-          CancellationSignal()
-              .apply {
-                setOnCancelListener {
-                  onCancel.invoke()
-                }
-              },
-          context.mainExecutor,
-          authenticationCallback
+        CancellationSignal()
+          .apply {
+            setOnCancelListener {
+              onCancel.invoke()
+            }
+          },
+        context.mainExecutor,
+        authenticationCallback
       )
     }
   }
@@ -55,9 +55,9 @@ object BiometricUtil {
       return true
     }
     if (ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.USE_BIOMETRIC
-        ) != PackageManager.PERMISSION_GRANTED
+        context,
+        Manifest.permission.USE_BIOMETRIC
+      ) != PackageManager.PERMISSION_GRANTED
     ) {
       return false
     }
