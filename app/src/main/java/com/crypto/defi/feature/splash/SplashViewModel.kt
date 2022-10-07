@@ -15,13 +15,13 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
-    private val _uiEvent = Channel<Boolean>()
-    val uiEvent = _uiEvent.receiveAsFlow()
+  private val _uiEvent = Channel<Boolean>()
+  val uiEvent = _uiEvent.receiveAsFlow()
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            val passcode = sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "")
-            _uiEvent.send(!passcode.isNullOrBlank())
-        }
+  init {
+    viewModelScope.launch(Dispatchers.IO) {
+      val passcode = sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "")
+      _uiEvent.send(!passcode.isNullOrBlank())
     }
+  }
 }

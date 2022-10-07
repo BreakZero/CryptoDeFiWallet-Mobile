@@ -22,19 +22,19 @@ data class Asset(
     @kotlinx.serialization.Serializable(with = BigDecimalSerializer::class)
     val rate: BigDecimal = BigDecimal.ZERO
 ) {
-    fun fiatBalance(): BigDecimal {
-        return nativeBalance.byDecimal(decimal).times(rate).setScale(2, RoundingMode.DOWN)
-    }
+  fun fiatBalance(): BigDecimal {
+    return nativeBalance.byDecimal(decimal).times(rate).setScale(2, RoundingMode.DOWN)
+  }
 
-    fun feeDecimal(): Int {
-        return contract?.let {
-            18
-        } ?: decimal
-    }
+  fun feeDecimal(): Int {
+    return contract?.let {
+      18
+    } ?: decimal
+  }
 
-    fun feeSymbol(): String {
-        return contract?.let {
-            "ETH"
-        } ?: symbol
-    }
+  fun feeSymbol(): String {
+    return contract?.let {
+      "ETH"
+    } ?: symbol
+  }
 }

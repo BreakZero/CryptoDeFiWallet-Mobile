@@ -14,17 +14,17 @@ import com.crypto.core.ui.composables.ScannerView
 fun DeFiScannerScreen(
     onResult: (String?) -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            DeFiAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = Color.Transparent
-                )
-            ) {
-                onResult.invoke(null)
-            }
+  Scaffold(
+      topBar = {
+        DeFiAppBar(
+            colors = TopAppBarDefaults.smallTopAppBarColors(
+                containerColor = Color.Transparent
+            )
+        ) {
+          onResult.invoke(null)
         }
-    ) {
-        ScannerView(onResult = onResult)
-    }
+      }
+  ) {
+    ScannerView(onResult = onResult)
+  }
 }

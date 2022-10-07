@@ -24,6 +24,6 @@ data class Dimensions(
 val LocalSpacing = compositionLocalOf { Dimensions() }
 
 val MaterialTheme.Spacing: Dimensions
-    @Composable
-    @ReadOnlyComposable
-    get() = LocalSpacing.current
+  @Composable
+  @ReadOnlyComposable
+  get() = LocalSpacing.current

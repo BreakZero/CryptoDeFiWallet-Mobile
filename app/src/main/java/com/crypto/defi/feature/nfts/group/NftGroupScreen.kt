@@ -1,8 +1,16 @@
 package com.crypto.defi.feature.nfts.group
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,42 +36,42 @@ fun NftGroupScreen(
     nftGroupViewModel: NftGroupViewModel = hiltViewModel(),
     onBack: () -> Unit
 ) {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            DeFiAppBar() {
-                onBack()
-            }
+  Scaffold(
+      modifier = Modifier.fillMaxSize(),
+      topBar = {
+        DeFiAppBar() {
+          onBack()
         }
-    ) {
-        val nftGroupsUiState by nftGroupViewModel.assetsByGroup.collectAsState()
-        AnimatedContent(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
-            targetState = true, transitionSpec = {
-                fadeIn(animationSpec = tween(300, 300)) with fadeOut(
-                    animationSpec = tween(
-                        300,
-                        300
-                    )
-                )
-            }) {
-            if (nftGroupsUiState.isLoading) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    LoadingIndicator(animating = true)
-                }
-            } else {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(MaterialTheme.Spacing.medium),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.medium)
-                ) {
-                    items(nftGroupsUiState.nftGroups) { group ->
-                        GroupItemView(group = group)
-                    }
-                }
-            }
+      }
+  ) {
+    val nftGroupsUiState by nftGroupViewModel.assetsByGroup.collectAsState()
+    AnimatedContent(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(it),
+        targetState = true, transitionSpec = {
+      fadeIn(animationSpec = tween(300, 300)) with fadeOut(
+          animationSpec = tween(
+              300,
+              300
+          )
+      )
+    }) {
+      if (nftGroupsUiState.isLoading) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+          LoadingIndicator(animating = true)
         }
+      } else {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(MaterialTheme.Spacing.medium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.medium)
+        ) {
+          items(nftGroupsUiState.nftGroups) { group ->
+            GroupItemView(group = group)
+          }
+        }
+      }
     }
+  }
 }

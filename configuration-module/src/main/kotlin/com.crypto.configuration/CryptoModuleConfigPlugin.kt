@@ -13,80 +13,80 @@ import java.io.InputStreamReader
 import java.util.*
 
 class CryptoModuleConfigPlugin : Plugin<Project> {
-    private val ignoreList = listOf("app", "onboarding")
+  private val ignoreList = listOf("app", "onboarding")
 
-    override fun apply(target: Project) {
-        if (target.name !in ignoreList) {
-            target.beforeEvaluate { applyPlugin() }
-            target.afterEvaluate {
-                extensions.getByType(LibraryExtension::class).run {
-                    moduleConfig()
-                }
-            }
+  override fun apply(target: Project) {
+    if (target.name !in ignoreList) {
+      target.beforeEvaluate { applyPlugin() }
+      target.afterEvaluate {
+        extensions.getByType(LibraryExtension::class).run {
+          moduleConfig()
         }
+      }
+    }
+  }
+
+  private fun Project.applyPlugin() {
+    apply(plugin = "com.android.library")
+    apply(plugin = "kotlin-android")
+    apply(plugin = "kotlin-kapt")
+    apply(plugin = "kotlin-parcelize")
+  }
+
+  @Suppress("UnstableApiUsage")
+  private fun LibraryExtension.moduleConfig() {
+    compileSdk = AndroidBuildConfig.compileSdkVersion
+    packagingOptions {
+      resources.excludes.add("META-INF/INDEX.LIST")
+    }
+    lint {
+      isCheckDependencies = true
     }
 
-    private fun Project.applyPlugin() {
-        apply(plugin = "com.android.library")
-        apply(plugin = "kotlin-android")
-        apply(plugin = "kotlin-kapt")
-        apply(plugin = "kotlin-parcelize")
+    defaultConfig {
+      minSdk = AndroidBuildConfig.minSdkVersion
+      targetSdk = AndroidBuildConfig.targetSdkVersion
+      testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+      release {
+        isMinifyEnabled = false
+        proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            "proguard-rules.pro"
+        )
+      }
+      debug {
+        isMinifyEnabled = false
+        isTestCoverageEnabled = true
+        proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            "proguard-rules.pro"
+        )
+      }
     }
 
-    @Suppress("UnstableApiUsage")
-    private fun LibraryExtension.moduleConfig() {
-        compileSdk = AndroidBuildConfig.compileSdkVersion
-        packagingOptions {
-            resources.excludes.add("META-INF/INDEX.LIST")
-        }
-        lint {
-            isCheckDependencies = true
-        }
-
-        defaultConfig {
-            minSdk = AndroidBuildConfig.minSdkVersion
-            targetSdk = AndroidBuildConfig.targetSdkVersion
-            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        }
-        buildTypes {
-            release {
-                isMinifyEnabled = false
-                proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
-                )
-            }
-            debug {
-                isMinifyEnabled = false
-                isTestCoverageEnabled = true
-                proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
-                )
-            }
-        }
-
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
-        }
-        buildFeatures.also {
-            it.compose = true
-        }
-        composeOptions {
-            kotlinCompilerExtensionVersion = ComposeDeps.compiler_version
-        }
+    compileOptions {
+      sourceCompatibility = JavaVersion.VERSION_11
+      targetCompatibility = JavaVersion.VERSION_11
     }
+    buildFeatures.also {
+      it.compose = true
+    }
+    composeOptions {
+      kotlinCompilerExtensionVersion = ComposeDeps.compiler_version
+    }
+  }
 }
 
 fun keyStoreProperties(): Properties {
-    val properties = Properties()
-    val keyProperties = File("./keystore", "keystore.properties")
+  val properties = Properties()
+  val keyProperties = File("./keystore", "keystore.properties")
 
-    if (keyProperties.isFile) {
-        InputStreamReader(FileInputStream(keyProperties), Charsets.UTF_8).use { reader ->
-            properties.load(reader)
-        }
+  if (keyProperties.isFile) {
+    InputStreamReader(FileInputStream(keyProperties), Charsets.UTF_8).use { reader ->
+      properties.load(reader)
     }
-    return properties
+  }
+  return properties
 }

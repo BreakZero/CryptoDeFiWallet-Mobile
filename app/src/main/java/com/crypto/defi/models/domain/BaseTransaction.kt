@@ -12,5 +12,5 @@ open class BaseTransaction(
 )
 
 enum class TransactionDirection {
-    SEND, RECEIVE, SEND_SELF
+  SEND, RECEIVE, SEND_SELF
 }

@@ -17,23 +17,23 @@ class BalanceWorker(
     private val chainManager: ChainManager,
     private val balanceUseCase: BalanceUseCase
 ) : CoroutineWorker(appContext, workerParams) {
-    override suspend fun doWork(): Result {
-        setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, true).build())
-        supervisorScope {
-            val evmAddress = chainManager.evmAddress()
-            launchWithHandler(Dispatchers.Default) {
-                balanceUseCase.fetchingTiers()
-            }
-            launchWithHandler(Dispatchers.Default) {
-                balanceUseCase.fetchingTokenHolding(
-                    address = evmAddress
-                )
-            }
-            launchWithHandler(Dispatchers.Default) {
-                balanceUseCase.fetchingEthMainCoin(address = evmAddress)
-            }
-        }
-        setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, false).build())
-        return Result.success()
+  override suspend fun doWork(): Result {
+    setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, true).build())
+    supervisorScope {
+      val evmAddress = chainManager.evmAddress()
+      launchWithHandler(Dispatchers.Default) {
+        balanceUseCase.fetchingTiers()
+      }
+      launchWithHandler(Dispatchers.Default) {
+        balanceUseCase.fetchingTokenHolding(
+            address = evmAddress
+        )
+      }
+      launchWithHandler(Dispatchers.Default) {
+        balanceUseCase.fetchingEthMainCoin(address = evmAddress)
+      }
     }
+    setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, false).build())
+    return Result.success()
+  }
 }

@@ -12,26 +12,28 @@ import java.math.BigInteger
 class SolanaChainImpl(
     private val httpClient: HttpClient,
     private val hdWallet: HDWallet
-): IChain {
-    override fun address(): String {
-        return hdWallet.getAddressForCoin(CoinType.SOLANA)
-    }
-    override suspend fun balance(contract: String?): BigInteger {
-        return BigInteger.ZERO
-    }
+) : IChain {
+  override fun address(): String {
+    return hdWallet.getAddressForCoin(CoinType.SOLANA)
+  }
 
-    override suspend fun transactions(
-        page: Int,
-        offset: Int,
-        contract: String?
-    ): List<EvmTransaction> {
-        return emptyList()
-    }
+  override suspend fun balance(contract: String?): BigInteger {
+    return BigInteger.ZERO
+  }
 
-    override suspend fun signTransaction(readyToSign: ReadyToSign): TransactionPlan {
-        return TransactionPlan.EmptyPlan
-    }
-    override suspend fun broadcast(rawData: String): String {
-        return ""
-    }
+  override suspend fun transactions(
+      page: Int,
+      offset: Int,
+      contract: String?
+  ): List<EvmTransaction> {
+    return emptyList()
+  }
+
+  override suspend fun signTransaction(readyToSign: ReadyToSign): TransactionPlan {
+    return TransactionPlan.EmptyPlan
+  }
+
+  override suspend fun broadcast(rawData: String): String {
+    return ""
+  }
 }

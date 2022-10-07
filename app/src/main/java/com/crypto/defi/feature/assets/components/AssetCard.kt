@@ -29,51 +29,51 @@ fun AssetCard(
     asset: Asset,
     onClick: (Asset) -> Unit
 ) {
-    Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(MaterialTheme.Spacing.space12),
-        onClick = {
-            onClick(asset)
-        }
+  Card(
+      modifier = modifier,
+      shape = RoundedCornerShape(MaterialTheme.Spacing.space12),
+      onClick = {
+        onClick(asset)
+      }
+  ) {
+    Row(
+        modifier = modifier
+            .padding(MaterialTheme.Spacing.small)
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = modifier
-                .padding(MaterialTheme.Spacing.small)
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AsyncImage(
-                modifier = Modifier
-                    .size(MaterialTheme.Spacing.space48)
-                    .clip(CircleShape),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(asset.iconUrl)
-                    .placeholder(R.drawable.avatar_generic_1)
-                    .error(R.drawable.avatar_generic_1)
-                    .crossfade(true)
-                    .build(),
-                contentScale = ContentScale.Fit,
-                contentDescription = null
-            )
-            Text(
-                text = asset.name,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = MaterialTheme.Spacing.small)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .wrapContentWidth(Alignment.End),
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = "${asset.nativeBalance.byDecimal(asset.decimal)} ${asset.symbol}", textAlign = TextAlign.End)
-                Text(text = "$ ${asset.fiatBalance().toPlainString()}", textAlign = TextAlign.End)
-            }
-        }
+      AsyncImage(
+          modifier = Modifier
+              .size(MaterialTheme.Spacing.space48)
+              .clip(CircleShape),
+          model = ImageRequest.Builder(LocalContext.current)
+              .data(asset.iconUrl)
+              .placeholder(R.drawable.avatar_generic_1)
+              .error(R.drawable.avatar_generic_1)
+              .crossfade(true)
+              .build(),
+          contentScale = ContentScale.Fit,
+          contentDescription = null
+      )
+      Text(
+          text = asset.name,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+          modifier = Modifier
+              .weight(1f)
+              .padding(start = MaterialTheme.Spacing.small)
+      )
+      Column(
+          modifier = Modifier
+              .fillMaxHeight()
+              .wrapContentWidth(Alignment.End),
+          horizontalAlignment = Alignment.End,
+          verticalArrangement = Arrangement.Center
+      ) {
+        Text(text = "${asset.nativeBalance.byDecimal(asset.decimal)} ${asset.symbol}", textAlign = TextAlign.End)
+        Text(text = "$ ${asset.fiatBalance().toPlainString()}", textAlign = TextAlign.End)
+      }
     }
+  }
 }

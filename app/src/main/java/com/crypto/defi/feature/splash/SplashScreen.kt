@@ -6,8 +6,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Surface
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -27,41 +27,41 @@ fun SplashScreen(
     splashViewModel: SplashViewModel = hiltViewModel(),
     navigateTo: (NavigationCommand) -> Unit
 ) {
-    val scale = remember {
-        androidx.compose.animation.core.Animatable(0f)
-    }
-    setStatusColor(statusColor = MaterialTheme.colorScheme.surface)
-    // AnimationEffect
-    LaunchedEffect(key1 = true) {
-        scale.animateTo(
-            targetValue = 0.7f,
-            animationSpec = tween(
-                durationMillis = 800,
-                easing = {
-                    OvershootInterpolator(4f).getInterpolation(it)
-                }
-            )
+  val scale = remember {
+    androidx.compose.animation.core.Animatable(0f)
+  }
+  setStatusColor(statusColor = MaterialTheme.colorScheme.surface)
+  // AnimationEffect
+  LaunchedEffect(key1 = true) {
+    scale.animateTo(
+        targetValue = 0.7f,
+        animationSpec = tween(
+            durationMillis = 800,
+            easing = {
+              OvershootInterpolator(4f).getInterpolation(it)
+            }
         )
-        splashViewModel.uiEvent.collect {
-            navigateTo.invoke(
-                if (it) MainNavigation.Main else OnboardingNavigations.Index
-            )
-        }
+    )
+    splashViewModel.uiEvent.collect {
+      navigateTo.invoke(
+          if (it) MainNavigation.Main else OnboardingNavigations.Index
+      )
     }
+  }
 
-    // Image
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_wallet_logo),
-                contentDescription = null,
-                modifier = Modifier
-                    .scale(scale.value)
-                    .fillMaxWidth()
-            )
-        }
+  // Image
+  Surface(modifier = Modifier.fillMaxSize()) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+      Image(
+          painter = painterResource(id = R.drawable.ic_wallet_logo),
+          contentDescription = null,
+          modifier = Modifier
+              .scale(scale.value)
+              .fillMaxWidth()
+      )
     }
+  }
 }

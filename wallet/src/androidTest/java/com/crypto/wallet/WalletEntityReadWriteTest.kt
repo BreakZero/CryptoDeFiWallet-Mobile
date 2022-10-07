@@ -21,53 +21,53 @@ import java.io.IOException
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class WalletEntityReadWriteTest {
-    @get:Rule
-    val dispatcherRule = TestDispatcherRule()
+  @get:Rule
+  val dispatcherRule = TestDispatcherRule()
 
-    private lateinit var walletDao: WalletDao
-    private lateinit var walletDb: WalletDatabase
+  private lateinit var walletDao: WalletDao
+  private lateinit var walletDb: WalletDatabase
 
-    @Before
-    fun createDb() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        walletDb = Room.inMemoryDatabaseBuilder(context, WalletDatabase::class.java)
-            .build()
-        walletDao = walletDb.walletDao
-    }
+  @Before
+  fun createDb() {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    walletDb = Room.inMemoryDatabaseBuilder(context, WalletDatabase::class.java)
+        .build()
+    walletDao = walletDb.walletDao
+  }
 
-    @After
-    @Throws(IOException::class)
-    fun closeDb() {
-        walletDb.close()
-    }
+  @After
+  @Throws(IOException::class)
+  fun closeDb() {
+    walletDb.close()
+  }
 
-    @Test
-    @Throws(Exception::class)
-    fun writeWalletAndReadInList() = runTest {
-        val walletEntity = WalletEntity(
-            mnemonic = "mock mnemonic",
-            active = 1,
-            passphrase = ""
-        )
+  @Test
+  @Throws(Exception::class)
+  fun writeWalletAndReadInList() = runTest {
+    val walletEntity = WalletEntity(
+        mnemonic = "mock mnemonic",
+        active = 1,
+        passphrase = ""
+    )
 
-        walletDao.insertWallet(walletEntity)
-        val activeOne = walletDao.activeWallet()
+    walletDao.insertWallet(walletEntity)
+    val activeOne = walletDao.activeWallet()
 
-        assertEquals(activeOne?.active, 1)
-    }
+    assertEquals(activeOne?.active, 1)
+  }
 
-    @Test
-    @kotlin.jvm.Throws(Exception::class)
-    fun deleteEntityInList() = runTest {
-        val walletEntity = WalletEntity(
-            mnemonic = "mock mnemonic",
-            active = 1,
-            passphrase = ""
-        )
+  @Test
+  @kotlin.jvm.Throws(Exception::class)
+  fun deleteEntityInList() = runTest {
+    val walletEntity = WalletEntity(
+        mnemonic = "mock mnemonic",
+        active = 1,
+        passphrase = ""
+    )
 
-        walletDao.insertWallet(walletEntity)
-        walletDao.deleteWallet(walletEntity)
-        val activeOne = walletDao.activeWallet()
-        assertNull(activeOne)
-    }
+    walletDao.insertWallet(walletEntity)
+    walletDao.deleteWallet(walletEntity)
+    val activeOne = walletDao.activeWallet()
+    assertNull(activeOne)
+  }
 }

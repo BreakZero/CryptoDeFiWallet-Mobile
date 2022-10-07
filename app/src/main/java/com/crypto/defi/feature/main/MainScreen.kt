@@ -2,9 +2,21 @@ package com.crypto.defi.feature.main
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -52,84 +64,84 @@ fun MainScreen(
     mainViewModel: MainViewModel = hiltViewModel(),
     onNavigateTo: (NavigationCommand) -> Unit
 ) {
-    savedStateHandle?.also { handler ->
-        LaunchedEffect(key1 = handler) {
-            handler.getStateFlow(MapKeyConstants.KEY_OF_QR_CODE_CONTENT, "").collect {
-                handler.remove<String>(MapKeyConstants.KEY_OF_QR_CODE_CONTENT)
-            }
+  savedStateHandle?.also { handler ->
+    LaunchedEffect(key1 = handler) {
+      handler.getStateFlow(MapKeyConstants.KEY_OF_QR_CODE_CONTENT, "").collect {
+        handler.remove<String>(MapKeyConstants.KEY_OF_QR_CODE_CONTENT)
+      }
+    }
+  }
+  val pageState = rememberPagerState()
+  val tabIndex = pageState.currentPage
+  val scope = rememberCoroutineScope()
+  val menus by remember {
+    mutableStateOf(navMenus.filter { it.visitable })
+  }
+
+  val systemUIController = rememberSystemUiController()
+  val useDartIcons = !isSystemInDarkTheme()
+  val statusColor = MaterialTheme.colorScheme.primary
+
+  LaunchedEffect(key1 = pageState.currentPage) {
+    systemUIController.setStatusBarColor(
+        statusColor, useDartIcons
+    )
+  }
+
+  Column(
+      modifier = Modifier.fillMaxSize()
+  ) {
+    HorizontalPager(
+        modifier = Modifier
+            .weight(1f)
+            .fillMaxWidth(),
+        count = menus.size, state = pageState,
+        userScrollEnabled = false
+    ) { page ->
+      when (menus[page].label) {
+        "Wallet" -> {
+          MainAssetsScreen(navigateTo = onNavigateTo)
         }
+        "NFT" -> {
+          MainNFTsScreen(navigateTo = onNavigateTo)
+        }
+        "Dapps" -> {
+          MainDappsScreen()
+        }
+        "Earn" -> {
+          MainDeFiScreen()
+        }
+        else -> Unit
+      }
     }
-    val pageState = rememberPagerState()
-    val tabIndex = pageState.currentPage
-    val scope = rememberCoroutineScope()
-    val menus by remember {
-        mutableStateOf(navMenus.filter { it.visitable })
-    }
-
-    val systemUIController = rememberSystemUiController()
-    val useDartIcons = !isSystemInDarkTheme()
-    val statusColor = MaterialTheme.colorScheme.primary
-
-    LaunchedEffect(key1 = pageState.currentPage) {
-        systemUIController.setStatusBarColor(
-            statusColor, useDartIcons
-        )
-    }
-
-    Column(
-        modifier = Modifier.fillMaxSize()
+    TabRow(
+        selectedTabIndex = tabIndex,
+        modifier = Modifier.height(56.dp),
+        divider = {},
+        indicator = {}
     ) {
-        HorizontalPager(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-            count = menus.size, state = pageState,
-            userScrollEnabled = false
-        ) { page ->
-            when (menus[page].label) {
-                "Wallet" -> {
-                    MainAssetsScreen(navigateTo = onNavigateTo)
-                }
-                "NFT" -> {
-                    MainNFTsScreen(navigateTo = onNavigateTo)
-                }
-                "Dapps" -> {
-                    MainDappsScreen()
-                }
-                "Earn" -> {
-                    MainDeFiScreen()
-                }
-                else -> Unit
+      menus.forEachIndexed { index, menu ->
+        Tab(
+            selected = index == tabIndex,
+            selectedContentColor = MaterialTheme.colorScheme.primary,
+            unselectedContentColor = MaterialTheme.colorScheme.tertiary,
+            onClick = {
+              scope.launch {
+                pageState.animateScrollToPage(index)
+              }
             }
-        }
-        TabRow(
-            selectedTabIndex = tabIndex,
-            modifier = Modifier.height(56.dp),
-            divider = {},
-            indicator = {}
         ) {
-            menus.forEachIndexed { index, menu ->
-                Tab(
-                    selected = index == tabIndex,
-                    selectedContentColor = MaterialTheme.colorScheme.primary,
-                    unselectedContentColor = MaterialTheme.colorScheme.tertiary,
-                    onClick = {
-                        scope.launch {
-                            pageState.animateScrollToPage(index)
-                        }
-                    }
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painter = painterResource(id = menu.icon),
-                            contentDescription = null
-                        )
-                        Text(text = menu.label)
-                    }
-                }
-            }
+          Column(
+              horizontalAlignment = Alignment.CenterHorizontally
+          ) {
+            Icon(
+                painter = painterResource(id = menu.icon),
+                contentDescription = null
+            )
+            Text(text = menu.label)
+          }
         }
+      }
     }
+  }
 }

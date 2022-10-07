@@ -16,21 +16,21 @@ fun SettingsScreen(
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            DeFiAppBar() {
-                navigateUp()
-            }
-        },
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        val scrollableState = rememberScrollState()
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .scrollable(state = scrollableState, orientation = Orientation.Vertical)
-        ) {
-
+  Scaffold(
+      topBar = {
+        DeFiAppBar() {
+          navigateUp()
         }
+      },
+      modifier = Modifier.fillMaxSize(),
+  ) {
+    val scrollableState = rememberScrollState()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .scrollable(state = scrollableState, orientation = Orientation.Vertical)
+    ) {
+
     }
+  }
 }

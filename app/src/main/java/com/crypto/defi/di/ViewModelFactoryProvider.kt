@@ -9,18 +9,18 @@ import dagger.hilt.android.components.ActivityComponent
 @EntryPoint
 @InstallIn(ActivityComponent::class)
 interface ViewModelFactoryProvider {
-    fun sendFormAssistedViewModelFactory(): SendFormAssistedFactory
-    fun transactionListAssistedViewModelFactory(): TransactionListAssistedFactory
+  fun sendFormAssistedViewModelFactory(): SendFormAssistedFactory
+  fun transactionListAssistedViewModelFactory(): TransactionListAssistedFactory
 }
 
 @dagger.assisted.AssistedFactory
 interface SendFormAssistedFactory {
-    fun createSendFormViewModel(slug: String): SendFormViewModel
+  fun createSendFormViewModel(slug: String): SendFormViewModel
 }
 
 @dagger.assisted.AssistedFactory
 interface TransactionListAssistedFactory {
-    fun createTransactionListViewModel(slug: String): TransactionListViewModel
+  fun createTransactionListViewModel(slug: String): TransactionListViewModel
 }
 
 

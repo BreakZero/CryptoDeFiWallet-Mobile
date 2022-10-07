@@ -27,11 +27,11 @@ data class TransactionPlan(
     val from: String,
     val fee: BigInteger
 ) {
-    companion object {
-        val EmptyPlan = TransactionPlan("", "", BigInteger.ZERO, "", "", BigInteger.ZERO)
-    }
+  companion object {
+    val EmptyPlan = TransactionPlan("", "", BigInteger.ZERO, "", "", BigInteger.ZERO)
+  }
 
-    fun isEmptyPlan(): Boolean {
-        return this == EmptyPlan
-    }
+  fun isEmptyPlan(): Boolean {
+    return this == EmptyPlan
+  }
 }

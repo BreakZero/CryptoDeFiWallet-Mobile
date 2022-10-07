@@ -25,7 +25,7 @@ data class DataItem(
 )
 
 enum class ActionType {
-    NUMBER, SPACE, BACKSPACE
+  NUMBER, SPACE, BACKSPACE
 }
 
 private val KEYBOARD_NUMBERS = listOf(
@@ -50,55 +50,55 @@ fun NumberKeyboard(
     showDivider: Boolean = true,
     onNumberClick: (DataItem) -> Unit
 ) {
-    LazyVerticalGrid(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.Center,
-        verticalArrangement = Arrangement.Center,
-        columns = GridCells.Fixed(3)
-    ) {
-        itemsIndexed(KEYBOARD_NUMBERS) { index, item ->
-            Row(Modifier.height(IntrinsicSize.Min)) {
-                Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Box(
-                        modifier = Modifier
-                            .height(48.dp)
-                            .fillMaxWidth()
-                            .clickable {
-                                onNumberClick.invoke(item)
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        when (item.actionType) {
-                            ActionType.NUMBER -> {
-                                Text(text = item.number, fontWeight = FontWeight.Bold)
-                            }
-                            ActionType.BACKSPACE -> {
-                                Icon(
-                                    imageVector = Icons.Outlined.Backspace,
-                                    contentDescription = null
-                                )
-                            }
-                            ActionType.SPACE -> {
-                                Spacer(modifier = Modifier.fillMaxSize())
-                            }
-                        }
-                    }
-                    if (showDivider) {
-                        Divider() // Horizontal divider
-                    }
-                }
-
-                // Vertical divider avoiding the last cell in each row
-                if (showDivider && (index + 1) % 3 != 0) {
-                    Column() {
-                        Divider(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(1.dp)
-                        )
-                    }
-                }
+  LazyVerticalGrid(
+      modifier = modifier,
+      horizontalArrangement = Arrangement.Center,
+      verticalArrangement = Arrangement.Center,
+      columns = GridCells.Fixed(3)
+  ) {
+    itemsIndexed(KEYBOARD_NUMBERS) { index, item ->
+      Row(Modifier.height(IntrinsicSize.Min)) {
+        Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+          Box(
+              modifier = Modifier
+                  .height(48.dp)
+                  .fillMaxWidth()
+                  .clickable {
+                    onNumberClick.invoke(item)
+                  },
+              contentAlignment = Alignment.Center
+          ) {
+            when (item.actionType) {
+              ActionType.NUMBER -> {
+                Text(text = item.number, fontWeight = FontWeight.Bold)
+              }
+              ActionType.BACKSPACE -> {
+                Icon(
+                    imageVector = Icons.Outlined.Backspace,
+                    contentDescription = null
+                )
+              }
+              ActionType.SPACE -> {
+                Spacer(modifier = Modifier.fillMaxSize())
+              }
             }
+          }
+          if (showDivider) {
+            Divider() // Horizontal divider
+          }
         }
+
+        // Vertical divider avoiding the last cell in each row
+        if (showDivider && (index + 1) % 3 != 0) {
+          Column() {
+            Divider(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(1.dp)
+            )
+          }
+        }
+      }
     }
+  }
 }

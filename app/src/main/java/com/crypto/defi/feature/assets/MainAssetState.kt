@@ -2,7 +2,6 @@ package com.crypto.defi.feature.assets
 
 import androidx.annotation.DrawableRes
 import com.crypto.core.common.UiText
-import com.crypto.core.model.NetworkStatus
 import com.crypto.defi.models.domain.Asset
 
 data class PromoCart(

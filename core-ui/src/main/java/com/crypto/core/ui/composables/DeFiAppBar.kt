@@ -5,7 +5,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -19,27 +18,27 @@ fun DeFiAppBar(
     actions: @Composable RowScope.() -> Unit = {},
     navigateUp: () -> Unit
 ) {
-    SmallTopAppBar(
-        colors = colors,
-        navigationIcon = {
-            IconButton(onClick = {
-                navigateUp()
-            }) {
-                Icon(
-                    imageVector = navIcon,
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.primaryContainer
-                )
-            }
-        },
-        title = {
-            title?.let {
-                Text(
-                    text = title, color = MaterialTheme.colorScheme.primaryContainer,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-        },
-        actions = actions
-    )
+  SmallTopAppBar(
+      colors = colors,
+      navigationIcon = {
+        IconButton(onClick = {
+          navigateUp()
+        }) {
+          Icon(
+              imageVector = navIcon,
+              contentDescription = "",
+              tint = MaterialTheme.colorScheme.primaryContainer
+          )
+        }
+      },
+      title = {
+        title?.let {
+          Text(
+              text = title, color = MaterialTheme.colorScheme.primaryContainer,
+              style = MaterialTheme.typography.titleMedium
+          )
+        }
+      },
+      actions = actions
+  )
 }

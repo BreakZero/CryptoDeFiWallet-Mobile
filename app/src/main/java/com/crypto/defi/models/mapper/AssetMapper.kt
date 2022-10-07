@@ -5,29 +5,29 @@ import com.crypto.defi.models.local.entities.AssetEntity
 import com.crypto.defi.models.remote.Currency
 
 fun AssetEntity.toAsset(): Asset {
-    return Asset(
-        slug = this.slug,
-        code = this.code,
-        iconUrl = this.iconUrl,
-        name = this.name,
-        symbol = this.symbol,
-        decimal = this.decimal,
-        chainName = this.chainName,
-        contract = this.contractAddress.ifBlank { null },
-        nativeBalance = this.balance.toBigInteger()
-    )
+  return Asset(
+      slug = this.slug,
+      code = this.code,
+      iconUrl = this.iconUrl,
+      name = this.name,
+      symbol = this.symbol,
+      decimal = this.decimal,
+      chainName = this.chainName,
+      contract = this.contractAddress.ifBlank { null },
+      nativeBalance = this.balance.toBigInteger()
+  )
 }
 
 internal fun Currency.toAssetEntity(): AssetEntity {
-    return AssetEntity(
-        slug = this.slug,
-        code = this.chain,
-        iconUrl = this.iconUrl,
-        name = this.coinName,
-        symbol = this.symbol,
-        decimal = this.tokenDecimal,
-        chainName = this.chainName,
-        contractAddress = this.contractAddress,
-        balance = "0"
-    )
+  return AssetEntity(
+      slug = this.slug,
+      code = this.chain,
+      iconUrl = this.iconUrl,
+      name = this.coinName,
+      symbol = this.symbol,
+      decimal = this.tokenDecimal,
+      chainName = this.chainName,
+      contractAddress = this.contractAddress,
+      balance = "0"
+  )
 }

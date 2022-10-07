@@ -9,7 +9,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.BottomSheetState
+import androidx.compose.material.BottomSheetValue
+import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Surface
+import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,18 +54,18 @@ import kotlinx.coroutines.launch
 fun transactionListViewModel(
     slug: String
 ): TransactionListViewModel {
-    val assistedFactory = EntryPointAccessors.fromActivity(
-        LocalContext.current as Activity,
-        ViewModelFactoryProvider::class.java
-    ).transactionListAssistedViewModelFactory()
+  val assistedFactory = EntryPointAccessors.fromActivity(
+      LocalContext.current as Activity,
+      ViewModelFactoryProvider::class.java
+  ).transactionListAssistedViewModelFactory()
 
-    return viewModel(
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return assistedFactory.createTransactionListViewModel(slug) as T
-            }
+  return viewModel(
+      factory = object : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+          return assistedFactory.createTransactionListViewModel(slug) as T
         }
-    )
+      }
+  )
 }
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class,
@@ -71,146 +77,146 @@ fun TransactionListScreen(
     navigateUp: () -> Unit,
     navigateTo: (NavigationCommand) -> Unit
 ) {
-    setStatusColor(statusColor = MaterialTheme.colorScheme.primary)
-    val txnUiState by txnListViewModel.txnState.collectAsState()
-    val transactionList = txnUiState.transactionList.collectAsLazyPagingItems()
+  setStatusColor(statusColor = MaterialTheme.colorScheme.primary)
+  val txnUiState by txnListViewModel.txnState.collectAsState()
+  val transactionList = txnUiState.transactionList.collectAsLazyPagingItems()
 
-    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
-    )
-    val coroutineScope = rememberCoroutineScope()
+  val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+      bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
+  )
+  val coroutineScope = rememberCoroutineScope()
 
-    BottomSheetScaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            DeFiAppBar {
-                navigateUp()
-            }
-        },
-        scaffoldState = bottomSheetScaffoldState,
-        sheetContent = {
-            QRCodeContent(content = txnUiState.address)
-        },
-        sheetPeekHeight = 0.dp,
-        sheetShape = RoundedCornerShape(
-            topEnd = MaterialTheme.Spacing.space24,
-            topStart = MaterialTheme.Spacing.space24
-        )
-    ) {
-        DeFiBoxWithConstraints { progress, _ ->
-            TransactionsMotionLayout(
-                asset = txnUiState.asset, targetValue = progress,
-                onSend = {
-                    navigateTo.invoke(SendFormNavigation.destination(txnListViewModel.coinSlug()))
-                },
-                onReceive = {
-                    coroutineScope.launch {
-                        if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
-                            bottomSheetScaffoldState.bottomSheetState.collapse()
-                        } else {
-                            bottomSheetScaffoldState.bottomSheetState.expand()
-                        }
-                    }
-                }
-            ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .clip(
-                            RoundedCornerShape(
-                                topEnd = MaterialTheme.Spacing.space24,
-                                topStart = MaterialTheme.Spacing.space24
-                            )
-                        )
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surface),
-                    contentPadding = PaddingValues(
-                        vertical = MaterialTheme.Spacing.medium,
-                        horizontal = MaterialTheme.Spacing.small
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
-                ) {
-                    when (transactionList.loadState.refresh) {
-                        is LoadState.Loading -> {
-                            item {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    LoadingIndicator(animating = true)
-                                }
-                            }
-                        }
-                        is LoadState.Error -> {
-                            item {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(text = "somethings went wrong")
-                                }
-                            }
-                        }
-                        else -> Unit
-                    }
-                    items(transactionList) {
-                        it?.let {
-                            TransactionItemView(data = it, modifier = Modifier.animateItemPlacement())
-                        }
-                    }
-                    if (transactionList.loadState.append is LoadState.Loading) {
-                        item {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                LoadingIndicator(animating = true)
-                            }
-                        }
-                    }
-                }
-            }
+  BottomSheetScaffold(
+      modifier = Modifier.fillMaxSize(),
+      topBar = {
+        DeFiAppBar {
+          navigateUp()
         }
+      },
+      scaffoldState = bottomSheetScaffoldState,
+      sheetContent = {
+        QRCodeContent(content = txnUiState.address)
+      },
+      sheetPeekHeight = 0.dp,
+      sheetShape = RoundedCornerShape(
+          topEnd = MaterialTheme.Spacing.space24,
+          topStart = MaterialTheme.Spacing.space24
+      )
+  ) {
+    DeFiBoxWithConstraints { progress, _ ->
+      TransactionsMotionLayout(
+          asset = txnUiState.asset, targetValue = progress,
+          onSend = {
+            navigateTo.invoke(SendFormNavigation.destination(txnListViewModel.coinSlug()))
+          },
+          onReceive = {
+            coroutineScope.launch {
+              if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
+                bottomSheetScaffoldState.bottomSheetState.collapse()
+              } else {
+                bottomSheetScaffoldState.bottomSheetState.expand()
+              }
+            }
+          }
+      ) {
+        LazyColumn(
+            modifier = Modifier
+                .clip(
+                    RoundedCornerShape(
+                        topEnd = MaterialTheme.Spacing.space24,
+                        topStart = MaterialTheme.Spacing.space24
+                    )
+                )
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+            contentPadding = PaddingValues(
+                vertical = MaterialTheme.Spacing.medium,
+                horizontal = MaterialTheme.Spacing.small
+            ),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+        ) {
+          when (transactionList.loadState.refresh) {
+            is LoadState.Loading -> {
+              item {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                  LoadingIndicator(animating = true)
+                }
+              }
+            }
+            is LoadState.Error -> {
+              item {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                  Text(text = "somethings went wrong")
+                }
+              }
+            }
+            else -> Unit
+          }
+          items(transactionList) {
+            it?.let {
+              TransactionItemView(data = it, modifier = Modifier.animateItemPlacement())
+            }
+          }
+          if (transactionList.loadState.append is LoadState.Loading) {
+            item {
+              Box(
+                  modifier = Modifier.fillMaxWidth(),
+                  contentAlignment = Alignment.Center
+              ) {
+                LoadingIndicator(animating = true)
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }
 
 @Composable
 private fun QRCodeContent(
     content: String
 ) {
-    val image = QRCodeEncoder.encodeQRCode(content)
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        Column {
-            Text(
-                text = content,
-                modifier = Modifier.padding(MaterialTheme.Spacing.space12),
-                textAlign = TextAlign.Center
-            )
-            image?.also {
-                Image(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    bitmap = it.asImageBitmap(),
-                    contentDescription = null,
-                    alignment = Alignment.Center
-                )
-            }
-            Divider(modifier = Modifier.padding(top = MaterialTheme.Spacing.space12))
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-                    .clickable {
-                    }
-            ) {
-                Text(
-                    text = "Copy",
-                    lineHeight = 48.sp,
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
+  val image = QRCodeEncoder.encodeQRCode(content)
+  Surface(
+      modifier = Modifier
+          .fillMaxWidth()
+  ) {
+    Column {
+      Text(
+          text = content,
+          modifier = Modifier.padding(MaterialTheme.Spacing.space12),
+          textAlign = TextAlign.Center
+      )
+      image?.also {
+        Image(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            bitmap = it.asImageBitmap(),
+            contentDescription = null,
+            alignment = Alignment.Center
+        )
+      }
+      Divider(modifier = Modifier.padding(top = MaterialTheme.Spacing.space12))
+      Box(
+          contentAlignment = Alignment.Center,
+          modifier = Modifier
+              .fillMaxWidth()
+              .height(48.dp)
+              .clickable {
+              }
+      ) {
+        Text(
+            text = "Copy",
+            lineHeight = 48.sp,
+            textAlign = TextAlign.Center
+        )
+      }
     }
+  }
 }

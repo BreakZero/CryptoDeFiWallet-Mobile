@@ -11,19 +11,19 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun setStatusColor(
     statusColor: Color
 ) {
-    val systemUiController = rememberSystemUiController()
-    val useDarkIcons = !isSystemInDarkTheme()
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = statusColor,
-            darkIcons = useDarkIcons
-        )
-    }
-    DisposableEffect(systemUiController, useDarkIcons) {
-        systemUiController.setSystemBarsColor(
-            color = statusColor,
-            darkIcons = useDarkIcons
-        )
-        onDispose { }
-    }
+  val systemUiController = rememberSystemUiController()
+  val useDarkIcons = !isSystemInDarkTheme()
+  SideEffect {
+    systemUiController.setStatusBarColor(
+        color = statusColor,
+        darkIcons = useDarkIcons
+    )
+  }
+  DisposableEffect(systemUiController, useDarkIcons) {
+    systemUiController.setSystemBarsColor(
+        color = statusColor,
+        darkIcons = useDarkIcons
+    )
+    onDispose { }
+  }
 }

@@ -26,53 +26,53 @@ class WalletImportViewModel @Inject constructor(
     private val preferences: SharedPreferences,
     private val walletRepository: WalletRepository
 ) : ViewModel() {
-    var state by mutableStateOf(ImportState())
-        private set
+  var state by mutableStateOf(ImportState())
+    private set
 
-    private val _uiEvent = Channel<UiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
+  private val _uiEvent = Channel<UiEvent>()
+  val uiEvent = _uiEvent.receiveAsFlow()
 
-    fun onEvent(event: ImportEvent) {
-        when (event) {
-            is ImportEvent.OnImportClick -> {
-                val isValid = Mnemonic.isValid(state.phrase)
-                if (isValid) {
-                    state = state.copy(inProgress = true)
-                    preferences.edit {
-                        putString(ConfigurationKeys.KEY_FOR_PASSCODE, event.passcode)
-                    }
-                    viewModelScope.launch(Dispatchers.IO) {
-                        delay(1000L)
-                        walletRepository.insertWallet(
-                            Wallet(
-                                mnemonic = state.phrase,
-                                1,
-                                passphrase = ""
-                            )
-                        )
-                        state = state.copy(inProgress = false)
-                        _uiEvent.send(UiEvent.Success)
-                    }
-                } else {
-                    viewModelScope.launch {
-                        _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString("invalid mnemonic, please try another")))
-                    }
-                }
-            }
-            is ImportEvent.OnFocusChange -> {
-                state = state.copy(
-                    isHintVisible = !event.isFocused && state.phrase.isBlank()
+  fun onEvent(event: ImportEvent) {
+    when (event) {
+      is ImportEvent.OnImportClick -> {
+        val isValid = Mnemonic.isValid(state.phrase)
+        if (isValid) {
+          state = state.copy(inProgress = true)
+          preferences.edit {
+            putString(ConfigurationKeys.KEY_FOR_PASSCODE, event.passcode)
+          }
+          viewModelScope.launch(Dispatchers.IO) {
+            delay(1000L)
+            walletRepository.insertWallet(
+                Wallet(
+                    mnemonic = state.phrase,
+                    1,
+                    passphrase = ""
                 )
-            }
-            is ImportEvent.OnPhraseChange -> {
-                state = state.copy(phrase = event.phrase)
-            }
+            )
+            state = state.copy(inProgress = false)
+            _uiEvent.send(UiEvent.Success)
+          }
+        } else {
+          viewModelScope.launch {
+            _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString("invalid mnemonic, please try another")))
+          }
         }
+      }
+      is ImportEvent.OnFocusChange -> {
+        state = state.copy(
+            isHintVisible = !event.isFocused && state.phrase.isBlank()
+        )
+      }
+      is ImportEvent.OnPhraseChange -> {
+        state = state.copy(phrase = event.phrase)
+      }
     }
+  }
 
-    fun onNavigateUp() {
-        viewModelScope.launch {
-            _uiEvent.send(UiEvent.NavigateUp)
-        }
+  fun onNavigateUp() {
+    viewModelScope.launch {
+      _uiEvent.send(UiEvent.NavigateUp)
     }
+  }
 }

@@ -5,9 +5,9 @@ import org.junit.Assert
 import org.junit.Test
 
 class ConstantUnitTest {
-    @Test
-    fun test_empty_chain() {
-        val emptyChain = EmptyChain()
-        Assert.assertEquals(emptyChain.address(), "")
-    }
+  @Test
+  fun test_empty_chain() {
+    val emptyChain = EmptyChain()
+    Assert.assertEquals(emptyChain.address(), "")
+  }
 }
