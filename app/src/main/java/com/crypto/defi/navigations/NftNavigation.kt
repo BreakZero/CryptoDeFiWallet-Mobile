@@ -23,7 +23,7 @@ object NftNavigation {
     token_id: String
   ) = object : NavigationCommand {
     override val arguments
-      get() = TransactionListNavigation.args
+      get() = args
     override val destination = "nft_detail?${NFT_TOKEN_ID}=$token_id"
   }
 }

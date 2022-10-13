@@ -54,5 +54,6 @@ object AndroidDeps {
     private const val media3_version = "1.0.0-beta02"
     const val exoplayer = "androidx.media3:media3-exoplayer:$media3_version"
     const val ui = "androidx.media3:media3-ui:$media3_version"
+    const val dash = "androidx.media3:media3-exoplayer-dash:$media3_version"
   }
 }

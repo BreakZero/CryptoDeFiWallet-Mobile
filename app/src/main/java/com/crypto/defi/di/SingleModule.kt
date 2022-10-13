@@ -5,12 +5,14 @@ import androidx.room.Room
 import com.crypto.defi.chains.ChainManager
 import com.crypto.defi.chains.usecase.AssetUseCase
 import com.crypto.defi.chains.usecase.BalanceUseCase
+import com.crypto.defi.common.SslSettings
 import com.crypto.defi.models.local.CryptoDeFiDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
+import io.ktor.client.engine.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -29,7 +31,12 @@ object SingleModule {
   @Provides
   @Singleton
   fun provideKtorClient(): HttpClient {
-    return HttpClient(Android) {
+    return HttpClient(Android.config {
+      connectTimeout = 10_000
+      /*sslManager = { httpsURLConnection ->
+        httpsURLConnection.sslSocketFactory = SslSettings.getSslContext(application.applicationContext)?.socketFactory
+      }*/
+    }) {
       defaultRequest {
         header("Content-type", "application/json")
 //        header("network", "ropsten")
@@ -52,9 +59,6 @@ object SingleModule {
           }
         }
         level = LogLevel.BODY
-      }
-      engine {
-        connectTimeout = 10_000
       }
     }
   }
