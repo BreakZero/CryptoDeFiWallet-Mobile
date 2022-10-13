@@ -32,7 +32,7 @@ object SingleModule {
     return HttpClient(Android) {
       defaultRequest {
         header("Content-type", "application/json")
-        header("network", "ropsten")
+//        header("network", "ropsten")
         contentType(ContentType.Application.Json)
       }
       install(ContentNegotiation) {

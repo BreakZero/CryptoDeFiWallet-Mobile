@@ -1,5 +1,6 @@
 package com.crypto.defi.chains
 
+import com.crypto.defi.chains.aptos.AptosChainImpl
 import com.crypto.defi.chains.evm.EvmChainImpl
 import com.crypto.defi.common.UrlConstant
 import com.crypto.defi.models.local.CryptoDeFiDatabase
@@ -57,6 +58,7 @@ class ChainManager @Inject constructor(
       chains.onEach {
         chain[it.code] = when (it.chainType) {
           "evm" -> EvmChainImpl(client, hdWallet)
+          "aptos" -> AptosChainImpl(client, hdWallet)
           else -> EmptyChain()
         }
       }

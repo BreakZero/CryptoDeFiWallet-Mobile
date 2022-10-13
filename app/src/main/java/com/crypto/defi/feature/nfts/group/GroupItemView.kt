@@ -12,19 +12,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.crypto.core.ui.Spacing
+import com.crypto.defi.feature.nfts.NFTContentPreview
 import com.crypto.defi.models.remote.nft.NftAssetGroup
 import com.crypto.resource.R
 
 @Composable
 fun GroupItemView(
-  modifier: Modifier = Modifier,
-  group: NftAssetGroup
+  modifier: Modifier = Modifier, group: NftAssetGroup
 ) {
   Card(
     modifier = modifier
@@ -38,29 +38,18 @@ fun GroupItemView(
         AsyncImage(
           modifier = Modifier
             .size(MaterialTheme.Spacing.space48)
-            .clip(CircleShape),
-          model = ImageRequest.Builder(LocalContext.current)
-            .data(group.logoUrl)
-            .placeholder(R.drawable.avatar_generic_1)
-            .error(R.drawable.avatar_generic_1)
-            .crossfade(true)
-            .build(), contentDescription = null
+            .clip(CircleShape), model = ImageRequest.Builder(LocalContext.current).data(group.logoUrl).placeholder(R.drawable.avatar_generic_1).error(R.drawable.avatar_generic_1).crossfade(true).build(), contentDescription = null
         )
         Column(
           modifier = Modifier
             .height(MaterialTheme.Spacing.space48)
             .padding(
-              start = MaterialTheme.Spacing.small,
-              top = MaterialTheme.Spacing.extraSmall,
-              bottom = MaterialTheme.Spacing.extraSmall
-            ),
-          verticalArrangement = Arrangement.SpaceBetween
+              start = MaterialTheme.Spacing.small, top = MaterialTheme.Spacing.extraSmall, bottom = MaterialTheme.Spacing.extraSmall
+            ), verticalArrangement = Arrangement.SpaceBetween
         ) {
           Text(text = group.contractName)
           Text(
-            text = group.contractAddress,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            text = group.contractAddress, maxLines = 1, overflow = TextOverflow.Ellipsis
           )
         }
       }
@@ -69,19 +58,13 @@ fun GroupItemView(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.space12)
       ) {
         items(group.assets) { asset ->
-          AsyncImage(
+          NFTContentPreview(
             modifier = Modifier
-              .size(MaterialTheme.Spacing.space128)
+              .size(100.dp)
+              .aspectRatio(1.0f)
               .clip(RoundedCornerShape(MaterialTheme.Spacing.space24))
               .background(color = MaterialTheme.colorScheme.surface),
-            contentScale = ContentScale.Crop,
-            model = ImageRequest.Builder(LocalContext.current)
-              .data(asset.nftscanUri ?: asset.imageUri)
-              .placeholder(R.drawable.avatar_generic_1)
-              .error(R.drawable.avatar_generic_1)
-              .crossfade(true)
-              .build(),
-            contentDescription = null
+            nftInfo = asset
           )
         }
       }

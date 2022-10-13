@@ -14,6 +14,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AudioFile
+import androidx.compose.material.icons.filled.MovieFilter
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -120,19 +123,13 @@ fun MainNFTsScreen(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
           ) {
             items(nftAssetsUiState.nfts) { asset ->
-              AsyncImage(
+              NFTContentPreview(
                 modifier = Modifier
-                  .size(MaterialTheme.Spacing.space128)
+                  .fillMaxWidth()
+                  .aspectRatio(1.0f)
                   .clip(RoundedCornerShape(MaterialTheme.Spacing.space24))
                   .background(color = MaterialTheme.colorScheme.surface),
-                contentScale = ContentScale.Crop,
-                model = ImageRequest.Builder(LocalContext.current)
-                  .data(asset.nftscanUri ?: asset.imageUri)
-                  .placeholder(R.drawable.avatar_generic_1)
-                  .error(R.drawable.avatar_generic_1)
-                  .crossfade(true)
-                  .build(),
-                contentDescription = null
+                nftInfo = asset
               )
             }
           }

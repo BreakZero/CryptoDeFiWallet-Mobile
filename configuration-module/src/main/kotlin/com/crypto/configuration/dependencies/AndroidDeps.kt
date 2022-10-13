@@ -49,4 +49,10 @@ object AndroidDeps {
     const val lifecycle = "androidx.camera:camera-lifecycle:$camera_version"
     const val view = "androidx.camera:camera-view:$camera_version"
   }
+
+  object Media3 {
+    private const val media3_version = "1.0.0-beta02"
+    const val exoplayer = "androidx.media3:media3-exoplayer:$media3_version"
+    const val ui = "androidx.media3:media3-ui:$media3_version"
+  }
 }
