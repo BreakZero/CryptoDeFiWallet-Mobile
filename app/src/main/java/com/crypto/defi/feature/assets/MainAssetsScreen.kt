@@ -61,9 +61,14 @@ fun MainAssetsScreen(
           containerColor = MaterialTheme.colorScheme.primary
         ),
         navigationIcon = {
-          IconButton(onClick = {
-            navigateTo(SettingsNavigation.Settings)
-          }) {
+          IconButton(
+            modifier = Modifier
+              .padding(start = MaterialTheme.Spacing.medium)
+              .size(MaterialTheme.Spacing.large),
+            onClick = {
+              navigateTo(SettingsNavigation.Settings)
+            }
+          ) {
             Image(
               modifier = Modifier.size(MaterialTheme.Spacing.space48),
               painter = painterResource(id = R.drawable.avatar_generic_1),

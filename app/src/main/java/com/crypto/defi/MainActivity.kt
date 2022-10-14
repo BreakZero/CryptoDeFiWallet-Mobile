@@ -18,7 +18,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.dialog
 import com.crypto.core.ui.composables.NormalTipsView
 import com.crypto.core.ui.models.NormalTips
-import com.crypto.core.ui.utils.setStatusColor
+import com.crypto.core.ui.utils.SetStatusColor
 import com.crypto.defi.common.MapKeyConstants
 import com.crypto.defi.feature.assets.send.SendFormScreen
 import com.crypto.defi.feature.assets.send.sendFormViewModel
@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
     setContent {
       DeFiWalletTheme {
         val navController = rememberAnimatedNavController()
-        setStatusColor(statusColor = MaterialTheme.colorScheme.primary)
+        SetStatusColor(statusColor = MaterialTheme.colorScheme.primary)
         Surface(
           modifier = Modifier
             .fillMaxSize()

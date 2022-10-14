@@ -17,7 +17,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.ui.routers.NavigationCommand
-import com.crypto.core.ui.utils.setStatusColor
+import com.crypto.core.ui.utils.SetStatusColor
 import com.crypto.defi.navigations.MainNavigation
 import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.resource.R
@@ -30,7 +30,7 @@ fun SplashScreen(
   val scale = remember {
     androidx.compose.animation.core.Animatable(0f)
   }
-  setStatusColor(statusColor = MaterialTheme.colorScheme.surface)
+  SetStatusColor(statusColor = MaterialTheme.colorScheme.surface)
   // AnimationEffect
   LaunchedEffect(key1 = true) {
     scale.animateTo(

@@ -1,7 +1,6 @@
 package com.crypto.defi.feature.assets.transactions
 
 import android.app.Activity
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,14 +8,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.BottomSheetState
-import androidx.compose.material.BottomSheetValue
-import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Surface
-import androidx.compose.material.rememberBottomSheetScaffoldState
+import androidx.compose.material.*
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -42,13 +37,14 @@ import com.crypto.core.ui.composables.DeFiBoxWithConstraints
 import com.crypto.core.ui.composables.LoadingIndicator
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.core.ui.utils.QRCodeEncoder
-import com.crypto.core.ui.utils.setStatusColor
+import com.crypto.core.ui.utils.SetStatusColor
 import com.crypto.defi.di.ViewModelFactoryProvider
 import com.crypto.defi.feature.assets.transactions.components.TransactionItemView
 import com.crypto.defi.feature.assets.transactions.components.TransactionsMotionLayout
 import com.crypto.defi.navigations.SendFormNavigation
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun transactionListViewModel(
@@ -68,8 +64,9 @@ fun transactionListViewModel(
   )
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class,
-  ExperimentalFoundationApi::class
+@OptIn(
+  ExperimentalMaterialApi::class,
+  ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class
 )
 @Composable
 fun TransactionListScreen(
@@ -77,99 +74,99 @@ fun TransactionListScreen(
   navigateUp: () -> Unit,
   navigateTo: (NavigationCommand) -> Unit
 ) {
-  setStatusColor(statusColor = MaterialTheme.colorScheme.primary)
+  SetStatusColor(statusColor = MaterialTheme.colorScheme.primary)
   val txnUiState by txnListViewModel.txnState.collectAsState()
   val transactionList = txnUiState.transactionList.collectAsLazyPagingItems()
 
-  val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-    bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
+  val bottomSheetState = rememberModalBottomSheetState(
+    initialValue = ModalBottomSheetValue.Hidden,
+    skipHalfExpanded = true
   )
   val coroutineScope = rememberCoroutineScope()
 
-  BottomSheetScaffold(
+  ModalBottomSheetLayout(
     modifier = Modifier.fillMaxSize(),
-    topBar = {
-      DeFiAppBar {
-        navigateUp()
-      }
-    },
-    scaffoldState = bottomSheetScaffoldState,
-    sheetContent = {
-      QRCodeContent(content = txnUiState.address)
-    },
-    sheetPeekHeight = 0.dp,
+    sheetState = bottomSheetState,
     sheetShape = RoundedCornerShape(
       topEnd = MaterialTheme.Spacing.space24,
       topStart = MaterialTheme.Spacing.space24
-    )
+    ),
+    sheetContent = {
+      QRCodeContent(content = txnUiState.address)
+    }
   ) {
-    DeFiBoxWithConstraints { progress, _ ->
-      TransactionsMotionLayout(
-        asset = txnUiState.asset, targetValue = progress,
-        onSend = {
-          navigateTo.invoke(SendFormNavigation.destination(txnListViewModel.coinSlug()))
-        },
-        onReceive = {
-          coroutineScope.launch {
-            if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
-              bottomSheetScaffoldState.bottomSheetState.collapse()
-            } else {
-              bottomSheetScaffoldState.bottomSheetState.expand()
+    Scaffold(
+      modifier = Modifier.fillMaxSize(),
+      topBar = {
+        DeFiAppBar {
+          navigateUp()
+        }
+      }
+    ) {
+      DeFiBoxWithConstraints { progress, _ ->
+        TransactionsMotionLayout(
+          asset = txnUiState.asset, targetValue = progress,
+          onSend = {
+            navigateTo.invoke(SendFormNavigation.destination(txnListViewModel.coinSlug()))
+          },
+          onReceive = {
+            coroutineScope.launch {
+              bottomSheetState.show()
             }
           }
-        }
-      ) {
-        LazyColumn(
-          modifier = Modifier
-            .clip(
-              RoundedCornerShape(
-                topEnd = MaterialTheme.Spacing.space24,
-                topStart = MaterialTheme.Spacing.space24
-              )
-            )
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface),
-          contentPadding = PaddingValues(
-            vertical = MaterialTheme.Spacing.medium,
-            horizontal = MaterialTheme.Spacing.small
-          ),
-          verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
         ) {
-          when (transactionList.loadState.refresh) {
-            is LoadState.Loading -> {
+          LazyColumn(
+            modifier = Modifier
+              .clip(
+                RoundedCornerShape(
+                  topEnd = MaterialTheme.Spacing.space24,
+                  topStart = MaterialTheme.Spacing.space24
+                )
+              )
+              .fillMaxSize()
+              .background(MaterialTheme.colorScheme.surface),
+            contentPadding = PaddingValues(
+              vertical = MaterialTheme.Spacing.medium,
+              horizontal = MaterialTheme.Spacing.small
+            ),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+          ) {
+            when (transactionList.loadState.refresh) {
+              is LoadState.Loading -> {
+                item {
+                  Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                  ) {
+                    LoadingIndicator(animating = true)
+                  }
+                }
+              }
+              is LoadState.Error -> {
+                item {
+                  Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                  ) {
+                    Text(text = "somethings went wrong")
+                  }
+                }
+              }
+              else -> Unit
+            }
+            items(transactionList) {
+              it?.let {
+                TransactionItemView(data = it, modifier = Modifier.animateItemPlacement())
+              }
+            }
+            if (transactionList.loadState.append is LoadState.Loading) {
               item {
                 Box(
-                  modifier = Modifier.fillMaxSize(),
+                  modifier = Modifier.fillMaxWidth(),
                   contentAlignment = Alignment.Center
                 ) {
                   LoadingIndicator(animating = true)
                 }
-              }
-            }
-            is LoadState.Error -> {
-              item {
-                Box(
-                  modifier = Modifier.fillMaxSize(),
-                  contentAlignment = Alignment.Center
-                ) {
-                  Text(text = "somethings went wrong")
-                }
-              }
-            }
-            else -> Unit
-          }
-          items(transactionList) {
-            it?.let {
-              TransactionItemView(data = it, modifier = Modifier.animateItemPlacement())
-            }
-          }
-          if (transactionList.loadState.append is LoadState.Loading) {
-            item {
-              Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-              ) {
-                LoadingIndicator(animating = true)
               }
             }
           }

@@ -84,36 +84,22 @@ fun SendFormScreen(
   }
   val keyboardController = LocalSoftwareKeyboardController.current
   val formUiState by sendFormViewModel.sendFormState.collectAsState()
-  val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-    bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed, confirmStateChange = {
-      if (it == BottomSheetValue.Collapsed) {
-        sendFormViewModel.clearPlan()
-      }
-      true
-    })
-  )
+  val bottomSheetState = rememberModalBottomSheetState(
+    initialValue = ModalBottomSheetValue.Hidden,
+    skipHalfExpanded = true
+  ) {
+    if (it == ModalBottomSheetValue.Hidden) {
+      sendFormViewModel.clearPlan()
+    }
+    true
+  }
   val coroutineScope = rememberCoroutineScope()
-  BottomSheetScaffold(
-    modifier = Modifier.fillMaxSize(),
-    topBar = {
-      DeFiAppBar(
-        title = stringResource(id = R.string.send_address__send),
-        actions = {
-          Icon(
-            modifier = Modifier
-              .padding(end = MaterialTheme.Spacing.medium)
-              .clickable {
-                navigateTo(ScannerNavigation.Scanner)
-              },
-            painter = painterResource(id = R.drawable.ic_scanner),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primaryContainer
-          )
-        }) {
-        navigateUp()
-      }
-    },
-    scaffoldState = bottomSheetScaffoldState,
+  ModalBottomSheetLayout(
+    sheetState = bottomSheetState,
+    sheetShape = RoundedCornerShape(
+      topEnd = MaterialTheme.Spacing.space24,
+      topStart = MaterialTheme.Spacing.space24
+    ),
     sheetContent = {
       if (formUiState.plan.isEmptyPlan()) {
         Box(
@@ -129,7 +115,7 @@ fun SendFormScreen(
           sendFormViewModel.broadcast(
             onFailed = {
               coroutineScope.launch {
-                bottomSheetScaffoldState.bottomSheetState.collapse()
+                bottomSheetState.show()
               }
             },
             onSuccess = {
@@ -138,133 +124,148 @@ fun SendFormScreen(
           )
         }
       }
-    },
-    sheetShape = RoundedCornerShape(
-      topEnd = MaterialTheme.Spacing.space24,
-      topStart = MaterialTheme.Spacing.space24
-    ),
-    sheetPeekHeight = 0.dp
+    }
   ) {
-    Column(
-      modifier = Modifier
-        .fillMaxSize()
-        .padding(
-          horizontal = MaterialTheme.Spacing.medium,
-          vertical = MaterialTheme.Spacing.medium
-        )
-    ) {
-      Column {
-        Text(text = stringResource(id = R.string.send_address__to))
-        Spacer(modifier = Modifier.height(MaterialTheme.Spacing.extraSmall))
-        BasicTextField(
-          modifier = Modifier
-            .fillMaxWidth()
-            .defaultMinSize(
-              minWidth = TextFieldDefaults.MinWidth,
-              minHeight = TextFieldDefaults.MinHeight
+    Scaffold(
+      modifier = Modifier.fillMaxSize(),
+      topBar = {
+        DeFiAppBar(
+          title = stringResource(id = R.string.send_address__send),
+          actions = {
+            Icon(
+              modifier = Modifier
+                .padding(end = MaterialTheme.Spacing.medium)
+                .clickable {
+                  navigateTo(ScannerNavigation.Scanner)
+                },
+              painter = painterResource(id = R.drawable.ic_scanner),
+              contentDescription = null,
+              tint = MaterialTheme.colorScheme.primaryContainer
             )
-            .clip(RoundedCornerShape(MaterialTheme.Spacing.small))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(
-              vertical = MaterialTheme.Spacing.medium,
-              horizontal = MaterialTheme.Spacing.medium
-            ),
-          textStyle = LocalTextStyle.current,
-          maxLines = 2,
-          keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Text
-          ),
-          value = formUiState.to,
-          onValueChange = {
-            sendFormViewModel.onToChanged(it)
-          })
-        Row(
-          modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = MaterialTheme.Spacing.extraSmall),
-          horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-          Text(text = stringResource(id = R.string.send_amount__enter_another_amount))
-          Text(text = "")
+          }) {
+          navigateUp()
         }
-        BasicTextField(
-          modifier = Modifier
-            .fillMaxWidth()
-            .defaultMinSize(
-              minWidth = TextFieldDefaults.MinWidth,
-              minHeight = TextFieldDefaults.MinHeight
-            )
-            .clip(
-              RoundedCornerShape(
-                topStart = MaterialTheme.Spacing.small,
-                topEnd = MaterialTheme.Spacing.small
-              )
-            )
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(
-              vertical = MaterialTheme.Spacing.medium,
-              horizontal = MaterialTheme.Spacing.medium
-            ),
-          textStyle = LocalTextStyle.current,
-          maxLines = 1,
-          keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Number
-          ),
-          value = formUiState.amount,
-          onValueChange = {
-            sendFormViewModel.onAmountChanged(it)
-          })
-        Divider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
-        BasicTextField(
-          modifier = Modifier
-            .fillMaxWidth()
-            .defaultMinSize(
-              minWidth = TextFieldDefaults.MinWidth,
-              minHeight = TextFieldDefaults.MinHeight
-            )
-            .clip(
-              RoundedCornerShape(
-                bottomStart = MaterialTheme.Spacing.small,
-                bottomEnd = MaterialTheme.Spacing.small
-              )
-            )
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(
-              vertical = MaterialTheme.Spacing.medium,
-              horizontal = MaterialTheme.Spacing.medium
-            ),
-          textStyle = LocalTextStyle.current,
-          maxLines = 5,
-          keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Text
-          ),
-          value = formUiState.memo,
-          onValueChange = {
-            sendFormViewModel.onMemoChanged(it)
-          }
-        )
-        Text(text = "Miner Fee")
       }
-      Button(modifier = Modifier.fillMaxWidth(), onClick = {
-        keyboardController?.hide()
-        coroutineScope.launch {
-          if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
-            bottomSheetScaffoldState.bottomSheetState.collapse()
-          } else {
-            bottomSheetScaffoldState.bottomSheetState.expand()
+    ) {
+      Column(
+        modifier = Modifier
+          .fillMaxSize()
+          .padding(
+            horizontal = MaterialTheme.Spacing.medium,
+            vertical = MaterialTheme.Spacing.medium
+          )
+          .imePadding(),
+        verticalArrangement = Arrangement.SpaceBetween
+      ) {
+        Column {
+          Text(text = stringResource(id = R.string.send_address__to))
+          Spacer(modifier = Modifier.height(MaterialTheme.Spacing.extraSmall))
+          BasicTextField(
+            modifier = Modifier
+              .fillMaxWidth()
+              .defaultMinSize(
+                minWidth = TextFieldDefaults.MinWidth,
+                minHeight = TextFieldDefaults.MinHeight
+              )
+              .clip(RoundedCornerShape(MaterialTheme.Spacing.small))
+              .background(MaterialTheme.colorScheme.surfaceVariant)
+              .padding(
+                vertical = MaterialTheme.Spacing.medium,
+                horizontal = MaterialTheme.Spacing.medium
+              ),
+            textStyle = LocalTextStyle.current,
+            maxLines = 2,
+            keyboardOptions = KeyboardOptions.Default.copy(
+              keyboardType = KeyboardType.Text
+            ),
+            value = formUiState.to,
+            onValueChange = {
+              sendFormViewModel.onToChanged(it)
+            })
+          Row(
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(vertical = MaterialTheme.Spacing.extraSmall),
+            horizontalArrangement = Arrangement.SpaceBetween
+          ) {
+            Text(text = stringResource(id = R.string.send_amount__enter_another_amount))
+            Text(text = "")
           }
-        }
-        sendFormViewModel.sign(
-          onSuccess = {},
-          onFailed = {
-            coroutineScope.launch {
-              bottomSheetScaffoldState.bottomSheetState.collapse()
+          BasicTextField(
+            modifier = Modifier
+              .fillMaxWidth()
+              .defaultMinSize(
+                minWidth = TextFieldDefaults.MinWidth,
+                minHeight = TextFieldDefaults.MinHeight
+              )
+              .clip(
+                RoundedCornerShape(
+                  topStart = MaterialTheme.Spacing.small,
+                  topEnd = MaterialTheme.Spacing.small
+                )
+              )
+              .background(MaterialTheme.colorScheme.surfaceVariant)
+              .padding(
+                vertical = MaterialTheme.Spacing.medium,
+                horizontal = MaterialTheme.Spacing.medium
+              ),
+            textStyle = LocalTextStyle.current,
+            maxLines = 1,
+            keyboardOptions = KeyboardOptions.Default.copy(
+              keyboardType = KeyboardType.Number
+            ),
+            value = formUiState.amount,
+            onValueChange = {
+              sendFormViewModel.onAmountChanged(it)
+            })
+          Divider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+          BasicTextField(
+            modifier = Modifier
+              .fillMaxWidth()
+              .defaultMinSize(
+                minWidth = TextFieldDefaults.MinWidth,
+                minHeight = TextFieldDefaults.MinHeight
+              )
+              .clip(
+                RoundedCornerShape(
+                  bottomStart = MaterialTheme.Spacing.small,
+                  bottomEnd = MaterialTheme.Spacing.small
+                )
+              )
+              .background(MaterialTheme.colorScheme.surfaceVariant)
+              .padding(
+                vertical = MaterialTheme.Spacing.medium,
+                horizontal = MaterialTheme.Spacing.medium
+              ),
+            textStyle = LocalTextStyle.current,
+            maxLines = 5,
+            keyboardOptions = KeyboardOptions.Default.copy(
+              keyboardType = KeyboardType.Text
+            ),
+            value = formUiState.memo,
+            onValueChange = {
+              sendFormViewModel.onMemoChanged(it)
             }
-            Timber.e(it)
+          )
+          Text(text = "Miner Fee")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = {
+          keyboardController?.hide()
+          coroutineScope.launch {
+            bottomSheetState.show()
           }
-        )
-      }) {
-        Text(text = "Next")
+          sendFormViewModel.sign(
+            onSuccess = {},
+            onFailed = {
+              coroutineScope.launch {
+                bottomSheetState.hide()
+              }
+              Timber.e(it)
+            }
+          )
+        }) {
+          Text(text = "Next")
+        }
       }
     }
   }

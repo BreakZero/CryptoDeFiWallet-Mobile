@@ -22,7 +22,7 @@ import com.crypto.core.ui.composables.AdvanceMenu
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.MenuItemView
 import com.crypto.core.ui.routers.NavigationCommand
-import com.crypto.core.ui.utils.setStatusColor
+import com.crypto.core.ui.utils.SetStatusColor
 import com.crypto.onboarding.presentation.OnboardingNavigations
 import com.crypto.resource.R
 
@@ -33,7 +33,7 @@ fun LegalScreen(
   navigateUp: () -> Unit,
   navigateTo: (NavigationCommand) -> Unit
 ) {
-  setStatusColor(statusColor = MaterialTheme.colorScheme.surface)
+  SetStatusColor(statusColor = MaterialTheme.colorScheme.surface)
   Scaffold(
     modifier = Modifier.fillMaxSize(),
     topBar = {
