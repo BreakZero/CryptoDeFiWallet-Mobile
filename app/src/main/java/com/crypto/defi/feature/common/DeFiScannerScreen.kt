@@ -9,22 +9,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.ScannerView
+import com.crypto.core.ui.utils.SetStatusColor
 
 @Composable
 fun DeFiScannerScreen(
-    onResult: (String?) -> Unit
+  onResult: (String?) -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            DeFiAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = Color.Transparent
-                )
-            ) {
-                onResult.invoke(null)
-            }
-        }
-    ) {
-        ScannerView(onResult = onResult)
+  Scaffold(
+    topBar = {
+      DeFiAppBar(
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+          containerColor = Color.Transparent
+        )
+      ) {
+        onResult.invoke(null)
+      }
     }
+  ) {
+    SetStatusColor(statusColor = Color.Transparent)
+    ScannerView(onResult = onResult)
+  }
 }

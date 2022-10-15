@@ -9,32 +9,32 @@ import java.math.RoundingMode
 
 @kotlinx.serialization.Serializable
 data class Asset(
-    val slug: String,
-    val code: String,
-    val iconUrl: String,
-    val name: String,
-    val symbol: String,
-    val decimal: Int,
-    val chainName: String,
-    val contract: String? = null,
-    @kotlinx.serialization.Serializable(with = BigIntegerSerializer::class)
-    val nativeBalance: BigInteger = BigInteger.ZERO,
-    @kotlinx.serialization.Serializable(with = BigDecimalSerializer::class)
-    val rate: BigDecimal = BigDecimal.ZERO
+  val slug: String,
+  val code: String,
+  val iconUrl: String,
+  val name: String,
+  val symbol: String,
+  val decimal: Int,
+  val chainName: String,
+  val contract: String? = null,
+  @kotlinx.serialization.Serializable(with = BigIntegerSerializer::class)
+  val nativeBalance: BigInteger = BigInteger.ZERO,
+  @kotlinx.serialization.Serializable(with = BigDecimalSerializer::class)
+  val rate: BigDecimal = BigDecimal.ZERO
 ) {
-    fun fiatBalance(): BigDecimal {
-        return nativeBalance.byDecimal(decimal).times(rate).setScale(2, RoundingMode.DOWN)
-    }
+  fun fiatBalance(): BigDecimal {
+    return nativeBalance.byDecimal(decimal).times(rate).setScale(2, RoundingMode.DOWN)
+  }
 
-    fun feeDecimal(): Int {
-        return contract?.let {
-            18
-        } ?: decimal
-    }
+  fun feeDecimal(): Int {
+    return contract?.let {
+      18
+    } ?: decimal
+  }
 
-    fun feeSymbol(): String {
-        return contract?.let {
-            "ETH"
-        } ?: symbol
-    }
+  fun feeSymbol(): String {
+    return contract?.let {
+      "ETH"
+    } ?: symbol
+  }
 }

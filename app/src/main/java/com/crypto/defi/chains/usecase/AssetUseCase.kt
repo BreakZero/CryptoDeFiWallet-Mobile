@@ -26,55 +26,53 @@ import java.math.BigDecimal
 import javax.inject.Inject
 
 class AssetUseCase @Inject constructor(
-    private val client: HttpClient,
-    private val database: CryptoDeFiDatabase
+  private val client: HttpClient,
+  private val database: CryptoDeFiDatabase
 ) {
-    suspend fun fetchingAssets(
-        initial: suspend () -> Unit
-    ) = withContext(Dispatchers.IO) {
-        try {
-            val lastSha256 = database.versionDao.lastVersion()?.sha256.orElse("==")
-            val response = client.get("${UrlConstant.BASE_URL}/currencies") {
-                parameter("sha256", lastSha256)
-            }.body<BaseResponse<AssetDto>>()
-            if (response.data.sha256 != lastSha256) {
-                database.versionDao.insert(
-                    CoinVersionShaEntity(
-                        sha256 = response.data.sha256,
-                        createAt = DateTimeUtil.toEpochMillis(DateTimeUtil.now())
-                    )
-                )
-            }
-            database.assetDao.insertAll(response.data.currencies.map { it.toAssetEntity() })
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
-        initial()
+  suspend fun fetchingAssets(
+    initial: suspend () -> Unit
+  ) = withContext(Dispatchers.IO) {
+    try {
+      val lastSha256 = database.versionDao.lastVersion()?.sha256.orElse("==")
+      val response = client.get("${UrlConstant.BASE_URL}/currencies") {
+        parameter("sha256", lastSha256)
+      }.body<BaseResponse<AssetDto>>()
+      if (response.data.sha256 != lastSha256) {
+        database.versionDao.insert(
+          CoinVersionShaEntity(
+            sha256 = response.data.sha256,
+            createAt = DateTimeUtil.toEpochMillis(DateTimeUtil.now())
+          )
+        )
+      }
+      database.assetDao.insertAll(response.data.currencies.map { it.toAssetEntity() })
+    } catch (e: Exception) {
+      Timber.e(e)
     }
+    initial()
+  }
 
-    fun assetsFlow(): Flow<List<AssetEntity>> {
-        return try {
-            database.assetDao.assetsFlow().map {
-                it.filter { it.chainName == "Ethereum" }
-            }
-        } catch (e: Exception) {
-            flow { emptyList<Asset>() }
-        }
+  fun assetsFlow(): Flow<List<AssetEntity>> {
+    return try {
+      database.assetDao.assetsFlow()
+    } catch (e: Exception) {
+      flow { emptyList<Asset>() }
     }
+  }
 
-    fun tiersFlow(): Flow<List<TierEntity>> {
-        return try {
-            database.tierDao.allTiers("USD")
-        } catch (e: Exception) {
-            flow { emptyList<TierEntity>() }
-        }
+  fun tiersFlow(): Flow<List<TierEntity>> {
+    return try {
+      database.tierDao.allTiers("USD")
+    } catch (e: Exception) {
+      flow { emptyList<TierEntity>() }
     }
+  }
 
-    fun findAssetBySlug(slug: String): Flow<Asset?> {
-        val assetEntity = flow { emit(database.assetDao.assetBySlug(slug)) }
-        val rateEntity = database.tierDao.findBySlug(slug)
-        return combine(assetEntity, rateEntity) { asset, rate ->
-            asset?.toAsset()?.copy(rate = rate?.rate?.toBigDecimalOrNull() ?: BigDecimal.ZERO)
-        }
+  fun findAssetBySlug(slug: String): Flow<Asset?> {
+    val assetEntity = flow { emit(database.assetDao.assetBySlug(slug)) }
+    val rateEntity = database.tierDao.findBySlug(slug)
+    return combine(assetEntity, rateEntity) { asset, rate ->
+      asset?.toAsset()?.copy(rate = rate?.rate?.toBigDecimalOrNull() ?: BigDecimal.ZERO)
     }
+  }
 }

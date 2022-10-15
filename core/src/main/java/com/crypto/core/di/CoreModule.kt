@@ -27,36 +27,36 @@ private const val USER_PREFERENCES = "user_preferences"
 @Module
 @InstallIn(SingletonComponent::class)
 object CoreModule {
-    @Provides
-    @Singleton
-    fun providePreferencesDataStore(@ApplicationContext appContext: Context): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create(
-            corruptionHandler = ReplaceFileCorruptionHandler(
-                produceNewData = { emptyPreferences() }
-            ),
-            migrations = listOf(SharedPreferencesMigration(appContext, USER_PREFERENCES)),
-            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-            produceFile = { appContext.preferencesDataStoreFile(USER_PREFERENCES) }
-        )
-    }
+  @Provides
+  @Singleton
+  fun providePreferencesDataStore(@ApplicationContext appContext: Context): DataStore<Preferences> {
+    return PreferenceDataStoreFactory.create(
+      corruptionHandler = ReplaceFileCorruptionHandler(
+        produceNewData = { emptyPreferences() }
+      ),
+      migrations = listOf(SharedPreferencesMigration(appContext, USER_PREFERENCES)),
+      scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+      produceFile = { appContext.preferencesDataStoreFile(USER_PREFERENCES) }
+    )
+  }
 
-    @Provides
-    @Singleton
-    fun provideSharedPreference(@ApplicationContext appContext: Context): SharedPreferences {
-        val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
-        val mainKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
-        return EncryptedSharedPreferences.create(
-            "security_sharedPreferences",
-            mainKeyAlias,
-            appContext,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
+  @Provides
+  @Singleton
+  fun provideSharedPreference(@ApplicationContext appContext: Context): SharedPreferences {
+    val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
+    val mainKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
+    return EncryptedSharedPreferences.create(
+      "security_sharedPreferences",
+      mainKeyAlias,
+      appContext,
+      EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+      EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
+  }
 
-    @Provides
-    @Singleton
-    fun provideSecurityUtil(): SecurityUtil {
-        return SecurityUtil()
-    }
+  @Provides
+  @Singleton
+  fun provideSecurityUtil(): SecurityUtil {
+    return SecurityUtil()
+  }
 }

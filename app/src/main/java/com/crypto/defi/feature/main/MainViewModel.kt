@@ -13,21 +13,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val chainManager: ChainManager,
-    private val walletRepository: WalletRepository
+  private val chainManager: ChainManager,
+  private val walletRepository: WalletRepository
 ) : ViewModel() {
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            walletRepository.activeOne()?.let {
-                try {
-                    chainManager.fetchingChains(HDWallet(it.mnemonic, it.passphrase))
-                } catch (e: Exception) {
-                    // not wallet, restart, reset passcode
-                    Timber.e(e)
-                }
-            } ?: kotlin.run {
-                // not wallet, restart, reset passcode
-            }
+  init {
+    viewModelScope.launch(Dispatchers.IO) {
+      walletRepository.activeOne()?.let {
+        try {
+          chainManager.fetchingChains(HDWallet(it.mnemonic, it.passphrase))
+        } catch (e: Exception) {
+          // not wallet, restart, reset passcode
+          Timber.e(e)
         }
+      } ?: kotlin.run {
+        // not wallet, restart, reset passcode
+      }
     }
+  }
 }

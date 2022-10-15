@@ -8,7 +8,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.QrCode
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -26,91 +32,91 @@ import com.crypto.core.common.UiEvent
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.LoadingButton
-import com.crypto.core.ui.utils.setStatusColor
+import com.crypto.core.ui.utils.SetStatusColor
 import com.crypto.resource.R
 import timber.log.Timber
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ImportWordsScreen(
-    passcode: String,
-    viewModel: WalletImportViewModel = hiltViewModel(),
-    navigateUp: () -> Unit,
-    navigateMain: () -> Unit,
+  passcode: String,
+  viewModel: WalletImportViewModel = hiltViewModel(),
+  navigateUp: () -> Unit,
+  navigateMain: () -> Unit,
 ) {
-    setStatusColor(statusColor = MaterialTheme.colorScheme.surface)
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val context = LocalContext.current
-    val importState = viewModel.state
-    LaunchedEffect(key1 = keyboardController) {
-        viewModel.uiEvent.collect { event ->
-            when (event) {
-                is UiEvent.Success -> {
-                    navigateMain()
-                }
-                is UiEvent.ShowSnackbar -> {
-                    Timber.v(event.message.asString(context))
-                }
-                is UiEvent.NavigateUp -> {
-                    navigateUp()
-                }
-                else -> Unit
-            }
+  SetStatusColor(statusColor = MaterialTheme.colorScheme.surface)
+  val keyboardController = LocalSoftwareKeyboardController.current
+  val context = LocalContext.current
+  val importState = viewModel.state
+  LaunchedEffect(key1 = keyboardController) {
+    viewModel.uiEvent.collect { event ->
+      when (event) {
+        is UiEvent.Success -> {
+          navigateMain()
         }
+        is UiEvent.ShowSnackbar -> {
+          Timber.v(event.message.asString(context))
+        }
+        is UiEvent.NavigateUp -> {
+          navigateUp()
+        }
+        else -> Unit
+      }
     }
-    Scaffold(
-        modifier = Modifier,
-        topBar = {
-            DeFiAppBar(
-                title = stringResource(id = R.string.import_wallet__import_wallet),
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = Color.Transparent
-                ),
-                actions = {
-                    Icon(imageVector = Icons.Default.QrCode, contentDescription = null)
-                }
-            ) {
-                viewModel.onNavigateUp()
-            }
+  }
+  Scaffold(
+    modifier = Modifier,
+    topBar = {
+      DeFiAppBar(
+        title = stringResource(id = R.string.import_wallet__import_wallet),
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+          containerColor = Color.Transparent
+        ),
+        actions = {
+          Icon(imageVector = Icons.Default.QrCode, contentDescription = null)
         }
+      ) {
+        viewModel.onNavigateUp()
+      }
+    }
+  ) {
+    Column(
+      modifier = Modifier.padding(it)
     ) {
-        Column(
-            modifier = Modifier.padding(it)
-        ) {
-            TextField(
-                value = importState.phrase,
-                onValueChange = {
-                    viewModel.onEvent(ImportEvent.OnPhraseChange(it))
-                },
-                textStyle = TextStyle(color = Color.Black),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        keyboardController?.hide()
-                    }
-                ),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
-                ),
-                modifier = Modifier
-                    .padding(MaterialTheme.Spacing.medium)
-                    .defaultMinSize(minHeight = 128.dp)
-                    .fillMaxWidth()
-                    .onFocusChanged {
-                        viewModel.onEvent(ImportEvent.OnFocusChange(it.isFocused))
-                    }
-            )
-            LoadingButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(MaterialTheme.Spacing.medium),
-                loading = viewModel.state.inProgress,
-                onClick = {
-                    viewModel.onEvent(ImportEvent.OnImportClick(passcode))
-                    keyboardController?.hide()
-                }
-            ) {
-                Text(text = stringResource(id = R.string.import_wallet__restore))
-            }
+      TextField(
+        value = importState.phrase,
+        onValueChange = {
+          viewModel.onEvent(ImportEvent.OnPhraseChange(it))
+        },
+        textStyle = TextStyle(color = Color.Black),
+        keyboardActions = KeyboardActions(
+          onDone = {
+            keyboardController?.hide()
+          }
+        ),
+        keyboardOptions = KeyboardOptions(
+          imeAction = ImeAction.Done,
+        ),
+        modifier = Modifier
+          .padding(MaterialTheme.Spacing.medium)
+          .defaultMinSize(minHeight = 128.dp)
+          .fillMaxWidth()
+          .onFocusChanged {
+            viewModel.onEvent(ImportEvent.OnFocusChange(it.isFocused))
+          }
+      )
+      LoadingButton(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(MaterialTheme.Spacing.medium),
+        loading = viewModel.state.inProgress,
+        onClick = {
+          viewModel.onEvent(ImportEvent.OnImportClick(passcode))
+          keyboardController?.hide()
         }
+      ) {
+        Text(text = stringResource(id = R.string.import_wallet__restore))
+      }
     }
+  }
 }

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 data class TransactionListState(
-    val asset: Asset? = null,
-    val address: String = "",
-    val transactionList: Flow<PagingData<BaseTransaction>> = flow { emit(PagingData.empty()) }
+  val asset: Asset? = null,
+  val address: String = "",
+  val transactionList: Flow<PagingData<BaseTransaction>> = flow { emit(PagingData.empty()) }
 )

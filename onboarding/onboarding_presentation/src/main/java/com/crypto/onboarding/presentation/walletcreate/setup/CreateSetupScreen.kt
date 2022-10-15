@@ -19,26 +19,26 @@ import com.crypto.resource.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateSetupScreen(
-    navigateUp: () -> Unit
+  navigateUp: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            DeFiAppBar() {
-                navigateUp()
-            }
-        }
-    ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Text(text = stringResource(id = R.string.wallet_protect__protect_wallet))
-            Text(text = stringResource(id = R.string.wallet_protect__wallet_protect_tips))
-            Image(painter = painterResource(id = R.drawable.banner_secure), contentDescription = null)
-            Card(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.fillMaxHeight()) {
-                    
-                } 
-            }
-        }
+  Scaffold(
+    topBar = {
+      DeFiAppBar() {
+        navigateUp()
+      }
     }
+  ) {
+    Column(modifier = Modifier.fillMaxSize()) {
+      Text(text = stringResource(id = R.string.wallet_protect__protect_wallet))
+      Text(text = stringResource(id = R.string.wallet_protect__wallet_protect_tips))
+      Image(painter = painterResource(id = R.drawable.banner_secure), contentDescription = null)
+      Card(
+        modifier = Modifier.fillMaxWidth()
+      ) {
+        Column(modifier = Modifier.fillMaxHeight()) {
+
+        }
+      }
+    }
+  }
 }

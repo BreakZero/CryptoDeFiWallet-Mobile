@@ -20,37 +20,37 @@ import org.junit.runner.RunWith
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class WalletEntityReadWriteTest {
-    @get:Rule
-    val dispatcherRule = TestDispatcherRule()
+  @get:Rule
+  val dispatcherRule = TestDispatcherRule()
 
-    private lateinit var versionDao: CoinVersionDao
-    private lateinit var db: CryptoDeFiDatabase
+  private lateinit var versionDao: CoinVersionDao
+  private lateinit var db: CryptoDeFiDatabase
 
-    @Before
-    fun createDb() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(context, CryptoDeFiDatabase::class.java)
-            .build()
-        versionDao = db.versionDao
-    }
+  @Before
+  fun createDb() {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    db = Room.inMemoryDatabaseBuilder(context, CryptoDeFiDatabase::class.java)
+      .build()
+    versionDao = db.versionDao
+  }
 
-    @After
-    @Throws(IOException::class)
-    fun closeDb() {
-        db.close()
-    }
+  @After
+  @Throws(IOException::class)
+  fun closeDb() {
+    db.close()
+  }
 
-    @Test
-    @Throws(Exception::class)
-    fun writeWalletAndReadInList() = runTest {
-        val versionEntity = CoinVersionShaEntity(
-            sha256 = "mocksha256",
-            createAt = 10000L
-        )
+  @Test
+  @Throws(Exception::class)
+  fun writeWalletAndReadInList() = runTest {
+    val versionEntity = CoinVersionShaEntity(
+      sha256 = "mocksha256",
+      createAt = 10000L
+    )
 
-        versionDao.insert(versionEntity)
-        val lastVersion = versionDao.lastVersion()
+    versionDao.insert(versionEntity)
+    val lastVersion = versionDao.lastVersion()
 
-        assertEquals(lastVersion?.sha256, "mocksha256")
-    }
+    assertEquals(lastVersion?.sha256, "mocksha256")
+  }
 }

@@ -5,14 +5,14 @@ import androidx.room.RoomDatabase
 import timber.log.Timber
 
 @Database(
-    entities = [WalletEntity::class],
-    exportSchema = false,
-    version = 1
+  entities = [WalletEntity::class],
+  exportSchema = false,
+  version = 1
 )
 abstract class WalletDatabase : RoomDatabase() {
-    internal abstract val walletDao: WalletDao
+  internal abstract val walletDao: WalletDao
 
-    init {
-        Timber.v("init database")
-    }
+  init {
+    Timber.v("init database")
+  }
 }

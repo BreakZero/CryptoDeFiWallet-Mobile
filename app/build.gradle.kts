@@ -102,6 +102,9 @@ dependencies {
     implementation(AndroidDeps.activity_compose)
 
     implementation(ComposeDeps.constraintlayout)
+    implementation(AndroidDeps.Media3.ui)
+    implementation(AndroidDeps.Media3.exoplayer)
+    implementation(AndroidDeps.Media3.dash)
 
     implementation(project(":resource"))
     implementation(project(":onboarding:onboarding_presentation"))
