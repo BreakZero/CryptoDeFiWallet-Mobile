@@ -20,6 +20,9 @@ interface AssetDao {
   @Query("select * from tb_asset where slug = :slug")
   suspend fun assetBySlug(slug: String): AssetEntity?
 
+  @Query("select * from tb_asset where code = :code")
+  suspend fun assetByChain(code: String): AssetEntity?
+
   @Insert(onConflict = OnConflictStrategy.IGNORE)
   suspend fun insertAll(chains: List<AssetEntity>)
 
@@ -35,6 +38,15 @@ interface AssetDao {
   @Transaction
   suspend fun updateBalanceViaSlug(slug: String, balance: String) {
     assetBySlug(slug)?.also {
+      if (it.balance != balance) {
+        update(it.copy(balance = balance))
+      }
+    }
+  }
+
+  @Transaction
+  suspend fun updateBalanceForMainChain(chain: String, balance: String) {
+    assetByChain(chain)?.also {
       if (it.balance != balance) {
         update(it.copy(balance = balance))
       }

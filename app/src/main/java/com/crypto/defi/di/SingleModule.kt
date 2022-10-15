@@ -69,6 +69,7 @@ object SingleModule {
     application: Application
   ): CryptoDeFiDatabase {
     return Room.databaseBuilder(application, CryptoDeFiDatabase::class.java, "defi_wallet.db")
+      .addMigrations(CryptoDeFiDatabase.Migrations.MIGRATION_2_3)
       .build()
   }
 
@@ -88,10 +89,12 @@ object SingleModule {
   @Singleton
   fun provideBalanceUseCase(
     database: CryptoDeFiDatabase,
+    chainManager: ChainManager,
     client: HttpClient
   ): BalanceUseCase {
     return BalanceUseCase(
       client = client,
+      chainManager = chainManager,
       database = database
     )
   }

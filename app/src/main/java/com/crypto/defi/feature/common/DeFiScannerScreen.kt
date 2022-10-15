@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.ScannerView
+import com.crypto.core.ui.utils.SetStatusColor
 
 @Composable
 fun DeFiScannerScreen(
@@ -25,6 +26,7 @@ fun DeFiScannerScreen(
       }
     }
   ) {
+    SetStatusColor(statusColor = Color.Transparent)
     ScannerView(onResult = onResult)
   }
 }

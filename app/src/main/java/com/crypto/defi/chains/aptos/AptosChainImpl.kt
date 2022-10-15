@@ -5,6 +5,7 @@ import com.crypto.defi.feature.assets.send.ReadyToSign
 import com.crypto.defi.feature.assets.send.TransactionPlan
 import com.crypto.defi.models.domain.BaseTransaction
 import io.ktor.client.*
+import timber.log.Timber
 import wallet.core.jni.CoinType
 import wallet.core.jni.HDWallet
 import java.math.BigInteger
@@ -23,7 +24,7 @@ class AptosChainImpl(
   }
 
   override suspend fun balance(contract: String?): BigInteger {
-    return "100000".toBigInteger()
+    return "100000000".toBigInteger()
   }
 
   override suspend fun transactions(page: Int, offset: Int, contract: String?): List<BaseTransaction> {

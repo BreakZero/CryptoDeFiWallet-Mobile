@@ -41,7 +41,7 @@ data class NftAttribute(
   @SerialName("attribute_value")
   val attributeValue: String,
   @SerialName("percentage")
-  val percentage: String
+  val percentage: String?
 )
 
 @Serializable

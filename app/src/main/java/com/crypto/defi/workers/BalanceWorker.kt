@@ -30,7 +30,7 @@ class BalanceWorker(
         )
       }
       launchWithHandler(Dispatchers.Default) {
-        balanceUseCase.fetchingEthMainCoin(address = evmAddress)
+        balanceUseCase.fetchingMainCoinsBalance()
       }
     }
     setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, false).build())

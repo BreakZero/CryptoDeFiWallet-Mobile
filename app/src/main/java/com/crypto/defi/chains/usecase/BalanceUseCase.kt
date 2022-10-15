@@ -1,5 +1,6 @@
 package com.crypto.defi.chains.usecase
 
+import com.crypto.defi.chains.ChainManager
 import com.crypto.defi.common.UrlConstant
 import com.crypto.defi.models.local.CryptoDeFiDatabase
 import com.crypto.defi.models.local.entities.TierEntity
@@ -9,11 +10,14 @@ import com.crypto.defi.models.remote.TokenHolding
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
 class BalanceUseCase @Inject constructor(
   private val client: HttpClient,
+  private val chainManager: ChainManager,
   private val database: CryptoDeFiDatabase
 ) {
   suspend fun fetchingTokenHolding(
@@ -50,12 +54,17 @@ class BalanceUseCase @Inject constructor(
     }
   }
 
-  suspend fun fetchingEthMainCoin(
-    chain: String = "ethereum",
-    address: String
-  ) {
-    val result = client.get("${UrlConstant.BASE_URL}/$chain/balance/${address}")
-      .body<BaseResponse<String>>()
-    database.assetDao.updateBalanceViaSlug("ethereum", result.data)
+  suspend fun fetchingMainCoinsBalance() {
+    // match ChainManager keys
+    database.chainDao.chains().filterNot {
+      it.isToken || it.chainType == "evm"
+    }.map {
+      val iChain = chainManager.getChainByKey(it.code)
+      it.code to withContext(Dispatchers.Default) {
+        iChain.balance()
+      }
+    }.onEach { (chainCode, balance) ->
+      database.assetDao.updateBalanceForMainChain(chainCode, balance.toString())
+    }
   }
 }

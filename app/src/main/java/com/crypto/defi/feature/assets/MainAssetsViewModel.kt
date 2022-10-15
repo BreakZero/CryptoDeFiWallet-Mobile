@@ -20,7 +20,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -96,7 +98,7 @@ class MainAssetsViewModel @Inject constructor(
           assetState = assetState.copy(
             onRefreshing = false,
             assets = assets.filter {
-              it.nativeBalance.toBigDecimal() > BigDecimal.ZERO
+              it.nativeBalance > BigInteger.ZERO
             }.sortedByDescending { it.fiatBalance() },
             totalBalance = assets.sumOf { it.fiatBalance() }.toPlainString()
           )

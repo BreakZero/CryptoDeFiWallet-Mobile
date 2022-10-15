@@ -6,14 +6,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class ChainDto(
-  @SerialName("cdc_network_id")
-  val cdcNetworkId: String,
-  @SerialName("chain_types")
-  val chainTypes: List<String>?,
+  @SerialName("chain_type")
+  val chainType: String?,
   @SerialName("code")
   val code: String,
-  @SerialName("details")
-  val details: Details?,
   @SerialName("display_token_name")
   val displayTokenName: String,
   @SerialName("is_testnet")
@@ -24,8 +20,10 @@ internal data class ChainDto(
   val parentChain: String,
   @SerialName("position")
   val position: Int,
-  @SerialName("remark")
-  val remark: String
+  @SerialName("chain_id")
+  val chainId: String?,
+  @SerialName("is_token")
+  val isToken: Boolean
 )
 
 @Serializable

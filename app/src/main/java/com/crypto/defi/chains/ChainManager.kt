@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import wallet.core.jni.CoinType
 import wallet.core.jni.HDWallet
 import javax.inject.Inject
@@ -38,12 +39,11 @@ class ChainManager @Inject constructor(
         .body<BaseResponse<List<ChainDto>>>().data.map {
           ChainEntity(
             code = it.code,
-            chainType = it.chainTypes?.let {
-              "evm"
-            } ?: it.parentChain,
-            chainId = it.details?.chainId,
+            chainType = it.chainType ?: it.parentChain,
+            chainId = it.chainId,
             isTestNet = it.isTestnet,
-            name = it.name
+            name = it.name,
+            isToken = it.isToken
           )
         }.also {
           withContext(Dispatchers.Default) {
