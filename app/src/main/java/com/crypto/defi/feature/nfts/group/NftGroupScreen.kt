@@ -67,7 +67,12 @@ fun NftGroupScreen(
           contentPadding = PaddingValues(MaterialTheme.Spacing.medium),
           verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.medium)
         ) {
-          items(nftGroupsUiState.nftGroups) { group ->
+          items(
+            items = nftGroupsUiState.nftGroups,
+            key = {
+              it.contractAddress
+            }
+          ) { group ->
             GroupItemView(group = group)
           }
         }

@@ -116,7 +116,12 @@ fun MainNFTsScreen(
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
           ) {
-            items(nftAssetsUiState.nfts) { asset ->
+            items(
+              items = nftAssetsUiState.nfts,
+              key = {
+                it.tokenId
+              }
+            ) { asset ->
               NFTContentPreview(
                 modifier = Modifier
                   .fillMaxWidth()

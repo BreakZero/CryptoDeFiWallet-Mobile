@@ -2495,7 +2495,7 @@ and if so:
 
     <!-- not sure if this should translate (sometimes used in conditions) -->
     <string name="set_wallet__multi_coin_wallets">Multi-coin Wallets</string>
-    <string name="settings__about_crypto_com_wallet">About Crypto.com DeFi Wallet</string>
+    <string name="settings__about_crypto_com_wallet">About DeFi Wallet</string>
     <string name="settings__account">Account</string>
     <string name="settings__assets">Assets</string>
     <string name="settings__connect_crypto_com">Connect to Crypto.com App</string>

@@ -17,7 +17,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -55,9 +54,6 @@ fun MainAssetsScreen(
         ),
         navigationIcon = {
           IconButton(
-            modifier = Modifier
-              .padding(start = MaterialTheme.Spacing.medium)
-              .size(MaterialTheme.Spacing.large),
             onClick = {
               navigateTo(SettingsNavigation.Settings)
             }
@@ -98,7 +94,9 @@ fun MainAssetsScreen(
       )
     }) {
     DeFiBoxWithConstraints(
-      modifier = Modifier.fillMaxSize().padding(it)
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(it)
     ) { progress, isExpanded ->
       HomeAssetsMotionLayout(
         totalBalance = assetsUiState.totalBalance,
@@ -148,7 +146,12 @@ fun MainAssetsScreen(
                   MaterialTheme.Spacing.space12
                 )
               ) {
-                items(assetsUiState.promoCard) {
+                items(
+                  items = assetsUiState.promoCard,
+                  key = { promoCard ->
+                    promoCard.backgroundRes
+                  }
+                ) {
                   Card(
                     modifier = Modifier
                       .width(MaterialTheme.Spacing.space128)
@@ -172,7 +175,7 @@ fun MainAssetsScreen(
                           MaterialTheme.Spacing.extraSmall
                         ),
                         text = it.title.asString(context),
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.background
                       )
                     }
                   }

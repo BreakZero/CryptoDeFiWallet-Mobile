@@ -14,22 +14,21 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.AdvanceMenu
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.MenuBlockView
 import com.crypto.core.ui.routers.NavigationCommand
+import com.crypto.core.ui.utils.SetStatusColor
+import com.crypto.defi.BuildConfig
 import com.crypto.resource.R
-
-data class SettingItem(
-  val icon: Int,
-  val label: String
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,14 +38,15 @@ fun SettingsScreen(
 ) {
   Scaffold(
     topBar = {
-      DeFiAppBar() {
+      DeFiAppBar(
+        title = stringResource(id = R.string.settings__title)
+      ) {
         navigateUp()
       }
     },
     modifier = Modifier.fillMaxSize(),
   ) {
     val scrollableState = rememberScrollState()
-
     Column(
       modifier = Modifier
         .padding(
@@ -72,51 +72,49 @@ fun SettingsScreen(
         modifier = Modifier.align(Alignment.CenterHorizontally)
       )
       MenuBlockView(
-        modifier = Modifier.fillMaxWidth(), header = "Security",
+        modifier = Modifier.fillMaxWidth(), header = stringResource(id = R.string.settings__security),
         datas = listOf(
           AdvanceMenu(
-            title = "Protect Your Wallet", subTitle = "Passcode, Biometrics and 2FA"
+            title = stringResource(id = R.string.settings__protect_your_wallet),
+            subTitle = stringResource(id = R.string.settings__passcode_biometrics_and_2fa)
           ),
-          AdvanceMenu(title = "Recovery Phrase", subTitle = "Wallet Name")
-        )
-      ) {}
-      MenuBlockView(
-        modifier = Modifier.fillMaxWidth(), header = "Account",
-        datas = listOf(
-          AdvanceMenu(title = "Display Currency", endValue = ""),
           AdvanceMenu(
-            title = "Network Settings",
+            title = stringResource(id = R.string.settings__recovery_phrase),
+            subTitle = "Wallet Name"
+          )
+        )
+      ) {
+
+      }
+      MenuBlockView(
+        modifier = Modifier.fillMaxWidth(), header = stringResource(id = R.string.settings__account),
+        datas = listOf(
+          AdvanceMenu(title = stringResource(id = R.string.settings__display_currency), endValue = ""),
+          AdvanceMenu(
+            title = stringResource(id = R.string.settings__network_settings),
             endValue = ""
           )
         )
       ) {
-        when (it) {
-          0 -> {
 
-          }
-          1 -> {
-
-          }
-          else -> Unit
-        }
       }
       MenuBlockView(
-        modifier = Modifier.fillMaxWidth(), header = "Support",
+        modifier = Modifier.fillMaxWidth(), header = stringResource(id = R.string.settings__support),
         datas = listOf(
-          AdvanceMenu(title = "Help Center"),
-          AdvanceMenu(title = "New to DeFi"),
-          AdvanceMenu(title = "Join Community"),
-          AdvanceMenu(title = "Give Feedback")
+          AdvanceMenu(title = stringResource(id = R.string.settings__help_center)),
+          AdvanceMenu(title = stringResource(id = R.string.settings__new_to_defi)),
+          AdvanceMenu(title = stringResource(id = R.string.settings__join_community)),
+          AdvanceMenu(title = stringResource(id = R.string.settings__give_feedback))
         )
       ) {
       }
       MenuBlockView(
-        modifier = Modifier.fillMaxWidth(), header = "About DeFiWallet",
+        modifier = Modifier.fillMaxWidth(), header = stringResource(id = R.string.settings__about_crypto_com_wallet),
         datas = listOf(
-          AdvanceMenu(title = "Version", endValue = "v1.0.0", showIcon = false),
-          AdvanceMenu(title = "Terms of Service"),
-          AdvanceMenu(title = "Privacy Notice"),
-          AdvanceMenu(title = "Visit our website")
+          AdvanceMenu(title = stringResource(id = R.string.settings__version), endValue = "${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})", showIcon = false),
+          AdvanceMenu(title = stringResource(id = R.string.settings__terms_of_service)),
+          AdvanceMenu(title = stringResource(id = R.string.settings__privacy_notice)),
+          AdvanceMenu(title = stringResource(id = R.string.settings__visit_our_website))
         )
       ) {
 

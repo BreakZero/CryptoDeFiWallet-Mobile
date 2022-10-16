@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.crypto.core.ui.Spacing
@@ -38,32 +36,35 @@ data class AdvanceMenu(
 fun MenuItemView(
   modifier: Modifier = Modifier, data: AdvanceMenu, action: () -> Unit
 ) {
-  Row(modifier = modifier
-    .clickable {
-      action.invoke()
-    }
-    .padding(start = 12.dp, end = 12.dp)
-    .defaultMinSize(minHeight = 56.dp),
+  Row(
+    modifier = modifier
+      .background(MaterialTheme.colorScheme.background)
+      .clickable {
+        action.invoke()
+      }
+      .padding(start = 12.dp, end = 12.dp)
+      .defaultMinSize(minHeight = 56.dp),
     horizontalArrangement = Arrangement.SpaceBetween,
-    verticalAlignment = Alignment.CenterVertically) {
+    verticalAlignment = Alignment.CenterVertically
+  ) {
     Column(
       modifier = Modifier
     ) {
-      Text(text = data.title, color = MaterialTheme.colorScheme.onSecondaryContainer)
+      Text(text = data.title, color = MaterialTheme.colorScheme.onBackground)
       data.subTitle?.let {
         Text(
           text = it,
           fontSize = 12.sp,
-          color = MaterialTheme.colorScheme.onTertiaryContainer
+          color = MaterialTheme.colorScheme.onSecondaryContainer
         )
       }
     }
-    Row() {
+    Row {
       data.endValue?.let {
         Text(
           text = it,
           fontSize = 14.sp,
-          color = MaterialTheme.colorScheme.onTertiaryContainer
+          color = MaterialTheme.colorScheme.onSecondaryContainer
         )
       }
       if (data.showIcon) {
@@ -80,7 +81,10 @@ fun MenuItemView(
 
 @Composable
 fun MenuBlockView(
-  modifier: Modifier, header: String, datas: List<AdvanceMenu>, onItemClick: (Int) -> Unit
+  modifier: Modifier,
+  header: String,
+  datas: List<AdvanceMenu>,
+  onItemClick: (Int) -> Unit
 ) {
   Column(
     modifier = modifier
@@ -98,7 +102,7 @@ fun MenuBlockView(
       modifier = Modifier
         .fillMaxWidth(),
       colors = CardDefaults.cardColors(
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = MaterialTheme.colorScheme.background
       ),
       elevation = CardDefaults.cardElevation(
         defaultElevation = MaterialTheme.Spacing.extraSmall
@@ -116,7 +120,6 @@ fun MenuBlockView(
           }
           if (index < datas.size - 1) {
             Divider(
-              color = Color.Black,
               modifier = Modifier
                 .fillMaxWidth()
                 .height(0.2.dp)

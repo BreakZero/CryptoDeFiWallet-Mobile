@@ -57,7 +57,12 @@ fun GroupItemView(
       LazyRow(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.space12)
       ) {
-        items(group.assets) { asset ->
+        items(
+          items = group.assets,
+          key = {
+            it.tokenId
+          }
+        ) { asset ->
           NFTContentPreview(
             modifier = Modifier
               .size(100.dp)

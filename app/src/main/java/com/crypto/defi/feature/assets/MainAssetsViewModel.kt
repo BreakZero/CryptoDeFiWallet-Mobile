@@ -20,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
@@ -50,15 +49,15 @@ class MainAssetsViewModel @Inject constructor(
   var assetState by mutableStateOf(
     MainAssetState(
       promoCard = listOf(
-        PromoCart(
+        PromoCard(
           backgroundRes = R.drawable.card_small_orange,
           title = UiText.StringResource(R.string.new_coins__new_coin)
         ),
-        PromoCart(
+        PromoCard(
           backgroundRes = R.drawable.card_small_black,
           title = UiText.StringResource(R.string.wallet_asset__get_eth_ready_for_gas_fees)
         ),
-        PromoCart(
+        PromoCard(
           backgroundRes = R.drawable.card_small_purple,
           title = UiText.StringResource(R.string.wallet_asset__enable_email)
         )
