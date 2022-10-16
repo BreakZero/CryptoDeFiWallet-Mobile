@@ -2,13 +2,7 @@ package com.crypto.core.ui.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRight
@@ -22,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.crypto.core.ui.Spacing
 
 data class AdvanceMenu(
@@ -42,8 +35,8 @@ fun MenuItemView(
       .clickable {
         action.invoke()
       }
-      .padding(start = 12.dp, end = 12.dp)
-      .defaultMinSize(minHeight = 56.dp),
+      .padding(horizontal = MaterialTheme.Spacing.space12)
+      .height(MaterialTheme.Spacing.space56),
     horizontalArrangement = Arrangement.SpaceBetween,
     verticalAlignment = Alignment.CenterVertically
   ) {
@@ -54,16 +47,19 @@ fun MenuItemView(
       data.subTitle?.let {
         Text(
           text = it,
-          fontSize = 12.sp,
+          style = MaterialTheme.typography.bodyMedium,
           color = MaterialTheme.colorScheme.onSecondaryContainer
         )
       }
     }
-    Row {
+    Row(
+      modifier = Modifier.fillMaxHeight(),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
       data.endValue?.let {
         Text(
           text = it,
-          fontSize = 14.sp,
+          style = MaterialTheme.typography.bodyMedium,
           color = MaterialTheme.colorScheme.onSecondaryContainer
         )
       }
