@@ -1,3 +1,3 @@
 package com.crypto.defi.exceptions
 
-class InsufficientBalanceException : RuntimeException("insufficient balance")
+class InsufficientBalanceException : IllegalArgumentException("insufficient balance")

@@ -13,25 +13,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SmallTopAppBar
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiBoxWithConstraints
-import com.crypto.core.ui.composables.LoadingIndicator
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.feature.assets.components.AssetCard
 import com.crypto.defi.feature.assets.components.HomeAssetsMotionLayout
@@ -44,7 +37,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @OptIn(
   ExperimentalMaterialApi::class,
-  ExperimentalMaterial3Api::class
+  ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class
 )
 @Composable
 fun MainAssetsScreen(
@@ -104,13 +97,15 @@ fun MainAssetsScreen(
         }
       )
     }) {
-    DeFiBoxWithConstraints { progress, isExpanded ->
+    DeFiBoxWithConstraints(
+      modifier = Modifier.fillMaxSize().padding(it)
+    ) { progress, isExpanded ->
       HomeAssetsMotionLayout(
         totalBalance = assetsUiState.totalBalance,
         targetValue = progress
       ) {
         SwipeRefresh(
-          state = rememberSwipeRefreshState(false),
+          state = rememberSwipeRefreshState(assetsUiState.onRefreshing),
           swipeEnabled = isExpanded,
           onRefresh = {
             assetsViewModel.onRefresh()
@@ -132,19 +127,12 @@ fun MainAssetsScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
           ) {
-            if (assetsUiState.onRefreshing) {
-              item {
-                Box(
-                  modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = MaterialTheme.Spacing.medium),
-                  contentAlignment = Alignment.Center
-                ) {
-                  LoadingIndicator(animating = true)
-                }
+            items(
+              items = assetsUiState.assets,
+              key = {
+                it.slug
               }
-            }
-            items(assetsUiState.assets) { asset ->
+            ) { asset ->
               AssetCard(
                 modifier = Modifier
                   .fillMaxWidth()
@@ -161,21 +149,32 @@ fun MainAssetsScreen(
                 )
               ) {
                 items(assetsUiState.promoCard) {
-                  Box(
+                  Card(
                     modifier = Modifier
-                      .size(MaterialTheme.Spacing.space128)
+                      .width(MaterialTheme.Spacing.space128)
+                      .aspectRatio(4 / 3f),
+                    elevation = CardDefaults.cardElevation(
+                      defaultElevation = MaterialTheme.Spacing.extraSmall
+                    ),
+                    shape = RoundedCornerShape(MaterialTheme.Spacing.small)
                   ) {
-                    Image(
-                      painter = painterResource(id = it.backgroundRes),
-                      contentDescription = null
-                    )
-                    Text(
-                      modifier = Modifier.padding(
-                        MaterialTheme.Spacing.extraSmall
-                      ),
-                      text = it.title.asString(context),
-                      color = Color.White
-                    )
+                    Box(
+                      modifier = Modifier.fillMaxSize()
+                    ) {
+                      Image(
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.FillWidth,
+                        painter = painterResource(id = it.backgroundRes),
+                        contentDescription = null
+                      )
+                      Text(
+                        modifier = Modifier.padding(
+                          MaterialTheme.Spacing.extraSmall
+                        ),
+                        text = it.title.asString(context),
+                        color = Color.White
+                      )
+                    }
                   }
                 }
               }

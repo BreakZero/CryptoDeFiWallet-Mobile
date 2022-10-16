@@ -2,12 +2,10 @@ package com.crypto.defi.feature.assets.transactions.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,23 +27,29 @@ import timber.log.Timber
 @Composable
 fun TransactionItemView(
   modifier: Modifier,
-  data: BaseTransaction
+  data: BaseTransaction,
+  onItemClick: () -> Unit
 ) {
   Card(
     modifier = modifier
       .fillMaxWidth()
-      .defaultMinSize(minHeight = MaterialTheme.Spacing.space48)
-      .clickable {
-        Timber.v("${data.timeStamp}, ${data is EvmTransaction}")
-      }
+      .height(MaterialTheme.Spacing.extraLarge),
+    elevation = CardDefaults.cardElevation(
+      defaultElevation = MaterialTheme.Spacing.extraSmall
+    ),
+    shape = RoundedCornerShape(MaterialTheme.Spacing.space12)
   ) {
     Row(
       modifier = Modifier
-        .fillMaxWidth()
+        .fillMaxSize()
+        .clickable {
+          onItemClick.invoke()
+        }
         .padding(
           horizontal = MaterialTheme.Spacing.small,
           vertical = MaterialTheme.Spacing.extraSmall
-        ), verticalAlignment = Alignment.CenterVertically
+        ),
+      verticalAlignment = Alignment.CenterVertically
     ) {
       val isSend = data.direction == TransactionDirection.RECEIVE
       Icon(

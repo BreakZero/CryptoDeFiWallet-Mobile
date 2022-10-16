@@ -1,5 +1,6 @@
 package com.crypto.core.ui.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -19,8 +22,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.crypto.core.ui.Spacing
 
 data class AdvanceMenu(
   val title: String,
@@ -82,13 +87,23 @@ fun MenuBlockView(
   ) {
     Text(
       text = header,
-      fontSize = 12.sp,
       style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onBackground,
-      modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+      modifier = Modifier.padding(
+        top = MaterialTheme.Spacing.medium,
+        bottom = MaterialTheme.Spacing.small
+      )
     )
     Card(
-      modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp)
+      modifier = Modifier
+        .fillMaxWidth(),
+      colors = CardDefaults.cardColors(
+        containerColor = MaterialTheme.colorScheme.surface
+      ),
+      elevation = CardDefaults.cardElevation(
+        defaultElevation = MaterialTheme.Spacing.extraSmall
+      ),
+      shape = RoundedCornerShape(MaterialTheme.Spacing.small)
     ) {
       Column(
         modifier = Modifier.fillMaxWidth()
@@ -101,6 +116,7 @@ fun MenuBlockView(
           }
           if (index < datas.size - 1) {
             Divider(
+              color = Color.Black,
               modifier = Modifier
                 .fillMaxWidth()
                 .height(0.2.dp)

@@ -3,10 +3,10 @@ package com.crypto.defi.chains.evm
 import androidx.annotation.Keep
 import com.crypto.core.extensions._16toNumber
 import com.crypto.core.extensions.clearHexPrefix
+import com.crypto.core.extensions.hexStringToByteArray
 import com.crypto.core.extensions.orElse
-import com.crypto.core.extensions.toHex
+import com.crypto.core.extensions.toHexString
 import com.crypto.core.extensions.toHexByteArray
-import com.crypto.core.extensions.toHexBytes
 import com.crypto.defi.chains.IChain
 import com.crypto.defi.common.UrlConstant
 import com.crypto.defi.exceptions.InsufficientBalanceException
@@ -109,7 +109,7 @@ class EvmChainImpl(
         val transfer = Ethereum.Transaction.Transfer.newBuilder().apply {
           this.amount = ByteString.copyFrom(readyToSign.amount.toHexByteArray())
           readyToSign.memo?.also {
-            this.data = ByteString.copyFrom(it.toHexBytes())
+            this.data = ByteString.copyFrom(it.hexStringToByteArray())
           }
         }
         Ethereum.SigningInput.newBuilder().apply {
@@ -132,7 +132,7 @@ class EvmChainImpl(
         Ethereum.SigningOutput.parser()
       )
       TransactionPlan(
-        rawData = output.encoded.toByteArray().toHex(),
+        rawData = output.encoded.toByteArray().toHexString(),
         action = "ETH Transfer",
         amount = readyToSign.amount,
         to = readyToSign.to,

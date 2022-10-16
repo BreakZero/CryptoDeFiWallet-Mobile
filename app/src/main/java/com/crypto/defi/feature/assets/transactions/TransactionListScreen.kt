@@ -41,6 +41,7 @@ import com.crypto.core.ui.utils.SetStatusColor
 import com.crypto.defi.di.ViewModelFactoryProvider
 import com.crypto.defi.feature.assets.transactions.components.TransactionItemView
 import com.crypto.defi.feature.assets.transactions.components.TransactionsMotionLayout
+import com.crypto.defi.models.domain.EvmTransaction
 import com.crypto.defi.navigations.SendFormNavigation
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
@@ -102,8 +103,12 @@ fun TransactionListScreen(
           navigateUp()
         }
       }
-    ) {
-      DeFiBoxWithConstraints { progress, _ ->
+    ) { insetPaddings ->
+      DeFiBoxWithConstraints(
+        modifier = Modifier
+          .fillMaxSize()
+          .padding(insetPaddings)
+      ) { progress, _ ->
         TransactionsMotionLayout(
           asset = txnUiState.asset, targetValue = progress,
           onSend = {
@@ -154,9 +159,26 @@ fun TransactionListScreen(
               }
               else -> Unit
             }
-            items(transactionList) {
-              it?.let {
-                TransactionItemView(data = it, modifier = Modifier.animateItemPlacement())
+            items(
+              items = transactionList,
+              key = {
+                it.hash
+              }
+            ) { transaction ->
+              transaction?.let {
+                TransactionItemView(data = it, modifier = Modifier.animateItemPlacement()) {
+                  Timber.v("${it.timeStamp}, ${it is EvmTransaction}")
+                }
+              }
+            }
+            if (transactionList.loadState.append.endOfPaginationReached) {
+              item {
+                Box(
+                  modifier = Modifier.fillMaxWidth(),
+                  contentAlignment = Alignment.Center
+                ) {
+                  Text(text = "-- Ending --")
+                }
               }
             }
             if (transactionList.loadState.append is LoadState.Loading) {

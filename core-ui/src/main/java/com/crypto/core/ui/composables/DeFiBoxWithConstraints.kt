@@ -21,13 +21,13 @@ import androidx.compose.ui.unit.Velocity
 @ExperimentalMaterialApi
 @Composable
 fun DeFiBoxWithConstraints(
+  modifier: Modifier = Modifier,
   motionContent: @Composable (Float, Boolean) -> Unit
 ) {
   val swipingState = rememberSwipeableState(initialValue = SwipingStates.EXPANDED)
 
   BoxWithConstraints(
-    modifier = Modifier
-      .fillMaxSize()
+    modifier = modifier
   ) {
     val heightInPx = with(LocalDensity.current) { maxHeight.toPx() } // Get height of screen
     val connection = remember {
