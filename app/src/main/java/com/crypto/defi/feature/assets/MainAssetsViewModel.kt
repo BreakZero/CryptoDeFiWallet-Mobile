@@ -3,6 +3,7 @@ package com.crypto.defi.feature.assets
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.Constraints
@@ -12,11 +13,13 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.crypto.core.common.UiText
 import com.crypto.defi.chains.usecase.AssetUseCase
+import com.crypto.defi.models.domain.AppSettingsConfig
 import com.crypto.defi.models.mapper.toAsset
 import com.crypto.defi.workers.BalanceWorker
 import com.crypto.resource.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,6 +31,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainAssetsViewModel @Inject constructor(
+  private val appSettingsConfig: DataStore<AppSettingsConfig>,
   private val assetUseCase: AssetUseCase,
   private val workManager: WorkManager
 ) : ViewModel() {
@@ -66,7 +70,6 @@ class MainAssetsViewModel @Inject constructor(
   )
     private set
 
-
   init {
     viewModelScope.launch(Dispatchers.IO) {
       assetUseCase.fetchingAssets {
@@ -93,15 +96,18 @@ class MainAssetsViewModel @Inject constructor(
               rate = rate.toBigDecimalOrNull() ?: BigDecimal.ZERO
             )
           }
-        }.collect { assets ->
+        }.combine(
+          appSettingsConfig.data
+        ) { assets, appSettings ->
           assetState = assetState.copy(
+            walletName = appSettings.walletName,
             onRefreshing = false,
             assets = assets.filter {
               it.nativeBalance > BigInteger.ZERO
             }.sortedByDescending { it.fiatBalance() },
             totalBalance = assets.sumOf { it.fiatBalance() }.toPlainString()
           )
-        }
+        }.collect()
       }
     }
   }

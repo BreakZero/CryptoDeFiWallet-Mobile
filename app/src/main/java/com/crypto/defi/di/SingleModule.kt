@@ -1,15 +1,21 @@
 package com.crypto.defi.di
 
 import android.app.Application
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.dataStoreFile
 import androidx.room.Room
 import com.crypto.defi.chains.ChainManager
 import com.crypto.defi.chains.usecase.AssetUseCase
 import com.crypto.defi.chains.usecase.BalanceUseCase
-import com.crypto.defi.common.SslSettings
+import com.crypto.defi.models.domain.AppSettingsConfigSerializer
+import com.crypto.defi.models.domain.AppSettingsConfig
 import com.crypto.defi.models.local.CryptoDeFiDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
 import io.ktor.client.engine.*
@@ -20,9 +26,14 @@ import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Singleton
+
+private const val SETTINS_PREFERENCES = "app_settings"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -106,5 +117,16 @@ object SingleModule {
     database: CryptoDeFiDatabase
   ): AssetUseCase {
     return AssetUseCase(client = client, database = database)
+  }
+
+  @Singleton
+  @Provides
+  fun provideAppSettingsDataStore(@ApplicationContext appContext: Context): DataStore<AppSettingsConfig> {
+    return DataStoreFactory.create(
+      serializer = AppSettingsConfigSerializer,
+      produceFile = { appContext.dataStoreFile(SETTINS_PREFERENCES) },
+      scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+      corruptionHandler = null
+    )
   }
 }

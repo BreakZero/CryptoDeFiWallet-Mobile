@@ -80,7 +80,7 @@ fun MainAssetsScreen(
         title = {
           Column {
             Text(
-              text = "Wallet Name",
+              text = assetsUiState.walletName,
               style = MaterialTheme.typography.titleSmall,
               color = MaterialTheme.colorScheme.primaryContainer
             )

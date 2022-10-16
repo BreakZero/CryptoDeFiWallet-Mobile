@@ -16,11 +16,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.AdvanceMenu
 import com.crypto.core.ui.composables.DeFiAppBar
@@ -33,6 +36,7 @@ import com.crypto.resource.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+  settingsViewModel: SettingsViewModel = hiltViewModel(),
   navigateUp: () -> Unit,
   navigateTo: (NavigationCommand) -> Unit
 ) {
@@ -47,6 +51,7 @@ fun SettingsScreen(
     modifier = Modifier.fillMaxSize(),
   ) {
     val scrollableState = rememberScrollState()
+    val settingsUiState by settingsViewModel.settingsState.collectAsState()
     Column(
       modifier = Modifier
         .padding(
@@ -56,16 +61,32 @@ fun SettingsScreen(
         )
         .verticalScroll(scrollableState)
     ) {
-      Image(
-        painter = painterResource(id = R.drawable.avatar_generic_1),
-        contentDescription = null,
-        modifier = Modifier
-          .padding(top = MaterialTheme.Spacing.medium)
-          .align(Alignment.CenterHorizontally)
-          .size(MaterialTheme.Spacing.extraLarge)
-      )
+      when (settingsUiState.avator) {
+        "0" -> {
+          Image(
+            painter = painterResource(id = R.drawable.avatar_generic_1),
+            contentDescription = null,
+            modifier = Modifier
+              .padding(top = MaterialTheme.Spacing.medium)
+              .align(Alignment.CenterHorizontally)
+              .size(MaterialTheme.Spacing.extraLarge)
+          )
+        }
+        else -> {
+          // TODO load network via async image
+          Image(
+            painter = painterResource(id = R.drawable.avatar_generic_1),
+            contentDescription = null,
+            modifier = Modifier
+              .padding(top = MaterialTheme.Spacing.medium)
+              .align(Alignment.CenterHorizontally)
+              .size(MaterialTheme.Spacing.extraLarge)
+          )
+        }
+      }
+
       Text(
-        text = "Wallet Name",
+        text = settingsUiState.walletName,
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.titleMedium,
         color = MaterialTheme.colorScheme.onBackground,
@@ -80,7 +101,7 @@ fun SettingsScreen(
           ),
           AdvanceMenu(
             title = stringResource(id = R.string.settings__recovery_phrase),
-            subTitle = "Wallet Name"
+            subTitle = settingsUiState.walletName
           )
         )
       ) {
@@ -89,10 +110,13 @@ fun SettingsScreen(
       MenuBlockView(
         modifier = Modifier.fillMaxWidth(), header = stringResource(id = R.string.settings__account),
         datas = listOf(
-          AdvanceMenu(title = stringResource(id = R.string.settings__display_currency), endValue = ""),
+          AdvanceMenu(
+            title = stringResource(id = R.string.settings__display_currency),
+            endValue = "${settingsUiState.currency.code}(${settingsUiState.currency.symbol})"
+          ),
           AdvanceMenu(
             title = stringResource(id = R.string.settings__network_settings),
-            endValue = ""
+            endValue = settingsUiState.network.label
           )
         )
       ) {
@@ -117,7 +141,12 @@ fun SettingsScreen(
           AdvanceMenu(title = stringResource(id = R.string.settings__visit_our_website))
         )
       ) {
-
+        when (it) {
+          0 -> {
+            settingsViewModel.updateWalletName()
+          }
+          else -> Unit
+        }
       }
       Spacer(modifier = Modifier.height(MaterialTheme.Spacing.space24))
     }
