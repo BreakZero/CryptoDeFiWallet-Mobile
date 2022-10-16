@@ -31,13 +31,14 @@ import com.crypto.core.ui.composables.MenuBlockView
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.core.ui.utils.SetStatusColor
 import com.crypto.defi.BuildConfig
+import com.crypto.defi.navigations.SettingsNavigation
 import com.crypto.resource.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
   settingsViewModel: SettingsViewModel = hiltViewModel(),
-  navigateUp: () -> Unit,
+  popBack: () -> Unit,
   navigateTo: (NavigationCommand) -> Unit
 ) {
   Scaffold(
@@ -45,7 +46,7 @@ fun SettingsScreen(
       DeFiAppBar(
         title = stringResource(id = R.string.settings__title)
       ) {
-        navigateUp()
+        popBack()
       }
     },
     modifier = Modifier.fillMaxSize(),
@@ -120,7 +121,12 @@ fun SettingsScreen(
           )
         )
       ) {
-
+        when (it) {
+          0 -> {
+            navigateTo(SettingsNavigation.Settings_Currency)
+          }
+          else -> Unit
+        }
       }
       MenuBlockView(
         modifier = Modifier.fillMaxWidth(), header = stringResource(id = R.string.settings__support),
@@ -140,8 +146,8 @@ fun SettingsScreen(
           AdvanceMenu(title = stringResource(id = R.string.settings__privacy_notice)),
           AdvanceMenu(title = stringResource(id = R.string.settings__visit_our_website))
         )
-      ) {
-        when (it) {
+      ) { itemIndex ->
+        when (itemIndex) {
           0 -> {
             settingsViewModel.updateWalletName()
           }

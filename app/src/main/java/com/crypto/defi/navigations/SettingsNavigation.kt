@@ -11,4 +11,11 @@ object SettingsNavigation {
       get() = "settings"
 
   }
+
+  val Settings_Currency = object : NavigationCommand {
+    override val arguments: List<NamedNavArgument>
+      get() = emptyList()
+    override val destination: String
+      get() = "settings-currencies"
+  }
 }
