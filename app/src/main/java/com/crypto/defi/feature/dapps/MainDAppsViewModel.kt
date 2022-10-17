@@ -47,6 +47,7 @@ class MainDAppsViewModel @Inject constructor(
       client.get("${UrlConstant.BASE_URL}/dapps").body<BaseResponse<List<DAppInfoDto>>>().data
         .map {
           DAppInfo(
+            chainId = it.chainId.toIntOrNull() ?: 1,
             iconUrl = it.icon,
             url = it.url,
             appName = it.name,

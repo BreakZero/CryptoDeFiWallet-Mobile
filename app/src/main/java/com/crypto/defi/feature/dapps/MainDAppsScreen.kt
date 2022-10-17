@@ -143,7 +143,7 @@ fun MainDappsScreen(
                 modifier = Modifier
                   .fillMaxWidth()
                   .clickable {
-                    navigateTo(DAppsNavigation.detailDestination(dApp.url, dApp.rpc))
+                    navigateTo(DAppsNavigation.detailDestination(dApp.chainId, dApp.url, dApp.rpc))
                   },
                 elevation = CardDefaults.elevatedCardElevation(
                   defaultElevation = MaterialTheme.Spacing.extraSmall

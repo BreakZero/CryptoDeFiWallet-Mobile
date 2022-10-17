@@ -245,7 +245,9 @@ class MainActivity : ComponentActivity() {
             ) { backStackEntry ->
               val dAppUrl = backStackEntry.arguments?.getString(DAppsNavigation.KEY_OF_DAPP_URL).orEmpty()
               val dAppRpc = backStackEntry.arguments?.getString(DAppsNavigation.KEY_OF_DAPP_RPC).orEmpty()
+              val chainId = backStackEntry.arguments?.getInt(DAppsNavigation.KEY_OF_DAPP_CHAIN_ID, 1) ?: 1
               DAppDetailScreen(
+                chainId = chainId,
                 dAppUrl = dAppUrl,
                 dAppRpc = dAppRpc,
                 popBack = {

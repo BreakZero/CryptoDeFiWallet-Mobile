@@ -36,6 +36,7 @@ import com.crypto.core.ui.composables.MenuBlockView
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.core.ui.utils.SetStatusColor
 import com.crypto.defi.BuildConfig
+import com.crypto.defi.exceptions.rotating
 import com.crypto.defi.navigations.SettingsNavigation
 import com.crypto.resource.R
 
@@ -81,6 +82,7 @@ fun SettingsScreen(
             .clip(CircleShape)
             .align(Alignment.CenterHorizontally)
             .size(MaterialTheme.Spacing.space128)
+            .rotating(2500)
         )
       } ?: kotlin.run {
         Image(

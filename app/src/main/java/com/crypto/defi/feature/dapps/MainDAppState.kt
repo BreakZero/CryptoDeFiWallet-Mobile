@@ -5,6 +5,7 @@ import com.crypto.defi.models.domain.WalletNameInfo
 
 @Keep
 data class DAppInfo(
+  val chainId: Int,
   val iconUrl: String,
   val appName: String,
   val rpc: String,

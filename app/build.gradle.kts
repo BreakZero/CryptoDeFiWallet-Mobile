@@ -113,7 +113,6 @@ dependencies {
     implementation(project(":wallet"))
 
     implementation("androidx.work:work-runtime-ktx:2.8.0-alpha04")
-    implementation("com.github.trustwallet:trust-web3-provider:2.0.1")
 
     composeUI()
     hiltDependencies()
