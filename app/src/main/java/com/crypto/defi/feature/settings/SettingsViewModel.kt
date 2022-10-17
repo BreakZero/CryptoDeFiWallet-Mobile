@@ -28,7 +28,8 @@ class SettingsViewModel @Inject constructor(
       appSettingsConfig.updateData {
         it.copy(
           walletNameInfo = it.walletNameInfo.copy(
-            walletName = "D&J"
+            walletName = "D&J",
+            avator = "https://logo.nftscan.com/logo/0xb16dfd9aaaf874fcb1db8a296375577c1baa6f21.png"
           )
         )
       }

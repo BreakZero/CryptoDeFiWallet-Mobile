@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,10 +21,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.AdvanceMenu
 import com.crypto.core.ui.composables.DeFiAppBar
@@ -62,14 +67,20 @@ fun SettingsScreen(
         )
         .verticalScroll(scrollableState)
     ) {
-      settingsUiState.walletNameInfo.avator?.let {
-        Image(
-          painter = painterResource(id = R.drawable.avatar_generic_1),
+      settingsUiState.walletNameInfo.avator?.let { avatorUrl ->
+        AsyncImage(
+          model = ImageRequest.Builder(LocalContext.current)
+            .data(avatorUrl)
+            .placeholder(R.drawable.avatar_generic_1)
+            .error(R.drawable.avatar_generic_1)
+            .crossfade(true)
+            .build(),
           contentDescription = null,
           modifier = Modifier
             .padding(top = MaterialTheme.Spacing.medium)
+            .clip(CircleShape)
             .align(Alignment.CenterHorizontally)
-            .size(MaterialTheme.Spacing.extraLarge)
+            .size(MaterialTheme.Spacing.space128)
         )
       } ?: kotlin.run {
         Image(
@@ -77,8 +88,9 @@ fun SettingsScreen(
           contentDescription = null,
           modifier = Modifier
             .padding(top = MaterialTheme.Spacing.medium)
+            .clip(CircleShape)
             .align(Alignment.CenterHorizontally)
-            .size(MaterialTheme.Spacing.extraLarge)
+            .size(MaterialTheme.Spacing.space128)
         )
       }
 

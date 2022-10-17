@@ -18,7 +18,6 @@ class BalanceWorker(
   private val balanceUseCase: BalanceUseCase
 ) : CoroutineWorker(appContext, workerParams) {
   override suspend fun doWork(): Result {
-    setProgress(Data.Builder().put(MainAssetsViewModel.KEY_WORKER_PROGRESS, true).build())
     supervisorScope {
       val evmAddress = chainManager.evmAddress()
       launchWithHandler(Dispatchers.Default) {

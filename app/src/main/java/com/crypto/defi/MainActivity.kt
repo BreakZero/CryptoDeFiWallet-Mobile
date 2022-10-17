@@ -25,19 +25,14 @@ import com.crypto.defi.feature.assets.send.sendFormViewModel
 import com.crypto.defi.feature.assets.transactions.TransactionListScreen
 import com.crypto.defi.feature.assets.transactions.transactionListViewModel
 import com.crypto.defi.feature.common.DeFiScannerScreen
+import com.crypto.defi.feature.dapps.detail.DAppDetailScreen
 import com.crypto.defi.feature.main.MainScreen
 import com.crypto.defi.feature.nfts.detail.NftDetailScreen
 import com.crypto.defi.feature.nfts.group.NftGroupScreen
 import com.crypto.defi.feature.settings.SettingsScreen
 import com.crypto.defi.feature.settings.currencies.SettingsCurrencyScreen
 import com.crypto.defi.feature.splash.SplashScreen
-import com.crypto.defi.navigations.MainNavigation
-import com.crypto.defi.navigations.NftNavigation
-import com.crypto.defi.navigations.ScannerNavigation
-import com.crypto.defi.navigations.SendFormNavigation
-import com.crypto.defi.navigations.SettingsNavigation
-import com.crypto.defi.navigations.SplashNavigation
-import com.crypto.defi.navigations.TransactionListNavigation
+import com.crypto.defi.navigations.*
 import com.crypto.defi.ui.theme.DeFiWalletTheme
 import com.crypto.onboarding.presentation.onboarding
 import com.crypto.resource.R
@@ -129,9 +124,7 @@ class MainActivity : ComponentActivity() {
                 fadeOut(animationSpec = tween(500))
               }
             ) { backStackEntry ->
-              val coinSlug =
-                backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE)
-                  ?: ""
+              val coinSlug = backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE).orEmpty()
               TransactionListScreen(
                 txnListViewModel = transactionListViewModel(slug = coinSlug),
                 navigateUp = {
@@ -235,6 +228,33 @@ class MainActivity : ComponentActivity() {
             }
 
             composable(
+              route = DAppsNavigation.DAPP_DETAIL_ROUTE,
+              arguments = DAppsNavigation.detailsArgs,
+              enterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              exitTransition = {
+                fadeOut(animationSpec = tween(500))
+              },
+              popEnterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              popExitTransition = {
+                fadeOut(animationSpec = tween(500))
+              }
+            ) { backStackEntry ->
+              val dAppUrl = backStackEntry.arguments?.getString(DAppsNavigation.KEY_OF_DAPP_URL).orEmpty()
+              val dAppRpc = backStackEntry.arguments?.getString(DAppsNavigation.KEY_OF_DAPP_RPC).orEmpty()
+              DAppDetailScreen(
+                dAppUrl = dAppUrl,
+                dAppRpc = dAppRpc,
+                popBack = {
+                  navController.popBackStack()
+                }
+              )
+            }
+
+            composable(
               route = ScannerNavigation.Scanner.destination,
               enterTransition = {
                 fadeIn(animationSpec = tween(500))
@@ -261,7 +281,7 @@ class MainActivity : ComponentActivity() {
 
             composable(
               route = NftNavigation.NFT_DETAIL_ROUTE,
-              arguments = NftNavigation.args,
+              arguments = NftNavigation.nftDetailArgs,
               enterTransition = {
                 fadeIn(animationSpec = tween(500))
               },

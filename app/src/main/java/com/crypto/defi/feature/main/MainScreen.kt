@@ -109,7 +109,7 @@ fun MainScreen(
           MainNFTsScreen(navigateTo = onNavigateTo)
         }
         "Dapps" -> {
-          MainDappsScreen()
+          MainDappsScreen(navigateTo = onNavigateTo)
         }
         "Earn" -> {
           MainDeFiScreen()

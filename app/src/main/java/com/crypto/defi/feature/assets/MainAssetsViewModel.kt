@@ -1,8 +1,5 @@
 package com.crypto.defi.feature.assets
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,8 +16,11 @@ import com.crypto.defi.workers.BalanceWorker
 import com.crypto.resource.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -50,72 +50,76 @@ class MainAssetsViewModel @Inject constructor(
         .build()
     ).build()
 
-  var assetState by mutableStateOf(
-    MainAssetState(
-      promoCard = listOf(
-        PromoCard(
-          backgroundRes = R.drawable.card_small_orange,
-          title = UiText.StringResource(R.string.new_coins__new_coin)
-        ),
-        PromoCard(
-          backgroundRes = R.drawable.card_small_black,
-          title = UiText.StringResource(R.string.wallet_asset__get_eth_ready_for_gas_fees)
-        ),
-        PromoCard(
-          backgroundRes = R.drawable.card_small_purple,
-          title = UiText.StringResource(R.string.wallet_asset__enable_email)
-        )
-      )
-    )
-  )
-    private set
-
   init {
     viewModelScope.launch(Dispatchers.IO) {
       assetUseCase.fetchingAssets {
+        workManager.enqueueUniquePeriodicWork(
+          WORKER_NAME,
+          ExistingPeriodicWorkPolicy.UPDATE,
+          balanceWorkerRequest
+        )
         withContext(Dispatchers.Main) {
-          workManager.enqueueUniquePeriodicWork(
-            WORKER_NAME,
-            ExistingPeriodicWorkPolicy.UPDATE,
-            balanceWorkerRequest
-          )
           workManager.getWorkInfoByIdLiveData(balanceWorkerRequest.id).observeForever {
             val inProgress = it.progress.getBoolean(KEY_WORKER_PROGRESS, false)
-            assetState = assetState.copy(onRefreshing = inProgress)
+            _isLoading.update {
+              inProgress
+            }
           }
         }
-        combine(
-          assetUseCase.assetsFlow(),
-          assetUseCase.tiersFlow()
-        ) { assets, tiers ->
-          assets.map { asset ->
-            val rate = tiers.find { tier ->
-              asset.slug == tier.fromSlug
-            }?.rate ?: "0.0"
-            asset.toAsset().copy(
-              rate = rate.toBigDecimalOrNull() ?: BigDecimal.ZERO
-            )
-          }
-        }.combine(
-          appSettingsConfig.data
-        ) { assets, appSettings ->
-          assetState = assetState.copy(
-            walletNameInfo = appSettings.walletNameInfo,
-            onRefreshing = false,
-            assets = assets.filter {
-              it.nativeBalance > BigInteger.ZERO
-            }.sortedByDescending { it.fiatBalance() },
-            totalBalance = assets.sumOf { it.fiatBalance() }.toPlainString()
-          )
-        }.collect()
       }
     }
   }
 
-  fun onRefresh() {
-    assetState = assetState.copy(
-      onRefreshing = true
+  private val _isLoading = MutableStateFlow(true)
+  private val _promoCards = MutableStateFlow(
+    listOf(
+      PromoCard(
+        backgroundRes = R.drawable.card_small_orange,
+        title = UiText.StringResource(R.string.new_coins__new_coin)
+      ),
+      PromoCard(
+        backgroundRes = R.drawable.card_small_black,
+        title = UiText.StringResource(R.string.wallet_asset__get_eth_ready_for_gas_fees)
+      ),
+      PromoCard(
+        backgroundRes = R.drawable.card_small_purple,
+        title = UiText.StringResource(R.string.wallet_asset__enable_email)
+      )
     )
+  )
+
+  val assetState = combine(
+    _isLoading,
+    assetUseCase.assetsFlow(),
+    assetUseCase.tiersFlow(),
+    appSettingsConfig.data,
+    _promoCards
+  ) { isLoading, assets, tiers, appSettings, promoCards ->
+    val localAssets = assets.map { asset ->
+      val rate = tiers.find { tier ->
+        asset.slug == tier.fromSlug
+      }?.rate ?: "0.0"
+      asset.toAsset().copy(
+        rate = rate.toBigDecimalOrNull() ?: BigDecimal.ZERO
+      )
+    }
+    MainAssetState(
+      onRefreshing = isLoading,
+      walletNameInfo = appSettings.walletNameInfo,
+      assets = localAssets.filter {
+        it.nativeBalance > BigInteger.ZERO
+      }.sortedByDescending { it.fiatBalance() },
+      totalBalance = localAssets.sumOf { it.fiatBalance() }.toPlainString(),
+      promoCard = promoCards
+    )
+  }.stateIn(
+    viewModelScope,
+    SharingStarted.WhileSubscribed(),
+    MainAssetState(promoCard = emptyList())
+  )
+
+  fun onRefresh() {
+    _isLoading.update { true }
     workManager.enqueueUniquePeriodicWork(
       WORKER_NAME,
       ExistingPeriodicWorkPolicy.UPDATE,

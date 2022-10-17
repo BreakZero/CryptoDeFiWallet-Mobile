@@ -16,6 +16,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -48,7 +50,7 @@ fun MainAssetsScreen(
   navigateTo: (NavigationCommand) -> Unit
 ) {
   val context = LocalContext.current
-  val assetsUiState = assetsViewModel.assetState
+  val assetsUiState by assetsViewModel.assetState.collectAsState()
   Scaffold(
     modifier = Modifier.fillMaxSize(),
     topBar = {
