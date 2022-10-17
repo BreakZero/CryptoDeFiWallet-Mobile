@@ -100,7 +100,7 @@ class MainAssetsViewModel @Inject constructor(
           appSettingsConfig.data
         ) { assets, appSettings ->
           assetState = assetState.copy(
-            walletName = appSettings.walletName,
+            walletNameInfo = appSettings.walletNameInfo,
             onRefreshing = false,
             assets = assets.filter {
               it.nativeBalance > BigInteger.ZERO

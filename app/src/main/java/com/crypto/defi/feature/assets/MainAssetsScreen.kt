@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
@@ -22,9 +23,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiBoxWithConstraints
 import com.crypto.core.ui.routers.NavigationCommand
+import com.crypto.defi.exceptions.rotating
 import com.crypto.defi.feature.assets.components.AssetCard
 import com.crypto.defi.feature.assets.components.HomeAssetsMotionLayout
 import com.crypto.defi.navigations.ScannerNavigation
@@ -58,11 +62,30 @@ fun MainAssetsScreen(
               navigateTo(SettingsNavigation.Settings)
             }
           ) {
-            Image(
-              modifier = Modifier.size(MaterialTheme.Spacing.space48),
-              painter = painterResource(id = R.drawable.avatar_generic_1),
-              contentDescription = null
-            )
+            assetsUiState.walletNameInfo.avator?.let {
+              AsyncImage(
+                modifier = Modifier
+                  .size(MaterialTheme.Spacing.space48)
+                  .clip(CircleShape)
+                  .rotating(2500),
+                model = ImageRequest.Builder(LocalContext.current)
+                  .data(it)
+                  .placeholder(R.drawable.avatar_generic_1)
+                  .error(R.drawable.avatar_generic_1)
+                  .crossfade(true)
+                  .build(),
+                contentDescription = null
+              )
+            } ?: run {
+              Image(
+                modifier = Modifier
+                  .size(MaterialTheme.Spacing.space48)
+                  .clip(CircleShape)
+                  .rotating(2500),
+                painter = painterResource(id = assetsUiState.walletNameInfo.avatorRes),
+                contentDescription = null
+              )
+            }
           }
         },
         actions = {
@@ -80,7 +103,7 @@ fun MainAssetsScreen(
         title = {
           Column {
             Text(
-              text = assetsUiState.walletName,
+              text = assetsUiState.walletNameInfo.walletName,
               style = MaterialTheme.typography.titleSmall,
               color = MaterialTheme.colorScheme.primaryContainer
             )

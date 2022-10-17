@@ -62,32 +62,28 @@ fun SettingsScreen(
         )
         .verticalScroll(scrollableState)
     ) {
-      when (settingsUiState.avator) {
-        "0" -> {
-          Image(
-            painter = painterResource(id = R.drawable.avatar_generic_1),
-            contentDescription = null,
-            modifier = Modifier
-              .padding(top = MaterialTheme.Spacing.medium)
-              .align(Alignment.CenterHorizontally)
-              .size(MaterialTheme.Spacing.extraLarge)
-          )
-        }
-        else -> {
-          // TODO load network via async image
-          Image(
-            painter = painterResource(id = R.drawable.avatar_generic_1),
-            contentDescription = null,
-            modifier = Modifier
-              .padding(top = MaterialTheme.Spacing.medium)
-              .align(Alignment.CenterHorizontally)
-              .size(MaterialTheme.Spacing.extraLarge)
-          )
-        }
+      settingsUiState.walletNameInfo.avator?.let {
+        Image(
+          painter = painterResource(id = R.drawable.avatar_generic_1),
+          contentDescription = null,
+          modifier = Modifier
+            .padding(top = MaterialTheme.Spacing.medium)
+            .align(Alignment.CenterHorizontally)
+            .size(MaterialTheme.Spacing.extraLarge)
+        )
+      } ?: kotlin.run {
+        Image(
+          painter = painterResource(id = R.drawable.avatar_generic_1),
+          contentDescription = null,
+          modifier = Modifier
+            .padding(top = MaterialTheme.Spacing.medium)
+            .align(Alignment.CenterHorizontally)
+            .size(MaterialTheme.Spacing.extraLarge)
+        )
       }
 
       Text(
-        text = settingsUiState.walletName,
+        text = settingsUiState.walletNameInfo.walletName,
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.titleMedium,
         color = MaterialTheme.colorScheme.onBackground,
@@ -102,7 +98,7 @@ fun SettingsScreen(
           ),
           AdvanceMenu(
             title = stringResource(id = R.string.settings__recovery_phrase),
-            subTitle = settingsUiState.walletName
+            subTitle = settingsUiState.walletNameInfo.walletName
           )
         )
       ) {

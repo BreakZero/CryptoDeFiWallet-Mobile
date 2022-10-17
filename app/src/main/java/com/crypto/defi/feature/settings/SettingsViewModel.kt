@@ -14,20 +14,23 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
   private val appSettingsConfig: DataStore<AppSettingsConfig>
-): ViewModel() {
+) : ViewModel() {
   val settingsState = appSettingsConfig.data.map {
     SettingsState(
       currency = it.currency,
       network = it.network,
-      walletName = it.walletName,
-      avator = it.avator
+      walletNameInfo = it.walletNameInfo
     )
   }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SettingsState())
 
   fun updateWalletName() {
     viewModelScope.launch {
       appSettingsConfig.updateData {
-        it.copy(walletName = "D_J")
+        it.copy(
+          walletNameInfo = it.walletNameInfo.copy(
+            walletName = "D&J"
+          )
+        )
       }
     }
   }

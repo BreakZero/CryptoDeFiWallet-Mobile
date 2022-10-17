@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -15,9 +16,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.crypto.core.ui.Spacing
+import com.crypto.defi.exceptions.rotating
 import com.crypto.resource.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,7 +36,10 @@ fun MainDeFiScreen() {
           IconButton(onClick = {
           }) {
             Image(
-              modifier = Modifier.size(MaterialTheme.Spacing.space48),
+              modifier = Modifier
+                .size(MaterialTheme.Spacing.space48)
+                .clip(CircleShape)
+                .rotating(2500),
               painter = painterResource(id = R.drawable.avatar_generic_1),
               contentDescription = null
             )

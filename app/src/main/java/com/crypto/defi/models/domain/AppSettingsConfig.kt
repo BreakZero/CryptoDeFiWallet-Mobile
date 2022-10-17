@@ -28,9 +28,23 @@ data class DeFiCurrency(
 data class AppSettingsConfig(
   val currency: DeFiCurrency,
   val network: ChainNetwork,
-  val walletName: String,
-  val avator: String
+  val walletNameInfo: WalletNameInfo
 )
+
+@Serializable
+data class WalletNameInfo(
+  val avatorRes: Int,
+  val avator: String?,
+  val walletName: String
+) {
+  companion object {
+    val Default = WalletNameInfo(
+      avatorRes = com.crypto.resource.R.drawable.avatar_generic_1,
+      avator = null,
+      walletName = DeFiConstant.DEFAULT_WALLET_NAME
+    )
+  }
+}
 
 object AppSettingsConfigSerializer : Serializer<AppSettingsConfig> {
   override val defaultValue: AppSettingsConfig
@@ -39,8 +53,11 @@ object AppSettingsConfigSerializer : Serializer<AppSettingsConfig> {
       currency = Currency.getInstance(Locale.US).let {
         DeFiCurrency(it.symbol, it.currencyCode)
       },
-      walletName = DeFiConstant.DEFAULT_WALLET_NAME,
-      avator = "0"
+      walletNameInfo = WalletNameInfo(
+        avatorRes = com.crypto.resource.R.drawable.avatar_generic_1,
+        avator = null,
+        walletName = DeFiConstant.DEFAULT_WALLET_NAME
+      )
     )
 
   override suspend fun readFrom(input: InputStream): AppSettingsConfig {

@@ -60,7 +60,7 @@ fun GroupItemView(
         items(
           items = group.assets,
           key = {
-            it.tokenId
+            "${it.contractAddress}-${it.tokenId}"
           }
         ) { asset ->
           NFTContentPreview(
