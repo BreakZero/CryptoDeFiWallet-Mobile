@@ -143,7 +143,7 @@ fun MainAssetsScreen(
                   topStart = MaterialTheme.Spacing.space24
                 )
               )
-              .background(MaterialTheme.colorScheme.surface),
+              .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(
               vertical = MaterialTheme.Spacing.medium,
               horizontal = MaterialTheme.Spacing.small

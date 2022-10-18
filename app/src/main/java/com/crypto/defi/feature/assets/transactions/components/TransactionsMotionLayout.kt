@@ -62,9 +62,14 @@ fun TransactionsMotionLayout(
   ) {
     Box(
       modifier = Modifier
-        .layoutId("header-content")
+        .fillMaxWidth()
+        .layoutId("header-content"),
+      contentAlignment = Alignment.Center
     ) {
       Image(
+        modifier = Modifier
+          .fillMaxWidth()
+          .aspectRatio(16 / 9f),
         painter = painterResource(id = R.drawable.backgroud_stars),
         contentDescription = "poster",
         contentScale = ContentScale.FillWidth,
@@ -73,6 +78,7 @@ fun TransactionsMotionLayout(
       Column(
         modifier = Modifier
           .fillMaxWidth()
+          .aspectRatio(16 / 9f)
           .padding(top = 32.dp, bottom = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
       ) {

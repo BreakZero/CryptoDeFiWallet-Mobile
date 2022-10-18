@@ -4,11 +4,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material3.Icon
@@ -30,6 +26,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
+import com.crypto.core.ui.Spacing
 import com.crypto.resource.R
 
 @OptIn(ExperimentalMotionApi::class)
@@ -48,14 +45,19 @@ fun HomeAssetsMotionLayout(
     end = endConstraintSet(),
     progress = progress,
     modifier = Modifier
-      .fillMaxWidth()
+      .fillMaxSize()
       .background(MaterialTheme.colorScheme.primary)
   ) {
     Box(
       modifier = Modifier
-        .layoutId("header-content")
+        .fillMaxWidth()
+        .layoutId("header-content"),
+      contentAlignment = Alignment.Center
     ) {
       Image(
+        modifier = Modifier
+          .fillMaxWidth()
+          .aspectRatio(16 / 9f),
         painter = painterResource(id = R.drawable.backgroud_stars),
         contentDescription = "poster",
         contentScale = ContentScale.FillWidth,
@@ -63,8 +65,7 @@ fun HomeAssetsMotionLayout(
       )
       Column(
         modifier = Modifier
-          .fillMaxWidth()
-          .padding(top = 32.dp, bottom = 24.dp),
+          .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
         Row(modifier = Modifier) {
@@ -101,6 +102,7 @@ fun HomeAssetsMotionLayout(
             }
           }
         )
+        Spacer(modifier = Modifier.height(MaterialTheme.Spacing.large))
       }
     }
     Box(

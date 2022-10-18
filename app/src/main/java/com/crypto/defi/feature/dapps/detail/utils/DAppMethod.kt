@@ -9,6 +9,7 @@ enum class DAppMethod {
   REQUESTACCOUNTS,
   WATCHASSET,
   ADDETHEREUMCHAIN,
+  SWITCHETHEREUMCHAIN,
   UNKNOWN;
 
   companion object {
@@ -22,6 +23,7 @@ enum class DAppMethod {
         "requestAccounts" -> REQUESTACCOUNTS
         "watchAsset" -> WATCHASSET
         "addEthereumChain" -> ADDETHEREUMCHAIN
+        "switchEthereumChain" -> SWITCHETHEREUMCHAIN
         else -> UNKNOWN
       }
     }

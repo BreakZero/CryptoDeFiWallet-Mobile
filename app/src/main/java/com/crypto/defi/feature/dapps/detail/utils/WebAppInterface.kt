@@ -57,6 +57,16 @@ class WebAppInterface(
         val raw = extractRaw(obj)
         handleSignTypedMessage(id, data, method, raw)
       }
+      DAppMethod.SWITCHETHEREUMCHAIN -> {
+        onResult.invoke(
+          MessageInfo(
+            title = "SwichChain",
+            methodId = id,
+            data = "switch to polygon",
+            method = method
+          )
+        )
+      }
       else -> {
         onResult.invoke(
           MessageInfo(

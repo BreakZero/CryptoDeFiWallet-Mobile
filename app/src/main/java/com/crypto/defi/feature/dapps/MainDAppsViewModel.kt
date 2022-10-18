@@ -45,7 +45,9 @@ class MainDAppsViewModel @Inject constructor(
     _isLoading.update { true }
     val dApps = try {
       client.get("${UrlConstant.BASE_URL}/dapps").body<BaseResponse<List<DAppInfoDto>>>().data
-        .map {
+        .filterNot {
+          it.rpc.isBlank()
+        }.map {
           DAppInfo(
             chainId = it.chainId.toIntOrNull() ?: 1,
             iconUrl = it.icon,
