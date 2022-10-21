@@ -3,6 +3,7 @@ package com.crypto.defi
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -12,9 +13,14 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDeepLink
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.dialog
 import com.crypto.core.ui.composables.NormalTipsView
 import com.crypto.core.ui.models.NormalTips
@@ -43,6 +49,33 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
 
 @OptIn(ExperimentalAnimationApi::class)
+fun NavGraphBuilder.composableWithAnimation(
+  route: String,
+  arguments: List<NamedNavArgument> = emptyList(),
+  deepLinks: List<NavDeepLink> = emptyList(),
+  content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
+) {
+  composable(
+    route = route,
+    arguments = arguments,
+    deepLinks = deepLinks,
+    enterTransition = {
+      fadeIn(animationSpec = tween(500))
+    },
+    exitTransition = {
+      fadeOut(animationSpec = tween(500))
+    },
+    popEnterTransition = {
+      fadeIn(animationSpec = tween(500))
+    },
+    popExitTransition = {
+      fadeOut(animationSpec = tween(500))
+    },
+    content = content
+  )
+}
+
+@OptIn(ExperimentalAnimationApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,20 +96,8 @@ class MainActivity : ComponentActivity() {
             startDestination = SplashNavigation.Splashing.destination,
             modifier = Modifier
           ) {
-            composable(
-              SplashNavigation.Splashing.destination,
-              enterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              exitTransition = {
-                fadeOut(animationSpec = tween(500))
-              },
-              popEnterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              popExitTransition = {
-                fadeOut(animationSpec = tween(500))
-              }
+            composableWithAnimation(
+              SplashNavigation.Splashing.destination
             ) {
               SplashScreen {
                 navController.navigate(it.destination) {
@@ -87,20 +108,8 @@ class MainActivity : ComponentActivity() {
               }
             }
 
-            composable(
-              MainNavigation.Main.destination,
-              enterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              exitTransition = {
-                fadeOut(animationSpec = tween(500))
-              },
-              popEnterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              popExitTransition = {
-                fadeOut(animationSpec = tween(500))
-              }
+            composableWithAnimation(
+              MainNavigation.Main.destination
             ) {
               MainScreen(
                 savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
@@ -109,21 +118,9 @@ class MainActivity : ComponentActivity() {
               }
             }
 
-            composable(
+            composableWithAnimation(
               route = TransactionListNavigation.ROUTE,
-              arguments = TransactionListNavigation.args,
-              enterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              exitTransition = {
-                fadeOut(animationSpec = tween(500))
-              },
-              popEnterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              popExitTransition = {
-                fadeOut(animationSpec = tween(500))
-              }
+              arguments = TransactionListNavigation.args
             ) { backStackEntry ->
               val coinSlug = backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE).orEmpty()
               TransactionListScreen(
@@ -136,21 +133,9 @@ class MainActivity : ComponentActivity() {
               }
             }
 
-            composable(
+            composableWithAnimation(
               route = SendFormNavigation.ROUTE,
-              arguments = SendFormNavigation.args,
-              enterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              exitTransition = {
-                fadeOut(animationSpec = tween(500))
-              },
-              popEnterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              popExitTransition = {
-                fadeOut(animationSpec = tween(500))
-              }
+              arguments = SendFormNavigation.args
             ) { backStackEntry ->
               val coinSlug = backStackEntry.arguments
                 ?.getString(SendFormNavigation.KEY_SLUG) ?: ""
@@ -164,20 +149,8 @@ class MainActivity : ComponentActivity() {
               }
             }
 
-            composable(
-              route = SettingsNavigation.Settings.destination,
-              enterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              exitTransition = {
-                fadeOut(animationSpec = tween(500))
-              },
-              popEnterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              popExitTransition = {
-                fadeOut(animationSpec = tween(500))
-              }
+            composableWithAnimation(
+              route = SettingsNavigation.Settings.destination
             ) { _ ->
               SettingsScreen(
                 popBack = {
@@ -188,81 +161,33 @@ class MainActivity : ComponentActivity() {
               }
             }
 
-            composable(
-              route = SettingsNavigation.Settings_Currency.destination,
-              enterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              exitTransition = {
-                fadeOut(animationSpec = tween(500))
-              },
-              popEnterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              popExitTransition = {
-                fadeOut(animationSpec = tween(500))
-              }
+            composableWithAnimation(
+              route = SettingsNavigation.Settings_Currency.destination
             ) { _ ->
               SettingsCurrencyScreen {
                 navController.popBackStack()
               }
             }
 
-            composable(
-              route = SettingsNavigation.Settings_Chain.destination,
-              enterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              exitTransition = {
-                fadeOut(animationSpec = tween(500))
-              },
-              popEnterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              popExitTransition = {
-                fadeOut(animationSpec = tween(500))
-              }
+            composableWithAnimation(
+              route = SettingsNavigation.Settings_Chain.destination
             ) { _ ->
               SettingsMultiChainScreen {
                 navController.popBackStack()
               }
             }
 
-            composable(
-              route = NftNavigation.groupDestination.destination,
-              enterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              exitTransition = {
-                fadeOut(animationSpec = tween(500))
-              },
-              popEnterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              popExitTransition = {
-                fadeOut(animationSpec = tween(500))
-              }
+            composableWithAnimation(
+              route = NftNavigation.groupDestination.destination
             ) {
               NftGroupScreen() {
                 navController.popBackStack()
               }
             }
 
-            composable(
+            composableWithAnimation(
               route = DAppsNavigation.DAPP_DETAIL_ROUTE,
-              arguments = DAppsNavigation.detailsArgs,
-              enterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              exitTransition = {
-                fadeOut(animationSpec = tween(500))
-              },
-              popEnterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              popExitTransition = {
-                fadeOut(animationSpec = tween(500))
-              }
+              arguments = DAppsNavigation.detailsArgs
             ) { backStackEntry ->
               val dAppUrl = backStackEntry.arguments?.getString(DAppsNavigation.KEY_OF_DAPP_URL).orEmpty()
               val dAppRpc = backStackEntry.arguments?.getString(DAppsNavigation.KEY_OF_DAPP_RPC).orEmpty()
@@ -277,20 +202,8 @@ class MainActivity : ComponentActivity() {
               )
             }
 
-            composable(
-              route = ScannerNavigation.Scanner.destination,
-              enterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              exitTransition = {
-                fadeOut(animationSpec = tween(500))
-              },
-              popEnterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              popExitTransition = {
-                fadeOut(animationSpec = tween(500))
-              }
+            composableWithAnimation(
+              route = ScannerNavigation.Scanner.destination
             ) { _ ->
               DeFiScannerScreen { content ->
                 content?.also { qr_code ->
@@ -302,21 +215,9 @@ class MainActivity : ComponentActivity() {
               }
             }
 
-            composable(
+            composableWithAnimation(
               route = NftNavigation.NFT_DETAIL_ROUTE,
-              arguments = NftNavigation.nftDetailArgs,
-              enterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              exitTransition = {
-                fadeOut(animationSpec = tween(500))
-              },
-              popEnterTransition = {
-                fadeIn(animationSpec = tween(500))
-              },
-              popExitTransition = {
-                fadeOut(animationSpec = tween(500))
-              }
+              arguments = NftNavigation.nftDetailArgs
             ) {
               NftDetailScreen()
             }
