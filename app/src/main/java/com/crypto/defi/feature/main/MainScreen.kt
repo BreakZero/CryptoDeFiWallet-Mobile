@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
@@ -22,14 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.common.MapKeyConstants
 import com.crypto.defi.feature.assets.MainAssetsScreen
-import com.crypto.defi.feature.dapps.MainDappsScreen
+import com.crypto.defi.feature.dapps.MainDAppsScreen
 import com.crypto.defi.feature.defi.MainDeFiScreen
 import com.crypto.defi.feature.nfts.MainNFTsScreen
 import com.crypto.resource.R
@@ -109,7 +107,7 @@ fun MainScreen(
           MainNFTsScreen(navigateTo = onNavigateTo)
         }
         "Dapps" -> {
-          MainDappsScreen(navigateTo = onNavigateTo)
+          MainDAppsScreen(navigateTo = onNavigateTo)
         }
         "Earn" -> {
           MainDeFiScreen()

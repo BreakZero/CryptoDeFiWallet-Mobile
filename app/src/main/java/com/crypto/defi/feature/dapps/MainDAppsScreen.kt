@@ -33,15 +33,12 @@ import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.LoadingIndicator
 import com.crypto.core.ui.routers.NavigationCommand
 import com.crypto.defi.exceptions.rotating
-import com.crypto.defi.feature.nfts.NFTContentPreview
 import com.crypto.defi.navigations.DAppsNavigation
-import com.crypto.defi.navigations.NftNavigation
 import com.crypto.resource.R
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-fun MainDappsScreen(
+fun MainDAppsScreen(
   dAppsViewModel: MainDAppsViewModel = hiltViewModel(),
   navigateTo: (NavigationCommand) -> Unit
 ) {
@@ -99,7 +96,9 @@ fun MainDappsScreen(
       )
     }
   ) {
-    AnimatedContent(targetState = true, transitionSpec = {
+    AnimatedContent(
+      modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+      targetState = true, transitionSpec = {
       fadeIn(animationSpec = tween(300, 300)) with fadeOut(
         animationSpec = tween(
           300,

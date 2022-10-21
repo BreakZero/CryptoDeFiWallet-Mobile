@@ -31,6 +31,7 @@ import com.crypto.defi.feature.nfts.detail.NftDetailScreen
 import com.crypto.defi.feature.nfts.group.NftGroupScreen
 import com.crypto.defi.feature.settings.SettingsScreen
 import com.crypto.defi.feature.settings.currencies.SettingsCurrencyScreen
+import com.crypto.defi.feature.settings.multi_chain.SettingsMultiChainScreen
 import com.crypto.defi.feature.splash.SplashScreen
 import com.crypto.defi.navigations.*
 import com.crypto.defi.ui.theme.DeFiWalletTheme
@@ -203,6 +204,26 @@ class MainActivity : ComponentActivity() {
               }
             ) { _ ->
               SettingsCurrencyScreen {
+                navController.popBackStack()
+              }
+            }
+
+            composable(
+              route = SettingsNavigation.Settings_Chain.destination,
+              enterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              exitTransition = {
+                fadeOut(animationSpec = tween(500))
+              },
+              popEnterTransition = {
+                fadeIn(animationSpec = tween(500))
+              },
+              popExitTransition = {
+                fadeOut(animationSpec = tween(500))
+              }
+            ) { _ ->
+              SettingsMultiChainScreen {
                 navController.popBackStack()
               }
             }

@@ -102,7 +102,11 @@ fun MainNFTsScreen(
       )
     }
   ) { _ ->
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+      modifier = Modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.background)
+    ) {
       Row(
         modifier = Modifier
           .fillMaxWidth()

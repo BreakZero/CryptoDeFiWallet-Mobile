@@ -29,7 +29,7 @@ class NftGroupViewModel @Inject constructor(
     viewModelScope.launchWithHandler(Dispatchers.Default) {
       val response: BaseNftResponse<List<NftAssetGroup>> = client.get {
         url("${UrlConstant.NFT_SCAN_URL}/account/own/all/0x30145d714db337606c8f520bee9a3e3eac910636")
-        header("X-API-KEY", "")
+        header("X-API-KEY", "5nCEwFbKBh1shcolphAfBY4l")
         parameter("erc_type", ercType)
         parameter("show_attribute", true)
       }.body()

@@ -44,7 +44,7 @@ class NFTsViewModel @Inject constructor(
   fun refresh() {
     viewModelScope.launch {
       _nftsFlow.update {
-        loadNfts("")
+        loadNfts("5nCEwFbKBh1shcolphAfBY4l")
       }
     }
   }

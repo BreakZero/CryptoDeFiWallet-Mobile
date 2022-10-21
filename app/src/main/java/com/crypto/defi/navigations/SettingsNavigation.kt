@@ -18,4 +18,11 @@ object SettingsNavigation {
     override val destination: String
       get() = "settings-currencies"
   }
+
+  val Settings_Chain = object : NavigationCommand {
+    override val arguments: List<NamedNavArgument>
+      get() = emptyList()
+    override val destination: String
+      get() = "settings-multi-chain"
+  }
 }

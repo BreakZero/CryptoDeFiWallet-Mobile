@@ -135,6 +135,9 @@ fun SettingsScreen(
           0 -> {
             navigateTo(SettingsNavigation.Settings_Currency)
           }
+          1 -> {
+            navigateTo(SettingsNavigation.Settings_Chain)
+          }
           else -> Unit
         }
       }
