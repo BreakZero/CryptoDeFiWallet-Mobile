@@ -31,6 +31,7 @@ import com.crypto.defi.feature.assets.send.sendFormViewModel
 import com.crypto.defi.feature.assets.transactions.TransactionListScreen
 import com.crypto.defi.feature.assets.transactions.transactionListViewModel
 import com.crypto.defi.feature.common.DeFiScannerScreen
+import com.crypto.defi.feature.common.DeFiWebViewScreen
 import com.crypto.defi.feature.dapps.detail.DAppDetailScreen
 import com.crypto.defi.feature.main.MainScreen
 import com.crypto.defi.feature.nfts.detail.NftDetailScreen
@@ -211,6 +212,16 @@ class MainActivity : ComponentActivity() {
                     it[MapKeyConstants.KEY_OF_QR_CODE_CONTENT] = qr_code
                   }
                 }
+                navController.popBackStack()
+              }
+            }
+
+            composableWithAnimation(
+              route = WebViewNavigation.WEBSITE_DESTINATION,
+              arguments = WebViewNavigation.args
+            ) {  backStackEntry ->
+              val url = backStackEntry.arguments?.getString(WebViewNavigation.KEY_WEBSITE_URL).orEmpty()
+              DeFiWebViewScreen(url = url) {
                 navController.popBackStack()
               }
             }

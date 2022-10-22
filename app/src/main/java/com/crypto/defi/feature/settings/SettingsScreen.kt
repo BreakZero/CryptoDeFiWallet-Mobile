@@ -38,6 +38,7 @@ import com.crypto.core.ui.utils.SetStatusColor
 import com.crypto.defi.BuildConfig
 import com.crypto.defi.exceptions.rotating
 import com.crypto.defi.navigations.SettingsNavigation
+import com.crypto.defi.navigations.WebViewNavigation
 import com.crypto.resource.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -163,6 +164,9 @@ fun SettingsScreen(
         when (itemIndex) {
           0 -> {
             settingsViewModel.updateWalletName()
+          }
+          3 -> {
+            navigateTo(WebViewNavigation.visitWebsite("https://github.com/BreakZero"))
           }
           else -> Unit
         }

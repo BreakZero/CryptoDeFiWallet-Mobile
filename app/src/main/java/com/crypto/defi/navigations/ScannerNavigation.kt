@@ -9,6 +9,5 @@ object ScannerNavigation {
       get() = emptyList()
     override val destination: String
       get() = "scan-qr-code"
-
   }
 }
