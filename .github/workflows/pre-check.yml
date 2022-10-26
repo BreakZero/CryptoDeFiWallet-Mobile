@@ -1,0 +1,51 @@
+name: Pre-Checking
+on:
+  push:
+env:
+  JAVA_OPTS: "-Xmx4096m"
+  GRADLE_OPTS: -Xmx4096m -Xms512m -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.caching=true -Dorg.gradle.configureondemand=true -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false
+
+jobs:
+  Prepare:
+    uses: BreakZero/CryptoDeFiWallet-Mobile/.github/workflows/pre-workflow.yml@main
+
+  Deploy:
+    runs-on: macos-12
+    needs: Prepare
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Load Files
+        run: |
+          mkdir keystore
+          cd . > keystore/keystore.properties
+          cd . > keystore/github_token.properties
+          cd . > keystore/defi_wallet.jks
+          echo ${{ secrets.TOKEN_INFO }} | base64 --decode > keystore/github_token.properties
+          echo ${{ secrets.KEYSTORE_PROPERTIES }} | base64 --decode > keystore/keystore.properties
+          echo ${{ secrets.KEYSTORE_FILE }} | base64 --decode > keystore/defi_wallet.jks
+
+      - name: Generate cache key
+        run: ./scripts/checksum.sh . checksum.txt
+
+      - name: Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: gradle-${{ hashFiles('checksum.txt') }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Build the app
+        run: ./gradlew ktlintCheck
