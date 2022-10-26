@@ -20,12 +20,6 @@ jobs:
           echo ${{ secrets.KEYSTORE_PROPERTIES }} | base64 --decode > keystore/keystore.properties
           echo ${{ secrets.KEYSTORE_FILE }} | base64 --decode > keystore/defi_wallet.jks
 
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '11'
-
       - name: Generate cache key
         run: ./scripts/checksum.sh . checksum.txt
 
@@ -37,3 +31,9 @@ jobs:
             ~/.gradle/caches/jars-*
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
