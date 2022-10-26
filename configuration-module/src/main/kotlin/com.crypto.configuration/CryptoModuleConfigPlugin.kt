@@ -1,6 +1,7 @@
 package com.crypto.configuration
 
 import com.android.build.gradle.LibraryExtension
+import com.android.build.gradle.internal.utils.getKotlinCompile
 import com.crypto.configuration.dependencies.ComposeDeps
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
@@ -67,9 +68,10 @@ class CryptoModuleConfigPlugin : Plugin<Project> {
     }
 
     compileOptions {
-      sourceCompatibility = JavaVersion.VERSION_11
-      targetCompatibility = JavaVersion.VERSION_11
+      sourceCompatibility(JavaVersion.VERSION_11)
+      targetCompatibility(JavaVersion.VERSION_11)
     }
+
     buildFeatures.also {
       it.compose = true
     }
