@@ -9,7 +9,7 @@ jobs:
   Prepare:
     uses: BreakZero/CryptoDeFiWallet-Mobile/.github/workflows/pre-workflow.yml@main
 
-  Deploy:
+  KtlintCheck:
     runs-on: macos-12
     needs: Prepare
 
@@ -47,5 +47,5 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Build the app
+      - name: Run Ktlint Check Task
         run: ./gradlew ktlintCheck
