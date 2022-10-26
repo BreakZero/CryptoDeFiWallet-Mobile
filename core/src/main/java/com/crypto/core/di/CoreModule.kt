@@ -17,10 +17,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import javax.inject.Singleton
 
 private const val USER_PREFERENCES = "user_preferences"
 
@@ -32,11 +32,11 @@ object CoreModule {
   fun providePreferencesDataStore(@ApplicationContext appContext: Context): DataStore<Preferences> {
     return PreferenceDataStoreFactory.create(
       corruptionHandler = ReplaceFileCorruptionHandler(
-        produceNewData = { emptyPreferences() }
+        produceNewData = { emptyPreferences() },
       ),
       migrations = listOf(SharedPreferencesMigration(appContext, USER_PREFERENCES)),
       scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-      produceFile = { appContext.preferencesDataStoreFile(USER_PREFERENCES) }
+      produceFile = { appContext.preferencesDataStoreFile(USER_PREFERENCES) },
     )
   }
 
@@ -50,7 +50,7 @@ object CoreModule {
       mainKeyAlias,
       appContext,
       EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-      EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+      EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
     )
   }
 

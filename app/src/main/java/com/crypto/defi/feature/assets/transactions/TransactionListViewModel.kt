@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.stateIn
 class TransactionListViewModel @AssistedInject constructor(
   private val chainManager: ChainManager,
   assetUseCase: AssetUseCase,
-  @Assisted private val coinSlug: String
+  @Assisted private val coinSlug: String,
 ) : ViewModel() {
   private val _txnState = assetUseCase.findAssetBySlug(coinSlug).filterNotNull().map { asset ->
     val iChain = chainManager.getChainByKey(asset.code)
@@ -28,9 +28,10 @@ class TransactionListViewModel @AssistedInject constructor(
       address = iChain.address(),
       transactionList = Pager(PagingConfig(pageSize = 20)) {
         TransactionListSource(
-          contractAddress = asset.contract, iChain = iChain
+          contractAddress = asset.contract,
+          iChain = iChain,
         )
-      }.flow.cachedIn(viewModelScope)
+      }.flow.cachedIn(viewModelScope),
     )
   }
 
@@ -39,8 +40,8 @@ class TransactionListViewModel @AssistedInject constructor(
     started = SharingStarted.Lazily,
     initialValue = TransactionListState(
       asset = null,
-      transactionList = flow { emit(PagingData.empty()) }
-    )
+      transactionList = flow { emit(PagingData.empty()) },
+    ),
   )
 
   fun coinSlug() = coinSlug

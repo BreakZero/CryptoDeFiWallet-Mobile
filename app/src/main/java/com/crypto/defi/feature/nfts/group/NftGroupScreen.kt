@@ -28,13 +28,14 @@ import com.crypto.core.ui.composables.LoadingIndicator
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 @OptIn(
-  ExperimentalMaterial3Api::class, ExperimentalPagerApi::class,
-  ExperimentalAnimationApi::class
+  ExperimentalMaterial3Api::class,
+  ExperimentalPagerApi::class,
+  ExperimentalAnimationApi::class,
 )
 @Composable
 fun NftGroupScreen(
   nftGroupViewModel: NftGroupViewModel = hiltViewModel(),
-  onBack: () -> Unit
+  onBack: () -> Unit,
 ) {
   Scaffold(
     modifier = Modifier.fillMaxSize(),
@@ -42,21 +43,23 @@ fun NftGroupScreen(
       DeFiAppBar() {
         onBack()
       }
-    }
+    },
   ) {
     val nftGroupsUiState by nftGroupViewModel.assetsByGroup.collectAsState()
     AnimatedContent(
       modifier = Modifier
         .fillMaxSize()
         .padding(it),
-      targetState = true, transitionSpec = {
-      fadeIn(animationSpec = tween(300, 300)) with fadeOut(
-        animationSpec = tween(
-          300,
-          300
+      targetState = true,
+      transitionSpec = {
+        fadeIn(animationSpec = tween(300, 300)) with fadeOut(
+          animationSpec = tween(
+            300,
+            300,
+          ),
         )
-      )
-    }) {
+      },
+    ) {
       if (nftGroupsUiState.isLoading) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
           LoadingIndicator(animating = true)
@@ -65,13 +68,13 @@ fun NftGroupScreen(
         LazyColumn(
           modifier = Modifier.fillMaxSize(),
           contentPadding = PaddingValues(MaterialTheme.Spacing.medium),
-          verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.medium)
+          verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.medium),
         ) {
           items(
             items = nftGroupsUiState.nftGroups,
             key = {
               it.contractAddress
-            }
+            },
           ) { group ->
             GroupItemView(group = group)
           }

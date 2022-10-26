@@ -7,7 +7,7 @@ import timber.log.Timber
 @Database(
   entities = [WalletEntity::class],
   exportSchema = false,
-  version = 1
+  version = 1,
 )
 abstract class WalletDatabase : RoomDatabase() {
   internal abstract val walletDao: WalletDao

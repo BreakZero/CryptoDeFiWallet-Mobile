@@ -6,17 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.crypto.defi.chains.ChainManager
 import com.crypto.defi.feature.dapps.detail.utils.MessageInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 class DAppDetailViewModel @Inject constructor(
-  private val chainManager: ChainManager
+  private val chainManager: ChainManager,
 ) : ViewModel() {
   private val evmAddress = chainManager.evmAddress()
 
@@ -27,7 +26,7 @@ class DAppDetailViewModel @Inject constructor(
       title = it.title,
       method = it.method,
       methodId = it.methodId,
-      data = it.data
+      data = it.data,
     )
   }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), DAppState())
 
@@ -48,7 +47,7 @@ class DAppDetailViewModel @Inject constructor(
   }
 
   fun sendAddress(webView: WebView, methodId: Long) {
-    val script = "window.ethereum.sendResponse(${methodId}, [\"$evmAddress\"])"
+    val script = "window.ethereum.sendResponse($methodId, [\"$evmAddress\"])"
     webView.evaluateJavascript(script) {}
   }
 
@@ -59,4 +58,3 @@ class DAppDetailViewModel @Inject constructor(
     webView.evaluateJavascript(script1) {}
   }
 }
-

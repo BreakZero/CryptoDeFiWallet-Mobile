@@ -10,7 +10,8 @@ enum class DAppMethod {
   WATCHASSET,
   ADDETHEREUMCHAIN,
   SWITCHETHEREUMCHAIN,
-  UNKNOWN;
+  UNKNOWN,
+  ;
 
   companion object {
     fun fromValue(value: String): DAppMethod {

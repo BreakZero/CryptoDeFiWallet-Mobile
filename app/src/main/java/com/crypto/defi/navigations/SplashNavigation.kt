@@ -9,6 +9,5 @@ object SplashNavigation {
       get() = emptyList()
     override val destination: String
       get() = "splashing"
-
   }
 }

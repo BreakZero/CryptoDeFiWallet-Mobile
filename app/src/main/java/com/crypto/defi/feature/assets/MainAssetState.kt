@@ -2,13 +2,12 @@ package com.crypto.defi.feature.assets
 
 import androidx.annotation.DrawableRes
 import com.crypto.core.common.UiText
-import com.crypto.defi.common.DeFiConstant
 import com.crypto.defi.models.domain.Asset
 import com.crypto.defi.models.domain.WalletNameInfo
 
 data class PromoCard(
   @DrawableRes val backgroundRes: Int,
-  val title: UiText
+  val title: UiText,
 )
 
 data class MainAssetState(
@@ -16,5 +15,5 @@ data class MainAssetState(
   val assets: List<Asset> = emptyList(),
   val promoCard: List<PromoCard> = emptyList(),
   val totalBalance: String = "0.0",
-  val onRefreshing: Boolean = true
+  val onRefreshing: Boolean = true,
 )

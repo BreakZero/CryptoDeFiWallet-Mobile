@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.crypto.wallet.model.WalletDao
 import com.crypto.wallet.model.WalletDatabase
 import com.crypto.wallet.model.WalletEntity
+import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -16,7 +17,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -47,7 +47,7 @@ class WalletEntityReadWriteTest {
     val walletEntity = WalletEntity(
       mnemonic = "mock mnemonic",
       active = 1,
-      passphrase = ""
+      passphrase = "",
     )
 
     walletDao.insertWallet(walletEntity)
@@ -62,7 +62,7 @@ class WalletEntityReadWriteTest {
     val walletEntity = WalletEntity(
       mnemonic = "mock mnemonic",
       active = 1,
-      passphrase = ""
+      passphrase = "",
     )
 
     walletDao.insertWallet(walletEntity)

@@ -1,6 +1,5 @@
 package com.crypto.defi.models.remote
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,5 +10,5 @@ data class TokenHolding(
   @SerialName("contract_address")
   val contractAddress: String,
   @SerialName("contract_name")
-  val contractName: String
+  val contractName: String,
 )

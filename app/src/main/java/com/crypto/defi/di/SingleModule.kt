@@ -9,8 +9,8 @@ import androidx.room.Room
 import com.crypto.defi.chains.ChainManager
 import com.crypto.defi.chains.usecase.AssetUseCase
 import com.crypto.defi.chains.usecase.BalanceUseCase
-import com.crypto.defi.models.domain.AppSettingsConfigSerializer
 import com.crypto.defi.models.domain.AppSettingsConfig
+import com.crypto.defi.models.domain.AppSettingsConfigSerializer
 import com.crypto.defi.models.local.CryptoDeFiDatabase
 import dagger.Module
 import dagger.Provides
@@ -26,12 +26,12 @@ import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.serialization.json.Json
 import timber.log.Timber
-import javax.inject.Singleton
 
 private const val SETTINS_PREFERENCES = "app_settings"
 
@@ -42,12 +42,14 @@ object SingleModule {
   @Provides
   @Singleton
   fun provideKtorClient(): HttpClient {
-    return HttpClient(Android.config {
-      connectTimeout = 10_000
+    return HttpClient(
+      Android.config {
+        connectTimeout = 10_000
       /*sslManager = { httpsURLConnection ->
         httpsURLConnection.sslSocketFactory = SslSettings.getSslContext(application.applicationContext)?.socketFactory
       }*/
-    }) {
+      },
+    ) {
       defaultRequest {
         header("Content-type", "application/json")
 //        header("network", "ropsten")
@@ -60,7 +62,7 @@ object SingleModule {
             useArrayPolymorphism = true
             prettyPrint = true
             allowStructuredMapKeys = true
-          }
+          },
         )
       }
       install(Logging) {
@@ -77,7 +79,7 @@ object SingleModule {
   @Provides
   @Singleton
   fun provideDeFiDatabase(
-    application: Application
+    application: Application,
   ): CryptoDeFiDatabase {
     return Room.databaseBuilder(application, CryptoDeFiDatabase::class.java, "defi_wallet.db")
       .addMigrations(CryptoDeFiDatabase.Migrations.MIGRATION_2_3)
@@ -88,11 +90,11 @@ object SingleModule {
   @Singleton
   fun provideChainManager(
     database: CryptoDeFiDatabase,
-    client: HttpClient
+    client: HttpClient,
   ): ChainManager {
     return ChainManager(
       database = database,
-      client = client
+      client = client,
     )
   }
 
@@ -101,12 +103,12 @@ object SingleModule {
   fun provideBalanceUseCase(
     database: CryptoDeFiDatabase,
     chainManager: ChainManager,
-    client: HttpClient
+    client: HttpClient,
   ): BalanceUseCase {
     return BalanceUseCase(
       client = client,
       chainManager = chainManager,
-      database = database
+      database = database,
     )
   }
 
@@ -114,7 +116,7 @@ object SingleModule {
   @Singleton
   fun provideAssetUseCase(
     client: HttpClient,
-    database: CryptoDeFiDatabase
+    database: CryptoDeFiDatabase,
   ): AssetUseCase {
     return AssetUseCase(client = client, database = database)
   }
@@ -126,7 +128,7 @@ object SingleModule {
       serializer = AppSettingsConfigSerializer,
       produceFile = { appContext.dataStoreFile(SETTINS_PREFERENCES) },
       scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-      corruptionHandler = null
+      corruptionHandler = null,
     )
   }
 }

@@ -16,5 +16,5 @@ data class ChainEntity(
   val isTestNet: Boolean,
   val name: String,
   @ColumnInfo(name = "is_token")
-  val isToken: Boolean
+  val isToken: Boolean,
 )

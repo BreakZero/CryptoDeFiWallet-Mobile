@@ -49,11 +49,11 @@ import timber.log.Timber
 
 @Composable
 fun transactionListViewModel(
-  slug: String
+  slug: String,
 ): TransactionListViewModel {
   val assistedFactory = EntryPointAccessors.fromActivity(
     LocalContext.current as Activity,
-    ViewModelFactoryProvider::class.java
+    ViewModelFactoryProvider::class.java,
   ).transactionListAssistedViewModelFactory()
 
   return viewModel(
@@ -61,19 +61,20 @@ fun transactionListViewModel(
       override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return assistedFactory.createTransactionListViewModel(slug) as T
       }
-    }
+    },
   )
 }
 
 @OptIn(
   ExperimentalMaterialApi::class,
-  ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class
+  ExperimentalFoundationApi::class,
+  ExperimentalMaterial3Api::class,
 )
 @Composable
 fun TransactionListScreen(
   txnListViewModel: TransactionListViewModel,
   navigateUp: () -> Unit,
-  navigateTo: (NavigationCommand) -> Unit
+  navigateTo: (NavigationCommand) -> Unit,
 ) {
   SetStatusColor(statusColor = MaterialTheme.colorScheme.primary)
   val txnUiState by txnListViewModel.txnState.collectAsState()
@@ -81,7 +82,7 @@ fun TransactionListScreen(
 
   val bottomSheetState = rememberModalBottomSheetState(
     initialValue = ModalBottomSheetValue.Hidden,
-    skipHalfExpanded = true
+    skipHalfExpanded = true,
   )
   val coroutineScope = rememberCoroutineScope()
 
@@ -90,11 +91,11 @@ fun TransactionListScreen(
     sheetState = bottomSheetState,
     sheetShape = RoundedCornerShape(
       topEnd = MaterialTheme.Spacing.space24,
-      topStart = MaterialTheme.Spacing.space24
+      topStart = MaterialTheme.Spacing.space24,
     ),
     sheetContent = {
       QRCodeContent(content = txnUiState.address)
-    }
+    },
   ) {
     Scaffold(
       modifier = Modifier.fillMaxSize(),
@@ -102,15 +103,16 @@ fun TransactionListScreen(
         DeFiAppBar {
           navigateUp()
         }
-      }
+      },
     ) { insetPaddings ->
       DeFiBoxWithConstraints(
         modifier = Modifier
           .fillMaxSize()
-          .padding(insetPaddings)
+          .padding(insetPaddings),
       ) { progress, _ ->
         TransactionsMotionLayout(
-          asset = txnUiState.asset, targetValue = progress,
+          asset = txnUiState.asset,
+          targetValue = progress,
           onSend = {
             navigateTo.invoke(SendFormNavigation.destination(txnListViewModel.coinSlug()))
           },
@@ -118,30 +120,30 @@ fun TransactionListScreen(
             coroutineScope.launch {
               bottomSheetState.show()
             }
-          }
+          },
         ) {
           LazyColumn(
             modifier = Modifier
               .clip(
                 RoundedCornerShape(
                   topEnd = MaterialTheme.Spacing.space24,
-                  topStart = MaterialTheme.Spacing.space24
-                )
+                  topStart = MaterialTheme.Spacing.space24,
+                ),
               )
               .fillMaxSize()
               .background(MaterialTheme.colorScheme.surface),
             contentPadding = PaddingValues(
               vertical = MaterialTheme.Spacing.medium,
-              horizontal = MaterialTheme.Spacing.small
+              horizontal = MaterialTheme.Spacing.small,
             ),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small),
           ) {
             when (transactionList.loadState.refresh) {
               is LoadState.Loading -> {
                 item {
                   Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                   ) {
                     LoadingIndicator(animating = true)
                   }
@@ -151,7 +153,7 @@ fun TransactionListScreen(
                 item {
                   Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                   ) {
                     Text(text = "somethings went wrong")
                   }
@@ -163,7 +165,7 @@ fun TransactionListScreen(
               items = transactionList,
               key = {
                 it.hash
-              }
+              },
             ) { transaction ->
               transaction?.let {
                 TransactionItemView(data = it, modifier = Modifier.animateItemPlacement()) {
@@ -175,7 +177,7 @@ fun TransactionListScreen(
               item {
                 Box(
                   modifier = Modifier.fillMaxWidth(),
-                  contentAlignment = Alignment.Center
+                  contentAlignment = Alignment.Center,
                 ) {
                   Text(text = "-- Ending --")
                 }
@@ -185,7 +187,7 @@ fun TransactionListScreen(
               item {
                 Box(
                   modifier = Modifier.fillMaxWidth(),
-                  contentAlignment = Alignment.Center
+                  contentAlignment = Alignment.Center,
                 ) {
                   LoadingIndicator(animating = true)
                 }
@@ -200,25 +202,25 @@ fun TransactionListScreen(
 
 @Composable
 private fun QRCodeContent(
-  content: String
+  content: String,
 ) {
   val image = QRCodeEncoder.encodeQRCode(content)
   Surface(
     modifier = Modifier
-      .fillMaxWidth()
+      .fillMaxWidth(),
   ) {
     Column {
       Text(
         text = content,
         modifier = Modifier.padding(MaterialTheme.Spacing.space12),
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
       )
       image?.also {
         Image(
           modifier = Modifier.align(Alignment.CenterHorizontally),
           bitmap = it.asImageBitmap(),
           contentDescription = null,
-          alignment = Alignment.Center
+          alignment = Alignment.Center,
         )
       }
       Divider(modifier = Modifier.padding(top = MaterialTheme.Spacing.space12))
@@ -228,12 +230,12 @@ private fun QRCodeContent(
           .fillMaxWidth()
           .height(48.dp)
           .clickable {
-          }
+          },
       ) {
         Text(
           text = "Copy",
           lineHeight = 48.sp,
-          textAlign = TextAlign.Center
+          textAlign = TextAlign.Center,
         )
       }
     }

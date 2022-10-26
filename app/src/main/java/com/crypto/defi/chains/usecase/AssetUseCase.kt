@@ -15,6 +15,8 @@ import com.crypto.defi.models.remote.BaseResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import java.math.BigDecimal
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -22,15 +24,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.math.BigDecimal
-import javax.inject.Inject
 
 class AssetUseCase @Inject constructor(
   private val client: HttpClient,
-  private val database: CryptoDeFiDatabase
+  private val database: CryptoDeFiDatabase,
 ) {
   suspend fun fetchingAssets(
-    initial: suspend () -> Unit
+    initial: suspend () -> Unit,
   ) = withContext(Dispatchers.IO) {
     try {
       val lastSha256 = database.versionDao.lastVersion()?.sha256.orElse("==")
@@ -41,8 +41,8 @@ class AssetUseCase @Inject constructor(
         database.versionDao.insert(
           CoinVersionShaEntity(
             sha256 = response.data.sha256,
-            createAt = DateTimeUtil.toEpochMillis(DateTimeUtil.now())
-          )
+            createAt = DateTimeUtil.toEpochMillis(DateTimeUtil.now()),
+          ),
         )
       }
       database.assetDao.insertAll(response.data.currencies.map { it.toAssetEntity() })

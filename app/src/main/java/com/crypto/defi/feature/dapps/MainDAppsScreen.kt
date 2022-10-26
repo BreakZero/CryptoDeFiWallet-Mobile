@@ -40,19 +40,21 @@ import com.crypto.resource.R
 @Composable
 fun MainDAppsScreen(
   dAppsViewModel: MainDAppsViewModel = hiltViewModel(),
-  navigateTo: (NavigationCommand) -> Unit
+  navigateTo: (NavigationCommand) -> Unit,
 ) {
   val dAppUiState by dAppsViewModel.dAppState.collectAsState()
-  Scaffold(modifier = Modifier.fillMaxSize(),
+  Scaffold(
+    modifier = Modifier.fillMaxSize(),
     topBar = {
       SmallTopAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(
-          containerColor = MaterialTheme.colorScheme.primary
+          containerColor = MaterialTheme.colorScheme.primary,
         ),
         navigationIcon = {
-          IconButton(onClick = {
-
-          }) {
+          IconButton(
+            onClick = {
+            },
+          ) {
             dAppUiState.walletNameInfo.avator?.let {
               AsyncImage(
                 modifier = Modifier
@@ -65,7 +67,7 @@ fun MainDAppsScreen(
                   .error(R.drawable.avatar_generic_1)
                   .crossfade(true)
                   .build(),
-                contentDescription = null
+                contentDescription = null,
               )
             } ?: run {
               Image(
@@ -74,7 +76,7 @@ fun MainDAppsScreen(
                   .clip(CircleShape)
                   .rotating(2500),
                 painter = painterResource(id = dAppUiState.walletNameInfo.avatorRes),
-                contentDescription = null
+                contentDescription = null,
               )
             }
           }
@@ -84,33 +86,37 @@ fun MainDAppsScreen(
             Text(
               text = dAppUiState.walletNameInfo.walletName,
               style = MaterialTheme.typography.titleSmall,
-              color = MaterialTheme.colorScheme.primaryContainer
+              color = MaterialTheme.colorScheme.primaryContainer,
             )
             Text(
               text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
               style = MaterialTheme.typography.labelSmall,
-              color = MaterialTheme.colorScheme.surfaceVariant
+              color = MaterialTheme.colorScheme.surfaceVariant,
             )
           }
-        }
+        },
       )
-    }
+    },
   ) {
     AnimatedContent(
-      modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
-      targetState = true, transitionSpec = {
-      fadeIn(animationSpec = tween(300, 300)) with fadeOut(
-        animationSpec = tween(
-          300,
-          300
+      modifier = Modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.background),
+      targetState = true,
+      transitionSpec = {
+        fadeIn(animationSpec = tween(300, 300)) with fadeOut(
+          animationSpec = tween(
+            300,
+            300,
+          ),
         )
-      )
-    }) {
+      },
+    ) {
       if (dAppUiState.isLoading) {
         Box(
           contentAlignment = Alignment.Center,
           modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
         ) {
           LoadingIndicator(animating = true)
         }
@@ -119,24 +125,28 @@ fun MainDAppsScreen(
           Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-              .fillMaxSize()
+              .fillMaxSize(),
           ) {
-            Text(modifier = Modifier.clickable {
-              dAppsViewModel.onRefresh()
-            }, text = "tap to refresh...", style = MaterialTheme.typography.bodyLarge)
+            Text(
+              modifier = Modifier.clickable {
+                dAppsViewModel.onRefresh()
+              },
+              text = "tap to refresh...",
+              style = MaterialTheme.typography.bodyLarge,
+            )
           }
         } else {
           LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             contentPadding = PaddingValues(MaterialTheme.Spacing.medium),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small),
           ) {
             items(
               items = dAppUiState.dApps,
               key = {
                 it.appName
-              }
+              },
             ) { dApp ->
               Card(
                 modifier = Modifier
@@ -146,19 +156,19 @@ fun MainDAppsScreen(
                       DAppsNavigation.detailDestination(
                         dApp.chainId,
                         dApp.url.replace("#/", ""),
-                        dApp.rpc
-                      )
+                        dApp.rpc,
+                      ),
                     )
                   },
                 elevation = CardDefaults.elevatedCardElevation(
-                  defaultElevation = MaterialTheme.Spacing.extraSmall
+                  defaultElevation = MaterialTheme.Spacing.extraSmall,
                 ),
-                shape = RoundedCornerShape(MaterialTheme.Spacing.small)
+                shape = RoundedCornerShape(MaterialTheme.Spacing.small),
               ) {
                 Column(
                   modifier = Modifier
                     .fillMaxWidth(),
-                  horizontalAlignment = Alignment.CenterHorizontally
+                  horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                   AsyncImage(
                     modifier = Modifier
@@ -171,7 +181,7 @@ fun MainDAppsScreen(
                       .error(R.drawable.avatar_generic_1)
                       .crossfade(true)
                       .build(),
-                    contentDescription = null
+                    contentDescription = null,
                   )
                   Text(text = dApp.appName, style = MaterialTheme.typography.bodyMedium)
                 }

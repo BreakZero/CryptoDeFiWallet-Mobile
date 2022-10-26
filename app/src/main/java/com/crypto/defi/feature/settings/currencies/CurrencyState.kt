@@ -7,10 +7,10 @@ data class CurrencyState(
   val selected: DeFiCurrency = Currency.getInstance(Locale.US).let {
     DeFiCurrency(
       symbol = it.symbol,
-      code = it.currencyCode
+      code = it.currencyCode,
     )
   },
   val supportList: List<DeFiCurrency> = Currency.getAvailableCurrencies().map {
     DeFiCurrency(code = it.currencyCode, symbol = it.symbol)
-  }
+  },
 )

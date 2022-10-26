@@ -40,22 +40,26 @@ import kotlinx.coroutines.launch
 data class NavMenu(
   @DrawableRes val icon: Int,
   val label: String,
-  val visitable: Boolean = true
+  val visitable: Boolean = true,
 )
 
 val navMenus = listOf(
   NavMenu(
-    icon = R.drawable.ic_nav_wallet, label = "Wallet"
+    icon = R.drawable.ic_nav_wallet,
+    label = "Wallet",
   ),
   NavMenu(
-    icon = R.drawable.ic_nav_nft, label = "NFT"
+    icon = R.drawable.ic_nav_nft,
+    label = "NFT",
   ),
   NavMenu(
-    icon = R.drawable.ic_nav_dapp, label = "Dapps"
+    icon = R.drawable.ic_nav_dapp,
+    label = "Dapps",
   ),
   NavMenu(
-    icon = R.drawable.ic_nav_defi, label = "Earn"
-  )
+    icon = R.drawable.ic_nav_defi,
+    label = "Earn",
+  ),
 )
 
 @OptIn(ExperimentalPagerApi::class)
@@ -63,7 +67,7 @@ val navMenus = listOf(
 fun MainScreen(
   savedStateHandle: SavedStateHandle?,
   mainViewModel: MainViewModel = hiltViewModel(),
-  onNavigateTo: (NavigationCommand) -> Unit
+  onNavigateTo: (NavigationCommand) -> Unit,
 ) {
   savedStateHandle?.also { handler ->
     LaunchedEffect(key1 = handler) {
@@ -85,19 +89,21 @@ fun MainScreen(
 
   LaunchedEffect(key1 = pageState.currentPage) {
     systemUIController.setStatusBarColor(
-      statusColor, useDartIcons
+      statusColor,
+      useDartIcons,
     )
   }
 
   Column(
-    modifier = Modifier.fillMaxSize()
+    modifier = Modifier.fillMaxSize(),
   ) {
     HorizontalPager(
       modifier = Modifier
         .weight(1f)
         .fillMaxWidth(),
-      count = menus.size, state = pageState,
-      userScrollEnabled = false
+      count = menus.size,
+      state = pageState,
+      userScrollEnabled = false,
     ) { page ->
       when (menus[page].label) {
         "Wallet" -> {
@@ -121,7 +127,7 @@ fun MainScreen(
         .height(MaterialTheme.Spacing.extraLarge)
         .shadow(elevation = MaterialTheme.Spacing.small),
       divider = {},
-      indicator = {}
+      indicator = {},
     ) {
       menus.forEachIndexed { index, menu ->
         Tab(
@@ -132,14 +138,14 @@ fun MainScreen(
             scope.launch {
               pageState.animateScrollToPage(index)
             }
-          }
+          },
         ) {
           Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
           ) {
             Icon(
               painter = painterResource(id = menu.icon),
-              contentDescription = null
+              contentDescription = null,
             )
             Text(text = menu.label)
           }

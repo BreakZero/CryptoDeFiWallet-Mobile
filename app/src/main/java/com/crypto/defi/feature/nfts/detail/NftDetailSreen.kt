@@ -27,15 +27,14 @@ import com.crypto.core.ui.composables.DeFiAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NftDetailScreen(
-  detailViewModel: DetailViewModel = hiltViewModel()
+  detailViewModel: DetailViewModel = hiltViewModel(),
 ) {
   Scaffold(
     modifier = Modifier.fillMaxSize(),
     topBar = {
       DeFiAppBar() {
-
       }
-    }
+    },
   ) { paddings ->
     var lifecycle by remember {
       mutableStateOf(Lifecycle.Event.ON_CREATE)
@@ -52,7 +51,7 @@ fun NftDetailScreen(
       modifier = Modifier
         .fillMaxSize()
         .padding(paddings)
-        .padding(MaterialTheme.Spacing.medium)
+        .padding(MaterialTheme.Spacing.medium),
     ) {
       AndroidView(
         factory = { context ->
@@ -74,7 +73,7 @@ fun NftDetailScreen(
         },
         modifier = Modifier
           .fillMaxWidth()
-          .aspectRatio(16 / 9f)
+          .aspectRatio(16 / 9f),
       )
     }
   }

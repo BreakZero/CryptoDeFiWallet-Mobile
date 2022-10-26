@@ -7,7 +7,7 @@ data class PasscodeState(
   val passcode: String = "",
   val originPasscode: String = "",
   val messageLabel: String,
-  val error: String? = null
+  val error: String? = null,
 ) {
   fun insert(number: String): PasscodeState {
     return PasscodeState(passcode = "$passcode$number", messageLabel = messageLabel, originPasscode = originPasscode)

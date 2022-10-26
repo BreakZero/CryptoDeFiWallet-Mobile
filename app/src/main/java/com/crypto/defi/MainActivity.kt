@@ -38,7 +38,7 @@ import com.crypto.defi.feature.nfts.detail.NftDetailScreen
 import com.crypto.defi.feature.nfts.group.NftGroupScreen
 import com.crypto.defi.feature.settings.SettingsScreen
 import com.crypto.defi.feature.settings.currencies.SettingsCurrencyScreen
-import com.crypto.defi.feature.settings.multi_chain.SettingsMultiChainScreen
+import com.crypto.defi.feature.settings.multichain.SettingsMultiChainScreen
 import com.crypto.defi.feature.splash.SplashScreen
 import com.crypto.defi.navigations.*
 import com.crypto.defi.ui.theme.DeFiWalletTheme
@@ -54,7 +54,7 @@ fun NavGraphBuilder.composableWithAnimation(
   route: String,
   arguments: List<NamedNavArgument> = emptyList(),
   deepLinks: List<NavDeepLink> = emptyList(),
-  content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
+  content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
 ) {
   composable(
     route = route,
@@ -72,7 +72,7 @@ fun NavGraphBuilder.composableWithAnimation(
     popExitTransition = {
       fadeOut(animationSpec = tween(500))
     },
-    content = content
+    content = content,
   )
 }
 
@@ -90,15 +90,15 @@ class MainActivity : ComponentActivity() {
           modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
-            .navigationBarsPadding()
+            .navigationBarsPadding(),
         ) {
           AnimatedNavHost(
             navController = navController,
             startDestination = SplashNavigation.Splashing.destination,
-            modifier = Modifier
+            modifier = Modifier,
           ) {
             composableWithAnimation(
-              SplashNavigation.Splashing.destination
+              SplashNavigation.Splashing.destination,
             ) {
               SplashScreen {
                 navController.navigate(it.destination) {
@@ -110,10 +110,10 @@ class MainActivity : ComponentActivity() {
             }
 
             composableWithAnimation(
-              MainNavigation.Main.destination
+              MainNavigation.Main.destination,
             ) {
               MainScreen(
-                savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+                savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
               ) {
                 navController.navigate(it.destination)
               }
@@ -121,14 +121,14 @@ class MainActivity : ComponentActivity() {
 
             composableWithAnimation(
               route = TransactionListNavigation.ROUTE,
-              arguments = TransactionListNavigation.args
+              arguments = TransactionListNavigation.args,
             ) { backStackEntry ->
               val coinSlug = backStackEntry.arguments?.getString(TransactionListNavigation.KEY_CODE).orEmpty()
               TransactionListScreen(
                 txnListViewModel = transactionListViewModel(slug = coinSlug),
                 navigateUp = {
                   navController.popBackStack()
-                }
+                },
               ) {
                 navController.navigate(it.destination)
               }
@@ -136,7 +136,7 @@ class MainActivity : ComponentActivity() {
 
             composableWithAnimation(
               route = SendFormNavigation.ROUTE,
-              arguments = SendFormNavigation.args
+              arguments = SendFormNavigation.args,
             ) { backStackEntry ->
               val coinSlug = backStackEntry.arguments
                 ?.getString(SendFormNavigation.KEY_SLUG) ?: ""
@@ -145,25 +145,26 @@ class MainActivity : ComponentActivity() {
                 sendFormViewModel = sendFormViewModel(coinSlug),
                 navigateUp = {
                   navController.popBackStack()
-                }) {
-                navController.navigate(it.destination)
-              }
-            }
-
-            composableWithAnimation(
-              route = SettingsNavigation.Settings.destination
-            ) { _ ->
-              SettingsScreen(
-                popBack = {
-                  navController.popBackStack()
-                }
+                },
               ) {
                 navController.navigate(it.destination)
               }
             }
 
             composableWithAnimation(
-              route = SettingsNavigation.Settings_Currency.destination
+              route = SettingsNavigation.Settings.destination,
+            ) { _ ->
+              SettingsScreen(
+                popBack = {
+                  navController.popBackStack()
+                },
+              ) {
+                navController.navigate(it.destination)
+              }
+            }
+
+            composableWithAnimation(
+              route = SettingsNavigation.Settings_Currency.destination,
             ) { _ ->
               SettingsCurrencyScreen {
                 navController.popBackStack()
@@ -171,7 +172,7 @@ class MainActivity : ComponentActivity() {
             }
 
             composableWithAnimation(
-              route = SettingsNavigation.Settings_Chain.destination
+              route = SettingsNavigation.Settings_Chain.destination,
             ) { _ ->
               SettingsMultiChainScreen {
                 navController.popBackStack()
@@ -179,7 +180,7 @@ class MainActivity : ComponentActivity() {
             }
 
             composableWithAnimation(
-              route = NftNavigation.groupDestination.destination
+              route = NftNavigation.groupDestination.destination,
             ) {
               NftGroupScreen() {
                 navController.popBackStack()
@@ -188,7 +189,7 @@ class MainActivity : ComponentActivity() {
 
             composableWithAnimation(
               route = DAppsNavigation.DAPP_DETAIL_ROUTE,
-              arguments = DAppsNavigation.detailsArgs
+              arguments = DAppsNavigation.detailsArgs,
             ) { backStackEntry ->
               val dAppUrl = backStackEntry.arguments?.getString(DAppsNavigation.KEY_OF_DAPP_URL).orEmpty()
               val dAppRpc = backStackEntry.arguments?.getString(DAppsNavigation.KEY_OF_DAPP_RPC).orEmpty()
@@ -199,12 +200,12 @@ class MainActivity : ComponentActivity() {
                 dAppRpc = dAppRpc,
                 popBack = {
                   navController.popBackStack()
-                }
+                },
               )
             }
 
             composableWithAnimation(
-              route = ScannerNavigation.Scanner.destination
+              route = ScannerNavigation.Scanner.destination,
             ) { _ ->
               DeFiScannerScreen { content ->
                 content?.also { qr_code ->
@@ -218,8 +219,8 @@ class MainActivity : ComponentActivity() {
 
             composableWithAnimation(
               route = WebViewNavigation.WEBSITE_DESTINATION,
-              arguments = WebViewNavigation.args
-            ) {  backStackEntry ->
+              arguments = WebViewNavigation.args,
+            ) { backStackEntry ->
               val url = backStackEntry.arguments?.getString(WebViewNavigation.KEY_WEBSITE_URL).orEmpty()
               DeFiWebViewScreen(url = url) {
                 navController.popBackStack()
@@ -228,7 +229,7 @@ class MainActivity : ComponentActivity() {
 
             composableWithAnimation(
               route = NftNavigation.NFT_DETAIL_ROUTE,
-              arguments = NftNavigation.nftDetailArgs
+              arguments = NftNavigation.nftDetailArgs,
             ) {
               NftDetailScreen()
             }
@@ -242,8 +243,8 @@ class MainActivity : ComponentActivity() {
                 tips = NormalTips(
                   title = stringResource(id = R.string.two_fa_view__2_factor_authentication),
                   message = stringResource(id = R.string.wallet_protect__2fa_desc),
-                  iconRes = R.drawable.ic_shell
-                )
+                  iconRes = R.drawable.ic_shell,
+                ),
               )
             }
           }

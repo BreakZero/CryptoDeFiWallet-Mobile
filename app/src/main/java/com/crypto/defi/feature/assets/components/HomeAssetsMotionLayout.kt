@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.ExperimentalMotionApi
@@ -34,11 +33,11 @@ import com.crypto.resource.R
 fun HomeAssetsMotionLayout(
   totalBalance: String,
   targetValue: Float,
-  scrollableBody: @Composable () -> Unit
+  scrollableBody: @Composable () -> Unit,
 ) {
   val progress by animateFloatAsState(
     targetValue = targetValue,
-    tween(100)
+    tween(100),
   )
   MotionLayout(
     start = startConstraintSet(),
@@ -46,13 +45,13 @@ fun HomeAssetsMotionLayout(
     progress = progress,
     modifier = Modifier
       .fillMaxSize()
-      .background(MaterialTheme.colorScheme.primary)
+      .background(MaterialTheme.colorScheme.primary),
   ) {
     Box(
       modifier = Modifier
         .fillMaxWidth()
         .layoutId("header-content"),
-      contentAlignment = Alignment.Center
+      contentAlignment = Alignment.Center,
     ) {
       Image(
         modifier = Modifier
@@ -61,24 +60,25 @@ fun HomeAssetsMotionLayout(
         painter = painterResource(id = R.drawable.backgroud_stars),
         contentDescription = "poster",
         contentScale = ContentScale.FillWidth,
-        alpha = 1f - progress
+        alpha = 1f - progress,
       )
       Column(
         modifier = Modifier
           .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
       ) {
         Row(modifier = Modifier) {
           Text(
             text = stringResource(id = R.string.wallet_asset__total_balance_big),
             modifier = Modifier.align(Alignment.CenterVertically),
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primaryContainer
+            color = MaterialTheme.colorScheme.primaryContainer,
           )
           Icon(
-            imageVector = Icons.Default.RemoveRedEye, contentDescription = null,
+            imageVector = Icons.Default.RemoveRedEye,
+            contentDescription = null,
             modifier = Modifier.align(Alignment.CenterVertically),
-            tint = MaterialTheme.colorScheme.primaryContainer
+            tint = MaterialTheme.colorScheme.primaryContainer,
           )
         }
         Text(
@@ -92,21 +92,21 @@ fun HomeAssetsMotionLayout(
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
                 fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
                 fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                fontWeight = MaterialTheme.typography.titleLarge.fontWeight
-              )
+                fontWeight = MaterialTheme.typography.titleLarge.fontWeight,
+              ),
             ) {
               append(totalBalance)
             }
             withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
               append(" USD")
             }
-          }
+          },
         )
         Spacer(modifier = Modifier.height(MaterialTheme.Spacing.large))
       }
     }
     Box(
-      modifier = Modifier.layoutId("content")
+      modifier = Modifier.layoutId("content"),
     ) {
       scrollableBody()
     }

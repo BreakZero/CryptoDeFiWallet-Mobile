@@ -9,7 +9,6 @@ object SettingsNavigation {
       get() = emptyList()
     override val destination: String
       get() = "settings"
-
   }
 
   val Settings_Currency = object : NavigationCommand {

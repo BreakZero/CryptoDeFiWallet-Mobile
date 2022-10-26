@@ -5,15 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.crypto.core.ConfigurationKeys
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-  private val sharedPreferences: SharedPreferences
+  private val sharedPreferences: SharedPreferences,
 ) : ViewModel() {
   private val _uiEvent = Channel<Boolean>()
   val uiEvent = _uiEvent.receiveAsFlow()

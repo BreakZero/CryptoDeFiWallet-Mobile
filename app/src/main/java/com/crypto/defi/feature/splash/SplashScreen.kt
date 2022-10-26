@@ -25,7 +25,7 @@ import com.crypto.resource.R
 @Composable
 fun SplashScreen(
   splashViewModel: SplashViewModel = hiltViewModel(),
-  navigateTo: (NavigationCommand) -> Unit
+  navigateTo: (NavigationCommand) -> Unit,
 ) {
   val scale = remember {
     androidx.compose.animation.core.Animatable(0f)
@@ -39,12 +39,12 @@ fun SplashScreen(
         durationMillis = 800,
         easing = {
           OvershootInterpolator(4f).getInterpolation(it)
-        }
-      )
+        },
+      ),
     )
     splashViewModel.uiEvent.collect {
       navigateTo.invoke(
-        if (it) MainNavigation.Main else OnboardingNavigations.Index
+        if (it) MainNavigation.Main else OnboardingNavigations.Index,
       )
     }
   }
@@ -53,14 +53,14 @@ fun SplashScreen(
   Surface(modifier = Modifier.fillMaxSize()) {
     Box(
       contentAlignment = Alignment.Center,
-      modifier = Modifier.fillMaxSize()
+      modifier = Modifier.fillMaxSize(),
     ) {
       Image(
         painter = painterResource(id = R.drawable.ic_wallet_logo),
         contentDescription = null,
         modifier = Modifier
           .scale(scale.value)
-          .fillMaxWidth()
+          .fillMaxWidth(),
       )
     }
   }

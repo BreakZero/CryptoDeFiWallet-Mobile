@@ -26,22 +26,23 @@ import com.crypto.resource.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainDeFiScreen() {
-  Scaffold(modifier = Modifier.fillMaxSize(),
+  Scaffold(
+    modifier = Modifier.fillMaxSize(),
     topBar = {
       SmallTopAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(
-          containerColor = MaterialTheme.colorScheme.primary
+          containerColor = MaterialTheme.colorScheme.primary,
         ),
         navigationIcon = {
           IconButton(onClick = {
-          }) {
+          },) {
             Image(
               modifier = Modifier
                 .size(MaterialTheme.Spacing.space48)
                 .clip(CircleShape)
                 .rotating(2500),
               painter = painterResource(id = R.drawable.avatar_generic_1),
-              contentDescription = null
+              contentDescription = null,
             )
           }
         },
@@ -50,20 +51,21 @@ fun MainDeFiScreen() {
             Text(
               text = "Wallet Name",
               style = MaterialTheme.typography.titleSmall,
-              color = MaterialTheme.colorScheme.primaryContainer
+              color = MaterialTheme.colorScheme.primaryContainer,
             )
             Text(
               text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
               style = MaterialTheme.typography.labelSmall,
-              color = MaterialTheme.colorScheme.surfaceVariant
+              color = MaterialTheme.colorScheme.surfaceVariant,
             )
           }
-        }
+        },
       )
-    }) {
+    },
+  ) {
     Box(
       modifier = Modifier.fillMaxSize(),
-      contentAlignment = Alignment.Center
+      contentAlignment = Alignment.Center,
     ) {
       Text(text = "DeFi dapps")
     }

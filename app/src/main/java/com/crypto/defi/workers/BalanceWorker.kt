@@ -15,7 +15,7 @@ class BalanceWorker(
   appContext: Context,
   workerParams: WorkerParameters,
   private val chainManager: ChainManager,
-  private val balanceUseCase: BalanceUseCase
+  private val balanceUseCase: BalanceUseCase,
 ) : CoroutineWorker(appContext, workerParams) {
   override suspend fun doWork(): Result {
     supervisorScope {
@@ -25,7 +25,7 @@ class BalanceWorker(
       }
       launchWithHandler(Dispatchers.Default) {
         balanceUseCase.fetchingTokenHolding(
-          address = evmAddress
+          address = evmAddress,
         )
       }
       launchWithHandler(Dispatchers.Default) {

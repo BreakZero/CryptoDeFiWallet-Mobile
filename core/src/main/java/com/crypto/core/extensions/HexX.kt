@@ -10,7 +10,9 @@ private fun String.containsHexPrefix(): Boolean {
 fun String.cleanHexPrefix(): String {
   return if (this.containsHexPrefix()) {
     this.substring(2)
-  } else this
+  } else {
+    this
+  }
 }
 
 fun String.hexStringToByteArray(): ByteArray {

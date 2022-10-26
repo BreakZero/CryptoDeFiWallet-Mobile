@@ -1,4 +1,4 @@
-package com.crypto.defi.feature.settings.multi_chain
+package com.crypto.defi.feature.settings.multichain
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +27,7 @@ import com.crypto.core.ui.composables.DeFiAppBar
 @Composable
 fun SettingsMultiChainScreen(
   multiChainViewModel: MultiChainViewModel = hiltViewModel(),
-  popBack: () -> Unit
+  popBack: () -> Unit,
 ) {
   Scaffold(
     modifier = Modifier.fillMaxSize(),
@@ -36,38 +36,38 @@ fun SettingsMultiChainScreen(
         actions = {
           IconButton(onClick = {
             popBack()
-          }) {
+          },) {
             Icon(
               imageVector = Icons.Default.Done,
               contentDescription = null,
-              tint = MaterialTheme.colorScheme.primaryContainer
+              tint = MaterialTheme.colorScheme.primaryContainer,
             )
           }
-        }
+        },
       ) {
         popBack()
       }
-    }
+    },
   ) {
     val multiChainUiState by multiChainViewModel.multiChainState.collectAsState()
     LazyColumn(
-      modifier = Modifier.padding(it)
+      modifier = Modifier.padding(it),
     ) {
       items(
         items = multiChainUiState.supports,
         key = {
           it.label
-        }
+        },
       ) { network ->
         Row(
           modifier = Modifier.fillMaxWidth(),
-          verticalAlignment = Alignment.CenterVertically
+          verticalAlignment = Alignment.CenterVertically,
         ) {
           RadioButton(
             selected = network.label == multiChainUiState.selected.label,
             onClick = {
               multiChainViewModel.update(network)
-            }
+            },
           )
           Text(text = network.label)
         }

@@ -5,21 +5,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.crypto.defi.models.domain.AppSettingsConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-  private val appSettingsConfig: DataStore<AppSettingsConfig>
+  private val appSettingsConfig: DataStore<AppSettingsConfig>,
 ) : ViewModel() {
   val settingsState = appSettingsConfig.data.map {
     SettingsState(
       currency = it.currency,
       network = it.network,
-      walletNameInfo = it.walletNameInfo
+      walletNameInfo = it.walletNameInfo,
     )
   }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SettingsState())
 
@@ -29,8 +29,8 @@ class SettingsViewModel @Inject constructor(
         it.copy(
           walletNameInfo = it.walletNameInfo.copy(
             walletName = "D&J",
-            avator = "https://logo.nftscan.com/logo/0xb16dfd9aaaf874fcb1db8a296375577c1baa6f21.png"
-          )
+            avator = "https://logo.nftscan.com/logo/0xb16dfd9aaaf874fcb1db8a296375577c1baa6f21.png",
+          ),
         )
       }
     }

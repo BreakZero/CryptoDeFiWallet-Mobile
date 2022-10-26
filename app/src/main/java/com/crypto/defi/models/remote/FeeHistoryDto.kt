@@ -1,6 +1,5 @@
 package com.crypto.defi.models.remote
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,5 +12,5 @@ data class FeeHistoryDto(
   @SerialName("oldestBlock")
   val oldestBlock: String,
   @SerialName("reward")
-  val reward: List<List<String>>
+  val reward: List<List<String>>,
 )

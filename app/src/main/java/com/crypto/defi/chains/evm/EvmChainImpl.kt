@@ -5,8 +5,8 @@ import com.crypto.core.extensions._16toNumber
 import com.crypto.core.extensions.clearHexPrefix
 import com.crypto.core.extensions.hexStringToByteArray
 import com.crypto.core.extensions.orElse
-import com.crypto.core.extensions.toHexString
 import com.crypto.core.extensions.toHexByteArray
+import com.crypto.core.extensions.toHexString
 import com.crypto.defi.chains.IChain
 import com.crypto.defi.common.UrlConstant
 import com.crypto.defi.exceptions.InsufficientBalanceException
@@ -21,17 +21,17 @@ import com.google.protobuf.ByteString
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import java.math.BigInteger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import wallet.core.java.AnySigner
 import wallet.core.jni.CoinType
 import wallet.core.jni.HDWallet
 import wallet.core.jni.proto.Ethereum
-import java.math.BigInteger
 
 class EvmChainImpl(
   private val httpClient: HttpClient,
-  private val hdWallet: HDWallet
+  private val hdWallet: HDWallet,
 ) : IChain {
   override fun address(): String {
     return hdWallet.getAddressForCoin(CoinType.ETHEREUM)
@@ -53,11 +53,11 @@ class EvmChainImpl(
   override suspend fun transactions(
     page: Int,
     offset: Int,
-    contract: String?
+    contract: String?,
   ): List<EvmTransaction> {
     return try {
       httpClient.get(
-        urlString = "${UrlConstant.BASE_URL}/ethereum/transactions/${address()}"
+        urlString = "${UrlConstant.BASE_URL}/ethereum/transactions/${address()}",
       ) {
         parameter("page", page)
         parameter("offset", 20)
@@ -83,7 +83,8 @@ class EvmChainImpl(
         to = readyToSign.contract.orElse(readyToSign.to),
         input = readyToSign.contract?.let {
           "0x70a08231000000000000000000000000${address().clearHexPrefix()}"
-        })
+        },
+      )
       val prvKey =
         ByteString.copyFrom(hdWallet.getKeyForCoin(CoinType.ETHEREUM).data())
       val signer = readyToSign.contract?.let {
@@ -129,7 +130,7 @@ class EvmChainImpl(
       val output = AnySigner.sign(
         signer.build(),
         CoinType.ETHEREUM,
-        Ethereum.SigningOutput.parser()
+        Ethereum.SigningOutput.parser(),
       )
       TransactionPlan(
         rawData = output.encoded.toByteArray().toHexString(),
@@ -137,7 +138,7 @@ class EvmChainImpl(
         amount = readyToSign.amount,
         to = readyToSign.to,
         from = address(),
-        fee = gasLimit.toBigInteger().times(baseFee)
+        fee = gasLimit.toBigInteger().times(baseFee),
       )
     }
   }
@@ -153,7 +154,7 @@ class EvmChainImpl(
     chain: String = "ethereum",
     from: String,
     to: String,
-    input: String? = null
+    input: String? = null,
   ) = withContext(Dispatchers.IO) {
     return@withContext input?.let {
       val response = httpClient.get("${UrlConstant.BASE_URL}/$chain/estimateGas") {
@@ -166,14 +167,14 @@ class EvmChainImpl(
   }
 
   private suspend fun fetchNonce(
-    chain: String = "ethereum"
+    chain: String = "ethereum",
   ) = withContext(Dispatchers.IO) {
     httpClient.get("${UrlConstant.BASE_URL}/$chain/${address()}/nonce")
       .body<BaseResponse<Long>>().data
   }
 
   private suspend fun feeHistory(
-    chain: String = "ethereum"
+    chain: String = "ethereum",
   ) = withContext(Dispatchers.Default) {
     val history = httpClient.get("${UrlConstant.BASE_URL}/$chain/feeHistory")
       .body<BaseResponse<FeeHistoryDto>>()
@@ -189,7 +190,7 @@ class EvmChainImpl(
         baseFeePerGas = value._16toNumber(),
         gasUsedRatio = historyDto.gasUsedRatio.getOrNull(index) ?: 0.0,
         priorityFeePerGas = historyDto.reward.getOrNull(index)?.map { it._16toNumber() }
-          ?: emptyList()
+          ?: emptyList(),
       )
     }
     val firstPercentialPriorityFees = blocks.first().priorityFeePerGas
@@ -204,5 +205,5 @@ internal data class BlockInfo(
   val number: BigInteger,
   val baseFeePerGas: BigInteger,
   val gasUsedRatio: Double,
-  val priorityFeePerGas: List<BigInteger>
+  val priorityFeePerGas: List<BigInteger>,
 )

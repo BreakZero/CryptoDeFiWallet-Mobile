@@ -40,7 +40,7 @@ private val DeFiDarkColorScheme = darkColorScheme(
   inverseOnSurface = Grey20,
   surfaceVariant = BlueGrey30,
   onSurfaceVariant = BlueGrey80,
-  outline = BlueGrey60
+  outline = BlueGrey60,
 )
 
 private val DeFiLightColorScheme = lightColorScheme(
@@ -69,15 +69,14 @@ private val DeFiLightColorScheme = lightColorScheme(
   inverseOnSurface = Grey95,
   surfaceVariant = BlueGrey90,
   onSurfaceVariant = BlueGrey30,
-  outline = BlueGrey50
+  outline = BlueGrey50,
 )
-
 
 @Composable
 fun DeFiWalletTheme(
   darkTheme: Boolean = isSystemInDarkTheme(),
   isDynamicColor: Boolean = false,
-  content: @Composable () -> Unit
+  content: @Composable () -> Unit,
 ) {
   val dynamicColor = isDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
   val defiColorScheme = when {
@@ -92,13 +91,13 @@ fun DeFiWalletTheme(
   }
 
   CompositionLocalProvider(
-    LocalSpacing provides Dimensions()
+    LocalSpacing provides Dimensions(),
   ) {
     MaterialTheme(
       colorScheme = defiColorScheme,
       typography = Typography,
       shapes = Shapes,
-      content = content
+      content = content,
     )
   }
 }

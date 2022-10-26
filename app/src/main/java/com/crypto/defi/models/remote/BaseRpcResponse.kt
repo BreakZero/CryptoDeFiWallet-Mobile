@@ -10,5 +10,5 @@ data class BaseRpcResponse<T>(
   @SerialName("jsonrpc")
   val jsonrpc: String,
   @SerialName("result")
-  val result: T
+  val result: T,
 )

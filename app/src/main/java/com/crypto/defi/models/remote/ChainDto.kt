@@ -1,6 +1,5 @@
 package com.crypto.defi.models.remote
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -23,7 +22,7 @@ internal data class ChainDto(
   @SerialName("chain_id")
   val chainId: String?,
   @SerialName("is_token")
-  val isToken: Boolean
+  val isToken: Boolean,
 )
 
 @Serializable
@@ -35,5 +34,5 @@ internal data class Details(
   @SerialName("full_description")
   val fullDescription: String,
   @SerialName("icon_link")
-  val iconLink: String
+  val iconLink: String,
 )

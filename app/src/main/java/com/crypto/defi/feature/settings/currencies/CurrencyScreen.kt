@@ -27,7 +27,7 @@ import com.crypto.core.ui.composables.DeFiAppBar
 @Composable
 fun SettingsCurrencyScreen(
   currencyViewModel: CurrencyViewModel = hiltViewModel(),
-  popBack: () -> Unit
+  popBack: () -> Unit,
 ) {
   Scaffold(
     modifier = Modifier.fillMaxSize(),
@@ -36,38 +36,38 @@ fun SettingsCurrencyScreen(
         actions = {
           IconButton(onClick = {
             popBack()
-          }) {
+          },) {
             Icon(
               imageVector = Icons.Default.Done,
               contentDescription = null,
-              tint = MaterialTheme.colorScheme.primaryContainer
+              tint = MaterialTheme.colorScheme.primaryContainer,
             )
           }
-        }
+        },
       ) {
         popBack()
       }
-    }
+    },
   ) {
     val currencyUiState by currencyViewModel.currencyState.collectAsState()
     LazyColumn(
-      modifier = Modifier.padding(it)
+      modifier = Modifier.padding(it),
     ) {
       items(
         items = currencyUiState.supportList,
         key = {
           it.code
-        }
+        },
       ) { currency ->
         Row(
           modifier = Modifier.fillMaxWidth(),
-          verticalAlignment = Alignment.CenterVertically
+          verticalAlignment = Alignment.CenterVertically,
         ) {
           RadioButton(
             selected = currency.code == currencyUiState.selected.code,
             onClick = {
               currencyViewModel.updateCurrency(currency)
-            }
+            },
           )
           Text(text = "${currency.code} (${currency.symbol})")
         }

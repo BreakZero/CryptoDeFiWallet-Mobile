@@ -23,5 +23,5 @@ data class AssetEntity(
   @ColumnInfo(name = "contract_address")
   val contractAddress: String,
   @ColumnInfo(name = "balance")
-  val balance: String
+  val balance: String,
 )

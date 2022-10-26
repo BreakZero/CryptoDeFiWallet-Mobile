@@ -1,6 +1,5 @@
 package com.crypto.defi.models.remote.nft
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,7 +20,7 @@ data class NftAssetGroup(
   @SerialName("logo_url")
   val logoUrl: String?,
   @SerialName("owns_total")
-  val ownsTotal: Int
+  val ownsTotal: Int,
 )
 
 @Serializable
@@ -31,7 +30,7 @@ data class NftOwnerAssets(
   @SerialName("next")
   val next: String,
   @SerialName("total")
-  val total: Int
+  val total: Int,
 )
 
 @Serializable
@@ -41,7 +40,7 @@ data class NftAttribute(
   @SerialName("attribute_value")
   val attributeValue: String,
   @SerialName("percentage")
-  val percentage: String?
+  val percentage: String?,
 )
 
 @Serializable
@@ -93,5 +92,5 @@ data class NftInfo(
   @SerialName("token_id")
   val tokenId: String,
   @SerialName("token_uri")
-  val tokenUri: String?
+  val tokenUri: String?,
 )

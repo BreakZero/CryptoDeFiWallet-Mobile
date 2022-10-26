@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class SendFormViewModel @AssistedInject constructor(
   private val chainManager: ChainManager,
   assetUseCase: AssetUseCase,
-  @Assisted private val coinSlug: String
+  @Assisted private val coinSlug: String,
 ) : ViewModel() {
   private val _asset = assetUseCase.findAssetBySlug(coinSlug).filterNotNull()
   private val _to = MutableStateFlow("")
@@ -34,14 +34,14 @@ class SendFormViewModel @AssistedInject constructor(
     _planState,
     _to,
     _amount,
-    _memo
+    _memo,
   ) { asset, plan, to, amount, memo ->
     SendFormState(
       asset = asset,
       to = to,
       amount = amount,
       memo = memo,
-      plan = plan
+      plan = plan,
     )
   }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SendFormState())
 
@@ -65,7 +65,7 @@ class SendFormViewModel @AssistedInject constructor(
 
   fun sign(
     onSuccess: () -> Unit,
-    onFailed: (String) -> Unit
+    onFailed: (String) -> Unit,
   ) {
     viewModelScope.launch(Dispatchers.IO) {
       with(sendFormState.value) {
@@ -78,8 +78,8 @@ class SendFormViewModel @AssistedInject constructor(
                 memo = this.memo.ifBlank { null },
                 contract = it.contract,
                 amount = this.amount.toBigDecimal()
-                  .upWithDecimal(asset.decimal)
-              )
+                  .upWithDecimal(asset.decimal),
+              ),
             )
             _planState.update {
               plan
@@ -95,7 +95,7 @@ class SendFormViewModel @AssistedInject constructor(
 
   fun broadcast(
     onFailed: (String) -> Unit,
-    onSuccess: () -> Unit
+    onSuccess: () -> Unit,
   ) {
     viewModelScope.launch(Dispatchers.IO) {
       with(sendFormState.value) {

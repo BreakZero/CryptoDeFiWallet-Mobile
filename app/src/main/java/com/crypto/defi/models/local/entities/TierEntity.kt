@@ -13,5 +13,5 @@ data class TierEntity(
   val toCurrency: String,
   val rate: String,
   @ColumnInfo(name = "time_stamp")
-  val timeStamp: String
+  val timeStamp: String,
 )

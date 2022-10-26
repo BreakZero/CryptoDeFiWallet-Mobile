@@ -14,16 +14,16 @@ object NftNavigation {
   }
 
   const val NFT_TOKEN_ID = "nft_token_id"
-  const val NFT_DETAIL_ROUTE = "nft_detail?${NFT_TOKEN_ID}={${NFT_TOKEN_ID}}"
+  const val NFT_DETAIL_ROUTE = "nft_detail?$NFT_TOKEN_ID={$NFT_TOKEN_ID}"
   val nftDetailArgs = listOf(
-    navArgument(NFT_TOKEN_ID) { type = NavType.StringType }
+    navArgument(NFT_TOKEN_ID) { type = NavType.StringType },
   )
 
   fun detailDestination(
-    token_id: String
+    token_id: String,
   ) = object : NavigationCommand {
     override val arguments
       get() = nftDetailArgs
-    override val destination = "nft_detail?${NFT_TOKEN_ID}=$token_id"
+    override val destination = "nft_detail?$NFT_TOKEN_ID=$token_id"
   }
 }

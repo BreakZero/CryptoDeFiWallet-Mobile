@@ -11,18 +11,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class MainDAppsViewModel @Inject constructor(
   private val client: HttpClient,
-  appSettingsConfig: DataStore<AppSettingsConfig>
+  appSettingsConfig: DataStore<AppSettingsConfig>,
 ) : ViewModel() {
 
   private val _isLoading = MutableStateFlow(true)
@@ -40,7 +40,6 @@ class MainDAppsViewModel @Inject constructor(
     MainDAppState(walletNameInfo = appSettings.walletNameInfo, isLoading = isLoading, dApps = dApps)
   }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), MainDAppState())
 
-
   private suspend fun loadDApps(): List<DAppInfo> {
     _isLoading.update { true }
     val dApps = try {
@@ -53,7 +52,7 @@ class MainDAppsViewModel @Inject constructor(
             iconUrl = it.icon,
             url = it.url,
             appName = it.name,
-            rpc = it.rpc
+            rpc = it.rpc,
           )
         }
     } catch (e: Exception) {

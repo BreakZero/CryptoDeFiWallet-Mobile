@@ -22,6 +22,3 @@ interface SendFormAssistedFactory {
 interface TransactionListAssistedFactory {
   fun createTransactionListViewModel(slug: String): TransactionListViewModel
 }
-
-
-

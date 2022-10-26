@@ -3,9 +3,7 @@ package com.crypto.defi.feature.dapps.detail
 import android.graphics.Bitmap
 import android.webkit.WebView
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -21,7 +19,6 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,10 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.crypto.core.extensions.launchWithHandler
 import com.crypto.core.ui.Spacing
@@ -48,7 +42,6 @@ import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
@@ -57,14 +50,16 @@ fun DAppDetailScreen(
   chainId: Int,
   dAppUrl: String,
   dAppRpc: String,
-  popBack: () -> Unit
+  popBack: () -> Unit,
 ) {
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
   val provideJs by remember {
-    mutableStateOf(context.resources.openRawResource(R.raw.trust_min).bufferedReader().use {
-      it.readText()
-    })
+    mutableStateOf(
+      context.resources.openRawResource(R.raw.trust_min).bufferedReader().use {
+        it.readText()
+      },
+    )
   }
   val initJs by remember {
     mutableStateOf(
@@ -87,11 +82,12 @@ fun DAppDetailScreen(
             }
             window.ethereum = trustwallet.ethereum;
         })();
-    """.trimIndent()
+      """.trimIndent(),
     )
   }
   val bottomSheetState = rememberModalBottomSheetState(
-    initialValue = ModalBottomSheetValue.Hidden, skipHalfExpanded = true
+    initialValue = ModalBottomSheetValue.Hidden,
+    skipHalfExpanded = true,
   )
 
   val dAppUiState by dAppViewModel.dAppState.collectAsState()
@@ -110,14 +106,14 @@ fun DAppDetailScreen(
           scope.launch {
             bottomSheetState.hide()
           }
-        }
+        },
       )
     },
     sheetElevation = MaterialTheme.Spacing.small,
     sheetShape = RoundedCornerShape(
       topEnd = MaterialTheme.Spacing.space24,
-      topStart = MaterialTheme.Spacing.space24
-    )
+      topStart = MaterialTheme.Spacing.space24,
+    ),
   ) {
     val url by remember {
       mutableStateOf(dAppUrl)
@@ -130,23 +126,25 @@ fun DAppDetailScreen(
           actions = {
             IconButton(
               modifier = Modifier,
-              onClick = { /*TODO*/ }
+              onClick = { /*TODO*/ },
             ) {
               Icon(
-                imageVector = Icons.Default.MoreHoriz, contentDescription = null,
-                tint = MaterialTheme.colorScheme.primaryContainer
+                imageVector = Icons.Default.MoreHoriz,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primaryContainer,
               )
             }
             IconButton(
               modifier = Modifier,
-              onClick = { /*TODO*/ }
+              onClick = { /*TODO*/ },
             ) {
               Icon(
-                imageVector = Icons.Default.Close, contentDescription = null,
-                tint = MaterialTheme.colorScheme.primaryContainer
+                imageVector = Icons.Default.Close,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primaryContainer,
               )
             }
-          }
+          },
         ) {
           if (navigator.canGoBack) {
             navigator.navigateBack()
@@ -154,12 +152,12 @@ fun DAppDetailScreen(
             popBack()
           }
         }
-      }
+      },
     ) {
       Column(
         modifier = Modifier
           .fillMaxSize()
-          .padding(it)
+          .padding(it),
       ) {
         val webViewState = rememberWebViewState(url = url)
         val loadingState = webViewState.loadingState
@@ -167,7 +165,7 @@ fun DAppDetailScreen(
           LinearProgressIndicator(
             color = MaterialTheme.colorScheme.tertiary,
             progress = loadingState.progress,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
           )
         }
         val webClient = remember {
@@ -198,23 +196,26 @@ fun DAppDetailScreen(
               loadWithOverviewMode = true
               userAgentString = "$userAgentString DeFiWallet/${BuildConfig.VERSION_NAME}"
             }
-            webView.addJavascriptInterface(WebAppInterface { message ->
-              dAppViewModel.updateMessage(message)
-              scope.launchWithHandler(Dispatchers.Main) {
-                when (message.method) {
-                  DAppMethod.REQUESTACCOUNTS -> {
-                    dAppViewModel.setAddress(webView)
-                    dAppViewModel.sendAddress(webView, message.methodId)
+            webView.addJavascriptInterface(
+              WebAppInterface { message ->
+                dAppViewModel.updateMessage(message)
+                scope.launchWithHandler(Dispatchers.Main) {
+                  when (message.method) {
+                    DAppMethod.REQUESTACCOUNTS -> {
+                      dAppViewModel.setAddress(webView)
+                      dAppViewModel.sendAddress(webView, message.methodId)
+                    }
+                    DAppMethod.SWITCHETHEREUMCHAIN -> {
+                      bottomSheetState.show()
+                      dAppViewModel.switchChain(webView, "137")
+                    }
+                    else -> Unit
                   }
-                  DAppMethod.SWITCHETHEREUMCHAIN -> {
-                    bottomSheetState.show()
-                    dAppViewModel.switchChain(webView, "137")
-                  }
-                  else -> Unit
                 }
-              }
-            }, "_tw_")
-          }
+              },
+              "_tw_",
+            )
+          },
         )
       }
     }
@@ -227,30 +228,30 @@ fun ActionConfirmView(
   message: String,
   modifier: Modifier = Modifier,
   onConfirm: () -> Unit,
-  onReject: () -> Unit
+  onReject: () -> Unit,
 ) {
   Column(
-    modifier = modifier.padding(MaterialTheme.Spacing.medium)
+    modifier = modifier.padding(MaterialTheme.Spacing.medium),
   ) {
     Text(
       text = title,
       modifier = Modifier.fillMaxWidth(),
-      style = MaterialTheme.typography.titleMedium
+      style = MaterialTheme.typography.titleMedium,
     )
     Text(
       text = message,
       modifier = Modifier.fillMaxWidth(),
-      style = MaterialTheme.typography.bodyMedium
+      style = MaterialTheme.typography.bodyMedium,
     )
     Row(modifier = Modifier.fillMaxWidth()) {
       Button(modifier = Modifier.weight(1f), onClick = {
         onConfirm()
-      }) {
+      },) {
         Text(text = "Confirm")
       }
       Button(modifier = Modifier.weight(1f), onClick = {
         onReject()
-      }) {
+      },) {
         Text(text = "Cancel")
       }
     }

@@ -10,14 +10,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
 @HiltViewModel
 class NftGroupViewModel @Inject constructor(
-  private val client: HttpClient
+  private val client: HttpClient,
 ) : ViewModel() {
   val assetsByGroup = MutableStateFlow(NftGroupState())
 

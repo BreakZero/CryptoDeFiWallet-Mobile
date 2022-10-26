@@ -1,10 +1,7 @@
 package com.crypto.defi.di
 
 import android.app.Application
-import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.drm.HttpMediaDrmCallback
-import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

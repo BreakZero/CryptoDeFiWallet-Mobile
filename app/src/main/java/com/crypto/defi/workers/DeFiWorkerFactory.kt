@@ -10,11 +10,11 @@ import javax.inject.Inject
 
 class DeFiWorkerFactory @Inject constructor(
   private val chainManager: ChainManager,
-  private val balanceUseCase: BalanceUseCase
+  private val balanceUseCase: BalanceUseCase,
 ) : WorkerFactory() {
   override fun createWorker(
     appContext: Context,
     workerClassName: String,
-    workerParameters: WorkerParameters
+    workerParameters: WorkerParameters,
   ): ListenableWorker = BalanceWorker(appContext, workerParameters, chainManager, balanceUseCase)
 }

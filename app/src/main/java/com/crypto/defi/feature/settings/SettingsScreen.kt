@@ -15,7 +15,6 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,7 +33,6 @@ import com.crypto.core.ui.composables.AdvanceMenu
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.core.ui.composables.MenuBlockView
 import com.crypto.core.ui.routers.NavigationCommand
-import com.crypto.core.ui.utils.SetStatusColor
 import com.crypto.defi.BuildConfig
 import com.crypto.defi.exceptions.rotating
 import com.crypto.defi.navigations.SettingsNavigation
@@ -46,12 +44,12 @@ import com.crypto.resource.R
 fun SettingsScreen(
   settingsViewModel: SettingsViewModel = hiltViewModel(),
   popBack: () -> Unit,
-  navigateTo: (NavigationCommand) -> Unit
+  navigateTo: (NavigationCommand) -> Unit,
 ) {
   Scaffold(
     topBar = {
       DeFiAppBar(
-        title = stringResource(id = R.string.settings__title)
+        title = stringResource(id = R.string.settings__title),
       ) {
         popBack()
       }
@@ -65,9 +63,9 @@ fun SettingsScreen(
         .padding(
           top = it.calculateTopPadding(),
           start = MaterialTheme.Spacing.medium,
-          end = MaterialTheme.Spacing.medium
+          end = MaterialTheme.Spacing.medium,
         )
-        .verticalScroll(scrollableState)
+        .verticalScroll(scrollableState),
     ) {
       settingsUiState.walletNameInfo.avator?.let { avatorUrl ->
         AsyncImage(
@@ -83,7 +81,7 @@ fun SettingsScreen(
             .clip(CircleShape)
             .align(Alignment.CenterHorizontally)
             .size(MaterialTheme.Spacing.space128)
-            .rotating(2500)
+            .rotating(2500),
         )
       } ?: kotlin.run {
         Image(
@@ -93,7 +91,7 @@ fun SettingsScreen(
             .padding(top = MaterialTheme.Spacing.medium)
             .clip(CircleShape)
             .align(Alignment.CenterHorizontally)
-            .size(MaterialTheme.Spacing.space128)
+            .size(MaterialTheme.Spacing.space128),
         )
       }
 
@@ -102,35 +100,36 @@ fun SettingsScreen(
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.titleMedium,
         color = MaterialTheme.colorScheme.onBackground,
-        modifier = Modifier.align(Alignment.CenterHorizontally)
+        modifier = Modifier.align(Alignment.CenterHorizontally),
       )
       MenuBlockView(
-        modifier = Modifier.fillMaxWidth(), header = stringResource(id = R.string.settings__security),
+        modifier = Modifier.fillMaxWidth(),
+        header = stringResource(id = R.string.settings__security),
         datas = listOf(
           AdvanceMenu(
             title = stringResource(id = R.string.settings__protect_your_wallet),
-            subTitle = stringResource(id = R.string.settings__passcode_biometrics_and_2fa)
+            subTitle = stringResource(id = R.string.settings__passcode_biometrics_and_2fa),
           ),
           AdvanceMenu(
             title = stringResource(id = R.string.settings__recovery_phrase),
-            subTitle = settingsUiState.walletNameInfo.walletName
-          )
-        )
+            subTitle = settingsUiState.walletNameInfo.walletName,
+          ),
+        ),
       ) {
-
       }
       MenuBlockView(
-        modifier = Modifier.fillMaxWidth(), header = stringResource(id = R.string.settings__account),
+        modifier = Modifier.fillMaxWidth(),
+        header = stringResource(id = R.string.settings__account),
         datas = listOf(
           AdvanceMenu(
             title = stringResource(id = R.string.settings__display_currency),
-            endValue = "${settingsUiState.currency.code}(${settingsUiState.currency.symbol})"
+            endValue = "${settingsUiState.currency.code}(${settingsUiState.currency.symbol})",
           ),
           AdvanceMenu(
             title = stringResource(id = R.string.settings__network_settings),
-            endValue = settingsUiState.network.label
-          )
-        )
+            endValue = settingsUiState.network.label,
+          ),
+        ),
       ) {
         when (it) {
           0 -> {
@@ -143,23 +142,25 @@ fun SettingsScreen(
         }
       }
       MenuBlockView(
-        modifier = Modifier.fillMaxWidth(), header = stringResource(id = R.string.settings__support),
+        modifier = Modifier.fillMaxWidth(),
+        header = stringResource(id = R.string.settings__support),
         datas = listOf(
           AdvanceMenu(title = stringResource(id = R.string.settings__help_center)),
           AdvanceMenu(title = stringResource(id = R.string.settings__new_to_defi)),
           AdvanceMenu(title = stringResource(id = R.string.settings__join_community)),
-          AdvanceMenu(title = stringResource(id = R.string.settings__give_feedback))
-        )
+          AdvanceMenu(title = stringResource(id = R.string.settings__give_feedback)),
+        ),
       ) {
       }
       MenuBlockView(
-        modifier = Modifier.fillMaxWidth(), header = stringResource(id = R.string.settings__about_crypto_com_wallet),
+        modifier = Modifier.fillMaxWidth(),
+        header = stringResource(id = R.string.settings__about_crypto_com_wallet),
         datas = listOf(
           AdvanceMenu(title = stringResource(id = R.string.settings__version), endValue = "${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})", showIcon = false),
           AdvanceMenu(title = stringResource(id = R.string.settings__terms_of_service)),
           AdvanceMenu(title = stringResource(id = R.string.settings__privacy_notice)),
-          AdvanceMenu(title = stringResource(id = R.string.settings__visit_our_website))
-        )
+          AdvanceMenu(title = stringResource(id = R.string.settings__visit_our_website)),
+        ),
       ) { itemIndex ->
         when (itemIndex) {
           0 -> {

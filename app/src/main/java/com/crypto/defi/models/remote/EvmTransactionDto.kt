@@ -1,6 +1,5 @@
 package com.crypto.defi.models.remote
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -45,5 +44,5 @@ data class EvmTransactionDto(
   @SerialName("txreceipt_status")
   val txreceiptStatus: String?,
   @SerialName("value")
-  val value: String
+  val value: String,
 )

@@ -9,7 +9,7 @@ data class MessageInfo(
   val method: DAppMethod,
   val from: String ? = null,
   val to: String? = null,
-  val data: String
+  val data: String,
 ) {
   fun isEmpty(): Boolean {
     return this == Empty
@@ -19,7 +19,7 @@ data class MessageInfo(
       title = "",
       methodId = -1L,
       method = DAppMethod.UNKNOWN,
-      data = ""
+      data = "",
     )
   }
 }

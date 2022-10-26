@@ -9,5 +9,5 @@ data class BaseResponse<T>(
   @SerialName("error")
   val error: String? = null,
   @SerialName("data")
-  val `data`: T
+  val `data`: T,
 )

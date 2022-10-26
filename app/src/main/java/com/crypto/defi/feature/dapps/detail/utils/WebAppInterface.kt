@@ -1,16 +1,13 @@
 package com.crypto.defi.feature.dapps.detail.utils
 
 import android.webkit.JavascriptInterface
-import android.webkit.WebView
 import com.crypto.core.extensions.hexStringToByteArray
 import com.crypto.core.extensions.toHexString
 import org.json.JSONObject
 import timber.log.Timber
-import wallet.core.jni.Curve
-import wallet.core.jni.PrivateKey
 
 class WebAppInterface(
-  private val onResult: (MessageInfo) -> Unit
+  private val onResult: (MessageInfo) -> Unit,
 ) {
   @JavascriptInterface
   fun postMessage(json: String) {
@@ -24,8 +21,8 @@ class WebAppInterface(
             title = "Request Accounts",
             methodId = id,
             data = "DApp need to get your address",
-            method = method
-          )
+            method = method,
+          ),
         )
       }
       DAppMethod.SIGNTRANSACTION -> {
@@ -40,8 +37,8 @@ class WebAppInterface(
             data = data,
             from = from,
             to = to,
-            method = method
-          )
+            method = method,
+          ),
         )
       }
       DAppMethod.SIGNMESSAGE -> {
@@ -63,8 +60,8 @@ class WebAppInterface(
             title = "SwichChain",
             methodId = id,
             data = "switch to polygon",
-            method = method
-          )
+            method = method,
+          ),
         )
       }
       else -> {
@@ -73,8 +70,8 @@ class WebAppInterface(
             title = "Errors",
             methodId = id,
             data = "$method not implemented",
-            method = method
-          )
+            method = method,
+          ),
         )
       }
     }
@@ -99,8 +96,8 @@ class WebAppInterface(
         title = "Sign Message",
         methodId = id,
         data = data.toHexString(),
-        method = method
-      )
+        method = method,
+      ),
     )
   }
 
@@ -111,8 +108,8 @@ class WebAppInterface(
         title = "Sign Message",
         methodId = id,
         data = signEthereumMessage(data, false),
-        method = method
-      )
+        method = method,
+      ),
     )
   }
 

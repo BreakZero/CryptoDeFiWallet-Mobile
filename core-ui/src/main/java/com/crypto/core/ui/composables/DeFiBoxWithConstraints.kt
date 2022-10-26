@@ -22,19 +22,19 @@ import androidx.compose.ui.unit.Velocity
 @Composable
 fun DeFiBoxWithConstraints(
   modifier: Modifier = Modifier,
-  motionContent: @Composable (Float, Boolean) -> Unit
+  motionContent: @Composable (Float, Boolean) -> Unit,
 ) {
   val swipingState = rememberSwipeableState(initialValue = SwipingStates.EXPANDED)
 
   BoxWithConstraints(
-    modifier = modifier
+    modifier = modifier,
   ) {
     val heightInPx = with(LocalDensity.current) { maxHeight.toPx() } // Get height of screen
     val connection = remember {
       object : NestedScrollConnection {
         override fun onPreScroll(
           available: Offset,
-          source: NestedScrollSource
+          source: NestedScrollSource,
         ): Offset {
           val delta = available.y
           return if (delta < 0) {
@@ -47,7 +47,7 @@ fun DeFiBoxWithConstraints(
         override fun onPostScroll(
           consumed: Offset,
           available: Offset,
-          source: NestedScrollSource
+          source: NestedScrollSource,
         ): Offset {
           val delta = available.y
           return swipingState.performDrag(delta).toOffset()
@@ -55,7 +55,7 @@ fun DeFiBoxWithConstraints(
 
         override suspend fun onPostFling(
           consumed: Velocity,
-          available: Velocity
+          available: Velocity,
         ): Velocity {
           swipingState.performFling(velocity = available.y)
           return super.onPostFling(consumed, available)
@@ -79,15 +79,15 @@ fun DeFiBoxWithConstraints(
             // Maps anchor points (in px) to states
             0f to SwipingStates.COLLAPSED,
             heightInPx to SwipingStates.EXPANDED,
-          )
+          ),
         )
-        .nestedScroll(connection)
+        .nestedScroll(connection),
     ) {
       val targetValue = if (swipingState.progress.to == SwipingStates.COLLAPSED) swipingState.progress.fraction else 1f - swipingState.progress.fraction
       val isExpend = swipingState.progress.to == SwipingStates.EXPANDED && swipingState.progress.fraction == 1f
       motionContent(
         targetValue,
-        isExpend
+        isExpend,
       )
     }
   }
@@ -96,5 +96,5 @@ fun DeFiBoxWithConstraints(
 // Helper class defining swiping State
 enum class SwipingStates {
   EXPANDED,
-  COLLAPSED
+  COLLAPSED,
 }

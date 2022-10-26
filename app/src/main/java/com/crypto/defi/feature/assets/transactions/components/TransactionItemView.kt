@@ -18,26 +18,24 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.crypto.core.extensions.byDecimal2String
 import com.crypto.core.ui.Spacing
 import com.crypto.defi.models.domain.BaseTransaction
-import com.crypto.defi.models.domain.EvmTransaction
 import com.crypto.defi.models.domain.TransactionDirection
 import com.crypto.resource.R
-import timber.log.Timber
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TransactionItemView(
   modifier: Modifier,
   data: BaseTransaction,
-  onItemClick: () -> Unit
+  onItemClick: () -> Unit,
 ) {
   Card(
     modifier = modifier
       .fillMaxWidth()
       .height(MaterialTheme.Spacing.extraLarge),
     elevation = CardDefaults.cardElevation(
-      defaultElevation = MaterialTheme.Spacing.extraSmall
+      defaultElevation = MaterialTheme.Spacing.extraSmall,
     ),
-    shape = RoundedCornerShape(MaterialTheme.Spacing.space12)
+    shape = RoundedCornerShape(MaterialTheme.Spacing.space12),
   ) {
     Row(
       modifier = Modifier
@@ -47,16 +45,16 @@ fun TransactionItemView(
         }
         .padding(
           horizontal = MaterialTheme.Spacing.small,
-          vertical = MaterialTheme.Spacing.extraSmall
+          vertical = MaterialTheme.Spacing.extraSmall,
         ),
-      verticalAlignment = Alignment.CenterVertically
+      verticalAlignment = Alignment.CenterVertically,
     ) {
       val isSend = data.direction == TransactionDirection.RECEIVE
       Icon(
         painter = painterResource(
-          id = if (isSend) R.drawable.ic_send else R.drawable.ic_receive
+          id = if (isSend) R.drawable.ic_send else R.drawable.ic_receive,
         ),
-        contentDescription = null
+        contentDescription = null,
       )
       Column(modifier = Modifier.weight(1f)) {
         Text(text = data.hash, overflow = TextOverflow.Ellipsis, maxLines = 1)
@@ -64,7 +62,7 @@ fun TransactionItemView(
       }
       Text(
         text = "${if (isSend) "-" else "+"} ${data.value.byDecimal2String(18, 6)}",
-        color = if (isSend) Color.Red else Color.Green
+        color = if (isSend) Color.Red else Color.Green,
       )
     }
   }

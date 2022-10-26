@@ -46,7 +46,7 @@ import com.crypto.resource.R
 @Composable
 fun MainNFTsScreen(
   nftsViewModel: NFTsViewModel = hiltViewModel(),
-  navigateTo: (NavigationCommand) -> Unit
+  navigateTo: (NavigationCommand) -> Unit,
 ) {
   val nftAssetsUiState by nftsViewModel.ownerAssetState.collectAsState()
   Scaffold(
@@ -54,11 +54,13 @@ fun MainNFTsScreen(
     topBar = {
       SmallTopAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(
-          containerColor = MaterialTheme.colorScheme.primary
+          containerColor = MaterialTheme.colorScheme.primary,
         ),
         navigationIcon = {
-          IconButton(onClick = {
-          }) {
+          IconButton(
+            onClick = {
+            },
+          ) {
             nftAssetsUiState.walletNameInfo.avator?.let {
               AsyncImage(
                 modifier = Modifier
@@ -71,7 +73,7 @@ fun MainNFTsScreen(
                   .error(R.drawable.avatar_generic_1)
                   .crossfade(true)
                   .build(),
-                contentDescription = null
+                contentDescription = null,
               )
             } ?: run {
               Image(
@@ -80,7 +82,7 @@ fun MainNFTsScreen(
                   .clip(CircleShape)
                   .rotating(2500),
                 painter = painterResource(id = nftAssetsUiState.walletNameInfo.avatorRes),
-                contentDescription = null
+                contentDescription = null,
               )
             }
           }
@@ -90,50 +92,55 @@ fun MainNFTsScreen(
             Text(
               text = nftAssetsUiState.walletNameInfo.walletName,
               style = MaterialTheme.typography.titleSmall,
-              color = MaterialTheme.colorScheme.primaryContainer
+              color = MaterialTheme.colorScheme.primaryContainer,
             )
             Text(
               text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
               style = MaterialTheme.typography.labelSmall,
-              color = MaterialTheme.colorScheme.surfaceVariant
+              color = MaterialTheme.colorScheme.surfaceVariant,
             )
           }
-        }
+        },
       )
-    }
+    },
   ) { _ ->
     Column(
       modifier = Modifier
         .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)
+        .background(MaterialTheme.colorScheme.background),
     ) {
       Row(
         modifier = Modifier
           .fillMaxWidth()
           .padding(horizontal = MaterialTheme.Spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
       ) {
         Text(text = "Your NFTs")
-        Button(onClick = {
-          navigateTo(NftNavigation.groupDestination)
-        }) {
+        Button(
+          onClick = {
+            navigateTo(NftNavigation.groupDestination)
+          },
+        ) {
           Text(text = "All")
         }
       }
-      AnimatedContent(targetState = true, transitionSpec = {
-        fadeIn(animationSpec = tween(300, 300)) with fadeOut(
-          animationSpec = tween(
-            300,
-            300
+      AnimatedContent(
+        targetState = true,
+        transitionSpec = {
+          fadeIn(animationSpec = tween(300, 300)) with fadeOut(
+            animationSpec = tween(
+              300,
+              300,
+            ),
           )
-        )
-      }) {
+        },
+      ) {
         if (nftAssetsUiState.isLoading) {
           Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-              .fillMaxSize()
+              .fillMaxSize(),
           ) {
             LoadingIndicator(animating = true)
           }
@@ -142,24 +149,28 @@ fun MainNFTsScreen(
             Box(
               contentAlignment = Alignment.Center,
               modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
             ) {
-              Text(modifier = Modifier.clickable {
-                nftsViewModel.refresh()
-              }, text = "tap to refresh...", style = MaterialTheme.typography.bodyLarge)
+              Text(
+                modifier = Modifier.clickable {
+                  nftsViewModel.refresh()
+                },
+                text = "tap to refresh...",
+                style = MaterialTheme.typography.bodyLarge,
+              )
             }
           } else {
             LazyVerticalGrid(
               columns = GridCells.Fixed(3),
               contentPadding = PaddingValues(MaterialTheme.Spacing.medium),
               horizontalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small),
-              verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+              verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small),
             ) {
               items(
                 items = nftAssetsUiState.nfts,
                 key = {
                   "${it.contractAddress}-${it.tokenId}"
-                }
+                },
               ) { asset ->
                 NFTContentPreview(
                   modifier = Modifier
@@ -170,7 +181,7 @@ fun MainNFTsScreen(
                     .clickable {
                       navigateTo(NftNavigation.detailDestination("mock-nft"))
                     },
-                  nftInfo = asset
+                  nftInfo = asset,
                 )
               }
             }

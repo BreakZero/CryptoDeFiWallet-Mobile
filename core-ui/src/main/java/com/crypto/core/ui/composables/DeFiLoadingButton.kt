@@ -46,7 +46,7 @@ private fun LoadingDot(
   Box(
     modifier = modifier
       .clip(shape = CircleShape)
-      .background(color = color)
+      .background(color = color),
   )
 }
 
@@ -116,7 +116,7 @@ fun LoadingButton(
         indicatorSpacing = indicatorSpacing,
       )
       Box(
-        modifier = Modifier.graphicsLayer { alpha = contentAlpha }
+        modifier = Modifier.graphicsLayer { alpha = contentAlpha },
       ) {
         content()
       }

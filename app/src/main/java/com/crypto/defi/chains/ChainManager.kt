@@ -10,18 +10,17 @@ import com.crypto.defi.models.remote.ChainDto
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import wallet.core.jni.CoinType
 import wallet.core.jni.HDWallet
-import javax.inject.Inject
 
 class ChainManager @Inject constructor(
   private val database: CryptoDeFiDatabase,
-  private val client: HttpClient
+  private val client: HttpClient,
 ) {
   private lateinit var hdWallet: HDWallet
 
@@ -43,7 +42,7 @@ class ChainManager @Inject constructor(
             chainId = it.chainId,
             isTestNet = it.isTestnet,
             name = it.name,
-            isToken = it.isToken
+            isToken = it.isToken,
           )
         }.also {
           withContext(Dispatchers.Default) {

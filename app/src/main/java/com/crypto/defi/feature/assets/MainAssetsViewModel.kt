@@ -15,6 +15,11 @@ import com.crypto.defi.models.mapper.toAsset
 import com.crypto.defi.workers.BalanceWorker
 import com.crypto.resource.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.math.BigDecimal
+import java.math.BigInteger
+import java.util.*
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,17 +28,12 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.math.BigDecimal
-import java.math.BigInteger
-import java.util.*
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 @HiltViewModel
 class MainAssetsViewModel @Inject constructor(
   private val appSettingsConfig: DataStore<AppSettingsConfig>,
   private val assetUseCase: AssetUseCase,
-  private val workManager: WorkManager
+  private val workManager: WorkManager,
 ) : ViewModel() {
 
   companion object {
@@ -42,12 +42,13 @@ class MainAssetsViewModel @Inject constructor(
   }
 
   private val balanceWorkerRequest = PeriodicWorkRequestBuilder<BalanceWorker>(
-    15, TimeUnit.MINUTES
+    15,
+    TimeUnit.MINUTES,
   ).setId(UUID.fromString("d5b42914-cb0f-442c-a800-1532f52a5ed8"))
     .setConstraints(
       Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build()
+        .build(),
     ).build()
 
   init {
@@ -56,7 +57,7 @@ class MainAssetsViewModel @Inject constructor(
         workManager.enqueueUniquePeriodicWork(
           WORKER_NAME,
           ExistingPeriodicWorkPolicy.UPDATE,
-          balanceWorkerRequest
+          balanceWorkerRequest,
         )
         withContext(Dispatchers.Main) {
           workManager.getWorkInfoByIdLiveData(balanceWorkerRequest.id).observeForever {
@@ -75,17 +76,17 @@ class MainAssetsViewModel @Inject constructor(
     listOf(
       PromoCard(
         backgroundRes = R.drawable.card_small_orange,
-        title = UiText.StringResource(R.string.new_coins__new_coin)
+        title = UiText.StringResource(R.string.new_coins__new_coin),
       ),
       PromoCard(
         backgroundRes = R.drawable.card_small_black,
-        title = UiText.StringResource(R.string.wallet_asset__get_eth_ready_for_gas_fees)
+        title = UiText.StringResource(R.string.wallet_asset__get_eth_ready_for_gas_fees),
       ),
       PromoCard(
         backgroundRes = R.drawable.card_small_purple,
-        title = UiText.StringResource(R.string.wallet_asset__enable_email)
-      )
-    )
+        title = UiText.StringResource(R.string.wallet_asset__enable_email),
+      ),
+    ),
   )
 
   val assetState = combine(
@@ -93,14 +94,14 @@ class MainAssetsViewModel @Inject constructor(
     assetUseCase.assetsFlow(),
     assetUseCase.tiersFlow(),
     appSettingsConfig.data,
-    _promoCards
+    _promoCards,
   ) { isLoading, assets, tiers, appSettings, promoCards ->
     val localAssets = assets.map { asset ->
       val rate = tiers.find { tier ->
         asset.slug == tier.fromSlug
       }?.rate ?: "0.0"
       asset.toAsset().copy(
-        rate = rate.toBigDecimalOrNull() ?: BigDecimal.ZERO
+        rate = rate.toBigDecimalOrNull() ?: BigDecimal.ZERO,
       )
     }
     MainAssetState(
@@ -110,12 +111,12 @@ class MainAssetsViewModel @Inject constructor(
         it.nativeBalance > BigInteger.ZERO
       }.sortedByDescending { it.fiatBalance() },
       totalBalance = localAssets.sumOf { it.fiatBalance() }.toPlainString(),
-      promoCard = promoCards
+      promoCard = promoCards,
     )
   }.stateIn(
     viewModelScope,
     SharingStarted.WhileSubscribed(),
-    MainAssetState(promoCard = emptyList())
+    MainAssetState(promoCard = emptyList()),
   )
 
   fun onRefresh() {
@@ -123,7 +124,7 @@ class MainAssetsViewModel @Inject constructor(
     workManager.enqueueUniquePeriodicWork(
       WORKER_NAME,
       ExistingPeriodicWorkPolicy.UPDATE,
-      balanceWorkerRequest
+      balanceWorkerRequest,
     )
   }
 }

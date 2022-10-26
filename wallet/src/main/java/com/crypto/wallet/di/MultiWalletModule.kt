@@ -11,10 +11,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 import timber.log.Timber
-import javax.inject.Singleton
 
 @ExcludeFromJacocoGeneratedReport
 @Module
@@ -24,14 +24,14 @@ object MultiWalletModule {
   @Singleton
   fun provideWalletDatabase(
     app: Application,
-    sharedPreferences: SharedPreferences
+    sharedPreferences: SharedPreferences,
   ): WalletDatabase {
     val passcode = sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "").orEmpty().also {
       Timber.v(it)
     }
 
     val passPhrase = SQLiteDatabase.getBytes(
-      passcode.toCharArray()
+      passcode.toCharArray(),
     )
     val supportFactory = SupportFactory(passPhrase)
     return Room.databaseBuilder(app, WalletDatabase::class.java, "crypto_multi_wallet.db")
@@ -42,7 +42,7 @@ object MultiWalletModule {
   @Provides
   @Singleton
   fun provideWalletRepository(
-    database: dagger.Lazy<WalletDatabase>
+    database: dagger.Lazy<WalletDatabase>,
   ): WalletRepository {
     return WalletRepository(database)
   }

@@ -10,16 +10,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import com.crypto.core.ui.composables.DeFiAppBar
-import com.crypto.core.ui.composables.ScannerView
-import com.crypto.core.ui.utils.SetStatusColor
 import com.crypto.defi.BuildConfig
 import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebView
@@ -30,7 +26,7 @@ import com.google.accompanist.web.rememberWebViewState
 @Composable
 fun DeFiWebViewScreen(
   url: String,
-  popBack: () -> Unit
+  popBack: () -> Unit,
 ) {
   val navigator = rememberWebViewNavigator()
   Scaffold(
@@ -42,7 +38,7 @@ fun DeFiWebViewScreen(
           popBack()
         }
       }
-    }
+    },
   ) { paddings ->
     val webUrl by remember {
       mutableStateOf(url)
@@ -50,7 +46,7 @@ fun DeFiWebViewScreen(
     Column(
       modifier = Modifier
         .fillMaxSize()
-        .padding(paddings)
+        .padding(paddings),
     ) {
       val webViewState = rememberWebViewState(url = webUrl)
       val loadingState = webViewState.loadingState
@@ -58,7 +54,7 @@ fun DeFiWebViewScreen(
         LinearProgressIndicator(
           color = MaterialTheme.colorScheme.tertiary,
           progress = loadingState.progress,
-          modifier = Modifier.fillMaxWidth()
+          modifier = Modifier.fillMaxWidth(),
         )
       }
       WebView(
@@ -76,7 +72,7 @@ fun DeFiWebViewScreen(
             loadWithOverviewMode = true
             userAgentString = "$userAgentString DeFiWallet/${BuildConfig.VERSION_NAME}"
           }
-        }
+        },
       )
     }
   }

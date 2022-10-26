@@ -1,6 +1,5 @@
 package com.crypto.defi.models.remote
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,9 +8,8 @@ internal data class AssetDto(
   @SerialName("currencies")
   val currencies: List<Currency>,
   @SerialName("sha256")
-  val sha256: String
+  val sha256: String,
 )
-
 
 @Serializable
 internal data class Currency(
@@ -40,5 +38,5 @@ internal data class Currency(
   @SerialName("symbol")
   val symbol: String,
   @SerialName("tokenDecimal")
-  val tokenDecimal: Int
+  val tokenDecimal: Int,
 )

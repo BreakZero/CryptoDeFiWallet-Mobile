@@ -9,6 +9,5 @@ object MainNavigation {
       get() = emptyList()
     override val destination: String
       get() = "main-home"
-
   }
 }

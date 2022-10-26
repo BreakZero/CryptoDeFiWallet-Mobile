@@ -13,32 +13,33 @@ fun DeFiAppBar(
   navIcon: ImageVector = Icons.Filled.ArrowBack,
   title: String? = null,
   colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(
-    containerColor = MaterialTheme.colorScheme.primary
+    containerColor = MaterialTheme.colorScheme.primary,
   ),
   actions: @Composable RowScope.() -> Unit = {},
-  navigateUp: () -> Unit
+  navigateUp: () -> Unit,
 ) {
   SmallTopAppBar(
     colors = colors,
     navigationIcon = {
       IconButton(onClick = {
         navigateUp()
-      }) {
+      },) {
         Icon(
           imageVector = navIcon,
           contentDescription = "",
-          tint = MaterialTheme.colorScheme.primaryContainer
+          tint = MaterialTheme.colorScheme.primaryContainer,
         )
       }
     },
     title = {
       title?.let {
         Text(
-          text = title, color = MaterialTheme.colorScheme.primaryContainer,
-          style = MaterialTheme.typography.titleMedium
+          text = title,
+          color = MaterialTheme.colorScheme.primaryContainer,
+          style = MaterialTheme.typography.titleMedium,
         )
       }
     },
-    actions = actions
+    actions = actions,
   )
 }

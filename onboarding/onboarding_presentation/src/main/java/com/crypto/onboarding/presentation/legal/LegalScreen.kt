@@ -31,7 +31,7 @@ import com.crypto.resource.R
 fun LegalScreen(
   forCreate: Boolean,
   navigateUp: () -> Unit,
-  navigateTo: (NavigationCommand) -> Unit
+  navigateTo: (NavigationCommand) -> Unit,
 ) {
   SetStatusColor(statusColor = MaterialTheme.colorScheme.surface)
   Scaffold(
@@ -39,48 +39,46 @@ fun LegalScreen(
     topBar = {
       DeFiAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(
-          containerColor = Color.Transparent
-        )
+          containerColor = Color.Transparent,
+        ),
       ) {
         navigateUp()
       }
-    }
+    },
   ) {
     Column(
-      modifier = Modifier.padding(it)
+      modifier = Modifier.padding(it),
     ) {
       Text(
         modifier = Modifier.padding(start = MaterialTheme.Spacing.medium),
         text = stringResource(id = R.string.legal__legal),
-        style = MaterialTheme.typography.titleLarge
+        style = MaterialTheme.typography.titleLarge,
       )
       Text(
         modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.medium),
         text = stringResource(
-          id = R.string.legal__legal_tips
-        )
+          id = R.string.legal__legal_tips,
+        ),
       )
       Card(
         modifier = Modifier
           .fillMaxWidth()
           .padding(MaterialTheme.Spacing.medium),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
       ) {
         Column(
-          modifier = Modifier.fillMaxWidth()
+          modifier = Modifier.fillMaxWidth(),
         ) {
           MenuItemView(
             modifier = Modifier.fillMaxWidth(),
-            data = AdvanceMenu(title = stringResource(id = R.string.legal__terms_of_service))
+            data = AdvanceMenu(title = stringResource(id = R.string.legal__terms_of_service)),
           ) {
-
           }
           Divider()
           MenuItemView(
             modifier = Modifier.fillMaxWidth(),
-            data = AdvanceMenu(title = stringResource(id = R.string.legal__privacy_notice))
+            data = AdvanceMenu(title = stringResource(id = R.string.legal__privacy_notice)),
           ) {
-
           }
         }
       }
@@ -89,13 +87,13 @@ fun LegalScreen(
           .weight(1.0F)
           .fillMaxWidth()
           .padding(horizontal = MaterialTheme.Spacing.medium),
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.SpaceBetween,
       ) {
         var checked by rememberSaveable { mutableStateOf(false) }
         Row(modifier = Modifier.fillMaxWidth()) {
           Checkbox(checked = checked, onCheckedChange = {
             checked = it
-          })
+          },)
           Text(text = stringResource(id = R.string.legal__legal_read_confirm_tip))
         }
         Button(
@@ -104,7 +102,8 @@ fun LegalScreen(
           enabled = checked,
           onClick = {
             navigateTo(OnboardingNavigations.CreatePasscode.destination(forCreate))
-          }) {
+          },
+        ) {
           Text(text = stringResource(id = R.string.legal__continue_text))
         }
       }

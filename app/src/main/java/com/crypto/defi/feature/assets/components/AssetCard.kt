@@ -28,24 +28,24 @@ import com.crypto.resource.R
 fun AssetCard(
   modifier: Modifier = Modifier,
   asset: Asset,
-  onClick: (Asset) -> Unit
+  onClick: (Asset) -> Unit,
 ) {
   Card(
     modifier = modifier,
     elevation = CardDefaults.cardElevation(
-      defaultElevation = MaterialTheme.Spacing.extraSmall
+      defaultElevation = MaterialTheme.Spacing.extraSmall,
     ),
     shape = RoundedCornerShape(MaterialTheme.Spacing.space12),
     onClick = {
       onClick(asset)
-    }
+    },
   ) {
     Row(
       modifier = modifier
         .padding(MaterialTheme.Spacing.small)
         .fillMaxWidth()
         .height(IntrinsicSize.Min),
-      verticalAlignment = Alignment.CenterVertically
+      verticalAlignment = Alignment.CenterVertically,
     ) {
       AsyncImage(
         modifier = Modifier
@@ -58,7 +58,7 @@ fun AssetCard(
           .crossfade(true)
           .build(),
         contentScale = ContentScale.Fit,
-        contentDescription = null
+        contentDescription = null,
       )
       Text(
         text = asset.name,
@@ -66,14 +66,14 @@ fun AssetCard(
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier
           .weight(1f)
-          .padding(start = MaterialTheme.Spacing.small)
+          .padding(start = MaterialTheme.Spacing.small),
       )
       Column(
         modifier = Modifier
           .fillMaxHeight()
           .wrapContentWidth(Alignment.End),
         horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
       ) {
         Text(text = "${asset.nativeBalance.byDecimal(asset.decimal)} ${asset.symbol}", textAlign = TextAlign.End)
         Text(text = "$ ${asset.fiatBalance().toPlainString()}", textAlign = TextAlign.End)

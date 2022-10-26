@@ -14,7 +14,7 @@ fun AssetEntity.toAsset(): Asset {
     decimal = this.decimal,
     chainName = this.chainName,
     contract = this.contractAddress.ifBlank { null },
-    nativeBalance = this.balance.toBigInteger()
+    nativeBalance = this.balance.toBigInteger(),
   )
 }
 
@@ -28,6 +28,6 @@ internal fun Currency.toAssetEntity(): AssetEntity {
     decimal = this.tokenDecimal,
     chainName = this.chainName,
     contractAddress = this.contractAddress,
-    balance = "0"
+    balance = "0",
   )
 }

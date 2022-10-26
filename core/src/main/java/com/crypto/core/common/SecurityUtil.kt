@@ -43,7 +43,7 @@ class SecurityUtil @Inject constructor() {
           .Builder(keyAlias, PURPOSE_ENCRYPT or PURPOSE_DECRYPT)
           .setBlockModes(BLOCK_MODE_GCM)
           .setEncryptionPaddings(ENCRYPTION_PADDING_NONE)
-          .build()
+          .build(),
       )
     }.generateKey()
   }

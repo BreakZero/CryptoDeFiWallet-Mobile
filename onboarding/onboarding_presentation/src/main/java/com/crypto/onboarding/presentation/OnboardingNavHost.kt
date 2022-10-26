@@ -27,7 +27,7 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
     },
     popExitTransition = {
       fadeOut(animationSpec = tween(500))
-    }
+    },
   ) {
     OnboardScreen {
       navController.navigate(it.destination)
@@ -48,7 +48,7 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
     },
     popExitTransition = {
       fadeOut(animationSpec = tween(500))
-    }
+    },
   ) {
     val forCreate =
       it.arguments?.getBoolean(OnboardingNavigations.KEY_IS_CREATE) ?: false
@@ -57,7 +57,7 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
       navigateUp = { navController.navigateUp() },
       navigateTo = {
         navController.navigate(it.destination)
-      }
+      },
     )
   }
   composable(
@@ -74,7 +74,7 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
     },
     popExitTransition = {
       fadeOut(animationSpec = tween(500))
-    }
+    },
   ) {
     val forCreate =
       it.arguments?.getBoolean(OnboardingNavigations.KEY_IS_CREATE)
@@ -83,9 +83,11 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
       forCreate = forCreate,
       navigateUp = {
         navController.navigateUp()
-      }, navigateTo = {
-      navController.navigate(it.destination)
-    })
+      },
+      navigateTo = {
+        navController.navigate(it.destination)
+      },
+    )
   }
   composable(
     route = OnboardingNavigations.ImportWallet.ROUTE,
@@ -101,7 +103,7 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
     },
     popExitTransition = {
       fadeOut(animationSpec = tween(500))
-    }
+    },
   ) {
     val passcode =
       it.arguments?.getString(OnboardingNavigations.KEY_PASSCODE)!!
@@ -109,12 +111,14 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
       passcode = passcode,
       navigateUp = {
         navController.navigateUp()
-      }, navigateMain = {
-      navController.navigate("main-home") {
-        popUpTo(OnboardingNavigations.Index.destination) {
-          inclusive = true
+      },
+      navigateMain = {
+        navController.navigate("main-home") {
+          popUpTo(OnboardingNavigations.Index.destination) {
+            inclusive = true
+          }
         }
-      }
-    })
+      },
+    )
   }
 }

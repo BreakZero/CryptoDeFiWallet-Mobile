@@ -5,13 +5,13 @@ import com.crypto.defi.feature.assets.send.ReadyToSign
 import com.crypto.defi.feature.assets.send.TransactionPlan
 import com.crypto.defi.models.domain.EvmTransaction
 import io.ktor.client.*
+import java.math.BigInteger
 import wallet.core.jni.CoinType
 import wallet.core.jni.HDWallet
-import java.math.BigInteger
 
 class SolanaChainImpl(
   private val httpClient: HttpClient,
-  private val hdWallet: HDWallet
+  private val hdWallet: HDWallet,
 ) : IChain {
   override fun address(): String {
     return hdWallet.getAddressForCoin(CoinType.SOLANA)
@@ -24,7 +24,7 @@ class SolanaChainImpl(
   override suspend fun transactions(
     page: Int,
     offset: Int,
-    contract: String?
+    contract: String?,
   ): List<EvmTransaction> {
     return emptyList()
   }

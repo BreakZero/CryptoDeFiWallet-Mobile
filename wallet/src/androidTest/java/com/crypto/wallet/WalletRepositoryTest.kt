@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.crypto.wallet.model.Wallet
 import com.crypto.wallet.model.WalletDao
 import com.crypto.wallet.model.WalletDatabase
+import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -15,7 +16,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -30,7 +30,7 @@ class WalletRepositoryTest {
   private val wallet = Wallet(
     mnemonic = "mock mnemonic",
     active = 1,
-    passphrase = ""
+    passphrase = "",
   )
 
   @Before

@@ -31,7 +31,7 @@ fun CreatePasscodeScreen(
   forCreate: Boolean,
   viewModel: PasscodeViewModel = hiltViewModel(),
   navigateUp: () -> Unit,
-  navigateTo: (NavigationCommand) -> Unit
+  navigateTo: (NavigationCommand) -> Unit,
 ) {
   SetStatusColor(statusColor = MaterialTheme.colorScheme.surface)
   LaunchedEffect(key1 = null) {
@@ -40,7 +40,6 @@ fun CreatePasscodeScreen(
       if (it.isSuccess && passcode.isNotEmpty()) {
         // navigateTo()
         if (forCreate) {
-
         } else {
           navigateTo(OnboardingNavigations.ImportWallet.destination(passcode))
         }
@@ -60,33 +59,33 @@ fun CreatePasscodeScreen(
     Column(
       modifier = Modifier
         .fillMaxSize(),
-      verticalArrangement = Arrangement.SpaceBetween
+      verticalArrangement = Arrangement.SpaceBetween,
     ) {
       Box(
         modifier = Modifier
           .fillMaxWidth()
           .weight(1.0F),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
       ) {
         Image(
           painter = painterResource(id = R.drawable.backgroud_stars),
           contentDescription = null,
-          modifier = Modifier.fillMaxWidth()
+          modifier = Modifier.fillMaxWidth(),
         )
         Column(
-          modifier = Modifier.fillMaxWidth()
+          modifier = Modifier.fillMaxWidth(),
         ) {
           Text(
             text = viewModel.passcodeState.messageLabel,
             modifier = Modifier
               .fillMaxWidth(),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
           )
           Row(
             modifier = Modifier
               .fillMaxWidth()
               .padding(top = 12.dp),
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
           ) {
             val enterSize = viewModel.passcodeState.passcode.length
             if (enterSize == 0) {
@@ -95,7 +94,7 @@ fun CreatePasscodeScreen(
                   modifier = Modifier
                     .padding(2.dp)
                     .height(16.dp)
-                    .width(16.dp)
+                    .width(16.dp),
                 ) {
                   drawCircle(color = secondaryColor, style = Stroke(width = 1.5f))
                 }
@@ -106,7 +105,7 @@ fun CreatePasscodeScreen(
                   modifier = Modifier
                     .padding(2.dp)
                     .height(16.dp)
-                    .width(16.dp)
+                    .width(16.dp),
 
                 ) {
                   drawCircle(color = secondaryColor)
@@ -117,7 +116,7 @@ fun CreatePasscodeScreen(
                   modifier = Modifier
                     .padding(2.dp)
                     .height(16.dp)
-                    .width(16.dp)
+                    .width(16.dp),
                 ) {
                   drawCircle(color = secondaryColor, style = Stroke(width = 1.5f))
                 }
@@ -126,11 +125,12 @@ fun CreatePasscodeScreen(
           }
           viewModel.passcodeState.error?.let {
             Text(
-              text = it, color = Color.Red,
+              text = it,
+              color = Color.Red,
               modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp),
-              textAlign = TextAlign.Center
+              textAlign = TextAlign.Center,
             )
           }
         }
@@ -145,7 +145,7 @@ fun CreatePasscodeScreen(
             ActionType.BACKSPACE -> viewModel.onEvent(PasscodeEvent.Delete)
             else -> Unit
           }
-        }
+        },
       )
     }
   }

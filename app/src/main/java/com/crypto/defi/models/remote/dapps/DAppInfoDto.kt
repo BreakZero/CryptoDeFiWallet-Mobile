@@ -16,5 +16,5 @@ data class DAppInfoDto(
   @SerialName("slug")
   val slug: String,
   @SerialName("url")
-  val url: String
+  val url: String,
 )

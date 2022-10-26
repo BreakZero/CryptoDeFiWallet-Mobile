@@ -12,11 +12,10 @@ import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import com.crypto.defi.workers.DeFiWorkerFactory
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 import timber.log.Timber.Tree
-import javax.inject.Inject
-
 
 @HiltAndroidApp
 class DeFiApplication : Application(), Configuration.Provider, ImageLoaderFactory {
@@ -68,7 +67,7 @@ class DeFiApplication : Application(), Configuration.Provider, ImageLoaderFactor
 private class CrashReportingTree : Tree() {
   override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
     if (priority in listOf(Log.VERBOSE, Log.DEBUG)) {
-      return;
+      return
     }
     // push information to firebase or some cloud service else
   }

@@ -10,5 +10,5 @@ data class CoinVersionShaEntity(
   @ColumnInfo(name = "id")
   val sha256: String,
   @ColumnInfo(name = "create_at")
-  val createAt: Long
+  val createAt: Long,
 )

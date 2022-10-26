@@ -37,24 +37,24 @@ private val banners = listOf(
   OnboardBannerInfo(
     imageRes = R.drawable.banner_wallet,
     title = R.string.welcome_intro_adapter__welcome,
-    message = R.string.welcome_intro_adapter__welcome_tip
+    message = R.string.welcome_intro_adapter__welcome_tip,
   ),
   OnboardBannerInfo(
     imageRes = R.drawable.banner_secure,
     title = R.string.welcome_intro_adapter__secure,
-    message = R.string.welcome_intro_adapter__secure_tip
+    message = R.string.welcome_intro_adapter__secure_tip,
   ),
   OnboardBannerInfo(
     imageRes = R.drawable.banner_flexable,
     title = R.string.welcome_intro_adapter__flexible,
-    message = R.string.welcome_intro_adapter__flexible_tip
-  )
+    message = R.string.welcome_intro_adapter__flexible_tip,
+  ),
 )
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun OnboardScreen(
-  navigateTo: (NavigationCommand) -> Unit
+  navigateTo: (NavigationCommand) -> Unit,
 ) {
   SetStatusColor(statusColor = MaterialTheme.colorScheme.surface)
   Surface(modifier = Modifier.fillMaxSize()) {
@@ -62,7 +62,7 @@ fun OnboardScreen(
       modifier = Modifier
         .fillMaxSize()
         .padding(MaterialTheme.Spacing.medium),
-      verticalArrangement = Arrangement.Center
+      verticalArrangement = Arrangement.Center,
     ) {
       val pagerState = rememberPagerState()
       val bannerState = remember {
@@ -75,7 +75,7 @@ fun OnboardScreen(
           .align(Alignment.CenterHorizontally),
         contentScale = ContentScale.FillWidth,
         painter = painterResource(id = R.drawable.img_defi_header),
-        contentDescription = null
+        contentDescription = null,
       )
       HorizontalPager(
         count = bannerState.size,
@@ -83,7 +83,7 @@ fun OnboardScreen(
         modifier = Modifier
           .fillMaxWidth()
           .align(Alignment.CenterHorizontally)
-          .weight(1.0F)
+          .weight(1.0F),
       ) { page ->
         OnboardBanner(info = bannerState[page], modifier = Modifier.fillMaxSize())
       }
@@ -100,7 +100,8 @@ fun OnboardScreen(
         onClick = {
           // do not support now.
           // navigateTo(OnboardingNavigations.Legal.destination(true))
-        }) {
+        },
+      ) {
         Text(stringResource(id = R.string.welcome__create_a_new_wallet))
       }
       Button(
@@ -108,7 +109,8 @@ fun OnboardScreen(
           .fillMaxWidth(),
         onClick = {
           navigateTo(OnboardingNavigations.Legal.destination(false))
-        }) {
+        },
+      ) {
         Text(stringResource(id = R.string.welcome__importing_an_existing_wallet))
       }
     }
@@ -118,14 +120,14 @@ fun OnboardScreen(
 @Composable
 private fun OnboardBanner(
   info: OnboardBannerInfo,
-  modifier: Modifier
+  modifier: Modifier,
 ) {
   Box(modifier = modifier, contentAlignment = Alignment.Center) {
     Column {
       Image(
         painterResource(id = info.imageRes),
         contentDescription = null,
-        modifier = Modifier.align(Alignment.CenterHorizontally)
+        modifier = Modifier.align(Alignment.CenterHorizontally),
       )
       Text(
         modifier = Modifier.fillMaxWidth(),
@@ -133,14 +135,14 @@ private fun OnboardBanner(
         text = stringResource(id = info.title),
         fontSize = 24.sp,
         fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.primary
+        color = MaterialTheme.colorScheme.primary,
       )
       Text(
         modifier = Modifier.fillMaxWidth(),
         textAlign = TextAlign.Center,
         text = stringResource(id = info.message),
         fontSize = 18.sp,
-        color = MaterialTheme.colorScheme.secondary
+        color = MaterialTheme.colorScheme.secondary,
       )
     }
   }
@@ -149,5 +151,5 @@ private fun OnboardBanner(
 private data class OnboardBannerInfo(
   @DrawableRes val imageRes: Int,
   @StringRes val title: Int,
-  @StringRes val message: Int
+  @StringRes val message: Int,
 )

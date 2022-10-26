@@ -46,11 +46,11 @@ fun TransactionsMotionLayout(
   targetValue: Float,
   onSend: () -> Unit,
   onReceive: () -> Unit,
-  scrollableBody: @Composable () -> Unit
+  scrollableBody: @Composable () -> Unit,
 ) {
   val progress by animateFloatAsState(
     targetValue = targetValue,
-    tween(100)
+    tween(100),
   )
   MotionLayout(
     start = startConstraintSet(),
@@ -58,13 +58,13 @@ fun TransactionsMotionLayout(
     progress = progress,
     modifier = Modifier
       .fillMaxWidth()
-      .background(MaterialTheme.colorScheme.primary)
+      .background(MaterialTheme.colorScheme.primary),
   ) {
     Box(
       modifier = Modifier
         .fillMaxWidth()
         .layoutId("header-content"),
-      contentAlignment = Alignment.Center
+      contentAlignment = Alignment.Center,
     ) {
       Image(
         modifier = Modifier
@@ -73,17 +73,17 @@ fun TransactionsMotionLayout(
         painter = painterResource(id = R.drawable.backgroud_stars),
         contentDescription = "poster",
         contentScale = ContentScale.FillWidth,
-        alpha = 1f - progress
+        alpha = 1f - progress,
       )
       Column(
         modifier = Modifier
           .fillMaxWidth()
           .aspectRatio(16 / 9f)
           .padding(top = 32.dp, bottom = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
       ) {
         Row(
-          verticalAlignment = Alignment.CenterVertically
+          verticalAlignment = Alignment.CenterVertically,
         ) {
           AsyncImage(
             modifier = Modifier.size(MaterialTheme.Spacing.space24),
@@ -92,17 +92,19 @@ fun TransactionsMotionLayout(
               .placeholder(R.drawable.avatar_generic_1)
               .error(R.drawable.avatar_generic_1)
               .crossfade(true)
-              .build(), contentDescription = null
+              .build(),
+            contentDescription = null,
           )
           Text(
             modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.extraSmall),
             text = "${asset?.symbol ?: "--"} BALANCE",
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.primaryContainer
+            color = MaterialTheme.colorScheme.primaryContainer,
           )
           Icon(
-            imageVector = Icons.Default.RemoveRedEye, contentDescription = null,
-            tint = MaterialTheme.colorScheme.primaryContainer
+            imageVector = Icons.Default.RemoveRedEye,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primaryContainer,
           )
         }
         Text(
@@ -113,19 +115,21 @@ fun TransactionsMotionLayout(
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
                 fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
                 fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                fontWeight = MaterialTheme.typography.titleLarge.fontWeight
-              )
+                fontWeight = MaterialTheme.typography.titleLarge.fontWeight,
+              ),
             ) {
               append(
-                (asset?.nativeBalance
-                  ?: BigInteger.ZERO).byDecimal2String(asset?.decimal ?: 0)
+                (
+                  asset?.nativeBalance
+                    ?: BigInteger.ZERO
+                  ).byDecimal2String(asset?.decimal ?: 0),
               )
             }
             withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
               append(" ${asset?.symbol ?: "--"}")
             }
           },
-          modifier = Modifier.padding(MaterialTheme.Spacing.small)
+          modifier = Modifier.padding(MaterialTheme.Spacing.small),
         )
         Text(text = " ~ ${asset?.fiatBalance()?.toPlainString() ?: "--"} USD")
         Row {
@@ -135,23 +139,23 @@ fun TransactionsMotionLayout(
               .clickable {
                 onSend()
               },
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
           ) {
             Box(
               modifier = Modifier
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.onPrimaryContainer)
-                .padding(MaterialTheme.Spacing.extraSmall)
+                .padding(MaterialTheme.Spacing.extraSmall),
             ) {
               Image(
                 painter = painterResource(id = R.drawable.ic_send),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primaryContainer)
+                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primaryContainer),
               )
             }
             Text(
               text = stringResource(id = R.string.transaction_list__send),
-              color = MaterialTheme.colorScheme.primaryContainer
+              color = MaterialTheme.colorScheme.primaryContainer,
             )
           }
           Spacer(modifier = Modifier.size(MaterialTheme.Spacing.medium))
@@ -161,30 +165,30 @@ fun TransactionsMotionLayout(
               .clickable {
                 onReceive()
               },
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
           ) {
             Box(
               modifier = Modifier
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.onPrimaryContainer)
-                .padding(MaterialTheme.Spacing.extraSmall)
+                .padding(MaterialTheme.Spacing.extraSmall),
             ) {
               Image(
                 painter = painterResource(id = R.drawable.ic_receive),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primaryContainer)
+                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primaryContainer),
               )
             }
             Text(
               text = stringResource(id = R.string.transaction_list__receive),
-              color = MaterialTheme.colorScheme.primaryContainer
+              color = MaterialTheme.colorScheme.primaryContainer,
             )
           }
         }
       }
     }
     Box(
-      modifier = Modifier.layoutId("content")
+      modifier = Modifier.layoutId("content"),
     ) {
       scrollableBody()
     }

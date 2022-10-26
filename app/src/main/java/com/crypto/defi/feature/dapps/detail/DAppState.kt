@@ -8,5 +8,5 @@ data class DAppState(
   val title: String = "",
   val method: DAppMethod = DAppMethod.UNKNOWN,
   val methodId: Long = -1L,
-  val data: String = ""
+  val data: String = "",
 )

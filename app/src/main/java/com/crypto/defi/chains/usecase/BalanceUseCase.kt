@@ -10,19 +10,19 @@ import com.crypto.defi.models.remote.TokenHolding
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import javax.inject.Inject
 
 class BalanceUseCase @Inject constructor(
   private val client: HttpClient,
   private val chainManager: ChainManager,
-  private val database: CryptoDeFiDatabase
+  private val database: CryptoDeFiDatabase,
 ) {
   suspend fun fetchingTokenHolding(
     chain: String = "ethereum",
-    address: String
+    address: String,
   ) {
     try {
       val result: BaseResponse<List<TokenHolding>> =
@@ -39,16 +39,18 @@ class BalanceUseCase @Inject constructor(
     try {
       val result =
         client.get("${UrlConstant.BASE_URL}/tiers").body<BaseResponse<List<TierDto>>>()
-      database.tierDao.insertAll(result.data.map { tier ->
-        TierEntity(
-          timeStamp = tier.timeStamp.toString(),
-          fromCurrency = tier.fromCurrency,
-          toCurrency = tier.toCurrency,
-          rate = tier.rates.minByOrNull { it.amount }?.rate
-            ?: "0.00",
-          fromSlug = tier.fromSlug
-        )
-      })
+      database.tierDao.insertAll(
+        result.data.map { tier ->
+          TierEntity(
+            timeStamp = tier.timeStamp.toString(),
+            fromCurrency = tier.fromCurrency,
+            toCurrency = tier.toCurrency,
+            rate = tier.rates.minByOrNull { it.amount }?.rate
+              ?: "0.00",
+            fromSlug = tier.fromSlug,
+          )
+        },
+      )
     } catch (e: Exception) {
       Timber.e(e)
     }

@@ -13,18 +13,18 @@ import com.crypto.core.common.UiText
 import com.crypto.wallet.WalletRepository
 import com.crypto.wallet.model.Wallet
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import wallet.core.jni.Mnemonic
-import javax.inject.Inject
 
 @HiltViewModel
 class WalletImportViewModel @Inject constructor(
   private val preferences: SharedPreferences,
-  private val walletRepository: WalletRepository
+  private val walletRepository: WalletRepository,
 ) : ViewModel() {
   var state by mutableStateOf(ImportState())
     private set
@@ -47,8 +47,8 @@ class WalletImportViewModel @Inject constructor(
               Wallet(
                 mnemonic = state.phrase,
                 1,
-                passphrase = ""
-              )
+                passphrase = "",
+              ),
             )
             state = state.copy(inProgress = false)
             _uiEvent.send(UiEvent.Success)
@@ -61,7 +61,7 @@ class WalletImportViewModel @Inject constructor(
       }
       is ImportEvent.OnFocusChange -> {
         state = state.copy(
-          isHintVisible = !event.isFocused && state.phrase.isBlank()
+          isHintVisible = !event.isFocused && state.phrase.isBlank(),
         )
       }
       is ImportEvent.OnPhraseChange -> {

@@ -11,7 +11,12 @@ class EvmTransaction(
   value: BigInteger,
   input: String,
   gas: BigInteger,
-  gasPrice: BigInteger
+  gasPrice: BigInteger,
 ) : BaseTransaction(
-  hash, direction, from, to, value, timeStamp
+  hash,
+  direction,
+  from,
+  to,
+  value,
+  timeStamp,
 )

@@ -1,7 +1,7 @@
 val ktlint by configurations.creating
 
 dependencies {
-    ktlint("com.pinterest:ktlint:0.45.2") {
+    ktlint("com.pinterest:ktlint:0.47.1") {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
         }
@@ -29,4 +29,5 @@ val ktlintFormat by tasks.creating(JavaExec::class) {
     classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
     args = listOf("-F", "src/**/*.kt", "--editorconfig=${rootProject.rootDir}/.editorconfig")
+    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }

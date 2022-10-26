@@ -12,19 +12,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class NFTsViewModel @Inject constructor(
   private val client: HttpClient,
-  private val appSettingsConfig: DataStore<AppSettingsConfig>
+  private val appSettingsConfig: DataStore<AppSettingsConfig>,
 ) : ViewModel() {
   private val _isLoadingFlow = MutableStateFlow(true)
   private val _nftsFlow = MutableStateFlow(emptyList<NftInfo>())

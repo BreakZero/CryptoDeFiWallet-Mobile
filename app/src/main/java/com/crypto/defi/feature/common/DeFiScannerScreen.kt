@@ -13,18 +13,18 @@ import com.crypto.core.ui.utils.SetStatusColor
 
 @Composable
 fun DeFiScannerScreen(
-  onResult: (String?) -> Unit
+  onResult: (String?) -> Unit,
 ) {
   Scaffold(
     topBar = {
       DeFiAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(
-          containerColor = Color.Transparent
-        )
+          containerColor = Color.Transparent,
+        ),
       ) {
         onResult.invoke(null)
       }
-    }
+    },
   ) {
     SetStatusColor(statusColor = Color.Transparent)
     ScannerView(onResult = onResult)

@@ -9,5 +9,5 @@ import kotlinx.coroutines.flow.flow
 data class TransactionListState(
   val asset: Asset? = null,
   val address: String = "",
-  val transactionList: Flow<PagingData<BaseTransaction>> = flow { emit(PagingData.empty()) }
+  val transactionList: Flow<PagingData<BaseTransaction>> = flow { emit(PagingData.empty()) },
 )

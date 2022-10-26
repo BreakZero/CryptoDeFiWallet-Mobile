@@ -9,7 +9,7 @@ enum class ParameterType {
 @Keep
 data class Navigator internal constructor(
   private val parameterType: ParameterType,
-  private val route: String
+  private val route: String,
 ) {
   private val params: MutableList<KeyPair<*>> = mutableListOf()
 
@@ -89,7 +89,7 @@ data class Navigator internal constructor(
 fun buildNavigator(
   parameterType: ParameterType,
   route: String,
-  init: Navigator.() -> Unit = {}
+  init: Navigator.() -> Unit = {},
 ): Navigator {
   return Navigator(parameterType, route).apply(init)
 }
@@ -104,5 +104,5 @@ inline fun Navigator.parameter(block: _Parameter.() -> Unit) {
 
 private data class KeyPair<T>(
   val key: String,
-  val value: T
+  val value: T,
 )

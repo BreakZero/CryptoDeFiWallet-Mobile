@@ -5,14 +5,13 @@ import com.crypto.defi.feature.assets.send.ReadyToSign
 import com.crypto.defi.feature.assets.send.TransactionPlan
 import com.crypto.defi.models.domain.BaseTransaction
 import io.ktor.client.*
-import timber.log.Timber
+import java.math.BigInteger
 import wallet.core.jni.CoinType
 import wallet.core.jni.HDWallet
-import java.math.BigInteger
 
 class AptosChainImpl(
   private val httpClient: HttpClient,
-  private val hdWallet: HDWallet
+  private val hdWallet: HDWallet,
 ) : IChain {
   override fun address(): String {
     return try {

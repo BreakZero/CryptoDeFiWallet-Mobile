@@ -70,18 +70,18 @@ fun ImportWordsScreen(
       DeFiAppBar(
         title = stringResource(id = R.string.import_wallet__import_wallet),
         colors = TopAppBarDefaults.smallTopAppBarColors(
-          containerColor = Color.Transparent
+          containerColor = Color.Transparent,
         ),
         actions = {
           Icon(imageVector = Icons.Default.QrCode, contentDescription = null)
-        }
+        },
       ) {
         viewModel.onNavigateUp()
       }
-    }
+    },
   ) {
     Column(
-      modifier = Modifier.padding(it)
+      modifier = Modifier.padding(it),
     ) {
       TextField(
         value = importState.phrase,
@@ -92,7 +92,7 @@ fun ImportWordsScreen(
         keyboardActions = KeyboardActions(
           onDone = {
             keyboardController?.hide()
-          }
+          },
         ),
         keyboardOptions = KeyboardOptions(
           imeAction = ImeAction.Done,
@@ -103,7 +103,7 @@ fun ImportWordsScreen(
           .fillMaxWidth()
           .onFocusChanged {
             viewModel.onEvent(ImportEvent.OnFocusChange(it.isFocused))
-          }
+          },
       )
       LoadingButton(
         modifier = Modifier
@@ -113,7 +113,7 @@ fun ImportWordsScreen(
         onClick = {
           viewModel.onEvent(ImportEvent.OnImportClick(passcode))
           keyboardController?.hide()
-        }
+        },
       ) {
         Text(text = stringResource(id = R.string.import_wallet__restore))
       }

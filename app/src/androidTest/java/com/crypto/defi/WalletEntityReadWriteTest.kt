@@ -45,7 +45,7 @@ class WalletEntityReadWriteTest {
   fun writeWalletAndReadInList() = runTest {
     val versionEntity = CoinVersionShaEntity(
       sha256 = "mocksha256",
-      createAt = 10000L
+      createAt = 10000L,
     )
 
     versionDao.insert(versionEntity)

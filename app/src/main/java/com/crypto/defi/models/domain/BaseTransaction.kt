@@ -8,7 +8,7 @@ open class BaseTransaction(
   val from: String,
   val to: String,
   val value: BigInteger,
-  val timeStamp: String
+  val timeStamp: String,
 )
 
 enum class TransactionDirection {

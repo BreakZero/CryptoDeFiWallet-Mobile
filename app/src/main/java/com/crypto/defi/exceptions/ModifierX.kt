@@ -15,10 +15,10 @@ fun Modifier.rotating(duration: Int): Modifier = composed {
     initialValue = 0f,
     targetValue = 1f,
     animationSpec = infiniteRepeatable(
-      animation = tween(duration)
-    )
+      animation = tween(duration),
+    ),
   )
   graphicsLayer(
-    rotationZ = 360f * angleRatio
+    rotationZ = 360f * angleRatio,
   )
 }
