@@ -26,10 +26,3 @@ subprojects {
 tasks.register("clean", Delete::class.java) {
   delete(rootProject.buildDir)
 }
-
-tasks.register("installGitHook", Copy::class.java) {
-  from(File(rootProject.rootDir, "scripts/pre-commit-macos"))
-  into(File(rootProject.rootDir, ".git/hooks"))
-  rename("pre-commit-macos", "pre-commit")
-  fileMode = 509
-}
