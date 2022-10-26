@@ -13,6 +13,7 @@ jobs:
     uses: BreakZero/CryptoDeFiWallet-Mobile/.github/workflows/pre-workflow.yml@main
 
   RunTest:
+    runs-on: macos-12
     steps:
       - name: AVD cache
         uses: actions/cache@v3
