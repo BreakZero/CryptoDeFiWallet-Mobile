@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         gradlePluginPortal()
         google()
@@ -34,7 +35,6 @@ fun userProperty(): java.util.Properties {
 }
 
 rootProject.name = "DeFiWallet"
-includeBuild("configuration-module")
 include(":app")
 include(":resource")
 include(":onboarding:onboarding_domain")
