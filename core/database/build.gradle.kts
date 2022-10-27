@@ -25,7 +25,7 @@ dependencies {
 
   implementation("net.zetetic:android-database-sqlcipher:4.5.0")
 
-  implementation(libs.room.runtime)
+  api(libs.room.runtime)
   implementation(libs.room.ktx)
   ksp(libs.room.compiler)
 
