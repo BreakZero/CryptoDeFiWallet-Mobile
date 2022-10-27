@@ -22,7 +22,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.easy.defi.app.feature.nft.NftListScreen
 
-const val nftNavigationRoute = "nft_route"
+const val nftNavigationRoute = "nfts_route"
 
 fun NavController.navigateToNft(navOptions: NavOptions? = null) {
   this.navigate(nftNavigationRoute, navOptions)

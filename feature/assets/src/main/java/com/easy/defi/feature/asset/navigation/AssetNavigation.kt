@@ -22,7 +22,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.easy.defi.feature.asset.list.AssetListScreen
 
-const val assetNavigationRoute = "assets_route"
+const val assetNavigationRoute = "wallet_route"
 
 fun NavController.navigateToWallet(navOptions: NavOptions? = null) {
   this.navigate(assetNavigationRoute, navOptions)

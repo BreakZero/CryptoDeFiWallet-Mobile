@@ -22,14 +22,14 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.easy.defi.app.feature.dapp.DAppListScreen
 
-const val dAppNavigationRoute = "dapp_route"
+const val dappNavigationRoute = "dapps_route"
 
 fun NavController.navigateToDApp(navOptions: NavOptions? = null) {
-  this.navigate(dAppNavigationRoute, navOptions)
+  this.navigate(dappNavigationRoute, navOptions)
 }
 
 fun NavGraphBuilder.dappGraph() {
-  composable(route = dAppNavigationRoute) {
+  composable(route = dappNavigationRoute) {
     DAppListScreen()
   }
 }

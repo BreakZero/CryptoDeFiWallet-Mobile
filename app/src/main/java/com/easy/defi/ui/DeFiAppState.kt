@@ -16,7 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.easy.defi.app.core.data.util.NetworkMonitor
-import com.easy.defi.app.feature.dapp.navigation.dAppNavigationRoute
+import com.easy.defi.app.feature.dapp.navigation.dappNavigationRoute
 import com.easy.defi.app.feature.dapp.navigation.navigateToDApp
 import com.easy.defi.app.feature.earn.navigation.earnNavigationRoute
 import com.easy.defi.app.feature.earn.navigation.navigateToEarn
@@ -57,7 +57,7 @@ class DeFiAppState(
     @Composable get() = when (currentDestination?.route) {
       assetNavigationRoute -> TopLevelDestination.WALLET
       nftNavigationRoute -> TopLevelDestination.NFTS
-      dAppNavigationRoute -> TopLevelDestination.DAPPS
+      dappNavigationRoute -> TopLevelDestination.DAPPS
       earnNavigationRoute -> TopLevelDestination.EARN
       else -> null
     }
