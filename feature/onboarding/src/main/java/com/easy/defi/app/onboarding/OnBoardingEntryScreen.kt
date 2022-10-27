@@ -23,9 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.easy.defi.app.core.designsystem.R
 import com.easy.defi.app.core.ui.Spacing
 import com.easy.defi.app.core.ui.navigation.NavigationCommand
-import com.easy.defi.resource.R
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator

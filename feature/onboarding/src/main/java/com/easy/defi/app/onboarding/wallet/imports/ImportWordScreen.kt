@@ -28,11 +28,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.easy.defi.app.core.designsystem.R
 import com.easy.defi.app.core.ui.DeFiAppBar
 import com.easy.defi.app.core.ui.LoadingButton
 import com.easy.defi.app.core.ui.Spacing
 import com.easy.defi.app.core.ui.UiEvent
-import com.easy.defi.resource.R
 import timber.log.Timber
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)

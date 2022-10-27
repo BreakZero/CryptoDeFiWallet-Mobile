@@ -57,20 +57,27 @@ android {
       isIncludeAndroidResources = true
     }
   }
-  namespace = "com.google.samples.apps.nowinandroid"
+  namespace = "com.easy.defi.wallet"
 }
 
 dependencies {
 
   implementation(project(":core:common"))
+  implementation(project(":core:designsystem"))
   implementation(project(":core:ui"))
   implementation(project(":core:data"))
   implementation(project(":core:model"))
+  
+  implementation(project(":feature:assets"))
+  implementation(project(":feature:nft"))
+  implementation(project(":feature:dapp"))
+  implementation(project(":feature:earn"))
 
   androidTestImplementation(project(":core:testing"))
   androidTestImplementation(libs.androidx.navigation.testing)
   debugImplementation(libs.androidx.compose.ui.testManifest)
 
+  implementation(libs.accompanist.navigation.animation)
   implementation(libs.accompanist.systemuicontroller)
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.appcompat)

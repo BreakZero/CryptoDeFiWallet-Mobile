@@ -31,15 +31,20 @@
             <option value="$PROJECT_DIR$/core/data" />
             <option value="$PROJECT_DIR$/core/database" />
             <option value="$PROJECT_DIR$/core/datastore" />
+            <option value="$PROJECT_DIR$/core/designsystem" />
             <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/model" />
+            <option value="$PROJECT_DIR$/core/network" />
             <option value="$PROJECT_DIR$/core/testing" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/assets" />
+            <option value="$PROJECT_DIR$/feature/dapp" />
+            <option value="$PROJECT_DIR$/feature/earn" />
             <option value="$PROJECT_DIR$/feature/multiwallet" />
+            <option value="$PROJECT_DIR$/feature/nft" />
             <option value="$PROJECT_DIR$/feature/onboarding" />
             <option value="$PROJECT_DIR$/feature/settings" />
-            <option value="$PROJECT_DIR$/resource" />
           </set>
         </option>
       </GradleProjectSettings>

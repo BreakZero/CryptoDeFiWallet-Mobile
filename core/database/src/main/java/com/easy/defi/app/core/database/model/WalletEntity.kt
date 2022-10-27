@@ -2,7 +2,7 @@ package com.easy.defi.app.core.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.easy.defi.app.core.model.Wallet
+import com.easy.defi.app.core.model.data.Wallet
 
 @Entity(
   tableName = "tb_wallet",

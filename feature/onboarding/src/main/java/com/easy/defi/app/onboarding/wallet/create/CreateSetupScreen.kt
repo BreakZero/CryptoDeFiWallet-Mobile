@@ -14,8 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.easy.defi.app.core.designsystem.R
 import com.easy.defi.app.core.ui.DeFiAppBar
-import com.easy.defi.resource.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

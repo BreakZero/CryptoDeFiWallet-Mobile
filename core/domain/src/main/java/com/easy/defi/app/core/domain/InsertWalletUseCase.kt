@@ -1,7 +1,7 @@
 package com.easy.defi.app.core.domain
 
 import com.easy.defi.app.core.data.repository.WalletRepository
-import com.easy.defi.app.core.model.Wallet
+import com.easy.defi.app.core.model.data.Wallet
 import javax.inject.Inject
 import wallet.core.jni.Mnemonic
 

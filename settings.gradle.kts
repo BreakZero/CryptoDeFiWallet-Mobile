@@ -36,7 +36,6 @@ fun userProperty(): java.util.Properties {
 
 rootProject.name = "DeFiWallet"
 include(":app")
-include(":resource")
 include(":core:testing")
 include(":core:common")
 include(":core:ui")
@@ -49,3 +48,9 @@ include(":core:model")
 include(":feature:onboarding")
 include(":feature:settings")
 include(":feature:multiwallet")
+include(":core:network")
+include(":feature:assets")
+include(":core:designsystem")
+include(":feature:dapp")
+include(":feature:nft")
+include(":feature:earn")

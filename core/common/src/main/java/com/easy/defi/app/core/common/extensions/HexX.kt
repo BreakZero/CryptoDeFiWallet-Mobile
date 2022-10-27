@@ -1,4 +1,4 @@
-package com.crypto.core.extensions
+package com.easy.defi.app.core.common.extensions
 
 import java.math.BigInteger
 import kotlin.experimental.and

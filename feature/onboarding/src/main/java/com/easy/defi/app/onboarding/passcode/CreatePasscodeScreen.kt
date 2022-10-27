@@ -19,11 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.easy.defi.app.core.designsystem.R
 import com.easy.defi.app.core.ui.ActionType
 import com.easy.defi.app.core.ui.NumberKeyboard
 import com.easy.defi.app.core.ui.navigation.NavigationCommand
 import com.easy.defi.app.onboarding.OnBoardingNavigations
-import com.easy.defi.resource.R
 
 @Composable
 fun CreatePasscodeScreen(

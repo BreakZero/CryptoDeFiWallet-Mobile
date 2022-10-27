@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.easy.defi.app.core.designsystem.theme.Spacing
 
 private const val NumIndicators = 3
 private const val IndicatorSize = 12

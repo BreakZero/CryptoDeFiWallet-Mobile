@@ -9,7 +9,6 @@ android {
 }
 
 dependencies {
-  implementation(project(":resource"))
   implementation(project(":core:ui"))
   implementation(project(":core:domain"))
 

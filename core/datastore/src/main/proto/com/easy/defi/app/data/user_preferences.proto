@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "com.easy.defi.app.core.datastore";
+option java_multiple_files = true;
+
+message UserPreferences {
+    string currencyCode = 1;
+    string currencySymbol = 2;
+    string network = 3;
+    string avator = 4;
+    string walletName = 5;
+}
