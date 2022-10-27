@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
-import com.crypto.core.extensions.launchWithHandler
 import com.crypto.defi.chains.ChainManager
 import com.crypto.defi.chains.usecase.BalanceUseCase
 import com.crypto.defi.feature.assets.MainAssetsViewModel
+import com.easy.defi.app.core.common.extensions.launchWithHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.supervisorScope
 

@@ -2,10 +2,10 @@ package com.crypto.defi.feature.nfts.group
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.crypto.core.extensions.launchWithHandler
 import com.crypto.defi.common.UrlConstant
 import com.crypto.defi.models.remote.nft.BaseNftResponse
 import com.crypto.defi.models.remote.nft.NftAssetGroup
+import com.easy.defi.app.core.common.extensions.launchWithHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.*
 import io.ktor.client.call.*

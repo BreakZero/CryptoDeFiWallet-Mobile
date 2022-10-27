@@ -14,5 +14,5 @@
 .cxx
 local.properties
 keystore/*
-configuration-module/build/*
-configuration-module/.gradle/*
+build-logic/build/*
+build-logic/.gradle/*

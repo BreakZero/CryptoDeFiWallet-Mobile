@@ -1,198 +1,99 @@
-import com.crypto.configuration.*
-import com.crypto.configuration.dependencies.AndroidDeps
-import com.crypto.configuration.dependencies.ComposeDeps
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
-    kotlin("plugin.serialization") version "1.7.10" apply true
-    jacoco apply true
+  id("easy.android.application")
+  id("easy.android.application.compose")
+  id("easy.android.application.jacoco")
+  id("easy.android.hilt")
+  id("jacoco")
 }
-//apply(from = "${rootProject.rootDir}/jacoco.gradle.kts")
+
 android {
-    compileSdk = AndroidBuildConfig.compileSdkVersion
+  defaultConfig {
+    applicationId = "com.crypto.defi"
+    versionCode = 1
+    versionName = "0.0.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
-    defaultConfig {
-        applicationId = "com.crypto.defi"
-        minSdk = AndroidBuildConfig.minSdkVersion
-        targetSdk = AndroidBuildConfig.targetSdkVersion
-        versionCode = AndroidBuildConfig.versionCode
-        versionName = AndroidBuildConfig.versionName
+    // Custom test runner to set up Hilt dependency graph
+    testInstrumentationRunner = "com.easy.defi.app.core.testing.EasyTestRunner"
+    vectorDrawables {
+      useSupportLibrary = true
+    }
+  }
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-//        vectorDrawables {
-//            useSupportLibrary true
-//        }
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
-        }
+  buildTypes {
+    val debug by getting {
+      applicationIdSuffix = ".debug"
     }
+    val release by getting {
+      isMinifyEnabled = true
+      proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-    val keyProperties = keyStoreProperties()
-    signingConfigs {
-        getByName("debug") {
-            storeFile = rootProject.file(keyProperties.getProperty("storeFile"))
-            storePassword = keyProperties.getProperty("storePassword")
-            keyAlias = keyProperties.getProperty("keyAlias")
-            keyPassword = keyProperties.getProperty("keyPassword")
-        }
-        create("release") {
-            storeFile = rootProject.file(keyProperties.getProperty("storeFile"))
-            storePassword = keyProperties.getProperty("storePassword")
-            keyAlias = keyProperties.getProperty("keyAlias")
-            keyPassword = keyProperties.getProperty("keyPassword")
-        }
+      // To publish on the Play store a private signing key is required, but to allow anyone
+      // who clones the code to sign and run the release variant, use the debug signing key.
+      // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
+      signingConfig = signingConfigs.getByName("debug")
     }
+    val benchmark by creating {
+      // Enable all the optimizations from release build through initWith(release).
+      initWith(release)
+      matchingFallbacks.add("release")
+      // Debug key signing is available to everyone.
+      signingConfig = signingConfigs.getByName("debug")
+      // Only use benchmark proguard rules
+      proguardFiles("benchmark-rules.pro")
+      //  FIXME enabling minification breaks access to demo backend.
+      isMinifyEnabled = false
+      applicationIdSuffix = ".benchmark"
+    }
+  }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            signingConfig = signingConfigs.getByName("release")
-            isDebuggable = false
-        }
-        debug {
-            signingConfig = signingConfigs.getByName("debug")
-            isDebuggable = true
-            isTestCoverageEnabled = true
-        }
+  packagingOptions {
+    resources {
+      excludes.add("/META-INF/{AL2.0,LGPL2.1}")
     }
-    compileOptions {
-        sourceCompatibility(JavaVersion.VERSION_11)
-        targetCompatibility(JavaVersion.VERSION_11)
+  }
+  testOptions {
+    unitTests {
+      isIncludeAndroidResources = true
     }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-    }
-
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-            unitTests.isReturnDefaultValues = true
-        }
-    }
-
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.0"
-    }
-    packagingOptions {
-        resources {
-            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-            excludes.add("google/protobuf/*.proto")
-        }
-    }
+  }
+  namespace = "com.google.samples.apps.nowinandroid"
 }
 
 dependencies {
-    implementation(AndroidDeps.coreKtx)
-    implementation(AndroidDeps.Lifecycle.runtime)
-    implementation(AndroidDeps.Lifecycle.viewmodel_ktx)
-    implementation(AndroidDeps.appcompat)
-    implementation(AndroidDeps.activity_compose)
 
-    implementation(ComposeDeps.constraintlayout)
-    implementation(AndroidDeps.Media3.ui)
-    implementation(AndroidDeps.Media3.exoplayer)
-    implementation(AndroidDeps.Media3.dash)
+  implementation(project(":core:common"))
+  implementation(project(":core:ui"))
+  implementation(project(":core:data"))
+  implementation(project(":core:model"))
 
-    implementation(project(":resource"))
-    implementation(project(":onboarding:onboarding_presentation"))
-    implementation(project(":core"))
-    implementation(project(":core-ui"))
-    implementation(project(":wallet"))
+  androidTestImplementation(project(":core:testing"))
+  androidTestImplementation(libs.androidx.navigation.testing)
+  debugImplementation(libs.androidx.compose.ui.testManifest)
 
-    implementation("androidx.work:work-runtime-ktx:2.8.0-alpha04")
+  implementation(libs.accompanist.systemuicontroller)
+  implementation(libs.androidx.activity.compose)
+  implementation(libs.androidx.appcompat)
+  implementation(libs.androidx.core.ktx)
+  implementation(libs.androidx.core.splashscreen)
+  implementation(libs.androidx.compose.runtime)
+  implementation(libs.androidx.lifecycle.runtimeCompose)
+  implementation(libs.androidx.compose.runtime.tracing)
+  implementation(libs.androidx.compose.material3.windowSizeClass)
+  implementation(libs.androidx.hilt.navigation.compose)
+  implementation(libs.androidx.navigation.compose)
+  implementation(libs.androidx.window.manager)
+  implementation(libs.androidx.profileinstaller)
 
-    composeUI()
-    hiltDependencies()
-    roomDependencies()
-
-    unitTestDependencies()
-    androidTestDependencies()
+  implementation(libs.coil.kt)
+  implementation(libs.coil.kt.svg)
 }
 
-jacoco {
-    toolVersion = "0.8.7"
-    reportsDirectory.set(layout.buildDirectory.dir("jacoco"))
+// androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
+configurations.configureEach {
+  resolutionStrategy {
+    force(libs.junit4)
+    // Temporary workaround for https://issuetracker.google.com/174733673
+    force("org.objenesis:objenesis:2.6")
+  }
 }
-
-tasks.register("jacocoTestReport", JacocoReport::class) {
-    dependsOn(listOf("testDebugUnitTest", "createDebugCoverageReport"))
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-        html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
-    }
-    val fileFilter = listOf(
-        "**/R.class",
-        "**/R$*.class",
-        "**/BuildConfig.*",
-        "**/Manifest*.*",
-        "**/*Test*.*",
-        "android/**/*.*",
-        "**/*_Factory.*",
-        "**/*_Provide*Factory*.*",
-        "**/*Database_Impl*.*"
-    )
-    val jClasses = "${project.buildDir}/intermediates/javac/debug/classes"
-    val kClasses = "${project.buildDir}/tmp/kotlin-classes/debug"
-
-    val javaClasses = fileTree(
-        mapOf(
-            "dir" to jClasses,
-            "excludes" to fileFilter
-        )
-    )
-
-    val kotlinClasses = fileTree(
-        mapOf(
-            "dir" to kClasses,
-            "excludes" to fileFilter
-        )
-    )
-
-    val mainSrc = "${projectDir}/src/main/java"
-    sourceDirectories.setFrom(files(mainSrc))
-    classDirectories.setFrom(files(javaClasses, kotlinClasses))
-    executionData.setFrom(
-        fileTree(
-            mapOf(
-                "dir" to project.buildDir, "includes" to listOf(
-                    "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
-                    "outputs/code_coverage/debugAndroidTest/connected/*/coverage.ec"
-                )
-            )
-        )
-    )
-}
-
-tasks.withType(Test::class.java) {
-    configure<JacocoTaskExtension> {
-        isEnabled = true
-        excludes = listOf("jdk.internal.*")
-        isIncludeNoLocationClasses = true
-        setDestinationFile(layout.buildDirectory.file("jacoco/jacocoTest.exec").get().asFile)
-        classDumpDir = layout.buildDirectory.dir("jacoco/classpathdumps").get().asFile
-        output = JacocoTaskExtension.Output.FILE
-    }
-}
-
-tasks.register("installGitHook", Copy::class.java) {
-  from(File(rootProject.rootDir, "scripts/pre-commit-macos"))
-  into(File(rootProject.rootDir, ".git/hooks"))
-  rename("pre-commit-macos", "pre-commit")
-  fileMode = 509
-}
-
-tasks.getByPath(":app:preBuild").dependsOn("installGitHook")

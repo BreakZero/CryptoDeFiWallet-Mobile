@@ -28,16 +28,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.crypto.core.extensions.launchWithHandler
 import com.crypto.core.ui.Spacing
 import com.crypto.core.ui.composables.DeFiAppBar
 import com.crypto.defi.BuildConfig
-import com.crypto.defi.R
 import com.crypto.defi.feature.dapps.detail.utils.DAppMethod
 import com.crypto.defi.feature.dapps.detail.utils.WebAppInterface
+import com.easy.defi.app.core.common.extensions.launchWithHandler
 import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.LoadingState
-import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 import kotlinx.coroutines.Dispatchers
@@ -65,7 +63,7 @@ fun DAppDetailScreen(
     mutableStateOf(
       """
       (function() {
-            var config = {                
+            var config = {
                 ethereum: {
                     chainId: $chainId,
                     rpcUrl: "$dAppRpc"
