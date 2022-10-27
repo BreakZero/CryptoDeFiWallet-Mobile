@@ -4,8 +4,12 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import com.easy.defi.app.feature.dapp.navigation.dappGraph
+import com.easy.defi.app.feature.earn.navigation.earnGraph
+import com.easy.defi.app.feature.nft.navigation.nftGraph
 import com.easy.defi.feature.asset.navigation.assetNavigationRoute
-import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.easy.defi.feature.asset.navigation.walletGraph
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -15,10 +19,14 @@ fun DeFiNavHost(
   modifier: Modifier = Modifier,
   startDestination: String = assetNavigationRoute,
 ) {
-  AnimatedNavHost(
+  NavHost(
     navController = navController,
     startDestination = startDestination,
     modifier = modifier,
   ) {
+    walletGraph()
+    dappGraph()
+    nftGraph()
+    earnGraph()
   }
 }

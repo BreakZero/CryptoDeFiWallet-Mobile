@@ -10,6 +10,10 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class DeFiApplication : Application(), ImageLoaderFactory {
+  override fun onCreate() {
+    super.onCreate()
+  }
+
   override fun newImageLoader(): ImageLoader {
     return ImageLoader.Builder(this)
       .components {

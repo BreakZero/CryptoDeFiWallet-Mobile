@@ -15,7 +15,7 @@ class UserPreferencesDataSource @Inject constructor(
   val userDataStream = userPreferences.data.map {
     UserData(
       currency = DeFiCurrency(it.currencyCode, it.currencySymbol),
-      network = ChainNetwork.valueOf(it.network),
+      network = ChainNetwork.fromLabel(it.network),
       walletProfile = WalletProfile(avator = it.avator, walletName = it.walletName),
     )
   }

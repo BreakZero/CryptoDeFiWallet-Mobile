@@ -3,7 +3,13 @@ package com.easy.defi.app.core.model.data
 enum class ChainNetwork(
   val label: String,
 ) {
-  MAINNET("MainNet"), ROPSTEN("Ropsten"), RINKEBY("Rinkeby")
+  MAINNET("MainNet"), ROPSTEN("Ropsten"), RINKEBY("Rinkeby");
+
+  companion object {
+    fun fromLabel(label: String): ChainNetwork {
+      return ChainNetwork.MAINNET
+    }
+  }
 }
 
 data class DeFiCurrency(

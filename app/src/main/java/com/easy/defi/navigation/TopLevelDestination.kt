@@ -1,9 +1,9 @@
 package com.easy.defi.navigation
 
+import com.easy.defi.R
 import com.easy.defi.app.core.designsystem.icon.DeFiIcon
 import com.easy.defi.app.core.designsystem.icon.Icon
 import com.easy.defi.app.core.designsystem.icon.Icon.DrawableResourceIcon
-import com.easy.defi.wallet.R
 
 enum class TopLevelDestination(
   val selectedIcon: Icon,

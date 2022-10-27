@@ -57,7 +57,7 @@ android {
       isIncludeAndroidResources = true
     }
   }
-  namespace = "com.easy.defi.wallet"
+  namespace = "com.easy.defi"
 }
 
 dependencies {
@@ -67,7 +67,7 @@ dependencies {
   implementation(project(":core:ui"))
   implementation(project(":core:data"))
   implementation(project(":core:model"))
-  
+
   implementation(project(":feature:assets"))
   implementation(project(":feature:nft"))
   implementation(project(":feature:dapp"))

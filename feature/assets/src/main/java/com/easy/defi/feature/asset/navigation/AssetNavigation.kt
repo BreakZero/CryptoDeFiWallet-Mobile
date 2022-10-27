@@ -28,7 +28,7 @@ fun NavController.navigateToWallet(navOptions: NavOptions? = null) {
   this.navigate(assetNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.assetScreen() {
+fun NavGraphBuilder.walletGraph() {
   composable(route = assetNavigationRoute) {
     AssetListScreen {
     }
