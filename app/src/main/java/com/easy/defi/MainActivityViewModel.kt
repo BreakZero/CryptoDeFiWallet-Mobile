@@ -23,16 +23,29 @@ import com.easy.defi.app.core.data.repository.user.UserDataRepository
 import com.easy.defi.app.core.model.data.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.*
+import timber.log.Timber
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
   userDataRepository: UserDataRepository,
   walletRepository: WalletRepository,
 ) : ViewModel() {
+  private var walletJob: Job? = null
+
+  init {
+    walletJob = userDataRepository.userDataStream.flatMapLatest {
+      if (it.hasPasscode) {
+        walletRepository.activeWalletStream()
+      } else {
+        emptyFlow()
+      }
+    }.onEach {
+      Timber.tag("======").v(it.toString())
+    }.launchIn(viewModelScope)
+  }
+
   val uiState: StateFlow<MainActivityUiState> = userDataRepository.userDataStream.map {
     MainActivityUiState.Success(userData = it)
   }.stateIn(
@@ -40,6 +53,11 @@ class MainActivityViewModel @Inject constructor(
     initialValue = MainActivityUiState.Loading,
     started = SharingStarted.WhileSubscribed(5_000),
   )
+
+  override fun onCleared() {
+    super.onCleared()
+    walletJob?.cancel()
+  }
 }
 
 sealed interface MainActivityUiState {
