@@ -68,6 +68,7 @@ dependencies {
   implementation(project(":core:data"))
   implementation(project(":core:model"))
 
+  implementation(project(":feature:onboarding"))
   implementation(project(":feature:assets"))
   implementation(project(":feature:nft"))
   implementation(project(":feature:dapp"))

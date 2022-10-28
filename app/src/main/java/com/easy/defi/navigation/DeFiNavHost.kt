@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import com.easy.defi.app.feature.dapp.navigation.dappGraph
 import com.easy.defi.app.feature.earn.navigation.earnGraph
 import com.easy.defi.app.feature.nft.navigation.nftGraph
+import com.easy.defi.app.onboarding.onBoardingGraph
 import com.easy.defi.app.settings.navigation.navigateToSettings
 import com.easy.defi.app.settings.navigation.settingsGraph
 import com.easy.defi.feature.asset.navigation.assetGraphRoutePattern
@@ -26,6 +27,7 @@ fun DeFiNavHost(
     startDestination = startDestination,
     modifier = modifier,
   ) {
+    onBoardingGraph(navController)
     walletGraph(
       navigateToSettings = {
         navController.navigateToSettings()

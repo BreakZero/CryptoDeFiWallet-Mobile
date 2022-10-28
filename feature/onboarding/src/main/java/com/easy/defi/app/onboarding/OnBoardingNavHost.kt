@@ -2,13 +2,13 @@ package com.easy.defi.app.onboarding
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
+import com.easy.defi.app.core.designsystem.component.composableWithAnimation
 import com.easy.defi.app.onboarding.legal.LegalScreen
 import com.easy.defi.app.onboarding.passcode.CreatePasscodeScreen
 import com.easy.defi.app.onboarding.wallet.imports.ImportWordsScreen
 
-fun NavGraphBuilder.onboarding(navController: NavController) {
-  composable(
+fun NavGraphBuilder.onBoardingGraph(navController: NavController) {
+  composableWithAnimation(
     route = OnBoardingNavigations.Index.destination,
   ) {
     OnboardScreen {
@@ -16,7 +16,7 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
     }
   }
 
-  composable(
+  composableWithAnimation(
     route = OnBoardingNavigations.Legal.ROUTE,
     arguments = OnBoardingNavigations.Legal.args,
   ) {
@@ -30,7 +30,7 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
       },
     )
   }
-  composable(
+  composableWithAnimation(
     route = OnBoardingNavigations.CreatePasscode.ROUTE,
     arguments = OnBoardingNavigations.CreatePasscode.args,
   ) {
@@ -47,7 +47,7 @@ fun NavGraphBuilder.onboarding(navController: NavController) {
       },
     )
   }
-  composable(
+  composableWithAnimation(
     route = OnBoardingNavigations.ImportWallet.ROUTE,
     arguments = OnBoardingNavigations.ImportWallet.args,
   ) {

@@ -18,10 +18,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.easy.defi.app.core.designsystem.R
+import com.easy.defi.app.core.designsystem.theme.Spacing
 import com.easy.defi.app.core.ui.AdvanceMenu
 import com.easy.defi.app.core.ui.DeFiAppBar
 import com.easy.defi.app.core.ui.MenuItemView
-import com.easy.defi.app.core.ui.Spacing
 import com.easy.defi.app.core.ui.navigation.NavigationCommand
 import com.easy.defi.app.onboarding.OnBoardingNavigations
 

@@ -18,6 +18,7 @@ data class DeFiCurrency(
 )
 
 data class UserData(
+  val passcode: String,
   val currency: DeFiCurrency,
   val network: ChainNetwork,
   val walletProfile: WalletProfile,

@@ -9,9 +9,6 @@ android {
 }
 
 dependencies {
-  implementation(project(":core:ui"))
-  implementation(project(":core:domain"))
-
   implementation(libs.accompanist.pager)
   implementation(libs.accompanist.pager.indicators)
 }
