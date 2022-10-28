@@ -8,9 +8,15 @@ import wallet.core.jni.Mnemonic
 class InsertWalletUseCase @Inject constructor(
   private val walletRepository: WalletRepository,
 ) {
-  suspend operator fun invoke(mnemonic: String, passphrase: String = "", onResult: suspend (Boolean) -> Unit) {
+  suspend operator fun invoke(
+    mnemonic: String,
+    passphrase: String = "",
+    doFirst: suspend () -> Unit,
+    doLast: suspend (Boolean) -> Unit,
+  ) {
     val isValid = Mnemonic.isValid(mnemonic)
     if (isValid) {
+      doFirst()
       walletRepository.insertWallet(
         Wallet(
           mnemonic = mnemonic,
@@ -19,6 +25,6 @@ class InsertWalletUseCase @Inject constructor(
         ),
       )
     }
-    onResult(isValid)
+    doLast(isValid)
   }
 }

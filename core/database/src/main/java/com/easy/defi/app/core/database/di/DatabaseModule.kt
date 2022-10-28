@@ -14,6 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
+import timber.log.Timber
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -24,7 +25,9 @@ object DatabaseModule {
     @ApplicationContext context: Context,
     sharedPreferences: SharedPreferences,
   ): WalletDatabase {
-    val passcode = sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "").orEmpty()
+    val passcode = sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "").orEmpty().also {
+      Timber.tag("=====").v(it)
+    }
 
     val passPhrase = SQLiteDatabase.getBytes(
       passcode.toCharArray(),

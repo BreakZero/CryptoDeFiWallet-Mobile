@@ -9,5 +9,5 @@ message UserPreferences {
     string network = 3;
     string avator = 4;
     string walletName = 5;
-    string passcode = 6;
+    bool hasPasscode = 6;
 }

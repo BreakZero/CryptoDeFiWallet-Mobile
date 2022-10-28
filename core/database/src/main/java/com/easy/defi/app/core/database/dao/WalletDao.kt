@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.easy.defi.app.core.database.model.WalletEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WalletDao {
@@ -17,10 +18,10 @@ interface WalletDao {
 
   @Query(
     """
-        SELECT *
-        FROM TB_WALLET
-        WHERE active = 1
-        """,
+    SELECT *
+    FROM TB_WALLET
+    WHERE active = 1
+    """,
   )
-  fun activeWallet(): WalletEntity?
+  fun activeWallet(): Flow<WalletEntity?>
 }

@@ -11,6 +11,10 @@ class OfflineUserDataRepository @Inject constructor(
   private val userPreferencesDataSource: UserPreferencesDataSource,
 ) : UserDataRepository {
   override val userDataStream: Flow<UserData> = userPreferencesDataSource.userDataStream
+
+  override suspend fun storePasscode(passcode: String) {
+    userPreferencesDataSource.storePasscode(passcode)
+  }
   override suspend fun setAvator(avatorUrl: String) {
     userPreferencesDataSource.setAvator(avatorUrl)
   }

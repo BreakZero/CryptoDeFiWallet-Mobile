@@ -1,14 +1,12 @@
 package com.easy.defi.app.onboarding.wallet.imports
 
-import android.content.SharedPreferences
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.easy.defi.app.core.common.ConfigurationKeys
 import com.easy.defi.app.core.common.extensions.launchWithHandler
+import com.easy.defi.app.core.data.repository.user.UserDataRepository
 import com.easy.defi.app.core.domain.InsertWalletUseCase
 import com.easy.defi.app.core.ui.UiEvent
 import com.easy.defi.app.core.ui.UiText
@@ -20,7 +18,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class WalletImportViewModel @Inject constructor(
-  private val preferences: SharedPreferences,
+  private val userDataRepository: UserDataRepository,
   private val insertWalletUseCase: InsertWalletUseCase,
 ) : ViewModel() {
   var state by mutableStateOf(ImportState())
@@ -35,17 +33,18 @@ class WalletImportViewModel @Inject constructor(
         viewModelScope.launchWithHandler {
           insertWalletUseCase(
             mnemonic = state.phrase,
-          ) {
-            if (it) {
-              preferences.edit {
-                putString(ConfigurationKeys.KEY_FOR_PASSCODE, event.passcode)
+            doFirst = {
+              userDataRepository.storePasscode(event.passcode)
+            },
+            doLast = {
+              if (it) {
+                state = state.copy(inProgress = false)
+                _uiEvent.send(UiEvent.Success)
+              } else {
+                _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString("invalid mnemonic, please try another")))
               }
-              state = state.copy(inProgress = false)
-              _uiEvent.send(UiEvent.Success)
-            } else {
-              _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString("invalid mnemonic, please try another")))
-            }
-          }
+            },
+          )
         }
       }
       is ImportEvent.OnFocusChange -> {

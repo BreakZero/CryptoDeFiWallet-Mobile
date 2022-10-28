@@ -69,24 +69,24 @@ class MainActivity : ComponentActivity() {
         systemUiController.systemBarsDarkContentEnabled = !darkTheme
         onDispose {}
       }
-      if (uiState is MainActivityUiState.Success) {
-        val startDestination = if ((uiState as MainActivityUiState.Success).hasWallet) {
+      val startDestination = when {
+        uiState is MainActivityUiState.Success && (uiState as MainActivityUiState.Success).userData.hasPasscode -> {
           assetGraphRoutePattern
-        } else {
-          OnBoardingNavigations.Index.destination
         }
-        DeFiWalletTheme(
-          darkTheme = darkTheme,
-        ) {
-          DeFiApp(
-            startDestination = startDestination,
+        else -> OnBoardingNavigations.Index.destination
+      }
+
+      DeFiWalletTheme(
+        darkTheme = darkTheme,
+      ) {
+        DeFiApp(
+          startDestination = startDestination,
+          networkMonitor = networkMonitor,
+          appState = rememberDeFiAppState(
             networkMonitor = networkMonitor,
-            appState = rememberDeFiAppState(
-              networkMonitor = networkMonitor,
-              windowSizeClass = calculateWindowSizeClass(this),
-            ),
-          )
-        }
+            windowSizeClass = calculateWindowSizeClass(this),
+          ),
+        )
       }
     }
   }

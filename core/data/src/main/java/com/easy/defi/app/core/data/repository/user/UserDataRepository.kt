@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserDataRepository {
   val userDataStream: Flow<UserData>
 
+  suspend fun storePasscode(passcode: String)
   suspend fun setAvator(avatorUrl: String)
   suspend fun setWalletName(walletName: String)
   suspend fun setCurrency(currency: DeFiCurrency)
