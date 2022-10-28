@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.easy.defi.app.core.designsystem.R
@@ -35,11 +34,7 @@ fun LegalScreen(
   Scaffold(
     modifier = Modifier.fillMaxSize(),
     topBar = {
-      DeFiAppBar(
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-          containerColor = Color.Transparent,
-        ),
-      ) {
+      DeFiAppBar() {
         navigateUp()
       }
     },
@@ -89,9 +84,12 @@ fun LegalScreen(
       ) {
         var checked by rememberSaveable { mutableStateOf(false) }
         Row(modifier = Modifier.fillMaxWidth()) {
-          Checkbox(checked = checked, onCheckedChange = {
-            checked = it
-          },)
+          Checkbox(
+            checked = checked,
+            onCheckedChange = {
+              checked = it
+            },
+          )
           Text(text = stringResource(id = R.string.legal__legal_read_confirm_tip))
         }
         Button(

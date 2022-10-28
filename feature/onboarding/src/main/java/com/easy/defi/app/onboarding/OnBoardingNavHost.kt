@@ -9,7 +9,6 @@ import com.easy.defi.app.onboarding.wallet.imports.ImportWordsScreen
 
 fun NavGraphBuilder.onBoardingGraph(
   navController: NavController,
-  navigateToMain: () -> Unit,
 ) {
   composableWithAnimation(
     route = OnBoardingNavigations.Index.destination,
@@ -59,9 +58,6 @@ fun NavGraphBuilder.onBoardingGraph(
       passcode = passcode,
       navigateUp = {
         navController.navigateUp()
-      },
-      navigateMain = {
-        navigateToMain()
       },
     )
   }

@@ -18,14 +18,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.easy.defi.app.core.designsystem.R
+import com.easy.defi.app.core.designsystem.component.yellowBackground
 import com.easy.defi.app.core.designsystem.theme.Spacing
 import com.easy.defi.app.core.ui.extension.rotating
 import com.easy.defi.feature.asset.components.AssetCard
@@ -43,12 +46,15 @@ fun AssetListScreen(
 ) {
   val context = LocalContext.current
   val assetsUiState by assetsViewModel.assetState.collectAsState()
-  Scaffold(
-    modifier = Modifier.fillMaxSize(),
-    topBar = {
+  Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+      modifier = Modifier.yellowBackground(
+        MaterialTheme.colorScheme.primary,
+      ),
+    ) {
       TopAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(
-          containerColor = MaterialTheme.colorScheme.primary,
+          containerColor = Color.Transparent,
         ),
         navigationIcon = {
           IconButton(
@@ -108,12 +114,17 @@ fun AssetListScreen(
           }
         },
       )
-    },
-  ) {
+      Box(
+        modifier = Modifier
+          .fillMaxWidth()
+          .height(120.dp)
+          .background(Color.Transparent),
+      ) {
+      }
+    }
     SwipeRefresh(
       modifier = Modifier
-        .fillMaxSize()
-        .padding(it),
+        .fillMaxSize(),
       state = rememberSwipeRefreshState(assetsUiState.onRefreshing),
       swipeEnabled = true,
       onRefresh = {

@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -41,7 +40,6 @@ fun ImportWordsScreen(
   passcode: String,
   viewModel: WalletImportViewModel = hiltViewModel(),
   navigateUp: () -> Unit,
-  navigateMain: () -> Unit,
 ) {
   val keyboardController = LocalSoftwareKeyboardController.current
   val context = LocalContext.current
@@ -50,7 +48,6 @@ fun ImportWordsScreen(
     viewModel.uiEvent.collect { event ->
       when (event) {
         is UiEvent.Success -> {
-          navigateMain()
         }
         is UiEvent.ShowSnackbar -> {
           Timber.v(event.message.asString(context))
@@ -67,9 +64,6 @@ fun ImportWordsScreen(
     topBar = {
       DeFiAppBar(
         title = stringResource(id = R.string.import_wallet__import_wallet),
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-          containerColor = Color.Transparent,
-        ),
         actions = {
           Icon(imageVector = Icons.Default.QrCode, contentDescription = null)
         },

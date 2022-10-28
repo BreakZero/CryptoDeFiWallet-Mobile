@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -29,19 +30,24 @@ import com.easy.defi.app.core.designsystem.component.DeFiNavigationRail
 import com.easy.defi.app.core.designsystem.component.DeFiNavigationRailItem
 import com.easy.defi.app.core.designsystem.icon.Icon
 import com.easy.defi.navigation.DeFiNavHost
+import com.easy.defi.navigation.DeFiOnBoardingNavHost
 import com.easy.defi.navigation.TopLevelDestination
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun DeFiApp(
-  startDestination: String,
+  hasWallet: Boolean,
   networkMonitor: NetworkMonitor,
   appState: DeFiAppState,
 ) {
   val background: @Composable (@Composable () -> Unit) -> Unit =
     when (appState.currentTopLevelDestination) {
       TopLevelDestination.WALLET -> { content ->
-        DeFiGradientBackground(content = content)
+        DeFiGradientBackground(
+          topColor = White,
+          bottomColor = White,
+          content = content,
+        )
       }
       else -> { content -> DeFiBackground(content = content) }
     }
@@ -90,15 +96,20 @@ fun DeFiApp(
             modifier = Modifier.safeDrawingPadding(),
           )
         }
-
-        DeFiNavHost(
-          modifier = Modifier
-            .padding(padding)
-            .consumedWindowInsets(padding),
-          navController = appState.navController,
-          onBackClick = appState::onBackClick,
-          startDestination = startDestination,
-        )
+        if (hasWallet) {
+          DeFiNavHost(
+            modifier = Modifier
+              .padding(padding)
+              .consumedWindowInsets(padding),
+            navController = appState.navController,
+            onBackClick = appState::onBackClick,
+          )
+        } else {
+          DeFiOnBoardingNavHost(
+            navController = appState.navController,
+            onBackClick = appState::onBackClick,
+          )
+        }
       }
     }
   }
