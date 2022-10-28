@@ -77,6 +77,8 @@ dependencies {
 
   implementation(project(":sync:work"))
 
+  implementation("com.trustwallet:wallet-core:3.0.6")
+
   androidTestImplementation(project(":core:testing"))
   androidTestImplementation(libs.androidx.navigation.testing)
   debugImplementation(libs.androidx.compose.ui.testManifest)

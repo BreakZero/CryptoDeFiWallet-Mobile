@@ -16,8 +16,10 @@
 
 package com.easy.defi
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.easy.defi.app.core.common.ConfigurationKeys
 import com.easy.defi.app.core.data.repository.user.UserDataRepository
 import com.easy.defi.app.core.model.data.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,10 +31,13 @@ import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
+  private val sharedPreferences: SharedPreferences,
   userDataRepository: UserDataRepository,
 ) : ViewModel() {
+  private val hasWallet = !sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "").isNullOrBlank()
+
   val uiState: StateFlow<MainActivityUiState> = userDataRepository.userDataStream.map {
-    MainActivityUiState.Success(it)
+    MainActivityUiState.Success(hasWallet = hasWallet, userData = it)
   }.stateIn(
     scope = viewModelScope,
     initialValue = MainActivityUiState.Loading,
@@ -42,5 +47,5 @@ class MainActivityViewModel @Inject constructor(
 
 sealed interface MainActivityUiState {
   object Loading : MainActivityUiState
-  data class Success(val userData: UserData) : MainActivityUiState
+  data class Success(val hasWallet: Boolean, val userData: UserData) : MainActivityUiState
 }

@@ -34,6 +34,7 @@ import com.easy.defi.navigation.TopLevelDestination
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun DeFiApp(
+  startDestination: String,
   networkMonitor: NetworkMonitor,
   appState: DeFiAppState,
 ) {
@@ -96,6 +97,7 @@ fun DeFiApp(
             .consumedWindowInsets(padding),
           navController = appState.navController,
           onBackClick = appState::onBackClick,
+          startDestination = startDestination,
         )
       }
     }

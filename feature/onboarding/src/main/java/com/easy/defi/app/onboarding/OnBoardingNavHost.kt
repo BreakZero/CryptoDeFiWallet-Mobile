@@ -7,7 +7,10 @@ import com.easy.defi.app.onboarding.legal.LegalScreen
 import com.easy.defi.app.onboarding.passcode.CreatePasscodeScreen
 import com.easy.defi.app.onboarding.wallet.imports.ImportWordsScreen
 
-fun NavGraphBuilder.onBoardingGraph(navController: NavController) {
+fun NavGraphBuilder.onBoardingGraph(
+  navController: NavController,
+  navigateToMain: () -> Unit,
+) {
   composableWithAnimation(
     route = OnBoardingNavigations.Index.destination,
   ) {
@@ -58,11 +61,7 @@ fun NavGraphBuilder.onBoardingGraph(navController: NavController) {
         navController.navigateUp()
       },
       navigateMain = {
-        navController.navigate("main-home") {
-          popUpTo(OnBoardingNavigations.Index.destination) {
-            inclusive = true
-          }
-        }
+        navigateToMain()
       },
     )
   }

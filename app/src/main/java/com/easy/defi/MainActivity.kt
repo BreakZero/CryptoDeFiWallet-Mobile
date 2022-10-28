@@ -18,6 +18,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.easy.defi.app.core.data.util.NetworkMonitor
 import com.easy.defi.app.core.designsystem.theme.DeFiWalletTheme
+import com.easy.defi.app.onboarding.OnBoardingNavigations
+import com.easy.defi.feature.asset.navigation.assetGraphRoutePattern
 import com.easy.defi.ui.DeFiApp
 import com.easy.defi.ui.rememberDeFiAppState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -67,17 +69,24 @@ class MainActivity : ComponentActivity() {
         systemUiController.systemBarsDarkContentEnabled = !darkTheme
         onDispose {}
       }
-
-      DeFiWalletTheme(
-        darkTheme = darkTheme,
-      ) {
-        DeFiApp(
-          networkMonitor = networkMonitor,
-          appState = rememberDeFiAppState(
+      if (uiState is MainActivityUiState.Success) {
+        val startDestination = if ((uiState as MainActivityUiState.Success).hasWallet) {
+          assetGraphRoutePattern
+        } else {
+          OnBoardingNavigations.Index.destination
+        }
+        DeFiWalletTheme(
+          darkTheme = darkTheme,
+        ) {
+          DeFiApp(
+            startDestination = startDestination,
             networkMonitor = networkMonitor,
-            windowSizeClass = calculateWindowSizeClass(this),
-          ),
-        )
+            appState = rememberDeFiAppState(
+              networkMonitor = networkMonitor,
+              windowSizeClass = calculateWindowSizeClass(this),
+            ),
+          )
+        }
       }
     }
   }

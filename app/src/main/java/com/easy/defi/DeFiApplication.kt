@@ -12,6 +12,9 @@ import timber.log.Timber
 
 @HiltAndroidApp
 class DeFiApplication : Application(), ImageLoaderFactory {
+  init {
+    System.loadLibrary("TrustWalletCore")
+  }
   override fun onCreate() {
     super.onCreate()
     Timber.plant(Timber.DebugTree())
