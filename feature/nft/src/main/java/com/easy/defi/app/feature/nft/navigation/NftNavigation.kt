@@ -19,7 +19,7 @@ package com.easy.defi.app.feature.nft.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import com.easy.defi.app.core.designsystem.component.composableWithAnimation
 import com.easy.defi.app.feature.nft.NftListScreen
 
 const val nftNavigationRoute = "nfts_route"
@@ -29,7 +29,7 @@ fun NavController.navigateToNft(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.nftGraph() {
-  composable(route = nftNavigationRoute) {
+  composableWithAnimation(route = nftNavigationRoute) {
     NftListScreen()
   }
 }

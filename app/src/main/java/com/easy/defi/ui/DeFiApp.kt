@@ -30,7 +30,6 @@ import com.easy.defi.app.core.designsystem.component.DeFiNavigationRailItem
 import com.easy.defi.app.core.designsystem.icon.Icon
 import com.easy.defi.navigation.DeFiNavHost
 import com.easy.defi.navigation.TopLevelDestination
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class, ExperimentalLayoutApi::class)
 @Composable
@@ -177,6 +176,5 @@ private fun DeFiBottomBar(
 
 private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
   this?.hierarchy?.any {
-    Timber.tag("=====").v("h: ${it.route}, v: ${destination.name}")
     it.route?.contains(destination.name, true) ?: false
   } ?: false

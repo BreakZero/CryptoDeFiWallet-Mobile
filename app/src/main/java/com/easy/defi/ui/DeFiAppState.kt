@@ -1,18 +1,17 @@
 package com.easy.defi.ui
 
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.easy.defi.app.core.data.util.NetworkMonitor
@@ -25,17 +24,19 @@ import com.easy.defi.app.feature.nft.navigation.nftNavigationRoute
 import com.easy.defi.feature.asset.navigation.assetNavigationRoute
 import com.easy.defi.feature.asset.navigation.navigateToWallet
 import com.easy.defi.navigation.TopLevelDestination
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun rememberDeFiAppState(
   windowSizeClass: WindowSizeClass,
   networkMonitor: NetworkMonitor,
   coroutineScope: CoroutineScope = rememberCoroutineScope(),
-  navController: NavHostController = rememberNavController(),
+  navController: NavHostController = rememberAnimatedNavController(),
 ): DeFiAppState {
   return remember(navController, coroutineScope, windowSizeClass, networkMonitor) {
     DeFiAppState(navController, coroutineScope, windowSizeClass, networkMonitor)
@@ -62,15 +63,20 @@ class DeFiAppState(
       else -> null
     }
 
-  var shouldShowBottomBar by mutableStateOf(true)
-    private set
+  val shouldShowBottomBar: Boolean
+    @Composable get() = currentDestination?.route in listOf(
+      assetNavigationRoute,
+      nftNavigationRoute,
+      dappNavigationRoute,
+      earnNavigationRoute,
+    )
 
-//  val shouldShowBottomBar: Boolean
-//    get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact ||
-//      windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
+  val isOnPhone: Boolean
+    get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact ||
+      windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
 
   val shouldShowNavRail: Boolean
-    get() = !shouldShowBottomBar
+    get() = !isOnPhone
 
   val isOffline = networkMonitor.isOnline
     .map(Boolean::not)
@@ -120,9 +126,5 @@ class DeFiAppState(
 
   fun onBackClick() {
     navController.popBackStack()
-  }
-
-  fun setShowBottomBar(shouldShow: Boolean) {
-    shouldShowBottomBar = shouldShow
   }
 }

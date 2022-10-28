@@ -1,9 +1,10 @@
 package com.easy.defi.app.core.network
 
 import com.easy.defi.app.core.model.data.EvmTransaction
+import com.easy.defi.app.core.model.data.TokenHolding
 import com.easy.defi.app.core.network.model.BaseResponse
 import com.easy.defi.app.core.network.model.EvmTransactionDto
-import com.easy.defi.app.core.network.model.TokenHolding
+import com.easy.defi.app.core.network.model.TokenHoldingDto
 import com.easy.defi.app.core.network.model.asExternalModel
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -19,9 +20,15 @@ class EthereumDataSource @Inject constructor(
     address: String,
   ): List<TokenHolding> {
     return try {
-      val result: BaseResponse<List<TokenHolding>> =
+      val result: BaseResponse<List<TokenHoldingDto>> =
         httpClient.get("${UrlConstant.BASE_URL}/ethereum/$address/tokenholdings").body()
-      result.data
+      result.data.map {
+        TokenHolding(
+          amount = it.amount,
+          contractAddress = it.contractAddress,
+          contractName = it.contractName,
+        )
+      }
     } catch (e: Exception) {
       Timber.e(e)
       emptyList()

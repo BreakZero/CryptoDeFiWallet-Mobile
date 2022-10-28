@@ -28,7 +28,6 @@ import coil.request.ImageRequest
 import com.easy.defi.app.core.designsystem.R
 import com.easy.defi.app.core.designsystem.theme.Spacing
 import com.easy.defi.app.core.ui.extension.rotating
-import com.easy.defi.app.core.ui.navigation.NavigationCommand
 import com.easy.defi.feature.asset.components.AssetCard
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -40,7 +39,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 @Composable
 fun AssetListScreen(
   assetsViewModel: AssetListViewModel = hiltViewModel(),
-  navigateTo: (NavigationCommand) -> Unit,
+  navigateToSettings: () -> Unit,
 ) {
   val context = LocalContext.current
   val assetsUiState by assetsViewModel.assetState.collectAsState()
@@ -54,6 +53,7 @@ fun AssetListScreen(
         navigationIcon = {
           IconButton(
             onClick = {
+              navigateToSettings()
             },
           ) {
             assetsUiState.walletProfile.avator?.let {

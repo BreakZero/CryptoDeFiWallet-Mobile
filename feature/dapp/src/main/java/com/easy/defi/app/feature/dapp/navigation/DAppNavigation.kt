@@ -19,7 +19,7 @@ package com.easy.defi.app.feature.dapp.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import com.easy.defi.app.core.designsystem.component.composableWithAnimation
 import com.easy.defi.app.feature.dapp.DAppListScreen
 
 const val dappNavigationRoute = "dapps_route"
@@ -29,7 +29,7 @@ fun NavController.navigateToDApp(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.dappGraph() {
-  composable(route = dappNavigationRoute) {
+  composableWithAnimation(route = dappNavigationRoute) {
     DAppListScreen()
   }
 }

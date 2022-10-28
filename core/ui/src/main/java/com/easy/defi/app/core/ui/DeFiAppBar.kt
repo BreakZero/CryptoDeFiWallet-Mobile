@@ -18,7 +18,7 @@ fun DeFiAppBar(
   actions: @Composable RowScope.() -> Unit = {},
   navigateUp: () -> Unit,
 ) {
-  SmallTopAppBar(
+  TopAppBar(
     colors = colors,
     navigationIcon = {
       IconButton(onClick = {

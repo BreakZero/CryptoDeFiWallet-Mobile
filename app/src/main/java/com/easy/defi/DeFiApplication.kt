@@ -6,12 +6,16 @@ import coil.ImageLoaderFactory
 import coil.decode.SvgDecoder
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
+import com.easy.defi.app.sync.work.initializers.Sync
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 @HiltAndroidApp
 class DeFiApplication : Application(), ImageLoaderFactory {
   override fun onCreate() {
     super.onCreate()
+    Timber.plant(Timber.DebugTree())
+    Sync.initialize(context = this)
   }
 
   override fun newImageLoader(): ImageLoader {

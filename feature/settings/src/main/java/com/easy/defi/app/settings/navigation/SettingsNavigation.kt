@@ -1,27 +1,21 @@
 package com.easy.defi.app.settings.navigation
 
-import androidx.navigation.NamedNavArgument
-import com.easy.defi.app.core.ui.navigation.NavigationCommand
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
+import com.easy.defi.app.core.designsystem.component.composableWithAnimation
+import com.easy.defi.app.settings.SettingsScreen
 
-object SettingsNavigation {
-  val Settings = object : NavigationCommand {
-    override val arguments: List<NamedNavArgument>
-      get() = emptyList()
-    override val destination: String
-      get() = "settings"
-  }
+const val settingsEntryRoute = "settings_route"
 
-  val Settings_Currency = object : NavigationCommand {
-    override val arguments: List<NamedNavArgument>
-      get() = emptyList()
-    override val destination: String
-      get() = "settings-currencies"
-  }
+fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
+  this.navigate(settingsEntryRoute, navOptions)
+}
 
-  val Settings_Chain = object : NavigationCommand {
-    override val arguments: List<NamedNavArgument>
-      get() = emptyList()
-    override val destination: String
-      get() = "settings-multi-chain"
+fun NavGraphBuilder.settingsGraph(
+  onBackClick: () -> Unit,
+) {
+  composableWithAnimation(route = settingsEntryRoute) {
+    SettingsScreen(onBackClick = onBackClick)
   }
 }

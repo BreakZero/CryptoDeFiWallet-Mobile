@@ -19,18 +19,30 @@ package com.easy.defi.feature.asset.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import androidx.navigation.navigation
+import com.easy.defi.app.core.designsystem.component.composableWithAnimation
 import com.easy.defi.feature.asset.list.AssetListScreen
 
+const val assetGraphRoutePattern = "asset_graph"
 const val assetNavigationRoute = "wallet_route"
 
 fun NavController.navigateToWallet(navOptions: NavOptions? = null) {
-  this.navigate(assetNavigationRoute, navOptions)
+  this.navigate(assetGraphRoutePattern, navOptions)
 }
 
-fun NavGraphBuilder.walletGraph() {
-  composable(route = assetNavigationRoute) {
-    AssetListScreen {
+fun NavGraphBuilder.walletGraph(
+  navigateToSettings: () -> Unit,
+  nestedGraphs: NavGraphBuilder.() -> Unit,
+) {
+  navigation(
+    route = assetGraphRoutePattern,
+    startDestination = assetNavigationRoute,
+  ) {
+    composableWithAnimation(route = assetNavigationRoute) {
+      AssetListScreen(
+        navigateToSettings = navigateToSettings,
+      )
     }
+    nestedGraphs()
   }
 }

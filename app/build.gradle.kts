@@ -72,12 +72,14 @@ dependencies {
   implementation(project(":feature:nft"))
   implementation(project(":feature:dapp"))
   implementation(project(":feature:earn"))
+  implementation(project(":feature:settings"))
+
+  implementation(project(":sync:work"))
 
   androidTestImplementation(project(":core:testing"))
   androidTestImplementation(libs.androidx.navigation.testing)
   debugImplementation(libs.androidx.compose.ui.testManifest)
 
-  implementation(libs.accompanist.navigation.animation)
   implementation(libs.accompanist.systemuicontroller)
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.appcompat)

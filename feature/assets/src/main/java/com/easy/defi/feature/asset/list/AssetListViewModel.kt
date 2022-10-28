@@ -34,7 +34,7 @@ class AssetListViewModel @Inject constructor(
         .build(),
     ).build()*/
 
-  private val _isLoading = MutableStateFlow(true)
+  private val _isLoading = MutableStateFlow(false)
   private val _promoCards = MutableStateFlow(
     listOf(
       PromoCard(

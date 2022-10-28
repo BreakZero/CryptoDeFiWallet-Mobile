@@ -3,7 +3,7 @@ package com.easy.defi.app.feature.earn.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import com.easy.defi.app.core.designsystem.component.composableWithAnimation
 import com.easy.defi.app.feature.earn.EarnListScreen
 
 const val earnNavigationRoute = "earn_route"
@@ -13,7 +13,7 @@ fun NavController.navigateToEarn(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.earnGraph() {
-  composable(route = earnNavigationRoute) {
+  composableWithAnimation(route = earnNavigationRoute) {
     EarnListScreen()
   }
 }
