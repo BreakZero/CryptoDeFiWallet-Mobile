@@ -109,3 +109,12 @@ configurations.configureEach {
     force("org.objenesis:objenesis:2.6")
   }
 }
+
+tasks.register("installGitHook", Copy::class.java) {
+  from(File(rootProject.rootDir, "scripts/pre-commit-macos"))
+  into(File(rootProject.rootDir, ".git/hooks"))
+  rename("pre-commit-macos", "pre-commit")
+  fileMode = 509
+}
+
+tasks.getByPath(":app:preBuild").dependsOn("installGitHook")

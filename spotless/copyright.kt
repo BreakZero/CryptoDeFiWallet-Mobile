@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright $YEAR The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,3 @@
  * limitations under the License.
  */
 
-package com.easy.defi.app.core.network.model
-
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class FeeHistoryDto(
-  @SerialName("baseFeePerGas")
-  val baseFeePerGas: List<String>,
-  @SerialName("gasUsedRatio")
-  val gasUsedRatio: List<Double>,
-  @SerialName("oldestBlock")
-  val oldestBlock: String,
-  @SerialName("reward")
-  val reward: List<List<String>>,
-)
