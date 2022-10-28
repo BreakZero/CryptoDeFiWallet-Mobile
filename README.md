@@ -5,3 +5,6 @@
 - [x] Sync data via worker in background
 - [x] DApp inject connect (Trust Provider)
 - [x] NFTs with NFT Scan api
+
+- [x] Unit test with jacoco coverage
+- [x] Dynamic Theme Support
