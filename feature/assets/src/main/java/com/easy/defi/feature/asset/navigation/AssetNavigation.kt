@@ -36,11 +36,11 @@ fun NavGraphBuilder.walletGraph(
 ) {
   navigation(
     route = assetGraphRoutePattern,
-    startDestination = assetNavigationRoute,
+    startDestination = assetNavigationRoute
   ) {
     composableWithAnimation(route = assetNavigationRoute) {
       AssetListScreen(
-        navigateToSettings = navigateToSettings,
+        navigateToSettings = navigateToSettings
       )
     }
     nestedGraphs()

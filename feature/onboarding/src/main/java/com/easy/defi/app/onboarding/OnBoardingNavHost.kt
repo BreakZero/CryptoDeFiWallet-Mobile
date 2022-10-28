@@ -11,7 +11,7 @@ fun NavGraphBuilder.onBoardingGraph(
   navController: NavController,
 ) {
   composableWithAnimation(
-    route = OnBoardingNavigations.Index.destination,
+    route = OnBoardingNavigations.Index.destination
   ) {
     OnboardScreen {
       navController.navigate(it.destination)
@@ -20,7 +20,7 @@ fun NavGraphBuilder.onBoardingGraph(
 
   composableWithAnimation(
     route = OnBoardingNavigations.Legal.ROUTE,
-    arguments = OnBoardingNavigations.Legal.args,
+    arguments = OnBoardingNavigations.Legal.args
   ) {
     val forCreate =
       it.arguments?.getBoolean(OnBoardingNavigations.KEY_IS_CREATE) ?: false
@@ -29,12 +29,12 @@ fun NavGraphBuilder.onBoardingGraph(
       navigateUp = { navController.navigateUp() },
       navigateTo = {
         navController.navigate(it.destination)
-      },
+      }
     )
   }
   composableWithAnimation(
     route = OnBoardingNavigations.CreatePasscode.ROUTE,
-    arguments = OnBoardingNavigations.CreatePasscode.args,
+    arguments = OnBoardingNavigations.CreatePasscode.args
   ) {
     val forCreate =
       it.arguments?.getBoolean(OnBoardingNavigations.KEY_IS_CREATE)
@@ -46,19 +46,19 @@ fun NavGraphBuilder.onBoardingGraph(
       },
       navigateTo = {
         navController.navigate(it.destination)
-      },
+      }
     )
   }
   composableWithAnimation(
     route = OnBoardingNavigations.ImportWallet.ROUTE,
-    arguments = OnBoardingNavigations.ImportWallet.args,
+    arguments = OnBoardingNavigations.ImportWallet.args
   ) {
     val passcode = it.arguments?.getString(OnBoardingNavigations.KEY_PASSCODE).orEmpty()
     ImportWordsScreen(
       passcode = passcode,
       navigateUp = {
         navController.navigateUp()
-      },
+      }
     )
   }
 }

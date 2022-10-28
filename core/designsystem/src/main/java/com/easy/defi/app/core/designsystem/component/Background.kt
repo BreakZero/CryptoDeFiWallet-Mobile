@@ -64,7 +64,7 @@ fun DeFiBackground(
   Surface(
     color = if (color == Color.Unspecified) Color.Transparent else color,
     tonalElevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
-    modifier = modifier.fillMaxSize(),
+    modifier = modifier.fillMaxSize()
   ) {
     CompositionLocalProvider(LocalAbsoluteTonalElevation provides 0.dp) {
       content()
@@ -100,7 +100,7 @@ fun DeFiGradientBackground(
           val offset = size.height * tan(
             Math
               .toRadians(11.06)
-              .toFloat(),
+              .toFloat()
           )
 
           val start = Offset(size.width / 2 + offset / 2, 0f)
@@ -115,7 +115,7 @@ fun DeFiGradientBackground(
             },
             0.724f to Color.Transparent,
             start = start,
-            end = end,
+            end = end
           )
           // Create the bottom gradient that fades in before the halfway point vertically
           val bottomGradient = Brush.linearGradient(
@@ -126,7 +126,7 @@ fun DeFiGradientBackground(
               currentBottomColor
             },
             start = start,
-            end = end,
+            end = end
           )
 
           onDrawBehind {
@@ -134,7 +134,7 @@ fun DeFiGradientBackground(
             drawRect(topGradient)
             drawRect(bottomGradient)
           }
-        },
+        }
     ) {
       content()
     }
@@ -217,7 +217,7 @@ fun Modifier.yellowBackground(
       // Pass the color to support color space automatically
       shader.setColorUniform(
         "iColor",
-        android.graphics.Color.valueOf(color.red, color.green, color.blue, color.alpha),
+        android.graphics.Color.valueOf(color.red, color.green, color.blue, color.alpha)
       )
       onDrawBehind {
         drawRect(shaderBrush)

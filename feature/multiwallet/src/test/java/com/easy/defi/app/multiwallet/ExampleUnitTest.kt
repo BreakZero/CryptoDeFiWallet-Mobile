@@ -1,6 +1,6 @@
 package com.easy.defi.app.multiwallet
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**

@@ -70,6 +70,6 @@ fun EvmTransactionDto.asExternalModel(
     gas = this.gas.clearHexPrefix().toBigInteger(16),
     gasPrice = this.gasPrice.clearHexPrefix().toBigInteger(16),
     value = this.value.toBigInteger(),
-    timeStamp = Instant.fromEpochSeconds(timestamp).toString(),
+    timeStamp = Instant.fromEpochSeconds(timestamp).toString()
   )
 }

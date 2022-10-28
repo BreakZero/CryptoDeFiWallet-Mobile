@@ -70,15 +70,15 @@ class MainActivity : ComponentActivity() {
       if (uiState is MainActivityUiState.Success) {
         val hasWallet = (uiState as MainActivityUiState.Success).userData.hasPasscode
         DeFiWalletTheme(
-          darkTheme = darkTheme,
+          darkTheme = darkTheme
         ) {
           DeFiApp(
             hasWallet = hasWallet,
             networkMonitor = networkMonitor,
             appState = rememberDeFiAppState(
               networkMonitor = networkMonitor,
-              windowSizeClass = calculateWindowSizeClass(this),
-            ),
+              windowSizeClass = calculateWindowSizeClass(this)
+            )
           )
         }
       }

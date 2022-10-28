@@ -44,7 +44,7 @@ object DataStoreModule {
   ): DataStore<UserPreferences> =
     DataStoreFactory.create(
       serializer = userPreferencesSerializer,
-      scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+      scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     ) {
       context.dataStoreFile("user_preferences.pb")
     }

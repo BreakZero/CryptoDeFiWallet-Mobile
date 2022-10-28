@@ -46,7 +46,7 @@ private fun LoadingDot(
   Box(
     modifier = modifier
       .clip(shape = CircleShape)
-      .background(color = color),
+      .background(color = color)
   )
 }
 
@@ -67,8 +67,8 @@ fun LoadingIndicator(
           animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = AnimationDurationMillis),
             repeatMode = RepeatMode.Reverse,
-            initialStartOffset = StartOffset(AnimationDelayMillis * index),
-          ),
+            initialStartOffset = StartOffset(AnimationDelayMillis * index)
+          )
         ) { value, _ -> animatedValue = value }
       }
     }
@@ -82,7 +82,7 @@ fun LoadingIndicator(
           .width(IndicatorSize.dp)
           .aspectRatio(1f)
           .offset(y = animatedValue.dp),
-        color = color,
+        color = color
       )
     }
   }
@@ -104,18 +104,18 @@ fun LoadingButton(
     onClick = onClick,
     modifier = modifier,
     enabled = enabled,
-    colors = colors,
+    colors = colors
   ) {
     Box(
-      contentAlignment = Alignment.Center,
+      contentAlignment = Alignment.Center
     ) {
       LoadingIndicator(
         animating = loading,
         modifier = Modifier.graphicsLayer { alpha = loadingAlpha },
-        indicatorSpacing = indicatorSpacing,
+        indicatorSpacing = indicatorSpacing
       )
       Box(
-        modifier = Modifier.graphicsLayer { alpha = contentAlpha },
+        modifier = Modifier.graphicsLayer { alpha = contentAlpha }
       ) {
         content()
       }

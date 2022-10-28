@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.easy.defi.app.core.model.data.Wallet
 
 @Entity(
-  tableName = "tb_wallet",
+  tableName = "tb_wallet"
 )
 data class WalletEntity(
   @PrimaryKey val mnemonic: String,
@@ -16,5 +16,5 @@ data class WalletEntity(
 fun WalletEntity.asExternalModel() = Wallet(
   mnemonic = mnemonic,
   active = active,
-  passphrase = passphrase,
+  passphrase = passphrase
 )

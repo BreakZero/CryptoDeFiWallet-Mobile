@@ -33,7 +33,11 @@ import com.easy.defi.navigation.DeFiNavHost
 import com.easy.defi.navigation.DeFiOnBoardingNavHost
 import com.easy.defi.navigation.TopLevelDestination
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class, ExperimentalLayoutApi::class)
+@OptIn(
+  ExperimentalMaterial3Api::class,
+  ExperimentalLifecycleComposeApi::class,
+  ExperimentalLayoutApi::class
+)
 @Composable
 fun DeFiApp(
   hasWallet: Boolean,
@@ -46,7 +50,7 @@ fun DeFiApp(
         DeFiGradientBackground(
           topColor = White,
           bottomColor = White,
-          content = content,
+          content = content
         )
       }
       else -> { content -> DeFiBackground(content = content) }
@@ -63,10 +67,10 @@ fun DeFiApp(
           DeFiBottomBar(
             destinations = appState.topLevelDestinations,
             onNavigateToDestination = appState::navigateToTopLevelDestination,
-            currentDestination = appState.currentDestination,
+            currentDestination = appState.currentDestination
           )
         }
-      },
+      }
     ) { padding ->
       val isOffline by appState.isOffline.collectAsStateWithLifecycle()
       // If user is not connected to the internet show a snack bar to inform them.
@@ -75,7 +79,7 @@ fun DeFiApp(
         if (isOffline) {
           snackbarHostState.showSnackbar(
             message = notConnected,
-            duration = SnackbarDuration.Indefinite,
+            duration = SnackbarDuration.Indefinite
           )
         }
       }
@@ -84,16 +88,16 @@ fun DeFiApp(
           .fillMaxSize()
           .windowInsetsPadding(
             WindowInsets.safeDrawing.only(
-              WindowInsetsSides.Horizontal,
-            ),
-          ),
+              WindowInsetsSides.Horizontal
+            )
+          )
       ) {
         if (appState.shouldShowNavRail) {
           DeFiNavRail(
             destinations = appState.topLevelDestinations,
             onNavigateToDestination = appState::navigateToTopLevelDestination,
             currentDestination = appState.currentDestination,
-            modifier = Modifier.safeDrawingPadding(),
+            modifier = Modifier.safeDrawingPadding()
           )
         }
         if (hasWallet) {
@@ -102,12 +106,12 @@ fun DeFiApp(
               .padding(padding)
               .consumedWindowInsets(padding),
             navController = appState.navController,
-            onBackClick = appState::onBackClick,
+            onBackClick = appState::onBackClick
           )
         } else {
           DeFiOnBoardingNavHost(
             navController = appState.navController,
-            onBackClick = appState::onBackClick,
+            onBackClick = appState::onBackClick
           )
         }
       }
@@ -137,15 +141,15 @@ private fun DeFiNavRail(
           when (icon) {
             is Icon.ImageVectorIcon -> Icon(
               imageVector = icon.imageVector,
-              contentDescription = null,
+              contentDescription = null
             )
             is Icon.DrawableResourceIcon -> Icon(
               painter = painterResource(id = icon.id),
-              contentDescription = null,
+              contentDescription = null
             )
           }
         },
-        label = { Text(stringResource(destination.iconTextId)) },
+        label = { Text(stringResource(destination.iconTextId)) }
       )
     }
   }
@@ -172,16 +176,16 @@ private fun DeFiBottomBar(
           when (icon) {
             is Icon.ImageVectorIcon -> Icon(
               imageVector = icon.imageVector,
-              contentDescription = null,
+              contentDescription = null
             )
 
             is Icon.DrawableResourceIcon -> Icon(
               painter = painterResource(id = icon.id),
-              contentDescription = null,
+              contentDescription = null
             )
           }
         },
-        label = { Text(stringResource(destination.iconTextId)) },
+        label = { Text(stringResource(destination.iconTextId)) }
       )
     }
   }

@@ -68,7 +68,7 @@ class DeFiAppState(
       assetNavigationRoute,
       nftNavigationRoute,
       dappNavigationRoute,
-      earnNavigationRoute,
+      earnNavigationRoute
     )
 
   val isOnPhone: Boolean
@@ -83,7 +83,7 @@ class DeFiAppState(
     .stateIn(
       scope = coroutineScope,
       started = SharingStarted.WhileSubscribed(5_000),
-      initialValue = false,
+      initialValue = false
     )
 
   /**

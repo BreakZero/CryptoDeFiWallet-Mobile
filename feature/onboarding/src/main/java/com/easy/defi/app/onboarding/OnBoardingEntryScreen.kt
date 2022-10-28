@@ -35,18 +35,18 @@ private val banners = listOf(
   OnboardBannerInfo(
     imageRes = R.drawable.banner_wallet,
     title = R.string.welcome_intro_adapter__welcome,
-    message = R.string.welcome_intro_adapter__welcome_tip,
+    message = R.string.welcome_intro_adapter__welcome_tip
   ),
   OnboardBannerInfo(
     imageRes = R.drawable.banner_secure,
     title = R.string.welcome_intro_adapter__secure,
-    message = R.string.welcome_intro_adapter__secure_tip,
+    message = R.string.welcome_intro_adapter__secure_tip
   ),
   OnboardBannerInfo(
     imageRes = R.drawable.banner_flexable,
     title = R.string.welcome_intro_adapter__flexible,
-    message = R.string.welcome_intro_adapter__flexible_tip,
-  ),
+    message = R.string.welcome_intro_adapter__flexible_tip
+  )
 )
 
 @OptIn(ExperimentalPagerApi::class)
@@ -59,7 +59,7 @@ fun OnboardScreen(
       modifier = Modifier
         .fillMaxSize()
         .padding(MaterialTheme.Spacing.medium),
-      verticalArrangement = Arrangement.Center,
+      verticalArrangement = Arrangement.Center
     ) {
       val pagerState = rememberPagerState()
       val bannerState = remember {
@@ -72,7 +72,7 @@ fun OnboardScreen(
           .align(Alignment.CenterHorizontally),
         contentScale = ContentScale.FillWidth,
         painter = painterResource(id = R.drawable.img_defi_header),
-        contentDescription = null,
+        contentDescription = null
       )
       HorizontalPager(
         count = bannerState.size,
@@ -80,7 +80,7 @@ fun OnboardScreen(
         modifier = Modifier
           .fillMaxWidth()
           .align(Alignment.CenterHorizontally)
-          .weight(1.0F),
+          .weight(1.0F)
       ) { page ->
         OnboardBanner(info = bannerState[page], modifier = Modifier.fillMaxSize())
       }
@@ -88,7 +88,7 @@ fun OnboardScreen(
         pagerState = pagerState,
         modifier = Modifier
           .align(Alignment.CenterHorizontally)
-          .padding(MaterialTheme.Spacing.medium),
+          .padding(MaterialTheme.Spacing.medium)
       )
       Button(
         modifier = Modifier
@@ -97,7 +97,7 @@ fun OnboardScreen(
         onClick = {
           // do not support now.
           // navigateTo(OnboardingNavigations.Legal.destination(true))
-        },
+        }
       ) {
         Text(stringResource(id = R.string.welcome__create_a_new_wallet))
       }
@@ -106,7 +106,7 @@ fun OnboardScreen(
           .fillMaxWidth(),
         onClick = {
           navigateTo(OnBoardingNavigations.Legal.destination(false))
-        },
+        }
       ) {
         Text(stringResource(id = R.string.welcome__importing_an_existing_wallet))
       }
@@ -124,7 +124,7 @@ private fun OnboardBanner(
       Image(
         painterResource(id = info.imageRes),
         contentDescription = null,
-        modifier = Modifier.align(Alignment.CenterHorizontally),
+        modifier = Modifier.align(Alignment.CenterHorizontally)
       )
       Text(
         modifier = Modifier.fillMaxWidth(),
@@ -132,14 +132,14 @@ private fun OnboardBanner(
         text = stringResource(id = info.title),
         fontSize = 24.sp,
         fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.primary,
+        color = MaterialTheme.colorScheme.primary
       )
       Text(
         modifier = Modifier.fillMaxWidth(),
         textAlign = TextAlign.Center,
         text = stringResource(id = info.message),
         fontSize = 18.sp,
-        color = MaterialTheme.colorScheme.secondary,
+        color = MaterialTheme.colorScheme.secondary
       )
     }
   }

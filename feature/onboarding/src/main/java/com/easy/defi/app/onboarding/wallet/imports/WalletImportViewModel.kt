@@ -43,13 +43,13 @@ class WalletImportViewModel @Inject constructor(
               } else {
                 _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString("invalid mnemonic, please try another")))
               }
-            },
+            }
           )
         }
       }
       is ImportEvent.OnFocusChange -> {
         state = state.copy(
-          isHintVisible = !event.isFocused && state.phrase.isBlank(),
+          isHintVisible = !event.isFocused && state.phrase.isBlank()
         )
       }
       is ImportEvent.OnPhraseChange -> {

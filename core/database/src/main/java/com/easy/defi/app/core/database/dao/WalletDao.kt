@@ -21,7 +21,7 @@ interface WalletDao {
     SELECT *
     FROM TB_WALLET
     WHERE active = 1
-    """,
+    """
   )
   fun activeWallet(): Flow<WalletEntity?>
 }

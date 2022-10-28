@@ -37,7 +37,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @OptIn(
   ExperimentalMaterial3Api::class,
-  ExperimentalFoundationApi::class,
+  ExperimentalFoundationApi::class
 )
 @Composable
 fun AssetListScreen(
@@ -49,18 +49,18 @@ fun AssetListScreen(
   Column(modifier = Modifier.fillMaxSize()) {
     Column(
       modifier = Modifier.yellowBackground(
-        MaterialTheme.colorScheme.primary,
-      ),
+        MaterialTheme.colorScheme.primary
+      )
     ) {
       TopAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(
-          containerColor = Color.Transparent,
+          containerColor = Color.Transparent
         ),
         navigationIcon = {
           IconButton(
             onClick = {
               navigateToSettings()
-            },
+            }
           ) {
             assetsUiState.walletProfile.avator?.let {
               AsyncImage(
@@ -74,7 +74,7 @@ fun AssetListScreen(
                   .error(R.drawable.avatar_generic_1)
                   .crossfade(true)
                   .build(),
-                contentDescription = null,
+                contentDescription = null
               )
             } ?: run {
               Image(
@@ -83,7 +83,7 @@ fun AssetListScreen(
                   .clip(CircleShape)
                   .rotating(2500),
                 painter = painterResource(id = R.drawable.avatar_generic_1),
-                contentDescription = null,
+                contentDescription = null
               )
             }
           }
@@ -96,7 +96,7 @@ fun AssetListScreen(
               },
             painter = painterResource(id = R.drawable.ic_scanner),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primaryContainer,
+            tint = MaterialTheme.colorScheme.primaryContainer
           )
         },
         title = {
@@ -104,21 +104,21 @@ fun AssetListScreen(
             Text(
               text = assetsUiState.walletProfile.walletName,
               style = MaterialTheme.typography.titleSmall,
-              color = MaterialTheme.colorScheme.primaryContainer,
+              color = MaterialTheme.colorScheme.primaryContainer
             )
             Text(
               text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
               style = MaterialTheme.typography.labelSmall,
-              color = MaterialTheme.colorScheme.surfaceVariant,
+              color = MaterialTheme.colorScheme.surfaceVariant
             )
           }
-        },
+        }
       )
       Box(
         modifier = Modifier
           .fillMaxWidth()
           .height(120.dp)
-          .background(Color.Transparent),
+          .background(Color.Transparent)
       ) {
       }
     }
@@ -129,7 +129,7 @@ fun AssetListScreen(
       swipeEnabled = true,
       onRefresh = {
         assetsViewModel.onRefresh()
-      },
+      }
     ) {
       LazyColumn(
         modifier = Modifier
@@ -137,66 +137,66 @@ fun AssetListScreen(
           .clip(
             RoundedCornerShape(
               topEnd = MaterialTheme.Spacing.space24,
-              topStart = MaterialTheme.Spacing.space24,
-            ),
+              topStart = MaterialTheme.Spacing.space24
+            )
           )
           .background(MaterialTheme.colorScheme.background),
         contentPadding = PaddingValues(
           vertical = MaterialTheme.Spacing.medium,
-          horizontal = MaterialTheme.Spacing.small,
+          horizontal = MaterialTheme.Spacing.small
         ),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
       ) {
         items(
           items = assetsUiState.assets,
           key = {
             it.slug
-          },
+          }
         ) { asset ->
           AssetCard(
             modifier = Modifier
               .fillMaxWidth()
               .animateItemPlacement(),
-            asset = asset,
+            asset = asset
           ) {
           }
         }
         item {
           LazyRow(
             horizontalArrangement = Arrangement.spacedBy(
-              MaterialTheme.Spacing.space12,
-            ),
+              MaterialTheme.Spacing.space12
+            )
           ) {
             items(
               items = assetsUiState.promoCard,
               key = { promoCard ->
                 promoCard.backgroundRes
-              },
+              }
             ) {
               Card(
                 modifier = Modifier
                   .width(MaterialTheme.Spacing.space128)
                   .aspectRatio(4 / 3f),
                 elevation = CardDefaults.cardElevation(
-                  defaultElevation = MaterialTheme.Spacing.extraSmall,
+                  defaultElevation = MaterialTheme.Spacing.extraSmall
                 ),
-                shape = RoundedCornerShape(MaterialTheme.Spacing.small),
+                shape = RoundedCornerShape(MaterialTheme.Spacing.small)
               ) {
                 Box(
-                  modifier = Modifier.fillMaxSize(),
+                  modifier = Modifier.fillMaxSize()
                 ) {
                   Image(
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.FillWidth,
                     painter = painterResource(id = it.backgroundRes),
-                    contentDescription = null,
+                    contentDescription = null
                   )
                   Text(
                     modifier = Modifier.padding(
-                      MaterialTheme.Spacing.extraSmall,
+                      MaterialTheme.Spacing.extraSmall
                     ),
                     text = it.title.asString(context),
-                    color = MaterialTheme.colorScheme.background,
+                    color = MaterialTheme.colorScheme.background
                   )
                 }
               }

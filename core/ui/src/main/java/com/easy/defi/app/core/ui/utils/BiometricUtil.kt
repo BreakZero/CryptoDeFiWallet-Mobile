@@ -29,7 +29,7 @@ object BiometricUtil {
           }
           setNegativeButton(
             "Using App Password",
-            context.mainExecutor,
+            context.mainExecutor
           ) { _, _ ->
             onCancel.invoke()
           }
@@ -43,7 +43,7 @@ object BiometricUtil {
             }
           },
         context.mainExecutor,
-        authenticationCallback,
+        authenticationCallback
       )
     }
   }
@@ -56,7 +56,7 @@ object BiometricUtil {
     }
     if (ActivityCompat.checkSelfPermission(
         context,
-        Manifest.permission.USE_BIOMETRIC,
+        Manifest.permission.USE_BIOMETRIC
       ) != PackageManager.PERMISSION_GRANTED
     ) {
       return false

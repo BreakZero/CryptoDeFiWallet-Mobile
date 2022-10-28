@@ -2,7 +2,13 @@ package com.easy.defi.app.core.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRight
@@ -40,36 +46,36 @@ fun MenuItemView(
       .padding(horizontal = MaterialTheme.Spacing.space12)
       .height(MaterialTheme.Spacing.space56),
     horizontalArrangement = Arrangement.SpaceBetween,
-    verticalAlignment = Alignment.CenterVertically,
+    verticalAlignment = Alignment.CenterVertically
   ) {
     Column(
-      modifier = Modifier,
+      modifier = Modifier
     ) {
       Text(text = data.title, color = MaterialTheme.colorScheme.onBackground)
       data.subTitle?.let {
         Text(
           text = it,
           style = MaterialTheme.typography.bodyMedium,
-          color = MaterialTheme.colorScheme.onSecondaryContainer,
+          color = MaterialTheme.colorScheme.onSecondaryContainer
         )
       }
     }
     Row(
       modifier = Modifier.fillMaxHeight(),
-      verticalAlignment = Alignment.CenterVertically,
+      verticalAlignment = Alignment.CenterVertically
     ) {
       data.endValue?.let {
         Text(
           text = it,
           style = MaterialTheme.typography.bodyMedium,
-          color = MaterialTheme.colorScheme.onSecondaryContainer,
+          color = MaterialTheme.colorScheme.onSecondaryContainer
         )
       }
       if (data.showIcon) {
         Icon(
           imageVector = Icons.Filled.ArrowRight,
           tint = MaterialTheme.colorScheme.onSecondaryContainer,
-          contentDescription = null,
+          contentDescription = null
         )
       }
     }
@@ -84,7 +90,7 @@ fun MenuBlockView(
   onItemClick: (Int) -> Unit,
 ) {
   Column(
-    modifier = modifier,
+    modifier = modifier
   ) {
     Text(
       text = header,
@@ -92,27 +98,27 @@ fun MenuBlockView(
       color = MaterialTheme.colorScheme.onBackground,
       modifier = Modifier.padding(
         top = MaterialTheme.Spacing.medium,
-        bottom = MaterialTheme.Spacing.small,
-      ),
+        bottom = MaterialTheme.Spacing.small
+      )
     )
     Card(
       modifier = Modifier
         .fillMaxWidth(),
       colors = CardDefaults.cardColors(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.background
       ),
       elevation = CardDefaults.cardElevation(
-        defaultElevation = MaterialTheme.Spacing.extraSmall,
+        defaultElevation = MaterialTheme.Spacing.extraSmall
       ),
-      shape = RoundedCornerShape(MaterialTheme.Spacing.small),
+      shape = RoundedCornerShape(MaterialTheme.Spacing.small)
     ) {
       Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
       ) {
         datas.forEachIndexed { index, item ->
           MenuItemView(
             modifier = Modifier.fillMaxWidth(),
-            data = item,
+            data = item
           ) {
             onItemClick.invoke(index)
           }
@@ -120,7 +126,7 @@ fun MenuBlockView(
             Divider(
               modifier = Modifier
                 .fillMaxWidth()
-                .height(0.2.dp),
+                .height(0.2.dp)
             )
           }
         }

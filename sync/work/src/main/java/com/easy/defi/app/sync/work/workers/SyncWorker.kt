@@ -40,7 +40,7 @@ class SyncWorker @AssistedInject constructor(
     traceAsync("Sync", 0) {
       // First sync the repositories in parallel
       val syncedSuccessfully = awaitAll(
-        async { evmChainRepository.sync() },
+        async { evmChainRepository.sync() }
       ).all { it }
 
       if (syncedSuccessfully) {

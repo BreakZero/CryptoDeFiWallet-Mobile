@@ -6,5 +6,5 @@ import com.easy.defi.app.core.model.data.Wallet
 fun Wallet.asEntity() = WalletEntity(
   mnemonic = mnemonic,
   active = active,
-  passphrase = passphrase,
+  passphrase = passphrase
 )

@@ -26,7 +26,7 @@ class EthereumDataSource @Inject constructor(
         TokenHolding(
           amount = it.amount,
           contractAddress = it.contractAddress,
-          contractName = it.contractName,
+          contractName = it.contractName
         )
       }
     } catch (e: Exception) {
@@ -59,7 +59,7 @@ class EthereumDataSource @Inject constructor(
   ): List<EvmTransaction> {
     return try {
       httpClient.get(
-        urlString = "${UrlConstant.BASE_URL}/ethereum/transactions/$address",
+        urlString = "${UrlConstant.BASE_URL}/ethereum/transactions/$address"
       ) {
         parameter("page", page)
         parameter("offset", 20)

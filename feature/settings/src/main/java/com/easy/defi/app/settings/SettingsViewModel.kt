@@ -18,7 +18,7 @@ class SettingsViewModel @Inject constructor(
     SettingsState(
       currency = it.currency,
       network = it.network,
-      walletProfile = it.walletProfile,
+      walletProfile = it.walletProfile
     )
   }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SettingsState())
 

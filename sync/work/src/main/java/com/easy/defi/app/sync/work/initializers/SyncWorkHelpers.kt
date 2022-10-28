@@ -26,7 +26,7 @@ val SyncConstraints
  */
 fun Context.syncForegroundInfo() = ForegroundInfo(
   SyncNotificationId,
-  syncWorkNotification(),
+  syncWorkNotification()
 )
 
 private fun Context.syncWorkNotification(): Notification {
@@ -34,7 +34,7 @@ private fun Context.syncWorkNotification(): Notification {
     val channel = NotificationChannel(
       SyncNotificationChannelID,
       getString(R.string.sync_notification_channel_name),
-      NotificationManager.IMPORTANCE_DEFAULT,
+      NotificationManager.IMPORTANCE_DEFAULT
     ).apply {
       description = getString(R.string.sync_notification_channel_description)
     }
@@ -47,9 +47,9 @@ private fun Context.syncWorkNotification(): Notification {
 
   return NotificationCompat.Builder(
     this,
-    SyncNotificationChannelID,
+    SyncNotificationChannelID
   ).setSmallIcon(
-    R.drawable.ic_nia_notification,
+    R.drawable.ic_nia_notification
   ).setContentTitle(getString(R.string.sync_notification_title))
     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
     .build()

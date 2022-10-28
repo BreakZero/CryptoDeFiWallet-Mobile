@@ -27,18 +27,18 @@ fun CreateSetupScreen(
       DeFiAppBar() {
         navigateUp()
       }
-    },
+    }
   ) { paddingValues ->
     Column(
       modifier = Modifier
         .fillMaxSize()
-        .padding(paddingValues),
+        .padding(paddingValues)
     ) {
       Text(text = stringResource(id = R.string.wallet_protect__protect_wallet))
       Text(text = stringResource(id = R.string.wallet_protect__wallet_protect_tips))
       Image(painter = painterResource(id = R.drawable.banner_secure), contentDescription = null)
       Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
       ) {
         Column(modifier = Modifier.fillMaxHeight()) {
         }

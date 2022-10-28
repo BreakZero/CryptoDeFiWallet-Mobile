@@ -25,12 +25,13 @@ object DatabaseModule {
     @ApplicationContext context: Context,
     sharedPreferences: SharedPreferences,
   ): WalletDatabase {
-    val passcode = sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "").orEmpty().also {
-      Timber.tag("=====").v(it)
-    }
+    val passcode =
+      sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "").orEmpty().also {
+        Timber.tag("=====").v(it)
+      }
 
     val passPhrase = SQLiteDatabase.getBytes(
-      passcode.toCharArray(),
+      passcode.toCharArray()
     )
     val supportFactory = SupportFactory(passPhrase)
     return Room.databaseBuilder(context, WalletDatabase::class.java, "crypto_multi_wallet.db")
@@ -45,6 +46,6 @@ object DatabaseModule {
   ): DeFiDatabase = Room.databaseBuilder(
     context,
     DeFiDatabase::class.java,
-    "defi-database.db",
+    "defi-database.db"
   ).build()
 }

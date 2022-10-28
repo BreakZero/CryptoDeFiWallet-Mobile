@@ -14,7 +14,7 @@ import com.easy.defi.app.core.database.model.TierEntity
 @Database(
   entities = [AssetEntity::class, ChainEntity::class, CoinVersionShaEntity::class, TierEntity::class],
   exportSchema = false,
-  version = 1,
+  version = 1
 )
 abstract class DeFiDatabase : RoomDatabase() {
   abstract val chainDao: ChainDao

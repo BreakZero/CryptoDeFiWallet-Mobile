@@ -21,8 +21,8 @@ class InsertWalletUseCase @Inject constructor(
         Wallet(
           mnemonic = mnemonic,
           active = 1,
-          passphrase = passphrase,
-        ),
+          passphrase = passphrase
+        )
       )
     }
     doLast(isValid)

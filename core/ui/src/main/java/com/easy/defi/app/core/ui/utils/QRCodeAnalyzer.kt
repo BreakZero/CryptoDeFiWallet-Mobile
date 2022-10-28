@@ -17,7 +17,7 @@ class QRCodeAnalyzer(
   private val supportedImageFormats = listOf(
     ImageFormat.YUV_420_888,
     ImageFormat.YUV_422_888,
-    ImageFormat.YUV_444_888,
+    ImageFormat.YUV_444_888
   )
   private var finished = false
 
@@ -32,7 +32,7 @@ class QRCodeAnalyzer(
         0,
         image.width,
         image.height,
-        false,
+        false
       )
       val binaryBmp = BinaryBitmap(HybridBinarizer(source))
       try {
@@ -40,9 +40,9 @@ class QRCodeAnalyzer(
           setHints(
             mapOf(
               DecodeHintType.POSSIBLE_FORMATS to arrayListOf(
-                BarcodeFormat.QR_CODE,
-              ),
-            ),
+                BarcodeFormat.QR_CODE
+              )
+            )
           )
         }.decode(binaryBmp)
         if (result.text.isNotBlank() && !finished) {

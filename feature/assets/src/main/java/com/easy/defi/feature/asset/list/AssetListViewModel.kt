@@ -6,7 +6,6 @@ import com.easy.defi.app.core.data.repository.user.OfflineUserDataRepository
 import com.easy.defi.app.core.designsystem.R
 import com.easy.defi.app.core.ui.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.*
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -39,33 +38,33 @@ class AssetListViewModel @Inject constructor(
     listOf(
       PromoCard(
         backgroundRes = R.drawable.card_small_orange,
-        title = UiText.StringResource(R.string.new_coins__new_coin),
+        title = UiText.StringResource(R.string.new_coins__new_coin)
       ),
       PromoCard(
         backgroundRes = R.drawable.card_small_black,
-        title = UiText.StringResource(R.string.wallet_asset__get_eth_ready_for_gas_fees),
+        title = UiText.StringResource(R.string.wallet_asset__get_eth_ready_for_gas_fees)
       ),
       PromoCard(
         backgroundRes = R.drawable.card_small_purple,
-        title = UiText.StringResource(R.string.wallet_asset__enable_email),
-      ),
-    ),
+        title = UiText.StringResource(R.string.wallet_asset__enable_email)
+      )
+    )
   )
 
   val assetState = combine(
     _isLoading,
     offlineUserDataRepository.userDataStream,
-    _promoCards,
+    _promoCards
   ) { isLoading, userData, promoCards ->
     AssetListState(
       onRefreshing = isLoading,
       walletProfile = userData.walletProfile,
-      promoCard = promoCards,
+      promoCard = promoCards
     )
   }.stateIn(
     viewModelScope,
     SharingStarted.WhileSubscribed(),
-    AssetListState(promoCard = emptyList()),
+    AssetListState(promoCard = emptyList())
   )
 
   fun onRefresh() {

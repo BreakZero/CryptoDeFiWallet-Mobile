@@ -69,8 +69,8 @@ fun RowScope.DeFiNavigationBarItem(
       unselectedIconColor = DeFiNavigationDefaults.navigationContentColor(),
       selectedTextColor = DeFiNavigationDefaults.navigationSelectedItemColor(),
       unselectedTextColor = DeFiNavigationDefaults.navigationContentColor(),
-      indicatorColor = DeFiNavigationDefaults.navigationIndicatorColor(),
-    ),
+      indicatorColor = DeFiNavigationDefaults.navigationIndicatorColor()
+    )
   )
 }
 
@@ -90,7 +90,7 @@ fun DeFiNavigationBar(
     modifier = modifier,
     contentColor = DeFiNavigationDefaults.navigationContentColor(),
     tonalElevation = 0.dp,
-    content = content,
+    content = content
   )
 }
 
@@ -133,8 +133,8 @@ fun DeFiNavigationRailItem(
       unselectedIconColor = DeFiNavigationDefaults.navigationContentColor(),
       selectedTextColor = DeFiNavigationDefaults.navigationSelectedItemColor(),
       unselectedTextColor = DeFiNavigationDefaults.navigationContentColor(),
-      indicatorColor = DeFiNavigationDefaults.navigationIndicatorColor(),
-    ),
+      indicatorColor = DeFiNavigationDefaults.navigationIndicatorColor()
+    )
   )
 }
 
@@ -157,7 +157,7 @@ fun DeFiNavigationRail(
     containerColor = Color.Transparent,
     contentColor = DeFiNavigationDefaults.navigationContentColor(),
     header = header,
-    content = content,
+    content = content
   )
 }
 

@@ -29,7 +29,7 @@ object NetworkModule {
         /*sslManager = { httpsURLConnection ->
           httpsURLConnection.sslSocketFactory = SslSettings.getSslContext(application.applicationContext)?.socketFactory
         }*/
-      },
+      }
     ) {
       defaultRequest {
         header("Content-type", "application/json")
@@ -43,7 +43,7 @@ object NetworkModule {
             useArrayPolymorphism = true
             prettyPrint = true
             allowStructuredMapKeys = true
-          },
+          }
         )
       }
       install(Logging) {

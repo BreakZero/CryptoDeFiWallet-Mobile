@@ -40,7 +40,7 @@ private val KEYBOARD_NUMBERS = listOf(
   DataItem(actionType = ActionType.NUMBER, number = "9"),
   DataItem(actionType = ActionType.SPACE),
   DataItem(actionType = ActionType.NUMBER, number = "0"),
-  DataItem(actionType = ActionType.BACKSPACE),
+  DataItem(actionType = ActionType.BACKSPACE)
 )
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -54,7 +54,7 @@ fun NumberKeyboard(
     modifier = modifier,
     horizontalArrangement = Arrangement.Center,
     verticalArrangement = Arrangement.Center,
-    columns = GridCells.Fixed(3),
+    columns = GridCells.Fixed(3)
   ) {
     itemsIndexed(KEYBOARD_NUMBERS) { index, item ->
       Row(Modifier.height(IntrinsicSize.Min)) {
@@ -66,7 +66,7 @@ fun NumberKeyboard(
               .clickable {
                 onNumberClick.invoke(item)
               },
-            contentAlignment = Alignment.Center,
+            contentAlignment = Alignment.Center
           ) {
             when (item.actionType) {
               ActionType.NUMBER -> {
@@ -75,7 +75,7 @@ fun NumberKeyboard(
               ActionType.BACKSPACE -> {
                 Icon(
                   imageVector = Icons.Outlined.Backspace,
-                  contentDescription = null,
+                  contentDescription = null
                 )
               }
               ActionType.SPACE -> {
@@ -94,7 +94,7 @@ fun NumberKeyboard(
             Divider(
               modifier = Modifier
                 .fillMaxHeight()
-                .width(1.dp),
+                .width(1.dp)
             )
           }
         }

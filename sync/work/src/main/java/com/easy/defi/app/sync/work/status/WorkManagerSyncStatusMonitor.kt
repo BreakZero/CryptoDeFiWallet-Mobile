@@ -22,7 +22,7 @@ class WorkManagerSyncStatusMonitor @Inject constructor(
   override val isSyncing: Flow<Boolean> =
     Transformations.map(
       WorkManager.getInstance(context).getWorkInfosForUniqueWorkLiveData(SyncWorkName),
-      MutableList<WorkInfo>::anyRunning,
+      MutableList<WorkInfo>::anyRunning
     )
       .asFlow()
       .conflate()

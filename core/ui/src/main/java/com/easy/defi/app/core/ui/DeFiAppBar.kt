@@ -23,22 +23,22 @@ fun DeFiAppBar(
     modifier = Modifier
       .background(
         Brush.verticalGradient(
-          listOf(MaterialTheme.colorScheme.primary, Color.White),
-        ),
+          listOf(MaterialTheme.colorScheme.primary, Color.White)
+        )
       ),
     colors = TopAppBarDefaults.smallTopAppBarColors(
-      containerColor = Color.Transparent,
+      containerColor = Color.Transparent
     ),
     navigationIcon = {
       IconButton(
         onClick = {
           navigateUp()
-        },
+        }
       ) {
         Icon(
           imageVector = navIcon,
           contentDescription = "",
-          tint = MaterialTheme.colorScheme.primaryContainer,
+          tint = MaterialTheme.colorScheme.primaryContainer
         )
       }
     },
@@ -47,10 +47,10 @@ fun DeFiAppBar(
         Text(
           text = title,
           color = MaterialTheme.colorScheme.primaryContainer,
-          style = MaterialTheme.typography.titleMedium,
+          style = MaterialTheme.typography.titleMedium
         )
       }
     },
-    actions = actions,
+    actions = actions
   )
 }

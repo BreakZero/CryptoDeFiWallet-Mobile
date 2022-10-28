@@ -35,6 +35,6 @@ fun NavGraphBuilder.composableWithAnimation(
     popExitTransition = {
       fadeOut(animationSpec = tween(500))
     },
-    content = content,
+    content = content
   )
 }

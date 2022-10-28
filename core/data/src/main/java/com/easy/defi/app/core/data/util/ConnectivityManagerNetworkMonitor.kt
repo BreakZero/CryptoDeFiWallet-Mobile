@@ -52,7 +52,7 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
       Builder()
         .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
         .build(),
-      callback,
+      callback
     )
 
     channel.trySend(connectivityManager.isCurrentlyConnected())

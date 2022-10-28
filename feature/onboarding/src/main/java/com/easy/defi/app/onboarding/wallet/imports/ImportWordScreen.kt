@@ -66,14 +66,14 @@ fun ImportWordsScreen(
         title = stringResource(id = R.string.import_wallet__import_wallet),
         actions = {
           Icon(imageVector = Icons.Default.QrCode, contentDescription = null)
-        },
+        }
       ) {
         viewModel.onNavigateUp()
       }
-    },
+    }
   ) {
     Column(
-      modifier = Modifier.padding(it),
+      modifier = Modifier.padding(it)
     ) {
       TextField(
         value = importState.phrase,
@@ -84,10 +84,10 @@ fun ImportWordsScreen(
         keyboardActions = KeyboardActions(
           onDone = {
             keyboardController?.hide()
-          },
+          }
         ),
         keyboardOptions = KeyboardOptions(
-          imeAction = ImeAction.Done,
+          imeAction = ImeAction.Done
         ),
         modifier = Modifier
           .padding(MaterialTheme.Spacing.medium)
@@ -95,7 +95,7 @@ fun ImportWordsScreen(
           .fillMaxWidth()
           .onFocusChanged {
             viewModel.onEvent(ImportEvent.OnFocusChange(it.isFocused))
-          },
+          }
       )
       LoadingButton(
         modifier = Modifier
@@ -105,7 +105,7 @@ fun ImportWordsScreen(
         onClick = {
           viewModel.onEvent(ImportEvent.OnImportClick(passcode))
           keyboardController?.hide()
-        },
+        }
       ) {
         Text(text = stringResource(id = R.string.import_wallet__restore))
       }

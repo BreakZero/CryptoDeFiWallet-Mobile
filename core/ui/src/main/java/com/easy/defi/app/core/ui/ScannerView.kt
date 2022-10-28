@@ -43,21 +43,21 @@ fun ScannerView(
     mutableStateOf(
       ContextCompat.checkSelfPermission(
         context,
-        Manifest.permission.CAMERA,
-      ) == PackageManager.PERMISSION_GRANTED,
+        Manifest.permission.CAMERA
+      ) == PackageManager.PERMISSION_GRANTED
     )
   }
   val launcher = rememberLauncherForActivityResult(
     contract = ActivityResultContracts.RequestPermission(),
     onResult = { granted ->
       hasCamPermission = granted
-    },
+    }
   )
   LaunchedEffect(key1 = true) {
     launcher.launch(Manifest.permission.CAMERA)
   }
   Box(
-    modifier = Modifier.fillMaxSize(),
+    modifier = Modifier.fillMaxSize()
   ) {
     if (hasCamPermission) {
       AndroidView(
@@ -76,21 +76,21 @@ fun ScannerView(
             ContextCompat.getMainExecutor(context),
             QRCodeAnalyzer { result ->
               if (result.isNotEmpty()) onResult.invoke(result)
-            },
+            }
           )
           kotlin.runCatching {
             cameraProviderFuture.get().bindToLifecycle(
               lifecycleOwner,
               selector,
               preview,
-              imageAnalysis,
+              imageAnalysis
             )
           }.onFailure {
             it.printStackTrace()
           }
           previewView
         },
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
       )
       Canvas(modifier = Modifier.fillMaxSize()) {
         val startX = size.width / 4.0f
@@ -100,9 +100,9 @@ fun ScannerView(
           topLeft = Offset(startX, startY),
           size = androidx.compose.ui.geometry.Size(
             width = size.width / 2.0f,
-            height = size.width / 2.0f,
+            height = size.width / 2.0f
           ),
-          style = Stroke(width = 2.0f),
+          style = Stroke(width = 2.0f)
         )
       }
     }

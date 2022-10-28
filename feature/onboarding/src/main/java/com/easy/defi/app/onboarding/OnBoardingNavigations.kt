@@ -19,7 +19,7 @@ object OnBoardingNavigations {
   object Legal {
     const val ROUTE = "onboarding_legal?$KEY_IS_CREATE={$KEY_IS_CREATE}"
     val args = listOf(
-      navArgument(KEY_IS_CREATE) { type = NavType.BoolType },
+      navArgument(KEY_IS_CREATE) { type = NavType.BoolType }
     )
 
     fun destination(
@@ -34,7 +34,7 @@ object OnBoardingNavigations {
   object CreatePasscode {
     const val ROUTE = "onboarding_create_passcode?$KEY_IS_CREATE={$KEY_IS_CREATE}"
     val args = listOf(
-      navArgument(KEY_IS_CREATE) { type = NavType.BoolType },
+      navArgument(KEY_IS_CREATE) { type = NavType.BoolType }
     )
 
     fun destination(
@@ -49,7 +49,7 @@ object OnBoardingNavigations {
   object ImportWallet {
     const val ROUTE = "onboarding_import_wallet?$KEY_PASSCODE={$KEY_PASSCODE}"
     val args = listOf(
-      navArgument(KEY_PASSCODE) { type = NavType.StringType },
+      navArgument(KEY_PASSCODE) { type = NavType.StringType }
     )
 
     fun destination(

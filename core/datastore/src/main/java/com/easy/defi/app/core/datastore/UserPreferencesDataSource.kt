@@ -21,7 +21,7 @@ class UserPreferencesDataSource @Inject constructor(
       hasPasscode = it.hasPasscode,
       currency = DeFiCurrency(it.currencyCode, it.currencySymbol),
       network = ChainNetwork.fromLabel(it.network),
-      walletProfile = WalletProfile(avator = it.avator, walletName = it.walletName),
+      walletProfile = WalletProfile(avator = it.avator, walletName = it.walletName)
     )
   }
 

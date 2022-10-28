@@ -44,12 +44,12 @@ fun SettingsScreen(
   Scaffold(
     topBar = {
       DeFiAppBar(
-        title = stringResource(id = R.string.settings__title),
+        title = stringResource(id = R.string.settings__title)
       ) {
         onBackClick()
       }
     },
-    modifier = Modifier.fillMaxSize(),
+    modifier = Modifier.fillMaxSize()
   ) {
     val scrollableState = rememberScrollState()
     val settingsUiState by settingsViewModel.settingsState.collectAsState()
@@ -58,9 +58,9 @@ fun SettingsScreen(
         .padding(
           top = it.calculateTopPadding(),
           start = MaterialTheme.Spacing.medium,
-          end = MaterialTheme.Spacing.medium,
+          end = MaterialTheme.Spacing.medium
         )
-        .verticalScroll(scrollableState),
+        .verticalScroll(scrollableState)
     ) {
       settingsUiState.walletProfile.avator?.let { avatorUrl ->
         AsyncImage(
@@ -76,7 +76,7 @@ fun SettingsScreen(
             .clip(CircleShape)
             .align(Alignment.CenterHorizontally)
             .size(MaterialTheme.Spacing.space128)
-            .rotating(2500),
+            .rotating(2500)
         )
       } ?: kotlin.run {
         Image(
@@ -86,7 +86,7 @@ fun SettingsScreen(
             .padding(top = MaterialTheme.Spacing.medium)
             .clip(CircleShape)
             .align(Alignment.CenterHorizontally)
-            .size(MaterialTheme.Spacing.space128),
+            .size(MaterialTheme.Spacing.space128)
         )
       }
 
@@ -95,7 +95,7 @@ fun SettingsScreen(
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.titleMedium,
         color = MaterialTheme.colorScheme.onBackground,
-        modifier = Modifier.align(Alignment.CenterHorizontally),
+        modifier = Modifier.align(Alignment.CenterHorizontally)
       )
       MenuBlockView(
         modifier = Modifier.fillMaxWidth(),
@@ -103,13 +103,13 @@ fun SettingsScreen(
         datas = listOf(
           AdvanceMenu(
             title = stringResource(id = R.string.settings__protect_your_wallet),
-            subTitle = stringResource(id = R.string.settings__passcode_biometrics_and_2fa),
+            subTitle = stringResource(id = R.string.settings__passcode_biometrics_and_2fa)
           ),
           AdvanceMenu(
             title = stringResource(id = R.string.settings__recovery_phrase),
-            subTitle = settingsUiState.walletProfile.walletName,
-          ),
-        ),
+            subTitle = settingsUiState.walletProfile.walletName
+          )
+        )
       ) {
       }
       MenuBlockView(
@@ -118,13 +118,13 @@ fun SettingsScreen(
         datas = listOf(
           AdvanceMenu(
             title = stringResource(id = R.string.settings__display_currency),
-            endValue = "${settingsUiState.currency.code}(${settingsUiState.currency.symbol})",
+            endValue = "${settingsUiState.currency.code}(${settingsUiState.currency.symbol})"
           ),
           AdvanceMenu(
             title = stringResource(id = R.string.settings__network_settings),
-            endValue = settingsUiState.network.label,
-          ),
-        ),
+            endValue = settingsUiState.network.label
+          )
+        )
       ) {
         when (it) {
           0 -> {
@@ -141,19 +141,23 @@ fun SettingsScreen(
           AdvanceMenu(title = stringResource(id = R.string.settings__help_center)),
           AdvanceMenu(title = stringResource(id = R.string.settings__new_to_defi)),
           AdvanceMenu(title = stringResource(id = R.string.settings__join_community)),
-          AdvanceMenu(title = stringResource(id = R.string.settings__give_feedback)),
-        ),
+          AdvanceMenu(title = stringResource(id = R.string.settings__give_feedback))
+        )
       ) {
       }
       MenuBlockView(
         modifier = Modifier.fillMaxWidth(),
         header = stringResource(id = R.string.settings__about_crypto_com_wallet),
         datas = listOf(
-          AdvanceMenu(title = stringResource(id = R.string.settings__version), endValue = "v1.0.0(100)", showIcon = false),
+          AdvanceMenu(
+            title = stringResource(id = R.string.settings__version),
+            endValue = "v1.0.0(100)",
+            showIcon = false
+          ),
           AdvanceMenu(title = stringResource(id = R.string.settings__terms_of_service)),
           AdvanceMenu(title = stringResource(id = R.string.settings__privacy_notice)),
-          AdvanceMenu(title = stringResource(id = R.string.settings__visit_our_website)),
-        ),
+          AdvanceMenu(title = stringResource(id = R.string.settings__visit_our_website))
+        )
       ) { itemIndex ->
         when (itemIndex) {
           0 -> {

@@ -15,6 +15,7 @@ class OfflineUserDataRepository @Inject constructor(
   override suspend fun storePasscode(passcode: String) {
     userPreferencesDataSource.storePasscode(passcode)
   }
+
   override suspend fun setAvator(avatorUrl: String) {
     userPreferencesDataSource.setAvator(avatorUrl)
   }

@@ -26,7 +26,7 @@ fun DeFiOnBoardingNavHost(
   AnimatedNavHost(
     navController = navController,
     startDestination = startDestination,
-    modifier = modifier,
+    modifier = modifier
   ) {
     onBoardingGraph(navController)
   }
@@ -43,7 +43,7 @@ fun DeFiNavHost(
   AnimatedNavHost(
     navController = navController,
     startDestination = startDestination,
-    modifier = modifier,
+    modifier = modifier
   ) {
     walletGraph(
       navigateToSettings = {
@@ -51,7 +51,7 @@ fun DeFiNavHost(
       },
       nestedGraphs = {
         settingsGraph(onBackClick)
-      },
+      }
     )
     dappGraph()
     nftGraph()
