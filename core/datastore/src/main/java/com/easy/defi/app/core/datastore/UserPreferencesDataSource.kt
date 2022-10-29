@@ -23,14 +23,14 @@ import com.easy.defi.app.core.model.data.ChainNetwork
 import com.easy.defi.app.core.model.data.DeFiCurrency
 import com.easy.defi.app.core.model.data.UserData
 import com.easy.defi.app.core.model.data.WalletProfile
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
+import javax.inject.Inject
 
 class UserPreferencesDataSource @Inject constructor(
   private val userPreferences: DataStore<UserPreferences>,
-  private val preferences: SharedPreferences,
+  private val preferences: SharedPreferences
 ) {
   val userDataStream = userPreferences.data.map {
     UserData(

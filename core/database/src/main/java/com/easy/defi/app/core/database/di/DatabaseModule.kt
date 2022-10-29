@@ -27,10 +27,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 import timber.log.Timber
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -39,7 +39,7 @@ object DatabaseModule {
   @Singleton
   fun provideWalletDatabase(
     @ApplicationContext context: Context,
-    sharedPreferences: SharedPreferences,
+    sharedPreferences: SharedPreferences
   ): WalletDatabase {
     val passcode =
       sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "").orEmpty().also {
@@ -58,7 +58,7 @@ object DatabaseModule {
   @Provides
   @Singleton
   fun provideDeFiDatabase(
-    @ApplicationContext context: Context,
+    @ApplicationContext context: Context
   ): DeFiDatabase = Room.databaseBuilder(
     context,
     DeFiDatabase::class.java,

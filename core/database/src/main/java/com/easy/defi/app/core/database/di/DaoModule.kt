@@ -31,21 +31,21 @@ import dagger.hilt.components.SingletonComponent
 object DaoModule {
   @Provides
   fun providesChainDao(
-    database: DeFiDatabase,
+    database: DeFiDatabase
   ): ChainDao = database.chainDao
 
   @Provides
   fun providesAssetDao(
-    database: DeFiDatabase,
+    database: DeFiDatabase
   ): AssetDao = database.assetDao
 
   @Provides
   fun providesTierDao(
-    database: DeFiDatabase,
+    database: DeFiDatabase
   ): TierDao = database.tierDao
 
   @Provides
   fun providesVersionDao(
-    database: DeFiDatabase,
+    database: DeFiDatabase
   ): CoinVersionDao = database.versionDao
 }

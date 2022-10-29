@@ -24,5 +24,5 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 annotation class Dispatcher(val dwDispatchers: DwDispatchers)
 
 enum class DwDispatchers {
-  IO,
+  IO
 }

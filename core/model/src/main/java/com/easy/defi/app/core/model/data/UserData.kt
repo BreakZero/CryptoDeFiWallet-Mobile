@@ -17,7 +17,7 @@
 package com.easy.defi.app.core.model.data
 
 enum class ChainNetwork(
-  val label: String,
+  val label: String
 ) {
   MAINNET("MainNet"), ROPSTEN("Ropsten"), RINKEBY("Rinkeby");
 
@@ -30,12 +30,12 @@ enum class ChainNetwork(
 
 data class DeFiCurrency(
   val code: String,
-  val symbol: String,
+  val symbol: String
 )
 
 data class UserData(
   val hasPasscode: Boolean,
   val currency: DeFiCurrency,
   val network: ChainNetwork,
-  val walletProfile: WalletProfile,
+  val walletProfile: WalletProfile
 )

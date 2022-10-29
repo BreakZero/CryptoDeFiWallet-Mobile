@@ -23,5 +23,5 @@ data class ReadyToSign(
   val amount: BigInteger,
   val memo: String? = null,
   val contract: String? = null,
-  val chainId: Int = 3,
+  val chainId: Int = 3
 )

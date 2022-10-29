@@ -38,7 +38,7 @@ fun String._16toNumber(): BigInteger {
 fun String.mark(
   size: Int,
   markChar: String = "***",
-  dir: MarkDir = MarkDir.MIDDLE,
+  dir: MarkDir = MarkDir.MIDDLE
 ): String {
   when (dir) {
     MarkDir.MIDDLE -> {

@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import java.math.BigInteger
 import javax.inject.Inject
 
 @HiltViewModel
@@ -84,7 +85,7 @@ class AssetListViewModel @Inject constructor(
   ) { isLoading, userData, assets, promoCards ->
     AssetListState(
       onRefreshing = isLoading,
-      assets = assets.sortedByDescending { it.nativeBalance }.take(10),
+      assets = assets.sortedByDescending { it.nativeBalance }.filter { it.nativeBalance > BigInteger.ZERO },
       walletProfile = userData.walletProfile,
       promoCard = promoCards
     )

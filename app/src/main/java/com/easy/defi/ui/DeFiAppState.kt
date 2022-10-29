@@ -52,7 +52,7 @@ fun rememberDeFiAppState(
   windowSizeClass: WindowSizeClass,
   networkMonitor: NetworkMonitor,
   coroutineScope: CoroutineScope = rememberCoroutineScope(),
-  navController: NavHostController = rememberAnimatedNavController(),
+  navController: NavHostController = rememberAnimatedNavController()
 ): DeFiAppState {
   return remember(navController, coroutineScope, windowSizeClass, networkMonitor) {
     DeFiAppState(navController, coroutineScope, windowSizeClass, networkMonitor)
@@ -64,7 +64,7 @@ class DeFiAppState(
   val navController: NavHostController,
   val coroutineScope: CoroutineScope,
   val windowSizeClass: WindowSizeClass,
-  networkMonitor: NetworkMonitor,
+  networkMonitor: NetworkMonitor
 ) {
   val currentDestination: NavDestination?
     @Composable get() = navController

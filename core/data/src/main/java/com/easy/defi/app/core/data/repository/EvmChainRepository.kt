@@ -45,6 +45,8 @@ class EvmChainRepository @Inject constructor(
   }
 
   override suspend fun syncWith(synchronizer: Synchronizer): Boolean {
+    val ethBalance = ethereumDataSource.getSingleBalance("", null)
+    assetDao.updateBalanceForMainChain("eth", ethBalance.toString())
     val tokenHoldings = ethereumDataSource.getTokenHoldings("")
     tokenHoldings.onEach {
       assetDao.updateBalance(contract = it.contractAddress, balance = it.amount)

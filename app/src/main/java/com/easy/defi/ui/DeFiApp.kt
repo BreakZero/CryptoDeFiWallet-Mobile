@@ -58,7 +58,7 @@ import com.easy.defi.navigation.TopLevelDestination
 fun DeFiApp(
   hasWallet: Boolean,
   networkMonitor: NetworkMonitor,
-  appState: DeFiAppState,
+  appState: DeFiAppState
 ) {
   val background: @Composable (@Composable () -> Unit) -> Unit =
     when (appState.currentTopLevelDestination) {
@@ -140,7 +140,7 @@ private fun DeFiNavRail(
   destinations: List<TopLevelDestination>,
   onNavigateToDestination: (TopLevelDestination) -> Unit,
   currentDestination: NavDestination?,
-  modifier: Modifier = Modifier,
+  modifier: Modifier = Modifier
 ) {
   DeFiNavigationRail(modifier = modifier) {
     destinations.forEach { destination ->
@@ -175,7 +175,7 @@ private fun DeFiNavRail(
 private fun DeFiBottomBar(
   destinations: List<TopLevelDestination>,
   onNavigateToDestination: (TopLevelDestination) -> Unit,
-  currentDestination: NavDestination?,
+  currentDestination: NavDestination?
 ) {
   DeFiNavigationBar {
     destinations.forEach { destination ->

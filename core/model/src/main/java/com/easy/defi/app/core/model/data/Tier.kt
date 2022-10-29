@@ -4,5 +4,5 @@ data class Tier(
   val fromCurrency: String,
   val fromSlug: String,
   val toCurrency: String,
-  val rate: String,
+  val rate: String
 )

@@ -46,7 +46,7 @@ class SyncWorker @AssistedInject constructor(
   @Assisted private val appContext: Context,
   @Assisted workerParams: WorkerParameters,
   private val evmChainRepository: EvmChainRepository,
-  @Dispatcher(DwDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+  @Dispatcher(DwDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : CoroutineWorker(appContext, workerParams), Synchronizer {
 
   override suspend fun getForegroundInfo(): ForegroundInfo =

@@ -31,7 +31,7 @@ data class TierEntity(
   @ColumnInfo(name = "rate", defaultValue = "0.0")
   val rate: String,
   @ColumnInfo(name = "time_stamp")
-  val timeStamp: String,
+  val timeStamp: String
 )
 
 fun TierEntity.asExternalModel(): Tier {

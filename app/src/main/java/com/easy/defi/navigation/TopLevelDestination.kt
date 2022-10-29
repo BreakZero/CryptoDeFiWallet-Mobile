@@ -25,7 +25,7 @@ enum class TopLevelDestination(
   val selectedIcon: Icon,
   val unselectedIcon: Icon,
   val iconTextId: Int,
-  val titleTextId: Int,
+  val titleTextId: Int
 ) {
   WALLET(
     selectedIcon = DrawableResourceIcon(DeFiIcon.Wallet),
@@ -50,5 +50,5 @@ enum class TopLevelDestination(
     unselectedIcon = DrawableResourceIcon(DeFiIcon.Earn),
     iconTextId = R.string.earn,
     titleTextId = R.string.earn
-  ),
+  )
 }

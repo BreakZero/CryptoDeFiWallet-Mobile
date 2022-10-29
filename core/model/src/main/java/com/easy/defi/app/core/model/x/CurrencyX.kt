@@ -22,7 +22,7 @@ import java.math.RoundingMode
 
 fun BigInteger.byDecimal2String(
   decimal: Int,
-  display: Int = 8,
+  display: Int = 8
 ): String {
   return byDecimal(decimal, display)
     .toPlainString()
@@ -30,7 +30,7 @@ fun BigInteger.byDecimal2String(
 
 fun BigInteger.byDecimal(
   decimal: Int,
-  display: Int = 8,
+  display: Int = 8
 ): BigDecimal {
   return this.toBigDecimal()
     .movePointLeft(decimal)
@@ -38,7 +38,7 @@ fun BigInteger.byDecimal(
 }
 
 fun BigDecimal.upWithDecimal(
-  decimal: Int,
+  decimal: Int
 ): BigInteger {
   return this.movePointRight(decimal).toBigInteger()
 }

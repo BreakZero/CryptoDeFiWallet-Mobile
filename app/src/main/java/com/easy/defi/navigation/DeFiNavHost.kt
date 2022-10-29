@@ -37,7 +37,7 @@ fun DeFiOnBoardingNavHost(
   navController: NavHostController,
   onBackClick: () -> Unit,
   modifier: Modifier = Modifier,
-  startDestination: String = OnBoardingNavigations.Index.destination,
+  startDestination: String = OnBoardingNavigations.Index.destination
 ) {
   AnimatedNavHost(
     navController = navController,
@@ -54,7 +54,7 @@ fun DeFiNavHost(
   navController: NavHostController,
   onBackClick: () -> Unit,
   modifier: Modifier = Modifier,
-  startDestination: String = assetGraphRoutePattern,
+  startDestination: String = assetGraphRoutePattern
 ) {
   AnimatedNavHost(
     navController = navController,

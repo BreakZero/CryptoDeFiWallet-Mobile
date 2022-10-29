@@ -31,7 +31,7 @@ data class Asset(
   val chainName: String,
   val contract: String? = null,
   val nativeBalance: BigInteger = BigInteger.ZERO,
-  val rate: BigDecimal = BigDecimal.ZERO,
+  val rate: BigDecimal = BigDecimal.ZERO
 ) {
   fun fiatBalance(): BigDecimal {
     return nativeBalance.byDecimal(decimal).times(rate).setScale(2, RoundingMode.DOWN)

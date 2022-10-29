@@ -22,15 +22,15 @@ import com.easy.defi.app.core.data.repository.WalletRepository
 import com.easy.defi.app.core.data.repository.user.UserDataRepository
 import com.easy.defi.app.core.model.data.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
   userDataRepository: UserDataRepository,
-  walletRepository: WalletRepository,
+  walletRepository: WalletRepository
 ) : ViewModel() {
   private var walletJob: Job? = null
 

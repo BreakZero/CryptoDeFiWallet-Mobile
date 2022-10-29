@@ -6,5 +6,5 @@ data class Chain(
   val chainId: String? = null,
   val isTestNet: Boolean,
   val name: String,
-  val isToken: Boolean,
+  val isToken: Boolean
 )

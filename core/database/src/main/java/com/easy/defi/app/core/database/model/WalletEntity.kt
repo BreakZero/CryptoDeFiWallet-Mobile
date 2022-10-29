@@ -26,7 +26,7 @@ import com.easy.defi.app.core.model.data.Wallet
 data class WalletEntity(
   @PrimaryKey val mnemonic: String,
   val active: Int, // 0 = inactive, 1 = active
-  val passphrase: String,
+  val passphrase: String
 )
 
 fun WalletEntity.asExternalModel() = Wallet(

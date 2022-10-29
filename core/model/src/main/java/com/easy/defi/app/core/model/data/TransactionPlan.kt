@@ -24,7 +24,7 @@ data class TransactionPlan(
   val amount: BigInteger,
   val to: String,
   val from: String,
-  val fee: BigInteger,
+  val fee: BigInteger
 ) {
   companion object {
     val EmptyPlan = TransactionPlan("", "", BigInteger.ZERO, "", "", BigInteger.ZERO)
