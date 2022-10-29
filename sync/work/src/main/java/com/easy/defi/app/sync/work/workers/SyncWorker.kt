@@ -19,11 +19,7 @@ package com.easy.defi.app.sync.work.workers
 import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.tracing.traceAsync
-import androidx.work.CoroutineWorker
-import androidx.work.ForegroundInfo
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.OutOfQuotaPolicy
-import androidx.work.WorkerParameters
+import androidx.work.*
 import com.easy.defi.app.core.common.network.Dispatcher
 import com.easy.defi.app.core.common.network.DwDispatchers
 import com.easy.defi.app.core.data.Synchronizer
@@ -38,6 +34,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Syncs the data layer by delegating to the appropriate repository instances with
@@ -79,6 +77,13 @@ class SyncWorker @AssistedInject constructor(
       .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
       .setConstraints(SyncConstraints)
       .setInputData(SyncWorker::class.delegatedData())
+      .build()
+
+    fun startIntervalSyncWork() = PeriodicWorkRequestBuilder<DelegatingWorker>(
+      15,
+      TimeUnit.MINUTES
+    ).setInputData(SyncWorker::class.delegatedData())
+      .setConstraints(SyncConstraints)
       .build()
   }
 }
