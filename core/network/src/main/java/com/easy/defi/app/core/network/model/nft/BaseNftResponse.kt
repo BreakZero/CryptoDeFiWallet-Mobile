@@ -25,5 +25,5 @@ data class BaseNftResponse<T>(
   @SerialName("msg")
   val message: String? = null,
   @SerialName("data")
-  val `data`: T,
+  val `data`: T
 )

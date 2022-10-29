@@ -25,15 +25,15 @@ import com.easy.defi.app.core.network.model.asExternalModel
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import timber.log.Timber
 import java.math.BigInteger
 import javax.inject.Inject
-import timber.log.Timber
 
 class EthereumDataSource @Inject constructor(
-  private val httpClient: HttpClient,
+  private val httpClient: HttpClient
 ) {
   suspend fun getTokenHoldings(
-    address: String,
+    address: String
   ): List<TokenHolding> {
     return try {
       val result: BaseResponse<List<TokenHoldingDto>> =
@@ -53,7 +53,7 @@ class EthereumDataSource @Inject constructor(
 
   suspend fun getSingleBalance(
     address: String,
-    contractAddress: String?,
+    contractAddress: String?
   ): BigInteger {
     return try {
       val response = httpClient.get("${UrlConstant.BASE_URL}/ethereum/balance/$address") {
@@ -71,7 +71,7 @@ class EthereumDataSource @Inject constructor(
     address: String,
     page: Int,
     offset: Int,
-    contract: String?,
+    contract: String?
   ): List<EvmTransaction> {
     return try {
       httpClient.get(

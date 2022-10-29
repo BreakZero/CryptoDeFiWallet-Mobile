@@ -26,5 +26,5 @@ data class TokenHoldingDto(
   @SerialName("contract_address")
   val contractAddress: String,
   @SerialName("contract_name")
-  val contractName: String,
+  val contractName: String
 )

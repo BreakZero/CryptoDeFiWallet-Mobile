@@ -44,7 +44,7 @@ import com.easy.defi.app.core.model.x.byDecimal
 fun AssetCard(
   modifier: Modifier = Modifier,
   asset: Asset,
-  onClick: (Asset) -> Unit,
+  onClick: (Asset) -> Unit
 ) {
   Card(
     modifier = modifier,

@@ -24,7 +24,7 @@ data class AssetDto(
   @SerialName("currencies")
   val currencies: List<CurrencyDto>,
   @SerialName("sha256")
-  val sha256: String,
+  val sha256: String
 )
 
 @Serializable
@@ -54,5 +54,5 @@ data class CurrencyDto(
   @SerialName("symbol")
   val symbol: String,
   @SerialName("tokenDecimal")
-  val tokenDecimal: Int,
+  val tokenDecimal: Int
 )

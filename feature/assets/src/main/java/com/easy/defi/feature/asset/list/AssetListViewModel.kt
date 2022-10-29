@@ -24,17 +24,17 @@ import com.easy.defi.app.core.data.repository.user.OfflineUserDataRepository
 import com.easy.defi.app.core.designsystem.R
 import com.easy.defi.app.core.ui.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
 @HiltViewModel
 class AssetListViewModel @Inject constructor(
   offlineUserDataRepository: OfflineUserDataRepository,
-  supportCoinRepository: CoinRepository,
+  supportCoinRepository: CoinRepository
 ) : ViewModel() {
 
   companion object {

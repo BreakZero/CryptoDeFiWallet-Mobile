@@ -64,11 +64,11 @@ data class EvmTransactionDto(
   @SerialName("txreceipt_status")
   val txreceiptStatus: String?,
   @SerialName("value")
-  val value: String,
+  val value: String
 )
 
 fun EvmTransactionDto.asExternalModel(
-  owner: String,
+  owner: String
 ): EvmTransaction {
   val direction = if (this.from.equals(owner, true)) {
     TransactionDirection.RECEIVE

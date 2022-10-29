@@ -54,7 +54,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
   ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class
 ) @Composable fun AssetListScreen(
   assetsViewModel: AssetListViewModel = hiltViewModel(),
-  navigateToSettings: () -> Unit,
+  navigateToSettings: () -> Unit
 ) {
   val context = LocalContext.current
   val assetsUiState by assetsViewModel.assetState.collectAsState()

@@ -11,14 +11,11 @@ insert_final_newline = true
 ktlint_code_style = project
 indent_style = space
 indent_size = 2
+ij_kotlin_allow_trailing_comma = false
+ktlint_disabled_rules = filename, annotation, annotation-spacing, argument-list-wrapping, double-colon-spacing, enum-entry-name-case, multiline-if-else, no-empty-first-line-in-method-block, package-name, trailing-comma, spacing-around-angle-brackets, spacing-between-declarations-with-annotations, spacing-between-declarations-with-comments, unary-op-spacing, no-wildcard-imports
 
 [*.xml]
 indent_size = 4
-
-[*.kt]
-ij_kotlin_imports_layout = *
-ij_kotlin_allow_trailing_comma = true
-ktlint_disabled_rules = filename, annotation, annotation-spacing, argument-list-wrapping, double-colon-spacing, enum-entry-name-case, multiline-if-else, no-empty-first-line-in-method-block, package-name, trailing-comma, spacing-around-angle-brackets, spacing-between-declarations-with-annotations, spacing-between-declarations-with-comments, unary-op-spacing, no-wildcard-imports
 
 [*.md]
 trim_trailing_whitespace = false

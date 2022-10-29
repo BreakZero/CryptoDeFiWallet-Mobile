@@ -28,5 +28,5 @@ data class FeeHistoryDto(
   @SerialName("oldestBlock")
   val oldestBlock: String,
   @SerialName("reward")
-  val reward: List<List<String>>,
+  val reward: List<List<String>>
 )

@@ -32,7 +32,7 @@ fun NavController.navigateToWallet(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.walletGraph(
   navigateToSettings: () -> Unit,
-  nestedGraphs: NavGraphBuilder.() -> Unit,
+  nestedGraphs: NavGraphBuilder.() -> Unit
 ) {
   navigation(
     route = assetGraphRoutePattern,

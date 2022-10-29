@@ -26,7 +26,7 @@ import io.ktor.client.request.*
 import javax.inject.Inject
 
 class AssetDataSource @Inject constructor(
-  private val httpClient: HttpClient,
+  private val httpClient: HttpClient
 ) {
   suspend fun getChains(): List<String> {
     return try {
@@ -40,7 +40,7 @@ class AssetDataSource @Inject constructor(
   }
 
   suspend fun getCurrencies(
-    lastSha256: String,
+    lastSha256: String
   ): AssetDto {
     return try {
       httpClient.get("${UrlConstant.BASE_URL}/currencies") {

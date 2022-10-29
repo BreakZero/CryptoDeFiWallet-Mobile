@@ -24,7 +24,7 @@ import com.easy.defi.app.core.ui.UiText
 
 data class PromoCard(
   @DrawableRes val backgroundRes: Int,
-  val title: UiText,
+  val title: UiText
 )
 
 data class AssetListState(
@@ -32,5 +32,5 @@ data class AssetListState(
   val assets: List<Asset> = emptyList(),
   val promoCard: List<PromoCard> = emptyList(),
   val totalBalance: String = "0.0",
-  val onRefreshing: Boolean = true,
+  val onRefreshing: Boolean = true
 )

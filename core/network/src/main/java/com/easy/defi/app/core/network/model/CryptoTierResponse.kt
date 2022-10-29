@@ -30,7 +30,7 @@ data class TierDto(
   @SerialName("time_stamp")
   val timeStamp: Int,
   @SerialName("to_currency")
-  val toCurrency: String,
+  val toCurrency: String
 )
 
 @Serializable
@@ -38,5 +38,5 @@ data class RateDto(
   @SerialName("amount")
   val amount: String,
   @SerialName("rate")
-  val rate: String,
+  val rate: String
 )
