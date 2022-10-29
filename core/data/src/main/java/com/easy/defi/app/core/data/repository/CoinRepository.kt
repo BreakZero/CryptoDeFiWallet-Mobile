@@ -16,8 +16,15 @@
 
 package com.easy.defi.app.core.data.repository
 
+import com.easy.defi.app.core.model.data.Asset
+import com.easy.defi.app.core.model.data.Chain
+import com.easy.defi.app.core.model.data.Tier
+import kotlinx.coroutines.flow.Flow
+
 interface CoinRepository {
-  suspend fun loadSupportCurrencies(): List<String>
-  suspend fun loadSupportChains(): List<String>
-  suspend fun loadTiers(): List<String>
+  fun loadSupportCurrencies(): Flow<List<Asset>>
+  fun loadSupportChains(): Flow<List<Chain>>
+  fun loadTiers(toCurrency: String): Flow<List<Tier>>
+
+  suspend fun sync()
 }

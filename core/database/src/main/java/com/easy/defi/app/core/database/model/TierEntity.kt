@@ -18,6 +18,7 @@ package com.easy.defi.app.core.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import com.easy.defi.app.core.model.data.Tier
 
 @Entity(tableName = "tb_tier", primaryKeys = ["from_currency", "to_currency"])
 data class TierEntity(
@@ -27,7 +28,17 @@ data class TierEntity(
   val fromSlug: String,
   @ColumnInfo(name = "to_currency")
   val toCurrency: String,
+  @ColumnInfo(name = "rate", defaultValue = "0.0")
   val rate: String,
   @ColumnInfo(name = "time_stamp")
   val timeStamp: String,
 )
+
+fun TierEntity.asExternalModel(): Tier {
+  return Tier(
+    fromCurrency = fromCurrency,
+    fromSlug = fromSlug,
+    toCurrency = toCurrency,
+    rate = rate
+  )
+}

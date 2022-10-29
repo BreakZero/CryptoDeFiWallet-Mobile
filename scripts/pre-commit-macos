@@ -2,7 +2,7 @@
 
 echo "Running lint check..."
 
-./gradlew spotlessCheck --init-script scripts/init.gradle.kts --no-configuration-cache --stacktrace
+./gradlew ktlintCheck --no-configuration-cache --stacktrace
 
 status=$?
 

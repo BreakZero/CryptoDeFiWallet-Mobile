@@ -20,7 +20,6 @@ package com.easy.defi.feature.asset.list
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -44,7 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.easy.defi.app.core.designsystem.R
-import com.easy.defi.app.core.designsystem.component.yellowBackground
+import com.easy.defi.app.core.designsystem.component.brushBackground
 import com.easy.defi.app.core.designsystem.theme.Spacing
 import com.easy.defi.app.core.ui.extension.rotating
 import com.easy.defi.feature.asset.components.AssetCard
@@ -52,92 +51,80 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @OptIn(
-  ExperimentalMaterial3Api::class,
-  ExperimentalFoundationApi::class
-)
-@Composable
-fun AssetListScreen(
+  ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class
+) @Composable fun AssetListScreen(
   assetsViewModel: AssetListViewModel = hiltViewModel(),
   navigateToSettings: () -> Unit,
 ) {
   val context = LocalContext.current
   val assetsUiState by assetsViewModel.assetState.collectAsState()
-  Column(modifier = Modifier.fillMaxSize()) {
-    Column(
-      modifier = Modifier.yellowBackground(
-        MaterialTheme.colorScheme.primary
+  Column(
+    modifier = Modifier
+      .fillMaxSize()
+      .brushBackground(
+        listOf(
+          MaterialTheme.colorScheme.primary,
+          MaterialTheme.colorScheme.surface,
+          MaterialTheme.colorScheme.surface
+        )
       )
-    ) {
-      TopAppBar(
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-          containerColor = Color.Transparent
-        ),
-        navigationIcon = {
-          IconButton(
-            onClick = {
-              navigateToSettings()
-            }
-          ) {
-            assetsUiState.walletProfile.avator?.let {
-              AsyncImage(
-                modifier = Modifier
-                  .size(MaterialTheme.Spacing.space48)
-                  .clip(CircleShape)
-                  .rotating(2500),
-                model = ImageRequest.Builder(LocalContext.current)
-                  .data(it)
-                  .placeholder(R.drawable.avatar_generic_1)
-                  .error(R.drawable.avatar_generic_1)
-                  .crossfade(true)
-                  .build(),
-                contentDescription = null
-              )
-            } ?: run {
-              Image(
-                modifier = Modifier
-                  .size(MaterialTheme.Spacing.space48)
-                  .clip(CircleShape)
-                  .rotating(2500),
-                painter = painterResource(id = R.drawable.avatar_generic_1),
-                contentDescription = null
-              )
-            }
-          }
-        },
-        actions = {
-          Icon(
-            modifier = Modifier
-              .padding(end = MaterialTheme.Spacing.medium)
-              .clickable {
-              },
-            painter = painterResource(id = R.drawable.ic_scanner),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primaryContainer
-          )
-        },
-        title = {
-          Column {
-            Text(
-              text = assetsUiState.walletProfile.walletName,
-              style = MaterialTheme.typography.titleSmall,
-              color = MaterialTheme.colorScheme.primaryContainer
+  ) {
+    TopAppBar(
+      colors = TopAppBarDefaults.smallTopAppBarColors(
+        containerColor = Color.Transparent
+      ),
+      navigationIcon = {
+        IconButton(onClick = {
+          navigateToSettings()
+        }) {
+          assetsUiState.walletProfile.avator?.let {
+            AsyncImage(
+              modifier = Modifier
+                .size(MaterialTheme.Spacing.space48)
+                .clip(CircleShape)
+                .rotating(2500),
+              model = ImageRequest.Builder(LocalContext.current).data(it)
+                .placeholder(R.drawable.avatar_generic_1).error(R.drawable.avatar_generic_1)
+                .crossfade(true).build(),
+              contentDescription = null
             )
-            Text(
-              text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
-              style = MaterialTheme.typography.labelSmall,
-              color = MaterialTheme.colorScheme.surfaceVariant
+          } ?: run {
+            Image(
+              modifier = Modifier
+                .size(MaterialTheme.Spacing.space48)
+                .clip(CircleShape)
+                .rotating(2500),
+              painter = painterResource(id = R.drawable.avatar_generic_1),
+              contentDescription = null
             )
           }
         }
-      )
-      Box(
-        modifier = Modifier
-          .fillMaxWidth()
-          .height(120.dp)
-          .background(Color.Transparent)
-      ) {
+      },
+      actions = {
+        Icon(
+          modifier = Modifier
+            .padding(end = MaterialTheme.Spacing.medium)
+            .clickable {},
+          painter = painterResource(id = R.drawable.ic_scanner),
+          contentDescription = null,
+          tint = MaterialTheme.colorScheme.primaryContainer
+        )
+      },
+      title = {
+        Column {
+          Text(
+            text = assetsUiState.walletProfile.walletName,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.primaryContainer
+          )
+          Text(
+            text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.surfaceVariant
+          )
+        }
       }
-    }
+    )
     SwipeRefresh(
       modifier = Modifier
         .fillMaxSize(),
@@ -149,33 +136,23 @@ fun AssetListScreen(
     ) {
       LazyColumn(
         modifier = Modifier
-          .fillMaxSize()
-          .clip(
-            RoundedCornerShape(
-              topEnd = MaterialTheme.Spacing.space24,
-              topStart = MaterialTheme.Spacing.space24
-            )
-          )
-          .background(MaterialTheme.colorScheme.background),
+          .fillMaxSize(),
         contentPadding = PaddingValues(
           vertical = MaterialTheme.Spacing.medium,
           horizontal = MaterialTheme.Spacing.small
         ),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
       ) {
-        items(
-          items = assetsUiState.assets,
-          key = {
-            it.slug
-          }
-        ) { asset ->
+        item { Spacer(modifier = Modifier.height(160.dp)) }
+        items(items = assetsUiState.assets, key = {
+          it.slug
+        }) { asset ->
           AssetCard(
             modifier = Modifier
               .fillMaxWidth()
               .animateItemPlacement(),
             asset = asset
-          ) {
-          }
+          ) {}
         }
         item {
           LazyRow(
@@ -183,12 +160,9 @@ fun AssetListScreen(
               MaterialTheme.Spacing.space12
             )
           ) {
-            items(
-              items = assetsUiState.promoCard,
-              key = { promoCard ->
-                promoCard.backgroundRes
-              }
-            ) {
+            items(items = assetsUiState.promoCard, key = { promoCard ->
+              promoCard.backgroundRes
+            }) {
               Card(
                 modifier = Modifier
                   .width(MaterialTheme.Spacing.space128)

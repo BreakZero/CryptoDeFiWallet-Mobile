@@ -21,11 +21,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.easy.defi.app.core.database.model.ChainEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ChainDao {
   @Query("SELECT * FROM TB_CHAIN")
-  suspend fun chains(): List<ChainEntity>
+  fun chainStream(): Flow<List<ChainEntity>>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun insertAll(chains: List<ChainEntity>)

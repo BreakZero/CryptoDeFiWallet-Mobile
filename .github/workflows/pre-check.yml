@@ -48,4 +48,4 @@ jobs:
           java-version: '11'
 
       - name: Run spotless Check Task
-        run: ./gradlew spotlessCheck --init-script scripts/init.gradle.kts --no-configuration-cache --stacktrace
+        run: ./gradlew ktlintCheck --stacktrace

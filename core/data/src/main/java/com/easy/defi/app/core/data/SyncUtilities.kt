@@ -62,7 +62,8 @@ private suspend fun <T> suspendRunCatching(block: suspend () -> T): Result<T> = 
  * Note that the blocks defined above are never run concurrently, and the [Synchronizer]
  * implementation must guarantee this.
  */
-suspend fun Synchronizer.changeSync(
-  modelUpdater: suspend (List<String>) -> Unit,
+suspend fun Synchronizer.sync(
+  block: suspend () -> Unit,
 ) = suspendRunCatching {
+  block()
 }.isSuccess

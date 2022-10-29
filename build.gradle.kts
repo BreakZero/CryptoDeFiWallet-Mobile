@@ -15,9 +15,9 @@ plugins {
   id("com.android.library") version "7.3.0" apply false
 }
 
-/*subprojects {
+subprojects {
   this.apply(from = "${rootProject.rootDir}/lint.gradle.kts")
-}*/
+}
 
 tasks.register("clean", Delete::class.java) {
   delete(rootProject.buildDir)

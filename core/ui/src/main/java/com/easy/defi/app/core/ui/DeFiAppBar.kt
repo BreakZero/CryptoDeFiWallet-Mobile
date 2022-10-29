@@ -39,7 +39,10 @@ fun DeFiAppBar(
     modifier = Modifier
       .background(
         Brush.verticalGradient(
-          listOf(MaterialTheme.colorScheme.primary, Color.White)
+          listOf(
+            MaterialTheme.colorScheme.primary,
+            MaterialTheme.colorScheme.secondary
+          )
         )
       ),
     colors = TopAppBarDefaults.smallTopAppBarColors(

@@ -19,6 +19,7 @@ package com.easy.defi.app.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.easy.defi.app.core.model.data.Chain
 
 @Entity(tableName = "tb_chain")
 data class ChainEntity(
@@ -34,3 +35,14 @@ data class ChainEntity(
   @ColumnInfo(name = "is_token")
   val isToken: Boolean,
 )
+
+fun ChainEntity.asExternalModel(): Chain {
+  return Chain(
+    code = code,
+    chainType = chainType,
+    chainId = chainId,
+    isTestNet = isTestNet,
+    name = name,
+    isToken = isToken
+  )
+}

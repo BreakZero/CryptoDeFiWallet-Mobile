@@ -36,7 +36,6 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -197,8 +196,18 @@ fun GradientBackgroundAndroid() {
   }
 }
 
+fun Modifier.brushBackground(
+  colors: List<Color>,
+): Modifier = this.drawWithCache {
+  val gradientBrush = Brush.verticalGradient(colors)
+  onDrawBehind {
+    drawRect(gradientBrush)
+  }
+}
+
 fun Modifier.yellowBackground(
-  color: Color,
+  startColor: Color,
+  bottomColor: Color,
 ): Modifier = this.composed {
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     // produce updating time in seconds variable to pass into shader
@@ -217,7 +226,12 @@ fun Modifier.yellowBackground(
       // Pass the color to support color space automatically
       shader.setColorUniform(
         "iColor",
-        android.graphics.Color.valueOf(color.red, color.green, color.blue, color.alpha)
+        android.graphics.Color.valueOf(
+          startColor.red,
+          startColor.green,
+          startColor.blue,
+          startColor.alpha
+        )
       )
       onDrawBehind {
         drawRect(shaderBrush)
@@ -225,7 +239,7 @@ fun Modifier.yellowBackground(
     }
   } else {
     Modifier.drawWithCache {
-      val gradientBrush = Brush.verticalGradient(listOf(color, White))
+      val gradientBrush = Brush.verticalGradient(listOf(startColor, bottomColor))
       onDrawBehind {
         drawRect(gradientBrush)
       }

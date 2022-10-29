@@ -28,10 +28,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AssetDao {
   @Query("SELECT * FROM TB_ASSET")
-  fun assetsFlow(): Flow<List<AssetEntity>>
-
-  @Query("SELECT * FROM TB_ASSET")
-  suspend fun assets(): List<AssetEntity>
+  fun assetStream(): Flow<List<AssetEntity>>
 
   @Query("select * from tb_asset where slug = :slug")
   suspend fun assetBySlug(slug: String): AssetEntity?

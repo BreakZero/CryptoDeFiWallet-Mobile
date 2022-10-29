@@ -17,7 +17,9 @@
 package com.easy.defi.app.core.data.di
 
 import com.easy.defi.app.core.data.repository.ChainRepository
+import com.easy.defi.app.core.data.repository.CoinRepository
 import com.easy.defi.app.core.data.repository.EvmChainRepository
+import com.easy.defi.app.core.data.repository.SupportCoinRepository
 import com.easy.defi.app.core.data.repository.WalletRepository
 import com.easy.defi.app.core.data.repository.user.OfflineUserDataRepository
 import com.easy.defi.app.core.data.repository.user.UserDataRepository
@@ -43,6 +45,11 @@ interface DataModule {
   fun bindsUserRepository(
     userDataRepository: OfflineUserDataRepository,
   ): UserDataRepository
+
+  @Binds
+  fun bindsCoinRepository(
+    supportChainRepository: SupportCoinRepository,
+  ): CoinRepository
 
   @Binds
   fun bindsNetworkMonitor(

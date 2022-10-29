@@ -34,5 +34,5 @@ class EvmTransaction(
   from,
   to,
   value,
-  timeStamp,
+  timeStamp
 )

@@ -20,15 +20,15 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class AssetDto(
+data class AssetDto(
   @SerialName("currencies")
-  val currencies: List<Currency>,
+  val currencies: List<CurrencyDto>,
   @SerialName("sha256")
   val sha256: String,
 )
 
 @Serializable
-internal data class Currency(
+data class CurrencyDto(
   @SerialName("chain")
   val chain: String,
   @SerialName("chainName")

@@ -19,6 +19,7 @@ package com.easy.defi.app.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.easy.defi.app.core.model.data.Asset
 
 @Entity(tableName = "tb_asset")
 data class AssetEntity(
@@ -41,3 +42,17 @@ data class AssetEntity(
   @ColumnInfo(name = "balance")
   val balance: String,
 )
+
+fun AssetEntity.asExternalModel(): Asset {
+  return Asset(
+    slug = this.slug,
+    code = this.code,
+    iconUrl = this.iconUrl,
+    name = this.name,
+    symbol = this.symbol,
+    decimal = this.decimal,
+    chainName = this.chainName,
+    contract = this.contractAddress.ifBlank { null },
+    nativeBalance = this.balance.toBigInteger()
+  )
+}

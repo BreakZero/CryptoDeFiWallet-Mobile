@@ -24,7 +24,6 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import javax.inject.Inject
-import timber.log.Timber
 
 class AssetDataSource @Inject constructor(
   private val httpClient: HttpClient,
@@ -42,25 +41,21 @@ class AssetDataSource @Inject constructor(
 
   suspend fun getCurrencies(
     lastSha256: String,
-  ): List<String> {
+  ): AssetDto {
     return try {
       httpClient.get("${UrlConstant.BASE_URL}/currencies") {
         parameter("sha256", lastSha256)
-      }.body<BaseResponse<AssetDto>>().data.currencies.map {
-        it.chain
-      }
+      }.body<BaseResponse<AssetDto>>().data
     } catch (e: Exception) {
-      emptyList()
+      AssetDto(emptyList(), "")
     }
   }
 
-  suspend fun getTiers(): List<String> {
+  suspend fun getTiers(): List<TierDto> {
     return try {
-      httpClient.get("${UrlConstant.BASE_URL}/tiers").body<BaseResponse<List<TierDto>>>().data.map {
-        it.fromCurrency
-      }
+      httpClient.get("${UrlConstant.BASE_URL}/tiers")
+        .body<BaseResponse<List<TierDto>>>().data
     } catch (e: Exception) {
-      Timber.e(e)
       emptyList()
     }
   }

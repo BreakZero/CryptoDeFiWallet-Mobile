@@ -18,6 +18,8 @@ package com.easy.defi.feature.asset.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.easy.defi.app.core.common.extensions.launchWithHandler
+import com.easy.defi.app.core.data.repository.CoinRepository
 import com.easy.defi.app.core.data.repository.user.OfflineUserDataRepository
 import com.easy.defi.app.core.designsystem.R
 import com.easy.defi.app.core.ui.UiText
@@ -31,12 +33,19 @@ import kotlinx.coroutines.flow.update
 
 @HiltViewModel
 class AssetListViewModel @Inject constructor(
-  private val offlineUserDataRepository: OfflineUserDataRepository,
+  offlineUserDataRepository: OfflineUserDataRepository,
+  supportCoinRepository: CoinRepository,
 ) : ViewModel() {
 
   companion object {
     private const val WORKER_NAME = "update-balance-worker"
     const val KEY_WORKER_PROGRESS = "in_progressing"
+  }
+
+  init {
+    viewModelScope.launchWithHandler {
+      supportCoinRepository.sync()
+    }
   }
 
 /*  private val balanceWorkerRequest = PeriodicWorkRequestBuilder<BalanceWorker>(
@@ -70,10 +79,12 @@ class AssetListViewModel @Inject constructor(
   val assetState = combine(
     _isLoading,
     offlineUserDataRepository.userDataStream,
+    supportCoinRepository.loadSupportCurrencies(),
     _promoCards
-  ) { isLoading, userData, promoCards ->
+  ) { isLoading, userData, assets, promoCards ->
     AssetListState(
       onRefreshing = isLoading,
+      assets = assets.take(10),
       walletProfile = userData.walletProfile,
       promoCard = promoCards
     )
