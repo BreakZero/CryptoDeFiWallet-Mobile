@@ -46,7 +46,7 @@ fun CreatePasscodeScreen(
   forCreate: Boolean,
   viewModel: PasscodeViewModel = hiltViewModel(),
   navigateUp: () -> Unit,
-  navigateTo: (NavigationCommand) -> Unit,
+  navigateTo: (NavigationCommand) -> Unit
 ) {
   LaunchedEffect(key1 = null) {
     viewModel.uiEvent.collect {

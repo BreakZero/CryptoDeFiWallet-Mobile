@@ -27,10 +27,13 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -38,13 +41,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.easy.defi.app.core.designsystem.R
 import com.easy.defi.app.core.designsystem.component.brushBackground
-import com.easy.defi.app.core.designsystem.theme.Spacing
+import com.easy.defi.app.core.designsystem.theme.spacing
 import com.easy.defi.app.core.ui.extension.rotating
 import com.easy.defi.feature.asset.components.AssetCard
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -80,7 +85,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
           assetsUiState.walletProfile.avator?.let {
             AsyncImage(
               modifier = Modifier
-                .size(MaterialTheme.Spacing.space48)
+                .size(MaterialTheme.spacing.space48)
                 .clip(CircleShape)
                 .rotating(2500),
               model = ImageRequest.Builder(LocalContext.current).data(it)
@@ -91,7 +96,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
           } ?: run {
             Image(
               modifier = Modifier
-                .size(MaterialTheme.Spacing.space48)
+                .size(MaterialTheme.spacing.space48)
                 .clip(CircleShape)
                 .rotating(2500),
               painter = painterResource(id = R.drawable.avatar_generic_1),
@@ -103,7 +108,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
       actions = {
         Icon(
           modifier = Modifier
-            .padding(end = MaterialTheme.Spacing.medium)
+            .padding(end = MaterialTheme.spacing.medium)
             .clickable {},
           painter = painterResource(id = R.drawable.ic_scanner),
           contentDescription = null,
@@ -138,12 +143,14 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
         modifier = Modifier
           .fillMaxSize(),
         contentPadding = PaddingValues(
-          vertical = MaterialTheme.Spacing.medium,
-          horizontal = MaterialTheme.Spacing.small
+          vertical = MaterialTheme.spacing.medium,
+          horizontal = MaterialTheme.spacing.small
         ),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.Spacing.small)
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
       ) {
-        item { Spacer(modifier = Modifier.height(160.dp)) }
+        item {
+          AssetListHeader(modifier = Modifier.fillMaxWidth(), totalBalance = "888888.88")
+        }
         items(items = assetsUiState.assets, key = {
           it.slug
         }) { asset ->
@@ -157,7 +164,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
         item {
           LazyRow(
             horizontalArrangement = Arrangement.spacedBy(
-              MaterialTheme.Spacing.space12
+              MaterialTheme.spacing.space12
             )
           ) {
             items(items = assetsUiState.promoCard, key = { promoCard ->
@@ -165,12 +172,12 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
             }) {
               Card(
                 modifier = Modifier
-                  .width(MaterialTheme.Spacing.space128)
+                  .width(MaterialTheme.spacing.space128)
                   .aspectRatio(4 / 3f),
                 elevation = CardDefaults.cardElevation(
-                  defaultElevation = MaterialTheme.Spacing.extraSmall
+                  defaultElevation = MaterialTheme.spacing.extraSmall
                 ),
-                shape = RoundedCornerShape(MaterialTheme.Spacing.small)
+                shape = RoundedCornerShape(MaterialTheme.spacing.small)
               ) {
                 Box(
                   modifier = Modifier.fillMaxSize()
@@ -183,7 +190,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
                   )
                   Text(
                     modifier = Modifier.padding(
-                      MaterialTheme.Spacing.extraSmall
+                      MaterialTheme.spacing.extraSmall
                     ),
                     text = it.title.asString(context),
                     color = MaterialTheme.colorScheme.background
@@ -195,5 +202,53 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
         }
       }
     }
+  }
+}
+
+@Composable
+private fun AssetListHeader(
+  modifier: Modifier = Modifier,
+  totalBalance: String
+) {
+  Column(
+    modifier = modifier.padding(top = MaterialTheme.spacing.medium),
+    horizontalAlignment = Alignment.CenterHorizontally
+  ) {
+    Row(modifier = Modifier) {
+      Text(
+        text = stringResource(id = R.string.wallet_asset__total_balance_big),
+        modifier = Modifier.align(Alignment.CenterVertically),
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.primaryContainer
+      )
+      Icon(
+        imageVector = Icons.Default.RemoveRedEye,
+        contentDescription = null,
+        modifier = Modifier.align(Alignment.CenterVertically),
+        tint = MaterialTheme.colorScheme.primaryContainer
+      )
+    }
+    Text(
+      text = buildAnnotatedString {
+        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
+          append("$ ")
+        }
+        withStyle(
+          style = SpanStyle(
+            color = MaterialTheme.colorScheme.primaryContainer,
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
+            fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+            fontWeight = MaterialTheme.typography.titleLarge.fontWeight
+          )
+        ) {
+          append(totalBalance)
+        }
+        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.surfaceVariant)) {
+          append(" USD")
+        }
+      }
+    )
+    Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
   }
 }

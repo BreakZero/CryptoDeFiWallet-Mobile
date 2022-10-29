@@ -32,7 +32,7 @@ object BiometricUtil {
     subtitle: String = "",
     description: String = "",
     authenticationCallback: BiometricPrompt.AuthenticationCallback,
-    onCancel: () -> Unit,
+    onCancel: () -> Unit
   ) {
     if (checkBiometricSupport(context)) {
       val biometricPrompt = BiometricPrompt.Builder(context)

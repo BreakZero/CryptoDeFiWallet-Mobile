@@ -47,7 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.easy.defi.app.core.designsystem.theme.Spacing
+import com.easy.defi.app.core.designsystem.theme.spacing
 
 private const val NumIndicators = 3
 private const val IndicatorSize = 12
@@ -57,7 +57,7 @@ private const val AnimationDelayMillis = AnimationDurationMillis / NumIndicators
 @Composable
 private fun LoadingDot(
   color: Color,
-  modifier: Modifier = Modifier,
+  modifier: Modifier = Modifier
 ) {
   Box(
     modifier = modifier
@@ -71,7 +71,7 @@ fun LoadingIndicator(
   animating: Boolean,
   modifier: Modifier = Modifier,
   color: Color = MaterialTheme.colorScheme.primary,
-  indicatorSpacing: Dp = MaterialTheme.Spacing.small,
+  indicatorSpacing: Dp = MaterialTheme.spacing.small
 ) {
   val animatedValues = List(NumIndicators) { index ->
     var animatedValue by remember(key1 = animating) { mutableStateOf(0f) }
@@ -111,8 +111,8 @@ fun LoadingButton(
   enabled: Boolean = true,
   loading: Boolean = false,
   colors: ButtonColors = ButtonDefaults.buttonColors(),
-  indicatorSpacing: Dp = MaterialTheme.Spacing.small,
-  content: @Composable () -> Unit,
+  indicatorSpacing: Dp = MaterialTheme.spacing.small,
+  content: @Composable () -> Unit
 ) {
   val contentAlpha by animateFloatAsState(targetValue = if (loading) 0f else 1f)
   val loadingAlpha by animateFloatAsState(targetValue = if (loading) 1f else 0f)

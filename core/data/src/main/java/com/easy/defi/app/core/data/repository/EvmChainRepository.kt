@@ -17,15 +17,15 @@
 package com.easy.defi.app.core.data.repository
 
 import com.easy.defi.app.core.data.Synchronizer
+import com.easy.defi.app.core.database.dao.AssetDao
 import com.easy.defi.app.core.model.data.BaseTransaction
 import com.easy.defi.app.core.network.EthereumDataSource
 import java.math.BigInteger
 import javax.inject.Inject
-import kotlinx.coroutines.delay
-import timber.log.Timber
 
 class EvmChainRepository @Inject constructor(
   private val ethereumDataSource: EthereumDataSource,
+  private val assetDao: AssetDao
 ) : ChainRepository {
   override suspend fun getBalance(address: String, contractAddress: String?): BigInteger {
     return ethereumDataSource.getSingleBalance(address, contractAddress)
@@ -35,7 +35,7 @@ class EvmChainRepository @Inject constructor(
     address: String,
     page: Int,
     offset: Int,
-    contractAddress: String?,
+    contractAddress: String?
   ): List<BaseTransaction> {
     return ethereumDataSource.getTransactions(address, page, offset, contractAddress)
   }
@@ -45,9 +45,10 @@ class EvmChainRepository @Inject constructor(
   }
 
   override suspend fun syncWith(synchronizer: Synchronizer): Boolean {
-    Timber.tag("=====").v("Hello work, ${System.currentTimeMillis()}")
-    delay(1000)
-    Timber.tag("=====").v("Hello work, ${System.currentTimeMillis()}")
+    val tokenHoldings = ethereumDataSource.getTokenHoldings("")
+    tokenHoldings.onEach {
+      assetDao.updateBalance(contract = it.contractAddress, balance = it.amount)
+    }
     return true
   }
 }

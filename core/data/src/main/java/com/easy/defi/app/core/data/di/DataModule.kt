@@ -16,6 +16,9 @@
 
 package com.easy.defi.app.core.data.di
 
+import com.easy.defi.app.core.data.di.annotations.Bitcoin
+import com.easy.defi.app.core.data.di.annotations.Ethereum
+import com.easy.defi.app.core.data.repository.BitcoinChainRepository
 import com.easy.defi.app.core.data.repository.ChainRepository
 import com.easy.defi.app.core.data.repository.CoinRepository
 import com.easy.defi.app.core.data.repository.EvmChainRepository
@@ -37,23 +40,30 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 interface DataModule {
   @Binds
-  fun bindsChainRepository(
-    evmChainRepository: EvmChainRepository,
+  @Ethereum
+  fun bindsEthereumChainRepository(
+    evmChainRepository: EvmChainRepository
+  ): ChainRepository
+
+  @Binds
+  @Bitcoin
+  fun bindsBitcoinChainRepository(
+    bitcoinChainRepository: BitcoinChainRepository
   ): ChainRepository
 
   @Binds
   fun bindsUserRepository(
-    userDataRepository: OfflineUserDataRepository,
+    userDataRepository: OfflineUserDataRepository
   ): UserDataRepository
 
   @Binds
   fun bindsCoinRepository(
-    supportChainRepository: SupportCoinRepository,
+    supportChainRepository: SupportCoinRepository
   ): CoinRepository
 
   @Binds
   fun bindsNetworkMonitor(
-    networkMonitor: ConnectivityManagerNetworkMonitor,
+    networkMonitor: ConnectivityManagerNetworkMonitor
   ): NetworkMonitor
 }
 
@@ -63,7 +73,7 @@ object WalletModule {
   @Provides
   @Singleton
   fun provideWalletRepository(
-    database: dagger.Lazy<WalletDatabase>,
+    database: dagger.Lazy<WalletDatabase>
   ): WalletRepository {
     return WalletRepository(database)
   }

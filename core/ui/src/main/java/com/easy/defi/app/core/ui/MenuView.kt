@@ -38,20 +38,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.easy.defi.app.core.designsystem.theme.Spacing
+import com.easy.defi.app.core.designsystem.theme.spacing
 
 data class AdvanceMenu(
   val title: String,
   val subTitle: String? = null,
   val endValue: String? = null,
-  val showIcon: Boolean = true,
+  val showIcon: Boolean = true
 )
 
 @Composable
 fun MenuItemView(
   modifier: Modifier = Modifier,
   data: AdvanceMenu,
-  action: () -> Unit,
+  action: () -> Unit
 ) {
   Row(
     modifier = modifier
@@ -59,8 +59,8 @@ fun MenuItemView(
       .clickable {
         action.invoke()
       }
-      .padding(horizontal = MaterialTheme.Spacing.space12)
-      .height(MaterialTheme.Spacing.space56),
+      .padding(horizontal = MaterialTheme.spacing.space12)
+      .height(MaterialTheme.spacing.space56),
     horizontalArrangement = Arrangement.SpaceBetween,
     verticalAlignment = Alignment.CenterVertically
   ) {
@@ -103,7 +103,7 @@ fun MenuBlockView(
   modifier: Modifier,
   header: String,
   datas: List<AdvanceMenu>,
-  onItemClick: (Int) -> Unit,
+  onItemClick: (Int) -> Unit
 ) {
   Column(
     modifier = modifier
@@ -113,8 +113,8 @@ fun MenuBlockView(
       style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onBackground,
       modifier = Modifier.padding(
-        top = MaterialTheme.Spacing.medium,
-        bottom = MaterialTheme.Spacing.small
+        top = MaterialTheme.spacing.medium,
+        bottom = MaterialTheme.spacing.small
       )
     )
     Card(
@@ -124,9 +124,9 @@ fun MenuBlockView(
         containerColor = MaterialTheme.colorScheme.background
       ),
       elevation = CardDefaults.cardElevation(
-        defaultElevation = MaterialTheme.Spacing.extraSmall
+        defaultElevation = MaterialTheme.spacing.extraSmall
       ),
-      shape = RoundedCornerShape(MaterialTheme.Spacing.small)
+      shape = RoundedCornerShape(MaterialTheme.spacing.small)
     ) {
       Column(
         modifier = Modifier.fillMaxWidth()

@@ -33,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.easy.defi.app.core.designsystem.R
-import com.easy.defi.app.core.designsystem.theme.Spacing
+import com.easy.defi.app.core.designsystem.theme.spacing
 import com.easy.defi.app.core.ui.AdvanceMenu
 import com.easy.defi.app.core.ui.DeFiAppBar
 import com.easy.defi.app.core.ui.MenuItemView
@@ -45,7 +45,7 @@ import com.easy.defi.app.onboarding.OnBoardingNavigations
 fun LegalScreen(
   forCreate: Boolean,
   navigateUp: () -> Unit,
-  navigateTo: (NavigationCommand) -> Unit,
+  navigateTo: (NavigationCommand) -> Unit
 ) {
   Scaffold(
     modifier = Modifier.fillMaxSize(),
@@ -59,12 +59,12 @@ fun LegalScreen(
       modifier = Modifier.padding(it)
     ) {
       Text(
-        modifier = Modifier.padding(start = MaterialTheme.Spacing.medium),
+        modifier = Modifier.padding(start = MaterialTheme.spacing.medium),
         text = stringResource(id = R.string.legal__legal),
         style = MaterialTheme.typography.titleLarge
       )
       Text(
-        modifier = Modifier.padding(horizontal = MaterialTheme.Spacing.medium),
+        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
         text = stringResource(
           id = R.string.legal__legal_tips
         )
@@ -72,7 +72,7 @@ fun LegalScreen(
       Card(
         modifier = Modifier
           .fillMaxWidth()
-          .padding(MaterialTheme.Spacing.medium),
+          .padding(MaterialTheme.spacing.medium),
         shape = RoundedCornerShape(8.dp)
       ) {
         Column(
@@ -95,7 +95,7 @@ fun LegalScreen(
         modifier = Modifier
           .weight(1.0F)
           .fillMaxWidth()
-          .padding(horizontal = MaterialTheme.Spacing.medium),
+          .padding(horizontal = MaterialTheme.spacing.medium),
         verticalArrangement = Arrangement.SpaceBetween
       ) {
         var checked by rememberSaveable { mutableStateOf(false) }

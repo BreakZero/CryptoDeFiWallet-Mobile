@@ -35,7 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.easy.defi.app.core.designsystem.R
-import com.easy.defi.app.core.designsystem.theme.Spacing
+import com.easy.defi.app.core.designsystem.theme.spacing
 import com.easy.defi.app.core.model.data.Asset
 import com.easy.defi.app.core.model.x.byDecimal
 
@@ -49,23 +49,23 @@ fun AssetCard(
   Card(
     modifier = modifier,
     elevation = CardDefaults.cardElevation(
-      defaultElevation = MaterialTheme.Spacing.extraSmall
+      defaultElevation = MaterialTheme.spacing.extraSmall
     ),
-    shape = RoundedCornerShape(MaterialTheme.Spacing.space12),
+    shape = RoundedCornerShape(MaterialTheme.spacing.space12),
     onClick = {
       onClick(asset)
     }
   ) {
     Row(
       modifier = modifier
-        .padding(MaterialTheme.Spacing.small)
+        .padding(MaterialTheme.spacing.small)
         .fillMaxWidth()
         .height(IntrinsicSize.Min),
       verticalAlignment = Alignment.CenterVertically
     ) {
       AsyncImage(
         modifier = Modifier
-          .size(MaterialTheme.Spacing.space48)
+          .size(MaterialTheme.spacing.space48)
           .clip(CircleShape),
         model = ImageRequest.Builder(LocalContext.current)
           .data(asset.iconUrl)
@@ -82,7 +82,7 @@ fun AssetCard(
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier
           .weight(1f)
-          .padding(start = MaterialTheme.Spacing.small)
+          .padding(start = MaterialTheme.spacing.small)
       )
       Column(
         modifier = Modifier

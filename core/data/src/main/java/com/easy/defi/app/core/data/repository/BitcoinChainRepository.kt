@@ -16,22 +16,32 @@
 
 package com.easy.defi.app.core.data.repository
 
-import com.easy.defi.app.core.data.Syncable
+import com.easy.defi.app.core.data.Synchronizer
 import com.easy.defi.app.core.model.data.BaseTransaction
+import timber.log.Timber
 import java.math.BigInteger
+import javax.inject.Inject
 
-interface ChainRepository : Syncable {
-  suspend fun getBalance(
-    address: String,
-    contractAddress: String?
-  ): BigInteger
+class BitcoinChainRepository @Inject constructor() : ChainRepository {
+  override suspend fun getBalance(address: String, contractAddress: String?): BigInteger {
+    return BigInteger.ZERO
+  }
 
-  suspend fun getTransactions(
+  override suspend fun getTransactions(
     address: String,
     page: Int,
     offset: Int,
     contractAddress: String?
-  ): List<BaseTransaction>
+  ): List<BaseTransaction> {
+    return emptyList()
+  }
 
-  suspend fun broadcastTransaction(rawData: String): String
+  override suspend fun broadcastTransaction(rawData: String): String {
+    return ""
+  }
+
+  override suspend fun syncWith(synchronizer: Synchronizer): Boolean {
+    Timber.tag("=====").v("fetching bitcoin balance")
+    return true
+  }
 }

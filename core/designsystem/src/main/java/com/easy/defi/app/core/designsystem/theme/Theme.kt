@@ -185,7 +185,7 @@ val DarkAndroidBackgroundTheme = BackgroundTheme(color = Color.Black)
 fun DeFiWalletTheme(
   darkTheme: Boolean = isSystemInDarkTheme(),
   androidTheme: Boolean = false,
-  content: @Composable () -> Unit,
+  content: @Composable () -> Unit
 ) = DeFiWalletTheme(
   darkTheme = darkTheme,
   androidTheme = androidTheme,
@@ -208,7 +208,7 @@ internal fun DeFiWalletTheme(
   darkTheme: Boolean = isSystemInDarkTheme(),
   androidTheme: Boolean = false,
   disableDynamicTheming: Boolean,
-  content: @Composable () -> Unit,
+  content: @Composable () -> Unit
 ) {
   val colorScheme = if (androidTheme) {
     if (darkTheme) DarkAndroidColorScheme else LightAndroidColorScheme
@@ -261,12 +261,12 @@ data class Dimensions(
   val space24: Dp = 24.dp,
   val space48: Dp = 48.dp,
   val space56: Dp = 56.dp,
-  val space128: Dp = 128.dp,
+  val space128: Dp = 128.dp
 )
 
 val LocalSpacing = compositionLocalOf { Dimensions() }
 
-val MaterialTheme.Spacing: Dimensions
+val MaterialTheme.spacing: Dimensions
   @Composable
   @ReadOnlyComposable
   get() = LocalSpacing.current

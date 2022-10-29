@@ -21,13 +21,13 @@ import com.easy.defi.app.core.database.WalletDatabase
 import com.easy.defi.app.core.database.model.WalletEntity
 import com.easy.defi.app.core.database.model.asExternalModel
 import com.easy.defi.app.core.model.data.Wallet
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 class WalletRepository @Inject constructor(
-  private val database: dagger.Lazy<WalletDatabase>,
+  private val database: dagger.Lazy<WalletDatabase>
 ) {
   suspend fun insertWallet(wallet: Wallet) {
     database.get().walletDao.insertWallet(wallet.asEntity())

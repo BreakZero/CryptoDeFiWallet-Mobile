@@ -28,7 +28,7 @@ import com.google.zxing.common.HybridBinarizer
 import java.nio.ByteBuffer
 
 class QRCodeAnalyzer(
-  private val onCodeScanned: (result: String) -> Unit,
+  private val onCodeScanned: (result: String) -> Unit
 ) : ImageAnalysis.Analyzer {
   private val supportedImageFormats = listOf(
     ImageFormat.YUV_420_888,

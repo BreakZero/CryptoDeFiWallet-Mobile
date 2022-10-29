@@ -54,7 +54,7 @@ fun RowScope.DeFiNavigationBarItem(
   selectedIcon: @Composable () -> Unit = icon,
   enabled: Boolean = true,
   label: @Composable (() -> Unit)? = null,
-  alwaysShowLabel: Boolean = true,
+  alwaysShowLabel: Boolean = true
 ) {
   NavigationBarItem(
     selected = selected,
@@ -84,7 +84,7 @@ fun RowScope.DeFiNavigationBarItem(
 @Composable
 fun DeFiNavigationBar(
   modifier: Modifier = Modifier,
-  content: @Composable RowScope.() -> Unit,
+  content: @Composable RowScope.() -> Unit
 ) {
   NavigationBar(
     modifier = modifier,
@@ -118,7 +118,7 @@ fun DeFiNavigationRailItem(
   selectedIcon: @Composable () -> Unit = icon,
   enabled: Boolean = true,
   label: @Composable (() -> Unit)? = null,
-  alwaysShowLabel: Boolean = true,
+  alwaysShowLabel: Boolean = true
 ) {
   NavigationRailItem(
     selected = selected,
@@ -150,7 +150,7 @@ fun DeFiNavigationRailItem(
 fun DeFiNavigationRail(
   modifier: Modifier = Modifier,
   header: @Composable (ColumnScope.() -> Unit)? = null,
-  content: @Composable ColumnScope.() -> Unit,
+  content: @Composable ColumnScope.() -> Unit
 ) {
   NavigationRail(
     modifier = modifier,

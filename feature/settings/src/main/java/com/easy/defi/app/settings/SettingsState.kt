@@ -26,5 +26,5 @@ data class SettingsState(
     DeFiCurrency(it.symbol, it.currencyCode)
   },
   val network: ChainNetwork = ChainNetwork.MAINNET,
-  val walletProfile: WalletProfile = WalletProfile(null, ""),
+  val walletProfile: WalletProfile = WalletProfile(null, "")
 )

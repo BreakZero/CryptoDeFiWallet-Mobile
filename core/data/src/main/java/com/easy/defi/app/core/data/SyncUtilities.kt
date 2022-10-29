@@ -16,8 +16,8 @@
 
 package com.easy.defi.app.core.data
 
-import kotlin.coroutines.cancellation.CancellationException
 import timber.log.Timber
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Interface marker for a class that manages synchronization between local data and a remote
@@ -63,7 +63,7 @@ private suspend fun <T> suspendRunCatching(block: suspend () -> T): Result<T> = 
  * implementation must guarantee this.
  */
 suspend fun Synchronizer.sync(
-  block: suspend () -> Unit,
+  block: suspend () -> Unit
 ) = suspendRunCatching {
   block()
 }.isSuccess

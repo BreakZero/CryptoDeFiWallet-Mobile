@@ -26,7 +26,7 @@ object QRCodeEncoder {
   fun encodeQRCode(
     content: String,
     width: Int = 500,
-    height: Int = 500,
+    height: Int = 500
   ): Bitmap? {
     val qrCodeWriter = QRCodeWriter()
     val hints = hashMapOf<EncodeHintType, String>().apply {

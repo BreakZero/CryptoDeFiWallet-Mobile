@@ -38,6 +38,7 @@ class EthereumDataSource @Inject constructor(
     return try {
       val result: BaseResponse<List<TokenHoldingDto>> =
         httpClient.get("${UrlConstant.BASE_URL}/ethereum/$address/tokenholdings").body()
+
       result.data.map {
         TokenHolding(
           amount = it.amount,

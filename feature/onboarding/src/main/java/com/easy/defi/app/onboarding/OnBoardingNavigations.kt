@@ -39,7 +39,7 @@ object OnBoardingNavigations {
     )
 
     fun destination(
-      forCreate: Boolean,
+      forCreate: Boolean
     ) = object : NavigationCommand {
       override val arguments
         get() = args
@@ -54,7 +54,7 @@ object OnBoardingNavigations {
     )
 
     fun destination(
-      forCreate: Boolean,
+      forCreate: Boolean
     ) = object : NavigationCommand {
       override val arguments
         get() = args
@@ -69,7 +69,7 @@ object OnBoardingNavigations {
     )
 
     fun destination(
-      passcode: String,
+      passcode: String
     ) = object : NavigationCommand {
       override val arguments
         get() = args

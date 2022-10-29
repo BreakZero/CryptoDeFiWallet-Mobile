@@ -27,15 +27,15 @@ import com.easy.defi.app.core.domain.InsertWalletUseCase
 import com.easy.defi.app.core.ui.UiEvent
 import com.easy.defi.app.core.ui.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class WalletImportViewModel @Inject constructor(
   private val userDataRepository: UserDataRepository,
-  private val insertWalletUseCase: InsertWalletUseCase,
+  private val insertWalletUseCase: InsertWalletUseCase
 ) : ViewModel() {
   var state by mutableStateOf(ImportState())
     private set

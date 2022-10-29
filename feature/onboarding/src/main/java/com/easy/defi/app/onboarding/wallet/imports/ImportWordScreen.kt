@@ -44,7 +44,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.easy.defi.app.core.designsystem.R
-import com.easy.defi.app.core.designsystem.theme.Spacing
+import com.easy.defi.app.core.designsystem.theme.spacing
 import com.easy.defi.app.core.ui.DeFiAppBar
 import com.easy.defi.app.core.ui.LoadingButton
 import com.easy.defi.app.core.ui.UiEvent
@@ -55,7 +55,7 @@ import timber.log.Timber
 fun ImportWordsScreen(
   passcode: String,
   viewModel: WalletImportViewModel = hiltViewModel(),
-  navigateUp: () -> Unit,
+  navigateUp: () -> Unit
 ) {
   val keyboardController = LocalSoftwareKeyboardController.current
   val context = LocalContext.current
@@ -106,7 +106,7 @@ fun ImportWordsScreen(
           imeAction = ImeAction.Done
         ),
         modifier = Modifier
-          .padding(MaterialTheme.Spacing.medium)
+          .padding(MaterialTheme.spacing.medium)
           .defaultMinSize(minHeight = 128.dp)
           .fillMaxWidth()
           .onFocusChanged {
@@ -116,7 +116,7 @@ fun ImportWordsScreen(
       LoadingButton(
         modifier = Modifier
           .fillMaxWidth()
-          .padding(MaterialTheme.Spacing.medium),
+          .padding(MaterialTheme.spacing.medium),
         loading = viewModel.state.inProgress,
         onClick = {
           viewModel.onEvent(ImportEvent.OnImportClick(passcode))

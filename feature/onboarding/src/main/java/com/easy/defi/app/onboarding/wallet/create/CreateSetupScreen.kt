@@ -36,7 +36,7 @@ import com.easy.defi.app.core.ui.DeFiAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateSetupScreen(
-  navigateUp: () -> Unit,
+  navigateUp: () -> Unit
 ) {
   Scaffold(
     topBar = {

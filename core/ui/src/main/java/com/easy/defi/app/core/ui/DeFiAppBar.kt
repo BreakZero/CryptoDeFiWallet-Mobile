@@ -33,7 +33,7 @@ fun DeFiAppBar(
   navIcon: ImageVector = Icons.Filled.ArrowBack,
   title: String? = null,
   actions: @Composable RowScope.() -> Unit = {},
-  navigateUp: () -> Unit,
+  navigateUp: () -> Unit
 ) {
   TopAppBar(
     modifier = Modifier

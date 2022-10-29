@@ -45,7 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.easy.defi.app.core.designsystem.R
-import com.easy.defi.app.core.designsystem.theme.Spacing
+import com.easy.defi.app.core.designsystem.theme.spacing
 import com.easy.defi.app.core.ui.AdvanceMenu
 import com.easy.defi.app.core.ui.DeFiAppBar
 import com.easy.defi.app.core.ui.MenuBlockView
@@ -55,7 +55,7 @@ import com.easy.defi.app.core.ui.extension.rotating
 @Composable
 fun SettingsScreen(
   settingsViewModel: SettingsViewModel = hiltViewModel(),
-  onBackClick: () -> Unit,
+  onBackClick: () -> Unit
 ) {
   Scaffold(
     topBar = {
@@ -73,8 +73,8 @@ fun SettingsScreen(
       modifier = Modifier
         .padding(
           top = it.calculateTopPadding(),
-          start = MaterialTheme.Spacing.medium,
-          end = MaterialTheme.Spacing.medium
+          start = MaterialTheme.spacing.medium,
+          end = MaterialTheme.spacing.medium
         )
         .verticalScroll(scrollableState)
     ) {
@@ -88,10 +88,10 @@ fun SettingsScreen(
             .build(),
           contentDescription = null,
           modifier = Modifier
-            .padding(top = MaterialTheme.Spacing.medium)
+            .padding(top = MaterialTheme.spacing.medium)
             .clip(CircleShape)
             .align(Alignment.CenterHorizontally)
-            .size(MaterialTheme.Spacing.space128)
+            .size(MaterialTheme.spacing.space128)
             .rotating(2500)
         )
       } ?: kotlin.run {
@@ -99,10 +99,10 @@ fun SettingsScreen(
           painter = painterResource(id = R.drawable.avatar_generic_1),
           contentDescription = null,
           modifier = Modifier
-            .padding(top = MaterialTheme.Spacing.medium)
+            .padding(top = MaterialTheme.spacing.medium)
             .clip(CircleShape)
             .align(Alignment.CenterHorizontally)
-            .size(MaterialTheme.Spacing.space128)
+            .size(MaterialTheme.spacing.space128)
         )
       }
 
@@ -184,7 +184,7 @@ fun SettingsScreen(
           else -> Unit
         }
       }
-      Spacer(modifier = Modifier.height(MaterialTheme.Spacing.space24))
+      Spacer(modifier = Modifier.height(MaterialTheme.spacing.space24))
     }
   }
 }

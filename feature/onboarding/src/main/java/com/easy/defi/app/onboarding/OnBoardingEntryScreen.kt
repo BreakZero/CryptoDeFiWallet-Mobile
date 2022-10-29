@@ -40,7 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.easy.defi.app.core.designsystem.R
-import com.easy.defi.app.core.designsystem.theme.Spacing
+import com.easy.defi.app.core.designsystem.theme.spacing
 import com.easy.defi.app.core.ui.navigation.NavigationCommand
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -68,13 +68,13 @@ private val banners = listOf(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun OnboardScreen(
-  navigateTo: (NavigationCommand) -> Unit,
+  navigateTo: (NavigationCommand) -> Unit
 ) {
   Surface(modifier = Modifier.fillMaxSize()) {
     Column(
       modifier = Modifier
         .fillMaxSize()
-        .padding(MaterialTheme.Spacing.medium),
+        .padding(MaterialTheme.spacing.medium),
       verticalArrangement = Arrangement.Center
     ) {
       val pagerState = rememberPagerState()
@@ -84,7 +84,7 @@ fun OnboardScreen(
       Image(
         modifier = Modifier
           .fillMaxWidth()
-          .padding(horizontal = MaterialTheme.Spacing.medium)
+          .padding(horizontal = MaterialTheme.spacing.medium)
           .align(Alignment.CenterHorizontally),
         contentScale = ContentScale.FillWidth,
         painter = painterResource(id = R.drawable.img_defi_header),
@@ -104,7 +104,7 @@ fun OnboardScreen(
         pagerState = pagerState,
         modifier = Modifier
           .align(Alignment.CenterHorizontally)
-          .padding(MaterialTheme.Spacing.medium)
+          .padding(MaterialTheme.spacing.medium)
       )
       Button(
         modifier = Modifier
@@ -133,7 +133,7 @@ fun OnboardScreen(
 @Composable
 private fun OnboardBanner(
   info: OnboardBannerInfo,
-  modifier: Modifier,
+  modifier: Modifier
 ) {
   Box(modifier = modifier, contentAlignment = Alignment.Center) {
     Column {
@@ -164,5 +164,5 @@ private fun OnboardBanner(
 private data class OnboardBannerInfo(
   @DrawableRes val imageRes: Int,
   @StringRes val title: Int,
-  @StringRes val message: Int,
+  @StringRes val message: Int
 )

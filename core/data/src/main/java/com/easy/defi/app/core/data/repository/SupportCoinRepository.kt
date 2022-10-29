@@ -17,16 +17,16 @@ import com.easy.defi.app.core.model.data.Tier
 import com.easy.defi.app.core.network.AssetDataSource
 import com.easy.defi.app.core.network.model.CurrencyDto
 import com.easy.defi.app.core.network.model.TierDto
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 class SupportCoinRepository @Inject constructor(
   private val chainDao: ChainDao,
   private val assetDao: AssetDao,
   private val versionDao: CoinVersionDao,
   private val tierDao: TierDao,
-  private val assetDataSource: AssetDataSource,
+  private val assetDataSource: AssetDataSource
 ) : CoinRepository {
   override fun loadSupportCurrencies(): Flow<List<Asset>> {
     return assetDao.assetStream().map {

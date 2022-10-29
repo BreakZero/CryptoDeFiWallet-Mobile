@@ -84,7 +84,7 @@ class AssetListViewModel @Inject constructor(
   ) { isLoading, userData, assets, promoCards ->
     AssetListState(
       onRefreshing = isLoading,
-      assets = assets.take(10),
+      assets = assets.sortedByDescending { it.nativeBalance }.take(10),
       walletProfile = userData.walletProfile,
       promoCard = promoCards
     )

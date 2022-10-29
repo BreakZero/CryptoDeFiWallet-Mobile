@@ -34,13 +34,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.easy.defi.app.core.designsystem.theme.Spacing
+import com.easy.defi.app.core.designsystem.theme.spacing
 
 @Composable
 fun NormalTipsView(
   @DrawableRes icon: Int,
   title: String,
-  message: String,
+  message: String
 ) {
   Column(
     modifier = Modifier
@@ -49,25 +49,25 @@ fun NormalTipsView(
         color = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(12.dp)
       )
-      .padding(MaterialTheme.Spacing.medium)
+      .padding(MaterialTheme.spacing.medium)
   ) {
     Row(modifier = Modifier.fillMaxWidth()) {
       Text(
         modifier = Modifier
           .weight(1.0f)
-          .height(MaterialTheme.Spacing.large),
+          .height(MaterialTheme.spacing.large),
         text = title,
         style = MaterialTheme.typography.titleMedium,
         color = contentColorFor(MaterialTheme.colorScheme.surface)
       )
       Image(
-        modifier = Modifier.size(MaterialTheme.Spacing.large),
+        modifier = Modifier.size(MaterialTheme.spacing.large),
         painter = painterResource(id = icon),
         contentDescription = null
       )
     }
     Text(
-      modifier = Modifier.padding(vertical = MaterialTheme.Spacing.small),
+      modifier = Modifier.padding(vertical = MaterialTheme.spacing.small),
       text = message,
       color = contentColorFor(MaterialTheme.colorScheme.surface)
     )

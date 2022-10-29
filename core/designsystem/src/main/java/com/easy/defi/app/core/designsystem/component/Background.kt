@@ -43,8 +43,8 @@ import androidx.compose.ui.unit.dp
 import com.easy.defi.app.core.designsystem.theme.DeFiWalletTheme
 import com.easy.defi.app.core.designsystem.theme.LocalBackgroundTheme
 import com.easy.defi.app.core.designsystem.theme.LocalGradientColors
-import kotlin.math.tan
 import org.intellij.lang.annotations.Language
+import kotlin.math.tan
 
 /**
  * The main background for the app.
@@ -56,7 +56,7 @@ import org.intellij.lang.annotations.Language
 @Composable
 fun DeFiBackground(
   modifier: Modifier = Modifier,
-  content: @Composable () -> Unit,
+  content: @Composable () -> Unit
 ) {
   val color = LocalBackgroundTheme.current.color
   val tonalElevation = LocalBackgroundTheme.current.tonalElevation
@@ -85,7 +85,7 @@ fun DeFiGradientBackground(
   modifier: Modifier = Modifier,
   topColor: Color = LocalGradientColors.current.primary,
   bottomColor: Color = LocalGradientColors.current.secondary,
-  content: @Composable () -> Unit,
+  content: @Composable () -> Unit
 ) {
   val currentTopColor by rememberUpdatedState(topColor)
   val currentBottomColor by rememberUpdatedState(bottomColor)
@@ -197,7 +197,7 @@ fun GradientBackgroundAndroid() {
 }
 
 fun Modifier.brushBackground(
-  colors: List<Color>,
+  colors: List<Color>
 ): Modifier = this.drawWithCache {
   val gradientBrush = Brush.verticalGradient(colors)
   onDrawBehind {
@@ -207,7 +207,7 @@ fun Modifier.brushBackground(
 
 fun Modifier.yellowBackground(
   startColor: Color,
-  bottomColor: Color,
+  bottomColor: Color
 ): Modifier = this.composed {
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     // produce updating time in seconds variable to pass into shader

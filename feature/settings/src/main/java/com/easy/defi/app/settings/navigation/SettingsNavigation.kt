@@ -29,7 +29,7 @@ fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.settingsGraph(
-  onBackClick: () -> Unit,
+  onBackClick: () -> Unit
 ) {
   composableWithAnimation(route = settingsEntryRoute) {
     SettingsScreen(onBackClick = onBackClick)

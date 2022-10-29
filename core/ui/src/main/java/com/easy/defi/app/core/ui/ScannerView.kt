@@ -48,7 +48,7 @@ import com.easy.defi.app.core.ui.utils.QRCodeAnalyzer
 
 @Composable
 fun ScannerView(
-  onResult: (String) -> Unit,
+  onResult: (String) -> Unit
 ) {
   val context = LocalContext.current
   val lifecycleOwner = LocalLifecycleOwner.current

@@ -33,7 +33,7 @@ fun NavGraphBuilder.composableWithAnimation(
   route: String,
   arguments: List<NamedNavArgument> = emptyList(),
   deepLinks: List<NavDeepLink> = emptyList(),
-  content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
+  content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
 ) {
   composable(
     route = route,

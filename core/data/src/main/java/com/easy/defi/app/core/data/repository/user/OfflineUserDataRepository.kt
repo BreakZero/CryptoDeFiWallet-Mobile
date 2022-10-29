@@ -20,11 +20,11 @@ import com.easy.defi.app.core.datastore.UserPreferencesDataSource
 import com.easy.defi.app.core.model.data.ChainNetwork
 import com.easy.defi.app.core.model.data.DeFiCurrency
 import com.easy.defi.app.core.model.data.UserData
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 class OfflineUserDataRepository @Inject constructor(
-  private val userPreferencesDataSource: UserPreferencesDataSource,
+  private val userPreferencesDataSource: UserPreferencesDataSource
 ) : UserDataRepository {
   override val userDataStream: Flow<UserData> = userPreferencesDataSource.userDataStream
 

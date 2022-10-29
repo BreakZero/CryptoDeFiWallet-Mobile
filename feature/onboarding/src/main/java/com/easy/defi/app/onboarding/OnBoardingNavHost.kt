@@ -24,7 +24,7 @@ import com.easy.defi.app.onboarding.passcode.CreatePasscodeScreen
 import com.easy.defi.app.onboarding.wallet.imports.ImportWordsScreen
 
 fun NavGraphBuilder.onBoardingGraph(
-  navController: NavController,
+  navController: NavController
 ) {
   composableWithAnimation(
     route = OnBoardingNavigations.Index.destination

@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 @Keep
 data class DataItem(
   val actionType: ActionType,
-  val number: String = "",
+  val number: String = ""
 )
 
 enum class ActionType {
@@ -64,7 +64,7 @@ private val KEYBOARD_NUMBERS = listOf(
 fun NumberKeyboard(
   modifier: Modifier = Modifier,
   showDivider: Boolean = true,
-  onNumberClick: (DataItem) -> Unit,
+  onNumberClick: (DataItem) -> Unit
 ) {
   LazyVerticalGrid(
     modifier = modifier,
