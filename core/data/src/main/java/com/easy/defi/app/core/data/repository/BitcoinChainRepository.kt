@@ -23,12 +23,11 @@ import java.math.BigInteger
 import javax.inject.Inject
 
 class BitcoinChainRepository @Inject constructor() : ChainRepository {
-  override suspend fun getBalance(address: String, contractAddress: String?): BigInteger {
+  override suspend fun getBalance(contractAddress: String?): BigInteger {
     return BigInteger.ZERO
   }
 
   override suspend fun getTransactions(
-    address: String,
     page: Int,
     offset: Int,
     contractAddress: String?

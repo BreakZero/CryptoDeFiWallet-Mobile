@@ -16,28 +16,40 @@
 
 package com.easy.defi.app.core.data.repository
 
+import com.easy.defi.app.core.data.HdWalletHolder
 import com.easy.defi.app.core.data.Synchronizer
 import com.easy.defi.app.core.database.dao.AssetDao
 import com.easy.defi.app.core.model.data.BaseTransaction
 import com.easy.defi.app.core.network.EthereumDataSource
+import kotlinx.coroutines.delay
+import timber.log.Timber
+import wallet.core.jni.CoinType
 import java.math.BigInteger
 import javax.inject.Inject
 
 class EvmChainRepository @Inject constructor(
+  private val hdWalletHolder: HdWalletHolder,
   private val ethereumDataSource: EthereumDataSource,
   private val assetDao: AssetDao
 ) : ChainRepository {
-  override suspend fun getBalance(address: String, contractAddress: String?): BigInteger {
-    return ethereumDataSource.getSingleBalance(address, contractAddress)
+
+  private val address
+    get() = hdWalletHolder.hdWallet?.getAddressForCoin(CoinType.ETHEREUM)
+
+  override suspend fun getBalance(contractAddress: String?): BigInteger {
+    return address?.let {
+      ethereumDataSource.getSingleBalance(it, contractAddress)
+    } ?: BigInteger.ZERO
   }
 
   override suspend fun getTransactions(
-    address: String,
     page: Int,
     offset: Int,
     contractAddress: String?
   ): List<BaseTransaction> {
-    return ethereumDataSource.getTransactions(address, page, offset, contractAddress)
+    return address?.let {
+      ethereumDataSource.getTransactions(it, page, offset, contractAddress)
+    } ?: emptyList()
   }
 
   override suspend fun broadcastTransaction(rawData: String): String {
@@ -45,12 +57,16 @@ class EvmChainRepository @Inject constructor(
   }
 
   override suspend fun syncWith(synchronizer: Synchronizer): Boolean {
-    val ethBalance = ethereumDataSource.getSingleBalance("", null)
-    assetDao.updateBalanceForMainChain("eth", ethBalance.toString())
-    val tokenHoldings = ethereumDataSource.getTokenHoldings("")
-    tokenHoldings.onEach {
-      assetDao.updateBalance(contract = it.contractAddress, balance = it.amount)
-    }
-    return true
+    delay(1000)
+    Timber.tag("======").v(address)
+    return address?.let {
+      val ethBalance = ethereumDataSource.getSingleBalance(it, null)
+      assetDao.updateBalanceForMainChain("eth", ethBalance.toString())
+      val tokenHoldings = ethereumDataSource.getTokenHoldings(it)
+      tokenHoldings.onEach {
+        assetDao.updateBalance(contract = it.contractAddress, balance = it.amount)
+      }
+      true
+    } ?: false
   }
 }

@@ -11,8 +11,6 @@ dependencies {
 
   testImplementation(project(":core:testing"))
 
-  implementation("com.trustwallet:wallet-core:3.0.6")
-
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.datetime)
 

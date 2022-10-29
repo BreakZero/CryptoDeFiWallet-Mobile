@@ -21,16 +21,35 @@ import com.easy.defi.app.core.database.WalletDatabase
 import com.easy.defi.app.core.database.model.WalletEntity
 import com.easy.defi.app.core.database.model.asExternalModel
 import com.easy.defi.app.core.model.data.Wallet
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
+import wallet.core.jni.Mnemonic
 import javax.inject.Inject
 
 class WalletRepository @Inject constructor(
   private val database: dagger.Lazy<WalletDatabase>
 ) {
-  suspend fun insertWallet(wallet: Wallet) {
-    database.get().walletDao.insertWallet(wallet.asEntity())
+  suspend fun insertWallet(
+    mnemonic: String,
+    passphrase: String = "",
+    doFirst: suspend () -> Unit,
+    doLast: suspend (Boolean) -> Unit
+  ) {
+    val isValid = Mnemonic.isValid(mnemonic)
+    if (isValid) {
+      doFirst()
+      delay(500)
+      database.get().walletDao.insertWallet(
+        Wallet(
+          mnemonic = mnemonic,
+          active = 1,
+          passphrase = passphrase
+        ).asEntity()
+      )
+    }
+    doLast(isValid)
   }
 
   suspend fun deleteOne(wallet: Wallet) {

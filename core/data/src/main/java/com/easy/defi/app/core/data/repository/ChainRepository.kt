@@ -22,12 +22,10 @@ import java.math.BigInteger
 
 interface ChainRepository : Syncable {
   suspend fun getBalance(
-    address: String,
     contractAddress: String?
   ): BigInteger
 
   suspend fun getTransactions(
-    address: String,
     page: Int,
     offset: Int,
     contractAddress: String?

@@ -29,7 +29,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
-import timber.log.Timber
 import javax.inject.Singleton
 
 @Module
@@ -42,9 +41,7 @@ object DatabaseModule {
     sharedPreferences: SharedPreferences
   ): WalletDatabase {
     val passcode =
-      sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "").orEmpty().also {
-        Timber.tag("=====").v(it)
-      }
+      sharedPreferences.getString(ConfigurationKeys.KEY_FOR_PASSCODE, "").orEmpty()
 
     val passPhrase = SQLiteDatabase.getBytes(
       passcode.toCharArray()

@@ -18,6 +18,7 @@ package com.easy.defi
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.easy.defi.app.core.data.HdWalletHolder
 import com.easy.defi.app.core.data.repository.WalletRepository
 import com.easy.defi.app.core.data.repository.user.UserDataRepository
 import com.easy.defi.app.core.model.data.UserData
@@ -30,6 +31,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
   userDataRepository: UserDataRepository,
+  hdWalletHolder: HdWalletHolder,
   walletRepository: WalletRepository
 ) : ViewModel() {
   private var walletJob: Job? = null
@@ -43,6 +45,7 @@ class MainActivityViewModel @Inject constructor(
       }
     }.onEach {
       Timber.tag("======").v(it.toString())
+      hdWalletHolder.inject(it.mnemonic, it.passphrase)
     }.launchIn(viewModelScope)
   }
 

@@ -25,6 +25,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
@@ -40,7 +42,7 @@ class SettingsViewModel @Inject constructor(
 
   fun updateWalletName() {
     viewModelScope.launch {
-      userDataRepository.setWalletName("D_J")
+      userDataRepository.setWalletName("D&J${Random.nextInt(0..10)}")
       userDataRepository.setAvator(
         "https://logo.nftscan.com/logo/0xb16dfd9aaaf874fcb1db8a296375577c1baa6f21.png"
       )

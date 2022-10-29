@@ -19,10 +19,19 @@ android {
       useSupportLibrary = true
     }
   }
-
+  val keyProperties = keyStoreProperties()
+  signingConfigs {
+    getByName("debug") {
+      storeFile = rootProject.file(keyProperties.getProperty("storeFile"))
+      storePassword = keyProperties.getProperty("storePassword")
+      keyAlias = keyProperties.getProperty("keyAlias")
+      keyPassword = keyProperties.getProperty("keyPassword")
+    }
+  }
   buildTypes {
     val debug by getting {
       applicationIdSuffix = ".debug"
+      signingConfig = signingConfigs.getByName("debug")
     }
     val release by getting {
       isMinifyEnabled = true

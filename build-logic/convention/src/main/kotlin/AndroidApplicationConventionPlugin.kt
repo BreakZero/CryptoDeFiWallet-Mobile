@@ -22,6 +22,10 @@ import com.easy.defi.configurePrintApksTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStreamReader
+import java.util.*
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
   override fun apply(target: Project) {
@@ -42,4 +46,19 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
     }
   }
 
+}
+
+/**
+ * get keystore information
+ */
+fun keyStoreProperties(): Properties {
+  val properties = Properties()
+  val keyProperties = File("./keystore", "keystore.properties")
+
+  if (keyProperties.isFile) {
+    InputStreamReader(FileInputStream(keyProperties), Charsets.UTF_8).use { reader ->
+      properties.load(reader)
+    }
+  }
+  return properties
 }

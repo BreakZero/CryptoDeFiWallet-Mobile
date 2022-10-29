@@ -16,6 +16,7 @@
 
 package com.easy.defi.app.core.data.di
 
+import com.easy.defi.app.core.data.HdWalletHolder
 import com.easy.defi.app.core.data.di.annotations.Bitcoin
 import com.easy.defi.app.core.data.di.annotations.Ethereum
 import com.easy.defi.app.core.data.repository.BitcoinChainRepository
@@ -76,5 +77,11 @@ object WalletModule {
     database: dagger.Lazy<WalletDatabase>
   ): WalletRepository {
     return WalletRepository(database)
+  }
+
+  @Provides
+  @Singleton
+  fun provideHdWalletHolder(): HdWalletHolder {
+    return HdWalletHolder()
   }
 }

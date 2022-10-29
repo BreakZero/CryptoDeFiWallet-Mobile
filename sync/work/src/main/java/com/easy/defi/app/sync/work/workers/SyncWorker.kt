@@ -27,7 +27,9 @@ import androidx.work.WorkerParameters
 import com.easy.defi.app.core.common.network.Dispatcher
 import com.easy.defi.app.core.common.network.DwDispatchers
 import com.easy.defi.app.core.data.Synchronizer
-import com.easy.defi.app.core.data.repository.EvmChainRepository
+import com.easy.defi.app.core.data.di.annotations.Bitcoin
+import com.easy.defi.app.core.data.di.annotations.Ethereum
+import com.easy.defi.app.core.data.repository.ChainRepository
 import com.easy.defi.app.sync.work.initializers.SyncConstraints
 import com.easy.defi.app.sync.work.initializers.syncForegroundInfo
 import dagger.assisted.Assisted
@@ -45,7 +47,8 @@ import kotlinx.coroutines.withContext
 class SyncWorker @AssistedInject constructor(
   @Assisted private val appContext: Context,
   @Assisted workerParams: WorkerParameters,
-  private val evmChainRepository: EvmChainRepository,
+  @Ethereum private val evmChainRepository: ChainRepository,
+  @Bitcoin private val bitcoinChainRepository: ChainRepository,
   @Dispatcher(DwDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : CoroutineWorker(appContext, workerParams), Synchronizer {
 
@@ -56,7 +59,8 @@ class SyncWorker @AssistedInject constructor(
     traceAsync("Sync", 0) {
       // First sync the repositories in parallel
       val syncedSuccessfully = awaitAll(
-        async { evmChainRepository.sync() }
+        async { evmChainRepository.sync() },
+        async { bitcoinChainRepository.sync() }
       ).all { it }
 
       if (syncedSuccessfully) {
