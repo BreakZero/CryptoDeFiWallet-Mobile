@@ -23,4 +23,6 @@ import kotlinx.coroutines.flow.Flow
  */
 interface SyncStatusMonitor {
   val isSyncing: Flow<Boolean>
+
+  fun startUp()
 }

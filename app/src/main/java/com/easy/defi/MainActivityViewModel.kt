@@ -37,7 +37,7 @@ class MainActivityViewModel @Inject constructor(
   private var walletJob: Job? = null
 
   init {
-    walletJob = userDataRepository.userDataStream.flatMapLatest {
+    walletJob = userDataRepository.userDataStream.flatMapConcat {
       if (it.hasPasscode) {
         walletRepository.activeWalletStream()
       } else {

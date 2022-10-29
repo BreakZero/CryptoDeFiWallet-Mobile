@@ -19,11 +19,13 @@ package com.easy.defi.app.sync.work.status
 import android.content.Context
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.asFlow
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.WorkInfo
 import androidx.work.WorkInfo.State
 import androidx.work.WorkManager
 import com.easy.defi.app.core.data.util.SyncStatusMonitor
 import com.easy.defi.app.sync.work.initializers.SyncWorkName
+import com.easy.defi.app.sync.work.workers.SyncWorker
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
@@ -33,7 +35,7 @@ import javax.inject.Inject
  * [SyncStatusMonitor] backed by [WorkInfo] from [WorkManager]
  */
 class WorkManagerSyncStatusMonitor @Inject constructor(
-  @ApplicationContext context: Context
+  @ApplicationContext private val context: Context
 ) : SyncStatusMonitor {
   override val isSyncing: Flow<Boolean> =
     Transformations.map(
@@ -42,6 +44,17 @@ class WorkManagerSyncStatusMonitor @Inject constructor(
     )
       .asFlow()
       .conflate()
+
+  override fun startUp() {
+    WorkManager.getInstance(context).apply {
+      // Run sync on app startup and ensure only one sync worker runs at any time
+      enqueueUniquePeriodicWork(
+        SyncWorkName,
+        ExistingPeriodicWorkPolicy.REPLACE,
+        SyncWorker.startIntervalSyncWork()
+      )
+    }
+  }
 }
 
 private val List<WorkInfo>.anyRunning get() = any { it.state == State.RUNNING }

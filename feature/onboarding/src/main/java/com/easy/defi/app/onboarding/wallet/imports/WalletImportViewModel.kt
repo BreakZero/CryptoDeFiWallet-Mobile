@@ -22,8 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.easy.defi.app.core.common.extensions.launchWithHandler
-import com.easy.defi.app.core.data.repository.WalletRepository
 import com.easy.defi.app.core.data.repository.user.UserDataRepository
+import com.easy.defi.app.core.domain.InsertWalletUseCase
 import com.easy.defi.app.core.ui.UiEvent
 import com.easy.defi.app.core.ui.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,7 +35,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WalletImportViewModel @Inject constructor(
   private val userDataRepository: UserDataRepository,
-  private val walletRepository: WalletRepository
+  private val insertWalletUseCase: InsertWalletUseCase
 ) : ViewModel() {
   var state by mutableStateOf(ImportState())
     private set
@@ -47,7 +47,7 @@ class WalletImportViewModel @Inject constructor(
     when (event) {
       is ImportEvent.OnImportClick -> {
         viewModelScope.launchWithHandler {
-          walletRepository.insertWallet(
+          insertWalletUseCase(
             mnemonic = state.phrase,
             doFirst = {
               userDataRepository.storePasscode(event.passcode)

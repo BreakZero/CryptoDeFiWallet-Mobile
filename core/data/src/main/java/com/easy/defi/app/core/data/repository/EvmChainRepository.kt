@@ -21,8 +21,6 @@ import com.easy.defi.app.core.data.Synchronizer
 import com.easy.defi.app.core.database.dao.AssetDao
 import com.easy.defi.app.core.model.data.BaseTransaction
 import com.easy.defi.app.core.network.EthereumDataSource
-import kotlinx.coroutines.delay
-import timber.log.Timber
 import wallet.core.jni.CoinType
 import java.math.BigInteger
 import javax.inject.Inject
@@ -57,8 +55,6 @@ class EvmChainRepository @Inject constructor(
   }
 
   override suspend fun syncWith(synchronizer: Synchronizer): Boolean {
-    delay(1000)
-    Timber.tag("======").v(address)
     return address?.let {
       val ethBalance = ethereumDataSource.getSingleBalance(it, null)
       assetDao.updateBalanceForMainChain("eth", ethBalance.toString())
