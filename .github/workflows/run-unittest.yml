@@ -1,9 +1,8 @@
 name: Unit Test Checking
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags:
+      - 'v*'
 env:
   JAVA_OPTS: "-Xmx4096m"
   GRADLE_OPTS: -Xmx4096m -Xms512m -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.caching=true -Dorg.gradle.configureondemand=true -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false
@@ -82,4 +81,4 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{secrets.CODECOV_TOKEN}}
-          files: "core/common/build/reports/jacoco/jacocoTestDemoDebugUnitTestReport/jacocoTestDemoDebugUnitTestReport.xml"
+          files: "core/common/build/reports/jacoco/jacocoTestStagingDebugUnitTestReport/jacocoTestStagingDebugUnitTestReport.xml"
