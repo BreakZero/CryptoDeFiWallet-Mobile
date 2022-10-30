@@ -1,0 +1,60 @@
+/*
+ * Copyright 2022 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.easy.defi.app.sync.work.status
+
+import android.content.Context
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.asFlow
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.WorkInfo
+import androidx.work.WorkInfo.State
+import androidx.work.WorkManager
+import com.easy.defi.app.core.data.util.SyncStatusMonitor
+import com.easy.defi.app.sync.work.initializers.SyncWorkName
+import com.easy.defi.app.sync.work.workers.SyncWorker
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.conflate
+import javax.inject.Inject
+
+/**
+ * [SyncStatusMonitor] backed by [WorkInfo] from [WorkManager]
+ */
+class WorkManagerSyncStatusMonitor @Inject constructor(
+  @ApplicationContext private val context: Context
+) : SyncStatusMonitor {
+  override val isSyncing: Flow<Boolean> =
+    Transformations.map(
+      WorkManager.getInstance(context).getWorkInfosForUniqueWorkLiveData(SyncWorkName),
+      MutableList<WorkInfo>::anyRunning
+    )
+      .asFlow()
+      .conflate()
+
+  override fun startUp() {
+    WorkManager.getInstance(context).apply {
+      // Run sync on app startup and ensure only one sync worker runs at any time
+      enqueueUniquePeriodicWork(
+        SyncWorkName,
+        ExistingPeriodicWorkPolicy.REPLACE,
+        SyncWorker.startIntervalSyncWork()
+      )
+    }
+  }
+}
+
+private val List<WorkInfo>.anyRunning get() = any { it.state == State.RUNNING }

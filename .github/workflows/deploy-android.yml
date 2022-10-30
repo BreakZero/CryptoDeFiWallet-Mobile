@@ -1,9 +1,8 @@
 name: Deploy
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 env:
   JAVA_OPTS: "-Xmx4096m"
   GRADLE_OPTS: -Xmx4096m -Xms512m -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.caching=true -Dorg.gradle.configureondemand=true -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false

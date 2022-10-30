@@ -1,9 +1,8 @@
 name: Unit Test Checking
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags:
+      - 'v*'
 env:
   JAVA_OPTS: "-Xmx4096m"
   GRADLE_OPTS: -Xmx4096m -Xms512m -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.caching=true -Dorg.gradle.configureondemand=true -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false
@@ -76,10 +75,10 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: ./gradlew wallet:jacocoTestReport
+          script: ./gradlew core:common:jacocoTestReport --stacktrace
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{secrets.CODECOV_TOKEN}}
-          files: "wallet/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+          files: "core/common/build/reports/jacoco/jacocoTestStagingDebugUnitTestReport/jacocoTestStagingDebugUnitTestReport.xml"

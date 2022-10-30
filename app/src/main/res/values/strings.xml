@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">DeFiWallet</string>
+
+    <string name="wallet">Wallet</string>
+    <string name="nft">NFTs</string>
+    <string name="dapps">DApps</string>
+    <string name="earn">Earn</string>
+
 </resources>

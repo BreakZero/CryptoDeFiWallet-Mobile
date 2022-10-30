@@ -9,7 +9,9 @@ dependencies {
 }
 
 val outputDir = "${project.buildDir}/reports/ktlint/"
-val inputFiles = project.fileTree(mapOf("dir" to "src", "include" to "**/*.kt"))
+val inputFiles = project.fileTree(
+    mapOf("dir" to "src", "include" to "**/*.kt", "exclude" to "**/build/**/*.kt")
+)
 
 val ktlintCheck by tasks.creating(JavaExec::class) {
     inputs.files(inputFiles)

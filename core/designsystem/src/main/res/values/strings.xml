@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+These are strings that already add to en.json in monacohq/localization
+and will support Multi-Language Supported String.
+
+1.
+The format of string resource name in this file, should follow this:
+${where}__${view type and meaning of content}
+
+    ${where}:
+        - where is this string resource appear?
+            e.g. `all_categories` is referenced in `AllDappsViewModel.kt`
+                → should prefix with `all_dapps__`
+                → full name will be `all_dapps__all_categories`
+
+        - will this string resource display in which feature?
+            e.g. `card_fee` is referenced in `BuyProvider`, and will be used for `buy` related feature
+                → should prefix with `buy__`
+                → full name will be `buy__card_fee`
+
+    ${view type and meaning of content}:
+        -  will this string used for button / plain text / toast? add some short symbol for future reference
+            e.g. `to` is referenced in `MigrationDataProvider.kt`, and it's used for plain text,
+                → should add a `label_` prefix right after ${where}
+                → full name will be `cro_migration_data__label_to`
+
+2.
+This naming rule is mainly according to the experience of main app.
+`__` → this is <b>2 underline</b>.
+the whole format is for helping us better identify the usage of a string key at first sight.
+
+3.
+For now, our multi-language API not support to response different translation file by app version,
+so we should think about `Backward Compatibility`,
+which means, we have to keep all the old strings in our project (even that is an unused string),
+to prevent assigning a new value to a string resource name that already used in app's old version.
+
+4.
+In the future,
+when we get a new feature requirement from Product side,
+please remember to check with PM, whether that feature need to support multi-language,
+and if so:
+    4.1. please ask PM to specify every StringKey for App side (android & iOS)
+    4.2. add StringKey & Value to en.json in monacohq/localization
+    4.3. use that StringKey as our string resource name
+-->
+<resources>
+    <string name="view_settings">View Settings</string>
+    <string name="import_wallet__import_wallet">Import Wallet</string>
+    <string name="welcome__create_a_new_wallet">Create a new wallet</string>
+    <string name="welcome__importing_an_existing_wallet">Import an existing wallet</string>
+
+    <string name="welcome_intro__welcome">Welcome</string>
+    <string name="welcome_intro__welcome_tip">A crypto wallet app that gives you full control of your crypto and your keys</string>
+    <string name="welcome_intro__secure">Secure</string>
+    <string name="welcome_intro__secure_tip">Your private keys are encrypted locally on your device with Secure Enclave, protected by your biometrics and 2FA of your choice</string>
+    <string name="welcome_intro__flexible">Flexible</string>
+    <string name="welcome_intro__flexible_tip">Send crypto at your preferred confirmation speed and network fee</string>
+
+    <string name="legal__legal">Legal</string>
+    <string name="legal__legal_read_confirm_tip">I’ve read and accept the Terms of Service and Privacy Notice.</string>
+    <string name="legal__legal_tips">Please review the Crypto.com DeFi Wallet Terms of Service and Privacy Notice.</string>
+    <string name="legal__privacy_notice">Privacy Notice</string>
+    <string name="legal__continue_text">Continue</string>
+    <string name="legal__terms_of_service">Terms of Service</string>
+    <string name="wallet_asset__total_balance_big">TOTAL BALANCE</string>
+
+    <string name="wallet_protect__protect_wallet">Protect your wallet</string>
+
+    <string name="new_coins__new_coin">New Coin Listings</string>
+    <string name="wallet_asset__enable_email">Enable Email Updates</string>
+    <string name="wallet_asset__get_eth_ready_for_gas_fees">Get ETH ready for gas fees</string>
+
+    <string name="wallet_protect__recommended">Recommended</string>
+    <string name="wallet_protect__to_complete_wallet_setup">To complete wallet setup</string>
+    <string name="wallet_protect__two_fa_message">Add an extra layer of security</string>
+    <string name="wallet_protect__wallet_protect_tips">Keep your wallet secure when you unlock your wallet, send money and revisit recovery key phrase</string>
+    <string name="wallet_protect__wallet_protected">You\'re protected</string>
+    <string name="wallet_protect__your_device_not_support_biometric">sorry, your device not support biometric</string>
+
+    <string name="transaction_list__receive">Receive</string>
+    <string name="transaction_list__send">Send</string>
+    <string name="import_wallet__restore">Restore</string>
+
+
+    <string name="settings__display_currency">Display Currency</string>
+    <string name="settings__give_feedback">Give Feedback</string>
+    <string name="settings__help_center">Help Center</string>
+    <string name="settings__import_token">Import Token</string>
+    <string name="settings__join_community">Join Community</string>
+    <string name="settings__network_settings">Network Settings</string>
+    <string name="settings__new_to_defi">New to DeFi</string>
+    <string name="settings__notifications">Notifications</string>
+    <string name="settings__passcode_biometrics_and_2fa">Passcode, Biometrics and 2FA</string>
+    <string name="settings__privacy_notice">Privacy Notice</string>
+    <string name="settings__protect_your_wallet">Protect Your Wallet</string>
+    <string name="settings__title">Settings</string>
+    <string name="settings__title_language">Language</string>
+    <string name="settings__terms_of_service">Terms of Service</string>
+    <string name="settings__transaction_history">Transaction History</string>
+    <string name="settings__usd">$USD</string>
+    <string name="settings__version">Version</string>
+    <string name="settings__version_code">Version code:</string>
+    <string name="settings__visit_our_website">Visit our website</string>
+    <string name="settings__account">Account</string>
+    <string name="settings__recovery_phrase">Recovery Phrase</string>
+    <string name="settings__security">Security</string>
+    <string name="settings__support">Support</string>
+
+    <string name="settings__about_defi_wallet">About DeFi Wallet</string>
+
+    <string name="not_connected">⚠️ You aren’t connected to the internet</string>
+</resources>
