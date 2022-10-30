@@ -20,8 +20,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -68,99 +68,98 @@ fun CreatePasscodeScreen(
   BackHandler() {
     navigateUp()
   }
-  Surface(modifier = Modifier.fillMaxSize()) {
-    val secondaryColor = MaterialTheme.colorScheme.secondary
-    Column(
+  val secondaryColor = MaterialTheme.colorScheme.secondary
+  Column(
+    modifier = Modifier
+      .fillMaxSize(),
+    verticalArrangement = Arrangement.SpaceBetween
+  ) {
+    Box(
       modifier = Modifier
-        .fillMaxSize(),
-      verticalArrangement = Arrangement.SpaceBetween
+        .fillMaxWidth()
+        .weight(1.0F),
+      contentAlignment = Alignment.Center
     ) {
-      Box(
-        modifier = Modifier
-          .fillMaxWidth()
-          .weight(1.0F),
-        contentAlignment = Alignment.Center
+      Image(
+        painter = painterResource(id = R.drawable.backgroud_stars),
+        contentDescription = null,
+        modifier = Modifier.fillMaxWidth()
+      )
+      Column(
+        modifier = Modifier.fillMaxWidth()
       ) {
-        Image(
-          painter = painterResource(id = R.drawable.backgroud_stars),
-          contentDescription = null,
-          modifier = Modifier.fillMaxWidth()
+        Text(
+          text = viewModel.passcodeState.messageLabel,
+          modifier = Modifier
+            .fillMaxWidth(),
+          textAlign = TextAlign.Center
         )
-        Column(
-          modifier = Modifier.fillMaxWidth()
+        Row(
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 12.dp),
+          horizontalArrangement = Arrangement.Center
         ) {
-          Text(
-            text = viewModel.passcodeState.messageLabel,
-            modifier = Modifier
-              .fillMaxWidth(),
-            textAlign = TextAlign.Center
-          )
-          Row(
-            modifier = Modifier
-              .fillMaxWidth()
-              .padding(top = 12.dp),
-            horizontalArrangement = Arrangement.Center
-          ) {
-            val enterSize = viewModel.passcodeState.passcode.length
-            if (enterSize == 0) {
-              (0 until 6).forEach { _ ->
-                Canvas(
-                  modifier = Modifier
-                    .padding(2.dp)
-                    .height(16.dp)
-                    .width(16.dp)
-                ) {
-                  drawCircle(color = secondaryColor, style = Stroke(width = 1.5f))
-                }
+          val enterSize = viewModel.passcodeState.passcode.length
+          if (enterSize == 0) {
+            (0 until 6).forEach { _ ->
+              Canvas(
+                modifier = Modifier
+                  .padding(2.dp)
+                  .height(16.dp)
+                  .width(16.dp)
+              ) {
+                drawCircle(color = secondaryColor, style = Stroke(width = 1.5f))
               }
-            } else {
-              (0 until enterSize).forEach { _ ->
-                Canvas(
-                  modifier = Modifier
-                    .padding(2.dp)
-                    .height(16.dp)
-                    .width(16.dp)
+            }
+          } else {
+            (0 until enterSize).forEach { _ ->
+              Canvas(
+                modifier = Modifier
+                  .padding(2.dp)
+                  .height(16.dp)
+                  .width(16.dp)
 
-                ) {
-                  drawCircle(color = secondaryColor)
-                }
+              ) {
+                drawCircle(color = secondaryColor)
               }
-              (enterSize until 6).forEach { _ ->
-                Canvas(
-                  modifier = Modifier
-                    .padding(2.dp)
-                    .height(16.dp)
-                    .width(16.dp)
-                ) {
-                  drawCircle(color = secondaryColor, style = Stroke(width = 1.5f))
-                }
+            }
+            (enterSize until 6).forEach { _ ->
+              Canvas(
+                modifier = Modifier
+                  .padding(2.dp)
+                  .height(16.dp)
+                  .width(16.dp)
+              ) {
+                drawCircle(color = secondaryColor, style = Stroke(width = 1.5f))
               }
             }
           }
-          viewModel.passcodeState.error?.let {
-            Text(
-              text = it,
-              color = Color.Red,
-              modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp),
-              textAlign = TextAlign.Center
-            )
-          }
+        }
+        viewModel.passcodeState.error?.let {
+          Text(
+            text = it,
+            color = Color.Red,
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(top = 20.dp),
+            textAlign = TextAlign.Center
+          )
         }
       }
-      NumberKeyboard(
-        modifier = Modifier
-          .fillMaxWidth()
-          .shadow(2.dp),
-        onNumberClick = {
-          when (it.actionType) {
-            ActionType.NUMBER -> viewModel.onEvent(PasscodeEvent.Insert(it.number))
-            ActionType.BACKSPACE -> viewModel.onEvent(PasscodeEvent.Delete)
-            else -> Unit
-          }
-        }
-      )
     }
+    Divider(Modifier.shadow(1.dp))
+    NumberKeyboard(
+      modifier = Modifier
+        .fillMaxWidth(),
+      onNumberClick = {
+        when (it.actionType) {
+          ActionType.NUMBER -> viewModel.onEvent(PasscodeEvent.Insert(it.number))
+          ActionType.BACKSPACE -> viewModel.onEvent(PasscodeEvent.Delete)
+          else -> Unit
+        }
+      }
+    )
+    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
   }
 }

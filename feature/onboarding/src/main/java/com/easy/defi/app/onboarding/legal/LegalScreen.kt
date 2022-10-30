@@ -16,14 +16,15 @@
 
 package com.easy.defi.app.onboarding.legal
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,85 +41,83 @@ import com.easy.defi.app.core.ui.MenuItemView
 import com.easy.defi.app.core.ui.navigation.NavigationCommand
 import com.easy.defi.app.onboarding.OnBoardingNavigations
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LegalScreen(
   forCreate: Boolean,
   navigateUp: () -> Unit,
   navigateTo: (NavigationCommand) -> Unit
 ) {
-  Scaffold(
-    modifier = Modifier.fillMaxSize(),
-    topBar = {
-      DeFiAppBar() {
-        navigateUp()
-      }
-    }
+
+  Column(
+    modifier = Modifier.fillMaxSize()
   ) {
-    Column(
-      modifier = Modifier.padding(it)
+    DeFiAppBar() {
+      navigateUp()
+    }
+    Text(
+      modifier = Modifier.padding(start = MaterialTheme.spacing.medium),
+      text = stringResource(id = R.string.legal__legal),
+      style = MaterialTheme.typography.titleLarge
+    )
+    Text(
+      modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
+      text = stringResource(
+        id = R.string.legal__legal_tips
+      )
+    )
+    Card(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(MaterialTheme.spacing.medium),
+      elevation = CardDefaults.cardElevation(
+        defaultElevation = MaterialTheme.spacing.extraSmall
+      ),
+      shape = RoundedCornerShape(8.dp)
     ) {
-      Text(
-        modifier = Modifier.padding(start = MaterialTheme.spacing.medium),
-        text = stringResource(id = R.string.legal__legal),
-        style = MaterialTheme.typography.titleLarge
-      )
-      Text(
-        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
-        text = stringResource(
-          id = R.string.legal__legal_tips
-        )
-      )
-      Card(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(MaterialTheme.spacing.medium),
-        shape = RoundedCornerShape(8.dp)
-      ) {
-        Column(
-          modifier = Modifier.fillMaxWidth()
-        ) {
-          MenuItemView(
-            modifier = Modifier.fillMaxWidth(),
-            data = AdvanceMenu(title = stringResource(id = R.string.legal__terms_of_service))
-          ) {
-          }
-          Divider()
-          MenuItemView(
-            modifier = Modifier.fillMaxWidth(),
-            data = AdvanceMenu(title = stringResource(id = R.string.legal__privacy_notice))
-          ) {
-          }
-        }
-      }
       Column(
-        modifier = Modifier
-          .weight(1.0F)
-          .fillMaxWidth()
-          .padding(horizontal = MaterialTheme.spacing.medium),
-        verticalArrangement = Arrangement.SpaceBetween
+        modifier = Modifier.fillMaxWidth()
       ) {
-        var checked by rememberSaveable { mutableStateOf(false) }
-        Row(modifier = Modifier.fillMaxWidth()) {
-          Checkbox(
-            checked = checked,
-            onCheckedChange = {
-              checked = it
-            }
-          )
-          Text(text = stringResource(id = R.string.legal__legal_read_confirm_tip))
-        }
-        Button(
-          modifier = Modifier
-            .fillMaxWidth(),
-          enabled = checked,
-          onClick = {
-            navigateTo(OnBoardingNavigations.CreatePasscode.destination(forCreate))
-          }
+        MenuItemView(
+          modifier = Modifier.fillMaxWidth(),
+          data = AdvanceMenu(title = stringResource(id = R.string.legal__terms_of_service))
         ) {
-          Text(text = stringResource(id = R.string.legal__continue_text))
+        }
+        Divider()
+        MenuItemView(
+          modifier = Modifier.fillMaxWidth(),
+          data = AdvanceMenu(title = stringResource(id = R.string.legal__privacy_notice))
+        ) {
         }
       }
     }
+    Column(
+      modifier = Modifier
+        .weight(1.0F)
+        .fillMaxWidth()
+        .padding(horizontal = MaterialTheme.spacing.medium),
+      verticalArrangement = Arrangement.SpaceBetween
+    ) {
+      var checked by rememberSaveable { mutableStateOf(false) }
+      Row(modifier = Modifier.fillMaxWidth()) {
+        Checkbox(
+          checked = checked,
+          onCheckedChange = {
+            checked = it
+          }
+        )
+        Text(text = stringResource(id = R.string.legal__legal_read_confirm_tip))
+      }
+      Button(
+        modifier = Modifier
+          .fillMaxWidth(),
+        enabled = checked,
+        onClick = {
+          navigateTo(OnBoardingNavigations.CreatePasscode.destination(forCreate))
+        }
+      ) {
+        Text(text = stringResource(id = R.string.legal__continue_text))
+      }
+    }
+    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
   }
 }

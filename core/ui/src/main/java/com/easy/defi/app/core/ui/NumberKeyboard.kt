@@ -63,7 +63,7 @@ private val KEYBOARD_NUMBERS = listOf(
 @Composable
 fun NumberKeyboard(
   modifier: Modifier = Modifier,
-  showDivider: Boolean = true,
+  showDivider: Boolean = false,
   onNumberClick: (DataItem) -> Unit
 ) {
   LazyVerticalGrid(
