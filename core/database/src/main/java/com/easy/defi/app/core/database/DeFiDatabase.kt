@@ -34,7 +34,7 @@ import com.easy.defi.app.core.database.model.TierEntity
     CoinVersionShaEntity::class,
     TierEntity::class
   ],
-  exportSchema = false,
+  exportSchema = true,
   version = 1
 )
 abstract class DeFiDatabase : RoomDatabase() {

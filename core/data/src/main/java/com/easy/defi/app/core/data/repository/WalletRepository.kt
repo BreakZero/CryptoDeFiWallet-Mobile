@@ -18,9 +18,11 @@ package com.easy.defi.app.core.data.repository
 
 import com.easy.defi.app.core.data.model.asEntity
 import com.easy.defi.app.core.database.WalletDatabase
+import com.easy.defi.app.core.database.model.WalletEntity
 import com.easy.defi.app.core.database.model.asExternalModel
 import com.easy.defi.app.core.model.data.Wallet
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -35,9 +37,8 @@ class WalletRepository @Inject constructor(
     database.get().walletDao.deleteWallet(wallet.asEntity())
   }
 
-  fun activeWalletStream(): Flow<Wallet?> {
-    return database.get().walletDao.activeWallet().map {
-      it?.asExternalModel()
-    }
+  fun activeWalletStream(): Flow<Wallet> {
+    return database.get().walletDao.activeWallet().filterNotNull()
+      .map(WalletEntity::asExternalModel)
   }
 }

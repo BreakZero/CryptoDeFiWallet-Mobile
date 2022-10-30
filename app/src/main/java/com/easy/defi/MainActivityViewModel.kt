@@ -20,29 +20,39 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.easy.defi.app.core.data.HdWalletHolder
 import com.easy.defi.app.core.data.repository.WalletRepository
+import com.easy.defi.app.core.data.repository.user.UserDataRepository
+import com.easy.defi.app.core.model.data.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
   hdWalletHolder: HdWalletHolder,
+  userDataRepository: UserDataRepository,
   walletRepository: WalletRepository
 ) : ViewModel() {
   private var walletJob: Job? = null
 
-  val uiState: StateFlow<MainActivityUiState> = walletRepository.activeWalletStream().map {
-    delay(1000)
-    val hasWallet = it?.let {
+  init {
+    walletJob = userDataRepository.userDataStream.flatMapConcat {
+      if (it.hasPasscode) {
+        walletRepository.activeWalletStream()
+      } else {
+        emptyFlow()
+      }
+    }.onEach {
+      Timber.tag("======").v(it.toString())
       hdWalletHolder.inject(it.mnemonic, it.passphrase)
-      true
-    } ?: false
-    MainActivityUiState.Success(hasWallet = hasWallet)
+    }.launchIn(viewModelScope)
+  }
+
+  val uiState: StateFlow<MainActivityUiState> = userDataRepository.userDataStream.map {
+    delay(1000)
+    MainActivityUiState.Success(userData = it)
   }.stateIn(
     scope = viewModelScope,
     initialValue = MainActivityUiState.Loading,
@@ -57,5 +67,5 @@ class MainActivityViewModel @Inject constructor(
 
 sealed interface MainActivityUiState {
   object Loading : MainActivityUiState
-  data class Success(val hasWallet: Boolean) : MainActivityUiState
+  data class Success(val userData: UserData) : MainActivityUiState
 }

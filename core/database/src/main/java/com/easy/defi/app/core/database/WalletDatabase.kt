@@ -23,7 +23,7 @@ import com.easy.defi.app.core.database.model.WalletEntity
 
 @Database(
   entities = [WalletEntity::class],
-  exportSchema = false,
+  exportSchema = true,
   version = 1
 )
 abstract class WalletDatabase : RoomDatabase() {
