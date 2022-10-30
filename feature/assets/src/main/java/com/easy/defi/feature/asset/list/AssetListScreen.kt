@@ -60,7 +60,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 ) @Composable fun AssetListScreen(
   assetsViewModel: AssetListViewModel = hiltViewModel(),
   navigateToSettings: () -> Unit,
-  navigateToTransactionList: () -> Unit
+  navigateToTransactionList: (String) -> Unit
 ) {
   val context = LocalContext.current
   val assetsUiState by assetsViewModel.assetState.collectAsState()
@@ -164,7 +164,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
               .animateItemPlacement(),
             asset = asset
           ) {
-            navigateToTransactionList()
+            navigateToTransactionList(it.slug)
           }
         }
         item {

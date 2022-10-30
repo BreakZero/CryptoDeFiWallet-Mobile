@@ -15,7 +15,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,6 +39,7 @@ import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.easy.defi.app.core.designsystem.R
+import com.easy.defi.app.core.designsystem.component.brushBackground
 import com.easy.defi.app.core.designsystem.theme.spacing
 import com.easy.defi.app.core.model.data.Asset
 import com.easy.defi.app.core.model.data.BaseTransaction
@@ -57,81 +57,86 @@ fun TransactionListScreen(
   listViewModel: TransactionListViewModel = hiltViewModel(),
   onBackClick: () -> Unit
 ) {
-  Scaffold(
-    containerColor = Color.Transparent,
-    contentWindowInsets = WindowInsets(0, 0, 0, 0),
-    topBar = {
-      DeFiAppBar {
-        onBackClick()
-      }
+  val uiState by listViewModel.transactionListUiState.collectAsState()
+  val transactionPaging = uiState.transactionPaging.collectAsLazyPagingItems()
+  Column(
+    modifier = Modifier
+      .fillMaxSize()
+      .brushBackground(
+        listOf(
+          MaterialTheme.colorScheme.primary,
+          MaterialTheme.colorScheme.surface,
+          MaterialTheme.colorScheme.surface
+        )
+      )
+  ) {
+    DeFiAppBar {
+      onBackClick()
     }
-  ) { paddings ->
-    val txnUiState by listViewModel.transactionListUiState.collectAsState()
-
-    when (txnUiState) {
-      TransactionListUiState.Loading -> {
-        Box(
-          modifier = Modifier
-            .fillMaxSize()
-            .padding(paddings),
-          contentAlignment = Alignment.Center
-        ) {
-          LoadingIndicator(animating = true)
+    LazyColumn(
+      modifier = Modifier
+        .fillMaxSize(),
+      contentPadding = PaddingValues(
+        vertical = MaterialTheme.spacing.medium,
+        horizontal = MaterialTheme.spacing.small
+      ),
+      verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+    ) {
+      item {
+        TransactionListHeader(
+          asset = uiState.asset,
+          onSend = {},
+          onReceive = {}
+        )
+      }
+      items(items = transactionPaging, key = { it.hash }) { transaction ->
+        transaction?.let {
+          TransactionItemView(modifier = Modifier, data = it) {
+            Timber.v("${it.timeStamp}, ${it is EvmTransaction}")
+          }
         }
       }
-      TransactionListUiState.Error -> {
-        Box(
-          modifier = Modifier.fillMaxSize(),
-          contentAlignment = Alignment.Center
-        ) {
-          Text(text = "somethings went wrong")
+      when (transactionPaging.loadState.refresh) {
+        is LoadState.Loading -> {
+          item {
+            Box(
+              modifier = Modifier
+                .fillMaxSize(),
+              contentAlignment = Alignment.Center
+            ) {
+              LoadingIndicator(animating = true)
+            }
+          }
+        }
+        is LoadState.Error -> {
+          item {
+            Box(
+              modifier = Modifier.fillMaxSize(),
+              contentAlignment = Alignment.Center
+            ) {
+              Text(text = "somethings went wrong")
+            }
+          }
+        }
+        else -> Unit
+      }
+      if (transactionPaging.loadState.append.endOfPaginationReached) {
+        item {
+          Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+          ) {
+            Text(text = "-- Ending --")
+          }
         }
       }
-      is TransactionListUiState.Success -> {
-        val transactionList =
-          (txnUiState as TransactionListUiState.Success).transactionPaging.collectAsLazyPagingItems()
-        LazyColumn(
-          modifier = Modifier
-            .clip(
-              RoundedCornerShape(
-                topEnd = MaterialTheme.spacing.space24,
-                topStart = MaterialTheme.spacing.space24
-              )
-            )
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface),
-          contentPadding = PaddingValues(
-            vertical = MaterialTheme.spacing.medium,
-            horizontal = MaterialTheme.spacing.small
-          ),
-          verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
-        ) {
-          items(items = transactionList, key = { it.hash }) { transaction ->
-            transaction?.let {
-              TransactionItemView(modifier = Modifier, data = it) {
-                Timber.v("${it.timeStamp}, ${it is EvmTransaction}")
-              }
-            }
-          }
-          if (transactionList.loadState.append.endOfPaginationReached) {
-            item {
-              Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-              ) {
-                Text(text = "-- Ending --")
-              }
-            }
-          }
-          if (transactionList.loadState.append is LoadState.Loading) {
-            item {
-              Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-              ) {
-                LoadingIndicator(animating = true)
-              }
-            }
+      if (transactionPaging.loadState.append is LoadState.Loading) {
+        item {
+          Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+          ) {
+            LoadingIndicator(animating = true)
           }
         }
       }

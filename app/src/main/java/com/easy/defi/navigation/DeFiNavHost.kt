@@ -68,7 +68,7 @@ fun DeFiNavHost(
         navController.navigateToSettings()
       },
       navigateToTransactionList = {
-        navController.toTransactionList()
+        navController.toTransactionList(it)
       },
       nestedGraphs = {
         settingsGraph(onBackClick)

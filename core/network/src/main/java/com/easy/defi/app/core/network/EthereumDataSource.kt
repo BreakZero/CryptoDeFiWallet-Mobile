@@ -79,7 +79,7 @@ class EthereumDataSource @Inject constructor(
         urlString = "${UrlConstant.BASE_URL}/ethereum/transactions/$address"
       ) {
         parameter("page", page)
-        parameter("offset", 20)
+        parameter("offset", offset)
         if (!contract.isNullOrEmpty()) {
           parameter("contract", contract)
         }
