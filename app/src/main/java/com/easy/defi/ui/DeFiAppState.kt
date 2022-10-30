@@ -80,19 +80,11 @@ class DeFiAppState(
     }
 
   val shouldShowBottomBar: Boolean
-    @Composable get() = currentDestination?.route in listOf(
-      assetNavigationRoute,
-      nftNavigationRoute,
-      dappNavigationRoute,
-      earnNavigationRoute
-    )
-
-  val isOnPhone: Boolean
     get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact ||
       windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
 
   val shouldShowNavRail: Boolean
-    get() = !isOnPhone
+    get() = !shouldShowBottomBar
 
   val isOffline = networkMonitor.isOnline
     .map(Boolean::not)

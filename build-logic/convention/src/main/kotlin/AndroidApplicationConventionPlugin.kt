@@ -36,6 +36,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
       }
 
       extensions.configure<ApplicationExtension> {
+        defaultConfig.versionCode = AndroidBuildConfig.versionCode
+        defaultConfig.versionName = AndroidBuildConfig.versionName
         configureKotlinAndroid(this)
         defaultConfig.targetSdk = AndroidBuildConfig.targetSdkVersion
         configureFlavors(this)

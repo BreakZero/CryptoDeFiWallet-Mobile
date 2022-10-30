@@ -50,18 +50,18 @@ import com.google.accompanist.pager.rememberPagerState
 private val banners = listOf(
   OnboardBannerInfo(
     imageRes = R.drawable.banner_wallet,
-    title = R.string.welcome_intro_adapter__welcome,
-    message = R.string.welcome_intro_adapter__welcome_tip
+    title = R.string.welcome_intro__welcome,
+    message = R.string.welcome_intro__welcome_tip
   ),
   OnboardBannerInfo(
     imageRes = R.drawable.banner_secure,
-    title = R.string.welcome_intro_adapter__secure,
-    message = R.string.welcome_intro_adapter__secure_tip
+    title = R.string.welcome_intro__secure,
+    message = R.string.welcome_intro__secure_tip
   ),
   OnboardBannerInfo(
     imageRes = R.drawable.banner_flexable,
-    title = R.string.welcome_intro_adapter__flexible,
-    message = R.string.welcome_intro_adapter__flexible_tip
+    title = R.string.welcome_intro__flexible,
+    message = R.string.welcome_intro__flexible_tip
   )
 )
 

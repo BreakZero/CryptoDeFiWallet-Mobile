@@ -140,6 +140,9 @@ fun TransactionListScreen(
           }
         }
       }
+      item {
+        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+      }
     }
   }
 }

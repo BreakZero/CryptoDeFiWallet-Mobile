@@ -35,7 +35,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.easy.defi.app.core.data.util.NetworkMonitor
 import com.easy.defi.app.core.designsystem.theme.DeFiWalletTheme
 import com.easy.defi.ui.DeFiApp
-import com.easy.defi.ui.rememberDeFiAppState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -90,11 +89,8 @@ class MainActivity : ComponentActivity() {
         ) {
           DeFiApp(
             hasWallet = hasWallet,
-            networkMonitor = networkMonitor,
-            appState = rememberDeFiAppState(
-              networkMonitor = networkMonitor,
-              windowSizeClass = calculateWindowSizeClass(this)
-            )
+            windowSizeClass = calculateWindowSizeClass(this),
+            networkMonitor = networkMonitor
           )
         }
       }

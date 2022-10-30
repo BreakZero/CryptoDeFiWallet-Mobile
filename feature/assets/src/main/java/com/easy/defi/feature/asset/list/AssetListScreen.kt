@@ -124,7 +124,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
             color = MaterialTheme.colorScheme.primaryContainer
           )
           Text(
-            text = stringResource(id = R.string.avatar_wallet_layout__view_settings),
+            text = stringResource(id = R.string.view_settings),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.surfaceVariant
           )

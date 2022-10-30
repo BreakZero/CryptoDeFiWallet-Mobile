@@ -44,13 +44,12 @@ class AssetListViewModel @Inject constructor(
   private val syncStatusMonitor: SyncStatusMonitor
 ) : ViewModel() {
   private val walletJob: Job
+
   init {
     walletJob = viewModelScope.launchWithHandler {
       supportCoinRepository.sync()
-      walletRepository.activeWalletStream().collectLatest { wallet ->
-        wallet?.also {
-          syncStatusMonitor.startUp()
-        }
+      walletRepository.activeWalletStream().collectLatest {
+        syncStatusMonitor.startUp()
       }
     }
   }
