@@ -20,41 +20,33 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.easy.defi.app.core.data.HdWalletHolder
 import com.easy.defi.app.core.data.repository.WalletRepository
-import com.easy.defi.app.core.data.repository.user.UserDataRepository
-import com.easy.defi.app.core.model.data.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
-import timber.log.Timber
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-  userDataRepository: UserDataRepository,
   hdWalletHolder: HdWalletHolder,
   walletRepository: WalletRepository
 ) : ViewModel() {
   private var walletJob: Job? = null
 
-  init {
-    walletJob = userDataRepository.userDataStream.flatMapConcat {
-      if (it.hasPasscode) {
-        walletRepository.activeWalletStream()
-      } else {
-        emptyFlow()
-      }
-    }.onEach {
-      Timber.tag("======").v(it.toString())
+  val uiState: StateFlow<MainActivityUiState> = walletRepository.activeWalletStream().map {
+    delay(1000)
+    val hasWallet = it?.let {
       hdWalletHolder.inject(it.mnemonic, it.passphrase)
-    }.launchIn(viewModelScope)
-  }
-
-  val uiState: StateFlow<MainActivityUiState> = userDataRepository.userDataStream.map {
-    MainActivityUiState.Success(userData = it)
+      true
+    } ?: false
+    MainActivityUiState.Success(hasWallet = hasWallet)
   }.stateIn(
     scope = viewModelScope,
     initialValue = MainActivityUiState.Loading,
-    started = SharingStarted.WhileSubscribed(5_000)
+    started = SharingStarted.WhileSubscribed()
   )
 
   override fun onCleared() {
@@ -65,5 +57,5 @@ class MainActivityViewModel @Inject constructor(
 
 sealed interface MainActivityUiState {
   object Loading : MainActivityUiState
-  data class Success(val userData: UserData) : MainActivityUiState
+  data class Success(val hasWallet: Boolean) : MainActivityUiState
 }

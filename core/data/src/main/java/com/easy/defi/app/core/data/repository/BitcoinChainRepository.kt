@@ -16,13 +16,21 @@
 
 package com.easy.defi.app.core.data.repository
 
+import com.easy.defi.app.core.data.HdWalletHolder
 import com.easy.defi.app.core.data.Synchronizer
 import com.easy.defi.app.core.model.data.BaseTransaction
 import timber.log.Timber
+import wallet.core.jni.CoinType
 import java.math.BigInteger
 import javax.inject.Inject
 
-class BitcoinChainRepository @Inject constructor() : ChainRepository {
+class BitcoinChainRepository @Inject constructor(
+  private val hdWalletHolder: HdWalletHolder
+) : ChainRepository {
+
+  override val address: String?
+    get() = hdWalletHolder.hdWallet?.getAddressForCoin(CoinType.BITCOIN)
+
   override suspend fun getBalance(contractAddress: String?): BigInteger {
     return BigInteger.ZERO
   }
@@ -40,7 +48,7 @@ class BitcoinChainRepository @Inject constructor() : ChainRepository {
   }
 
   override suspend fun syncWith(synchronizer: Synchronizer): Boolean {
-    Timber.tag("=====").v("fetching bitcoin balance")
+    Timber.tag("=====").v("bitcoin address: $address")
     return true
   }
 }

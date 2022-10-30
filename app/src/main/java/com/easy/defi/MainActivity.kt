@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
         onDispose {}
       }
       if (uiState is MainActivityUiState.Success) {
-        val hasWallet = (uiState as MainActivityUiState.Success).userData.hasPasscode
+        val hasWallet = (uiState as MainActivityUiState.Success).hasWallet
         DeFiWalletTheme(
           darkTheme = darkTheme
         ) {

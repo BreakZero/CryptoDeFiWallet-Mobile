@@ -21,6 +21,7 @@ import com.easy.defi.app.core.model.data.BaseTransaction
 import java.math.BigInteger
 
 interface ChainRepository : Syncable {
+  val address: String?
   suspend fun getBalance(
     contractAddress: String?
   ): BigInteger

@@ -20,13 +20,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.easy.defi.app.core.common.extensions.launchWithHandler
 import com.easy.defi.app.core.data.repository.CoinRepository
+import com.easy.defi.app.core.data.repository.WalletRepository
 import com.easy.defi.app.core.data.repository.user.OfflineUserDataRepository
 import com.easy.defi.app.core.data.util.SyncStatusMonitor
 import com.easy.defi.app.core.designsystem.R
 import com.easy.defi.app.core.ui.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import java.math.BigInteger
@@ -34,13 +37,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AssetListViewModel @Inject constructor(
+  walletRepository: WalletRepository,
   offlineUserDataRepository: OfflineUserDataRepository,
   supportCoinRepository: CoinRepository,
   private val syncStatusMonitor: SyncStatusMonitor
 ) : ViewModel() {
+  private val walletJob: Job
   init {
-    viewModelScope.launchWithHandler {
+    walletJob = viewModelScope.launchWithHandler {
       supportCoinRepository.sync()
+      walletRepository.activeWalletStream().collectLatest { wallet ->
+        wallet?.also {
+          syncStatusMonitor.startUp()
+        }
+      }
     }
   }
 
@@ -70,7 +80,8 @@ class AssetListViewModel @Inject constructor(
   ) { isLoading, userData, assets, promoCards ->
     AssetListState(
       onRefreshing = isLoading,
-      assets = assets.sortedByDescending { it.nativeBalance }.filter { it.nativeBalance > BigInteger.ZERO },
+      assets = assets.sortedByDescending { it.nativeBalance }
+        .filter { it.nativeBalance > BigInteger.ZERO },
       walletProfile = userData.walletProfile,
       promoCard = promoCards
     )
@@ -82,5 +93,10 @@ class AssetListViewModel @Inject constructor(
 
   fun onRefresh() {
     syncStatusMonitor.startUp()
+  }
+
+  override fun onCleared() {
+    super.onCleared()
+    walletJob.cancel()
   }
 }

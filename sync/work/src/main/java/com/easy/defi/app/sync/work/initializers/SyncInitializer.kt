@@ -19,10 +19,7 @@ package com.easy.defi.app.sync.work.initializers
 import android.content.Context
 import androidx.startup.AppInitializer
 import androidx.startup.Initializer
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.WorkManager
 import androidx.work.WorkManagerInitializer
-import com.easy.defi.app.sync.work.workers.SyncWorker
 
 object Sync {
   // This method is a workaround to manually initialize the sync process instead of relying on
@@ -42,14 +39,14 @@ internal const val SyncWorkName = "SyncWorkName"
  */
 class SyncInitializer : Initializer<Sync> {
   override fun create(context: Context): Sync {
-    WorkManager.getInstance(context).apply {
+    /*WorkManager.getInstance(context).apply {
       // Run sync on app startup and ensure only one sync worker runs at any time
       enqueueUniquePeriodicWork(
         SyncWorkName,
         ExistingPeriodicWorkPolicy.REPLACE,
         SyncWorker.startIntervalSyncWork()
       )
-    }
+    }*/
 
     return Sync
   }
