@@ -16,11 +16,16 @@
 
 package com.easy.defi.app.core.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.easy.defi.app.core.data.HdWalletHolder
 import com.easy.defi.app.core.data.Synchronizer
+import com.easy.defi.app.core.data.paging.TransactionPagingSource
 import com.easy.defi.app.core.database.dao.AssetDao
 import com.easy.defi.app.core.model.data.BaseTransaction
 import com.easy.defi.app.core.network.EthereumDataSource
+import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import wallet.core.jni.CoinType
 import java.math.BigInteger
@@ -42,13 +47,15 @@ class EvmChainRepository @Inject constructor(
   }
 
   override suspend fun getTransactions(
-    page: Int,
-    offset: Int,
     contractAddress: String?
-  ): List<BaseTransaction> {
-    return address?.let {
-      ethereumDataSource.getTransactions(it, page, offset, contractAddress)
-    } ?: emptyList()
+  ): Flow<PagingData<BaseTransaction>> {
+    return Pager(PagingConfig(pageSize = 20)) {
+      TransactionPagingSource(
+        contractAddress = contractAddress,
+        address = address,
+        ethereumDataSource = ethereumDataSource
+      )
+    }.flow
   }
 
   override suspend fun broadcastTransaction(rawData: String): String {

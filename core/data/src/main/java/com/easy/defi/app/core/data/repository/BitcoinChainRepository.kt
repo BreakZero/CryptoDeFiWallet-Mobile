@@ -16,9 +16,12 @@
 
 package com.easy.defi.app.core.data.repository
 
+import androidx.paging.PagingData
 import com.easy.defi.app.core.data.HdWalletHolder
 import com.easy.defi.app.core.data.Synchronizer
 import com.easy.defi.app.core.model.data.BaseTransaction
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import wallet.core.jni.CoinType
 import java.math.BigInteger
@@ -36,11 +39,9 @@ class BitcoinChainRepository @Inject constructor(
   }
 
   override suspend fun getTransactions(
-    page: Int,
-    offset: Int,
     contractAddress: String?
-  ): List<BaseTransaction> {
-    return emptyList()
+  ): Flow<PagingData<BaseTransaction>> {
+    return flow { emit(PagingData.empty()) }
   }
 
   override suspend fun broadcastTransaction(rawData: String): String {

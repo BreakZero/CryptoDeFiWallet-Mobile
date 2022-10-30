@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import java.math.BigDecimal
 import java.math.BigInteger
 import javax.inject.Inject
 
@@ -76,14 +77,24 @@ class AssetListViewModel @Inject constructor(
     isSyncing,
     offlineUserDataRepository.userDataStream,
     supportCoinRepository.loadSupportCurrencies(),
+    supportCoinRepository.loadTiers("USD"),
     _promoCards
-  ) { isLoading, userData, assets, promoCards ->
+  ) { isLoading, userData, assets, tiers, promoCards ->
+    val localAssets = assets.map { asset ->
+      val rate = tiers.find { tier ->
+        asset.slug == tier.fromSlug
+      }?.rate ?: "0.0"
+      asset.copy(
+        rate = rate.toBigDecimalOrNull() ?: BigDecimal.ZERO
+      )
+    }
     AssetListState(
       onRefreshing = isLoading,
-      assets = assets.sortedByDescending { it.nativeBalance }
+      assets = localAssets.sortedByDescending { it.nativeBalance }
         .filter { it.nativeBalance > BigInteger.ZERO },
       walletProfile = userData.walletProfile,
-      promoCard = promoCards
+      promoCard = promoCards,
+      totalBalance = localAssets.sumOf { it.fiatBalance() }.toPlainString()
     )
   }.stateIn(
     viewModelScope,

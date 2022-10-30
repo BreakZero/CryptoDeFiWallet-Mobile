@@ -37,8 +37,8 @@ import com.easy.defi.app.feature.earn.navigation.earnNavigationRoute
 import com.easy.defi.app.feature.earn.navigation.navigateToEarn
 import com.easy.defi.app.feature.nft.navigation.navigateToNft
 import com.easy.defi.app.feature.nft.navigation.nftNavigationRoute
-import com.easy.defi.feature.asset.navigation.assetNavigationRoute
-import com.easy.defi.feature.asset.navigation.navigateToWallet
+import com.easy.defi.feature.asset.list.navigation.assetNavigationRoute
+import com.easy.defi.feature.asset.list.navigation.navigateToWallet
 import com.easy.defi.navigation.TopLevelDestination
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.CoroutineScope

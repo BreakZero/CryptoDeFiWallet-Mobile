@@ -31,6 +31,9 @@ interface AssetDao {
   fun assetStream(): Flow<List<AssetEntity>>
 
   @Query("select * from tb_asset where slug = :slug")
+  fun assetStreamBySlug(slug: String): Flow<AssetEntity?>
+
+  @Query("select * from tb_asset where slug = :slug")
   suspend fun assetBySlug(slug: String): AssetEntity?
 
   @Query("select * from tb_asset where code = :code")

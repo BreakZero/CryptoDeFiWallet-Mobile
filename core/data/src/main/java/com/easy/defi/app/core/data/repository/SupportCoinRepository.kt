@@ -46,6 +46,10 @@ class SupportCoinRepository @Inject constructor(
     }
   }
 
+  override fun assetBySlug(slug: String): Flow<Asset?> {
+    return assetDao.assetStreamBySlug(slug).map { it?.asExternalModel() }
+  }
+
   override suspend fun sync() {
     val lastVersion = versionDao.lastVersion()?.sha256.orEmpty()
     val networkCurrencies = assetDataSource.getCurrencies(lastVersion)

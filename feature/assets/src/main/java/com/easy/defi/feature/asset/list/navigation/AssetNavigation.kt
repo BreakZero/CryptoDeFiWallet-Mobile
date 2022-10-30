@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.easy.defi.feature.asset.navigation
+package com.easy.defi.feature.asset.list.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -32,6 +32,7 @@ fun NavController.navigateToWallet(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.walletGraph(
   navigateToSettings: () -> Unit,
+  navigateToTransactionList: () -> Unit,
   nestedGraphs: NavGraphBuilder.() -> Unit
 ) {
   navigation(
@@ -40,7 +41,8 @@ fun NavGraphBuilder.walletGraph(
   ) {
     composableWithAnimation(route = assetNavigationRoute) {
       AssetListScreen(
-        navigateToSettings = navigateToSettings
+        navigateToSettings = navigateToSettings,
+        navigateToTransactionList = navigateToTransactionList
       )
     }
     nestedGraphs()

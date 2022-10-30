@@ -27,8 +27,10 @@ import com.easy.defi.app.onboarding.OnBoardingNavigations
 import com.easy.defi.app.onboarding.onBoardingGraph
 import com.easy.defi.app.settings.navigation.navigateToSettings
 import com.easy.defi.app.settings.navigation.settingsGraph
-import com.easy.defi.feature.asset.navigation.assetGraphRoutePattern
-import com.easy.defi.feature.asset.navigation.walletGraph
+import com.easy.defi.feature.asset.list.navigation.assetGraphRoutePattern
+import com.easy.defi.feature.asset.list.navigation.walletGraph
+import com.easy.defi.feature.asset.transactions.navigation.toTransactionList
+import com.easy.defi.feature.asset.transactions.navigation.transactionListScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -65,8 +67,12 @@ fun DeFiNavHost(
       navigateToSettings = {
         navController.navigateToSettings()
       },
+      navigateToTransactionList = {
+        navController.toTransactionList()
+      },
       nestedGraphs = {
         settingsGraph(onBackClick)
+        transactionListScreen(onBackClick)
       }
     )
     dappGraph()

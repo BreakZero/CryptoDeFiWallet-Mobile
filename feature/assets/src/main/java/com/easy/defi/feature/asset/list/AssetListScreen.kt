@@ -59,7 +59,8 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
   ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class
 ) @Composable fun AssetListScreen(
   assetsViewModel: AssetListViewModel = hiltViewModel(),
-  navigateToSettings: () -> Unit
+  navigateToSettings: () -> Unit,
+  navigateToTransactionList: () -> Unit
 ) {
   val context = LocalContext.current
   val assetsUiState by assetsViewModel.assetState.collectAsState()
@@ -149,7 +150,10 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
       ) {
         item {
-          AssetListHeader(modifier = Modifier.fillMaxWidth(), totalBalance = "888888.88")
+          AssetListHeader(
+            modifier = Modifier.fillMaxWidth(),
+            totalBalance = assetsUiState.totalBalance
+          )
         }
         items(items = assetsUiState.assets, key = {
           it.slug
@@ -159,7 +163,9 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
               .fillMaxWidth()
               .animateItemPlacement(),
             asset = asset
-          ) {}
+          ) {
+            navigateToTransactionList()
+          }
         }
         item {
           LazyRow(

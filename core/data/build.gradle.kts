@@ -21,6 +21,7 @@ dependencies {
   implementation("com.trustwallet:wallet-core:3.0.6")
 
   implementation(libs.androidx.core.ktx)
+  implementation(libs.androidx.compose.paging)
 
   implementation(libs.kotlinx.datetime)
   implementation(libs.kotlinx.coroutines.android)

@@ -16,8 +16,10 @@
 
 package com.easy.defi.app.core.data.repository
 
+import androidx.paging.PagingData
 import com.easy.defi.app.core.data.Syncable
 import com.easy.defi.app.core.model.data.BaseTransaction
+import kotlinx.coroutines.flow.Flow
 import java.math.BigInteger
 
 interface ChainRepository : Syncable {
@@ -27,10 +29,8 @@ interface ChainRepository : Syncable {
   ): BigInteger
 
   suspend fun getTransactions(
-    page: Int,
-    offset: Int,
     contractAddress: String?
-  ): List<BaseTransaction>
+  ): Flow<PagingData<BaseTransaction>>
 
   suspend fun broadcastTransaction(rawData: String): String
 }

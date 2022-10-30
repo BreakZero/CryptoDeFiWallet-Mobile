@@ -26,5 +26,7 @@ interface CoinRepository {
   fun loadSupportChains(): Flow<List<Chain>>
   fun loadTiers(toCurrency: String): Flow<List<Tier>>
 
+  fun assetBySlug(slug: String): Flow<Asset?>
+
   suspend fun sync()
 }

@@ -35,7 +35,7 @@ class MainActivityViewModel @Inject constructor(
   userDataRepository: UserDataRepository,
   walletRepository: WalletRepository
 ) : ViewModel() {
-  private var walletJob: Job? = null
+  private var walletJob: Job
 
   init {
     walletJob = userDataRepository.userDataStream.flatMapConcat {
@@ -61,7 +61,7 @@ class MainActivityViewModel @Inject constructor(
 
   override fun onCleared() {
     super.onCleared()
-    walletJob?.cancel()
+    walletJob.cancel()
   }
 }
 
