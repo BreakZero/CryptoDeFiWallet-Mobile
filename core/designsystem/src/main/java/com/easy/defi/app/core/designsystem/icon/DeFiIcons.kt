@@ -24,10 +24,7 @@ import androidx.compose.material.icons.rounded.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.easy.defi.app.core.designsystem.R
 
-/**
- * Now in Android icons. Material icons are [ImageVector]s, custom icons are drawable resource IDs.
- */
-object DeFiIcon {
+object DeFiIcons {
   val Wallet = R.drawable.ic_nav_wallet
   val Nfts = R.drawable.ic_nav_nft
   val DApps = R.drawable.ic_nav_dapp

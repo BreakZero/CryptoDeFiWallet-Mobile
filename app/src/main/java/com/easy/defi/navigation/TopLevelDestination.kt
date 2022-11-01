@@ -17,7 +17,7 @@
 package com.easy.defi.navigation
 
 import com.easy.defi.R
-import com.easy.defi.app.core.designsystem.icon.DeFiIcon
+import com.easy.defi.app.core.designsystem.icon.DeFiIcons
 import com.easy.defi.app.core.designsystem.icon.Icon
 import com.easy.defi.app.core.designsystem.icon.Icon.DrawableResourceIcon
 
@@ -28,26 +28,26 @@ enum class TopLevelDestination(
   val titleTextId: Int
 ) {
   WALLET(
-    selectedIcon = DrawableResourceIcon(DeFiIcon.Wallet),
-    unselectedIcon = DrawableResourceIcon(DeFiIcon.Wallet),
+    selectedIcon = DrawableResourceIcon(DeFiIcons.Wallet),
+    unselectedIcon = DrawableResourceIcon(DeFiIcons.Wallet),
     iconTextId = R.string.wallet,
     titleTextId = R.string.app_name
   ),
   NFTS(
-    selectedIcon = DrawableResourceIcon(DeFiIcon.Nfts),
-    unselectedIcon = DrawableResourceIcon(DeFiIcon.Nfts),
+    selectedIcon = DrawableResourceIcon(DeFiIcons.Nfts),
+    unselectedIcon = DrawableResourceIcon(DeFiIcons.Nfts),
     iconTextId = R.string.nft,
     titleTextId = R.string.nft
   ),
   DAPPS(
-    selectedIcon = DrawableResourceIcon(DeFiIcon.DApps),
-    unselectedIcon = DrawableResourceIcon(DeFiIcon.DApps),
+    selectedIcon = DrawableResourceIcon(DeFiIcons.DApps),
+    unselectedIcon = DrawableResourceIcon(DeFiIcons.DApps),
     iconTextId = R.string.dapps,
     titleTextId = R.string.dapps
   ),
   EARN(
-    selectedIcon = DrawableResourceIcon(DeFiIcon.Earn),
-    unselectedIcon = DrawableResourceIcon(DeFiIcon.Earn),
+    selectedIcon = DrawableResourceIcon(DeFiIcons.Earn),
+    unselectedIcon = DrawableResourceIcon(DeFiIcons.Earn),
     iconTextId = R.string.earn,
     titleTextId = R.string.earn
   )
