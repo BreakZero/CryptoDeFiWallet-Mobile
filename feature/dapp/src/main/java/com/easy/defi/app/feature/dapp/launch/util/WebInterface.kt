@@ -21,8 +21,8 @@ internal class WebInterface(
             title = "Request Accounts",
             methodId = id,
             data = "DApp need to get your address",
-            method = method,
-          ),
+            method = method
+          )
         )
       }
       ActionMethod.SIGNTRANSACTION -> {
@@ -37,8 +37,8 @@ internal class WebInterface(
             data = data,
             from = from,
             to = to,
-            method = method,
-          ),
+            method = method
+          )
         )
       }
       ActionMethod.SIGNMESSAGE -> {
@@ -60,8 +60,8 @@ internal class WebInterface(
             title = "SwichChain",
             methodId = id,
             data = "switch to polygon",
-            method = method,
-          ),
+            method = method
+          )
         )
       }
       else -> {
@@ -70,8 +70,8 @@ internal class WebInterface(
             title = "Errors",
             methodId = id,
             data = "$method not implemented",
-            method = method,
-          ),
+            method = method
+          )
         )
       }
     }
@@ -96,8 +96,8 @@ internal class WebInterface(
         title = "Sign Message",
         methodId = id,
         data = data.toHexString(),
-        method = method,
-      ),
+        method = method
+      )
     )
   }
 
@@ -108,8 +108,8 @@ internal class WebInterface(
         title = "Sign Message",
         methodId = id,
         data = signEthereumMessage(data, false),
-        method = method,
-      ),
+        method = method
+      )
     )
   }
 

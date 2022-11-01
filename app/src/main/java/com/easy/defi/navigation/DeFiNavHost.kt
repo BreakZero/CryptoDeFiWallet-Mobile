@@ -20,13 +20,15 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.easy.defi.app.feature.dapp.navigation.dappGraph
+import com.easy.defi.app.feature.dapp.launch.navigation.dAppLaunchScreen
+import com.easy.defi.app.feature.dapp.launch.navigation.navigateIntoDApp
+import com.easy.defi.app.feature.dapp.navigation.dAppGraph
 import com.easy.defi.app.feature.earn.navigation.earnGraph
 import com.easy.defi.app.feature.nft.navigation.nftGraph
 import com.easy.defi.app.onboarding.OnBoardingNavigations
 import com.easy.defi.app.onboarding.onBoardingGraph
 import com.easy.defi.app.settings.navigation.navigateToSettings
-import com.easy.defi.app.settings.navigation.settingsGraph
+import com.easy.defi.app.settings.navigation.settingsScreen
 import com.easy.defi.feature.asset.list.navigation.assetGraphRoutePattern
 import com.easy.defi.feature.asset.list.navigation.walletGraph
 import com.easy.defi.feature.asset.transactions.navigation.toTransactionList
@@ -63,6 +65,8 @@ fun DeFiNavHost(
     startDestination = startDestination,
     modifier = modifier
   ) {
+    settingsScreen(onBackClick)
+
     walletGraph(
       navigateToSettings = {
         navController.navigateToSettings()
@@ -71,12 +75,20 @@ fun DeFiNavHost(
         navController.toTransactionList(it)
       },
       nestedGraphs = {
-        settingsGraph(onBackClick)
         transactionListScreen(onBackClick)
       }
     )
-    dappGraph()
+    dAppGraph(
+      navigateToSettings = {
+        navController.navigateToSettings()
+      },
+      navigateIntoDApp = { chainId, url, rpc ->
+        navController.navigateIntoDApp(chainId, url, rpc)
+      }
+    )
     nftGraph()
     earnGraph()
+
+    dAppLaunchScreen(onBackClick)
   }
 }

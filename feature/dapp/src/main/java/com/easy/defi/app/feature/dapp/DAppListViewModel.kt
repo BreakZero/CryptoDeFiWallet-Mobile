@@ -13,7 +13,6 @@ import com.easy.defi.app.core.model.data.WalletProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -43,7 +42,7 @@ class DAppListViewModel @Inject constructor(
         DAppListUiState(
           walletProfile = walletProfile,
           loadState = ResultLoadState.Success,
-          dApps = dAppResult.data
+          dApps = dAppResult.data.filter { it.chainId.isNotBlank() }
         )
       }
     }

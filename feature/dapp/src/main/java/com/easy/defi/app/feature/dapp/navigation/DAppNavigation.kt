@@ -28,8 +28,11 @@ fun NavController.navigateToDApp(navOptions: NavOptions? = null) {
   this.navigate(dappNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.dappGraph() {
+fun NavGraphBuilder.dAppGraph(
+  navigateToSettings: () -> Unit,
+  navigateIntoDApp: (Int, String, String) -> Unit
+) {
   composableWithAnimation(route = dappNavigationRoute) {
-    DAppListScreen()
+    DAppListScreen(navigateToSettings = navigateToSettings, navigateIntoDApp = navigateIntoDApp)
   }
 }

@@ -28,7 +28,7 @@ fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
   this.navigate(settingsEntryRoute, navOptions)
 }
 
-fun NavGraphBuilder.settingsGraph(
+fun NavGraphBuilder.settingsScreen(
   onBackClick: () -> Unit
 ) {
   composableWithAnimation(route = settingsEntryRoute) {

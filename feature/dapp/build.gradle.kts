@@ -10,4 +10,5 @@ android {
 
 dependencies {
   implementation(libs.accompanist.swiperefresh)
+  implementation(libs.accompanist.webview)
 }

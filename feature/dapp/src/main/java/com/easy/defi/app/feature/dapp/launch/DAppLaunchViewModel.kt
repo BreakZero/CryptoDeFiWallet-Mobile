@@ -1,10 +1,13 @@
 package com.easy.defi.app.feature.dapp.launch
 
 import android.webkit.WebView
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.easy.defi.app.core.common.decoder.StringDecoder
 import com.easy.defi.app.core.data.di.annotations.Ethereum
 import com.easy.defi.app.core.data.repository.ChainRepository
+import com.easy.defi.app.feature.dapp.launch.navigation.DAppLaunchArgs
 import com.easy.defi.app.feature.dapp.launch.util.ActionMethod
 import com.easy.defi.app.feature.dapp.launch.util.MessageData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,12 +16,41 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class DAppLaunchViewModel @Inject constructor(
+  savedStateHandle: SavedStateHandle,
+  stringDecoder: StringDecoder,
   @Ethereum evmChainRepository: ChainRepository
-): ViewModel() {
+) : ViewModel() {
+
+  private val dAppInfoArgs: DAppLaunchArgs = DAppLaunchArgs(savedStateHandle, stringDecoder)
+
+  val initJs = """
+      (function() {
+            var config = {
+                ethereum: {
+                    chainId: ${dAppInfoArgs.chainId},
+                    rpcUrl: "${dAppInfoArgs.dAppRpc}"
+                },
+                solana: {
+                    cluster: "mainnet-beta",
+                },
+                isDebug: true
+            };
+            trustwallet.ethereum = new trustwallet.Provider(config);
+            trustwallet.solana = new trustwallet.SolanaProvider(config);
+            trustwallet.postMessage = (json) => {
+                window._tw_.postMessage(JSON.stringify(json));
+            }
+            window.ethereum = trustwallet.ethereum;
+        })();
+  """.trimIndent()
+
+  val webUrl = dAppInfoArgs.dAppUrl
+
   private val ethAddress = evmChainRepository.address.orEmpty()
 
   private val _message = MutableStateFlow(MessageData.Empty)
@@ -33,6 +65,7 @@ class DAppLaunchViewModel @Inject constructor(
   }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(3_000), DAppLaunchState())
 
   internal fun updateMessage(message: MessageData) {
+    Timber.tag("======").v(message.toString())
     _message.update { message }
   }
 

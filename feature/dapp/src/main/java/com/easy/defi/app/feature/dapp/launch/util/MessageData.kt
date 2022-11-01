@@ -9,7 +9,7 @@ internal data class MessageData(
   val method: ActionMethod,
   val from: String? = null,
   val to: String? = null,
-  val data: String,
+  val data: String
 ) {
   fun isEmpty(): Boolean {
     return this == Empty
@@ -20,7 +20,7 @@ internal data class MessageData(
       title = "",
       methodId = -1L,
       method = ActionMethod.UNKNOWN,
-      data = "",
+      data = ""
     )
   }
 }

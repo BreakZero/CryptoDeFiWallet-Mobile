@@ -49,7 +49,9 @@ import com.easy.defi.app.core.ui.extension.rotating
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DAppListScreen(
-  dAppListViewModel: DAppListViewModel = hiltViewModel()
+  dAppListViewModel: DAppListViewModel = hiltViewModel(),
+  navigateToSettings: () -> Unit,
+  navigateIntoDApp: (Int, String, String) -> Unit
 ) {
   val uiState by dAppListViewModel.uiState.collectAsState()
   Column(
@@ -58,6 +60,7 @@ internal fun DAppListScreen(
       .brushBackground(
         listOf(
           MaterialTheme.colorScheme.primary,
+          MaterialTheme.colorScheme.surface,
           MaterialTheme.colorScheme.surface,
           MaterialTheme.colorScheme.surface
         )
@@ -69,7 +72,7 @@ internal fun DAppListScreen(
       ),
       navigationIcon = {
         IconButton(onClick = {
-
+          navigateToSettings()
         }) {
           uiState.walletProfile.avator?.let {
             AsyncImage(
@@ -149,11 +152,16 @@ internal fun DAppListScreen(
             uiState.dApps,
             key = {
               it.url
-            }) { dApp ->
+            }
+          ) { dApp ->
             Card(
-              modifier = Modifier.fillMaxWidth(),
+              modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                  navigateIntoDApp(dApp.chainId.toInt(), dApp.url, dApp.rpc)
+                },
               elevation = CardDefaults.elevatedCardElevation(
-                defaultElevation = MaterialTheme.spacing.extraSmall,
+                defaultElevation = MaterialTheme.spacing.extraSmall
               ),
               shape = RoundedCornerShape(MaterialTheme.spacing.small)
             ) {
@@ -161,7 +169,7 @@ internal fun DAppListScreen(
                 modifier = Modifier
                   .fillMaxWidth()
                   .padding(MaterialTheme.spacing.extraSmall),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                horizontalAlignment = Alignment.CenterHorizontally
               ) {
                 AsyncImage(
                   modifier = Modifier
@@ -174,7 +182,7 @@ internal fun DAppListScreen(
                     .error(R.drawable.avatar_generic_1)
                     .crossfade(true)
                     .build(),
-                  contentDescription = null,
+                  contentDescription = null
                 )
                 Text(
                   text = dApp.name,

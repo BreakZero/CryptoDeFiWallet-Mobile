@@ -69,7 +69,6 @@ interface DataModule {
     cryptoDAppsRepository: CryptoDAppsRepository
   ): DAppRepository
 
-
   @Binds
   fun bindsNetworkMonitor(
     networkMonitor: ConnectivityManagerNetworkMonitor
