@@ -24,7 +24,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class EvmTransactionDto(
+internal data class EvmTransactionDto(
   @SerialName("blockHash")
   val blockHash: String,
   @SerialName("blockNumber")
@@ -67,7 +67,7 @@ data class EvmTransactionDto(
   val value: String
 )
 
-fun EvmTransactionDto.asExternalModel(
+internal fun EvmTransactionDto.asExternalModel(
   owner: String
 ): EvmTransaction {
   val direction = if (this.from.equals(owner, true)) {

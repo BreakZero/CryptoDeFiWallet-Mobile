@@ -25,6 +25,8 @@ import com.easy.defi.app.core.data.repository.CoinRepository
 import com.easy.defi.app.core.data.repository.EvmChainRepository
 import com.easy.defi.app.core.data.repository.SupportCoinRepository
 import com.easy.defi.app.core.data.repository.WalletRepository
+import com.easy.defi.app.core.data.repository.dapp.CryptoDAppsRepository
+import com.easy.defi.app.core.data.repository.dapp.DAppRepository
 import com.easy.defi.app.core.data.repository.user.OfflineUserDataRepository
 import com.easy.defi.app.core.data.repository.user.UserDataRepository
 import com.easy.defi.app.core.data.util.ConnectivityManagerNetworkMonitor
@@ -61,6 +63,12 @@ interface DataModule {
   fun bindsCoinRepository(
     supportChainRepository: SupportCoinRepository
   ): CoinRepository
+
+  @Binds
+  fun bindsCryptoDAppRepository(
+    cryptoDAppsRepository: CryptoDAppsRepository
+  ): DAppRepository
+
 
   @Binds
   fun bindsNetworkMonitor(
