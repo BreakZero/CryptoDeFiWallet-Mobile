@@ -48,7 +48,7 @@ import com.easy.defi.app.core.ui.extension.rotating
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DAppListScreen(
+internal fun DAppListScreen(
   dAppListViewModel: DAppListViewModel = hiltViewModel()
 ) {
   val uiState by dAppListViewModel.uiState.collectAsState()
