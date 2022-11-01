@@ -16,11 +16,12 @@
 
 package com.easy.defi.app.core.network.model.dapps
 
+import com.easy.defi.app.core.model.data.DApp
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DAppInfoDto(
+internal data class DAppInfoDto(
   @SerialName("chain_id")
   val chainId: String,
   @SerialName("icon")
@@ -34,3 +35,14 @@ data class DAppInfoDto(
   @SerialName("url")
   val url: String
 )
+
+internal fun DAppInfoDto.asExternalModel(): DApp {
+  return DApp(
+    chainId = chainId,
+    icon = icon,
+    name = name,
+    rpc = rpc,
+    slug = slug,
+    url = url
+  )
+}

@@ -20,7 +20,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TokenHoldingDto(
+internal data class TokenHoldingDto(
   @SerialName("amount")
   val amount: String,
   @SerialName("contract_address")
