@@ -1,6 +1,5 @@
 package com.easy.defi.feature.asset.transactions
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -51,9 +49,8 @@ import com.easy.defi.app.core.ui.LoadingIndicator
 import timber.log.Timber
 import java.math.BigInteger
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun TransactionListScreen(
+internal fun TransactionListScreen(
   listViewModel: TransactionListViewModel = hiltViewModel(),
   onBackClick: () -> Unit
 ) {

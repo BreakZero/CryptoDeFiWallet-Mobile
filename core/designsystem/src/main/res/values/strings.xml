@@ -1,48 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-These are strings that already add to en.json in monacohq/localization
-and will support Multi-Language Supported String.
-
-1.
-The format of string resource name in this file, should follow this:
-${where}__${view type and meaning of content}
-
-    ${where}:
-        - where is this string resource appear?
-            e.g. `all_categories` is referenced in `AllDappsViewModel.kt`
-                → should prefix with `all_dapps__`
-                → full name will be `all_dapps__all_categories`
-
-        - will this string resource display in which feature?
-            e.g. `card_fee` is referenced in `BuyProvider`, and will be used for `buy` related feature
-                → should prefix with `buy__`
-                → full name will be `buy__card_fee`
-
-    ${view type and meaning of content}:
-        -  will this string used for button / plain text / toast? add some short symbol for future reference
-            e.g. `to` is referenced in `MigrationDataProvider.kt`, and it's used for plain text,
-                → should add a `label_` prefix right after ${where}
-                → full name will be `cro_migration_data__label_to`
-
-2.
-This naming rule is mainly according to the experience of main app.
-`__` → this is <b>2 underline</b>.
-the whole format is for helping us better identify the usage of a string key at first sight.
-
-3.
-For now, our multi-language API not support to response different translation file by app version,
-so we should think about `Backward Compatibility`,
-which means, we have to keep all the old strings in our project (even that is an unused string),
-to prevent assigning a new value to a string resource name that already used in app's old version.
-
-4.
-In the future,
-when we get a new feature requirement from Product side,
-please remember to check with PM, whether that feature need to support multi-language,
-and if so:
-    4.1. please ask PM to specify every StringKey for App side (android & iOS)
-    4.2. add StringKey & Value to en.json in monacohq/localization
-    4.3. use that StringKey as our string resource name
--->
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="view_settings">View Settings</string>
     <string name="import_wallet__import_wallet">Import Wallet</string>
@@ -109,4 +65,8 @@ and if so:
     <string name="settings__about_defi_wallet">About DeFi Wallet</string>
 
     <string name="not_connected">⚠️ You aren’t connected to the internet</string>
+
+    <string name="send__to">To</string>
+    <string name="send__enter_amount">Enter Amount</string>
+    <string name="send__confirm">Confirm</string>
 </resources>

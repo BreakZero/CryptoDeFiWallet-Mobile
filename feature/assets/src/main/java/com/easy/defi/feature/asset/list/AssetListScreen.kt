@@ -57,7 +57,8 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @OptIn(
   ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class
-) @Composable fun AssetListScreen(
+) @Composable
+internal fun AssetListScreen(
   assetsViewModel: AssetListViewModel = hiltViewModel(),
   navigateToSettings: () -> Unit,
   navigateToTransactionList: (String) -> Unit

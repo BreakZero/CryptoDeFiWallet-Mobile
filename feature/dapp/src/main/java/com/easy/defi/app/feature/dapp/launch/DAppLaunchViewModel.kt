@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +26,11 @@ class DAppLaunchViewModel @Inject constructor(
 ) : ViewModel() {
 
   private val dAppInfoArgs: DAppLaunchArgs = DAppLaunchArgs(savedStateHandle, stringDecoder)
+
+  private val _showConfirmDialog = MutableStateFlow(false)
+  val showConfirmDialog = _showConfirmDialog.stateIn(
+    viewModelScope, SharingStarted.WhileSubscribed(2000), false
+  )
 
   val initJs = """
       (function() {
@@ -64,9 +68,13 @@ class DAppLaunchViewModel @Inject constructor(
     )
   }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(3_000), DAppLaunchState())
 
-  internal fun updateMessage(message: MessageData) {
-    Timber.tag("======").v(message.toString())
+  internal fun onMessageReceive(message: MessageData) {
     _message.update { message }
+    _showConfirmDialog.update { true }
+  }
+
+  fun dismiss() {
+    _showConfirmDialog.update { false }
   }
 
   fun requestAccount(webView: WebView) {
@@ -80,8 +88,10 @@ class DAppLaunchViewModel @Inject constructor(
   }
 
   fun sendAddress(webView: WebView, methodId: Long) {
-    val script = "window.ethereum.sendResponse($methodId, [\"$ethAddress\"])"
-    webView.evaluateJavascript(script) {}
+    val script = "window.ethereum.sendResponse($methodId, [\"$ethAddress\"]);"
+    webView.evaluateJavascript(script) {
+      _showConfirmDialog.update { false }
+    }
   }
 
   fun switchChain(webView: WebView, chainId: String) {

@@ -1,21 +1,30 @@
 package com.easy.defi.app.feature.dapp.launch
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.webkit.WebView
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.easy.defi.app.core.common.extensions.launchWithHandler
 import com.easy.defi.app.core.ui.DeFiAppBar
 import com.easy.defi.app.feature.dapp.R
 import com.easy.defi.app.feature.dapp.launch.util.ActionMethod
@@ -25,8 +34,9 @@ import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
-import kotlinx.coroutines.Dispatchers
+import timber.log.Timber
 
+@SuppressLint("SetJavaScriptEnabled")
 @Composable
 internal fun DAppLaunchScreen(
   dAppLaunchViewModel: DAppLaunchViewModel = hiltViewModel(),
@@ -34,6 +44,9 @@ internal fun DAppLaunchScreen(
 ) {
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
+  val message by dAppLaunchViewModel.uiState.collectAsState()
+  val showConfirm by dAppLaunchViewModel.showConfirmDialog.collectAsState()
+  var currWebView by remember { mutableStateOf<WebView?>(null) }
 
   val provideJs by remember {
     mutableStateOf(
@@ -59,9 +72,10 @@ internal fun DAppLaunchScreen(
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
           super.onPageStarted(view, url, favicon)
           view?.also { webView ->
+            currWebView = webView
             webView.evaluateJavascript(provideJs, null)
             webView.evaluateJavascript(dAppLaunchViewModel.initJs, null)
-            dAppLaunchViewModel.requestAccount(webView)
+            dAppLaunchViewModel.requestAccount(currWebView!!)
           }
         }
       }
@@ -92,22 +106,73 @@ internal fun DAppLaunchScreen(
         }
         webView.addJavascriptInterface(
           WebInterface { message ->
-            dAppLaunchViewModel.updateMessage(message)
-            scope.launchWithHandler(Dispatchers.Main) {
-              when (message.method) {
-                ActionMethod.REQUESTACCOUNTS -> {
-                  dAppLaunchViewModel.setAddress(webView)
-                  dAppLaunchViewModel.sendAddress(webView, message.methodId)
-                }
-                ActionMethod.SWITCHETHEREUMCHAIN -> {
-                }
-                else -> Unit
-              }
-            }
+            dAppLaunchViewModel.onMessageReceive(message)
           },
           "_tw_"
         )
       }
     )
+    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+
+    if (showConfirm) {
+      ActionAlert(
+        title = message.title,
+        message = message.data,
+        onConfirm = {
+          when (message.method) {
+            ActionMethod.REQUESTACCOUNTS -> {
+              currWebView?.let {
+                Timber.tag("=====").v(message.toString())
+                dAppLaunchViewModel.setAddress(it)
+                dAppLaunchViewModel.sendAddress(it, message.methodId)
+              }
+            }
+            ActionMethod.SWITCHETHEREUMCHAIN -> {
+            }
+            else -> Unit
+          }
+        }, onDismiss = {
+          dAppLaunchViewModel.dismiss()
+        }
+      )
+    }
   }
+}
+
+@Composable
+private fun ActionAlert(
+  title: String,
+  message: String,
+  onConfirm: () -> Unit,
+  onDismiss: () -> Unit
+) {
+  AlertDialog(
+    onDismissRequest = {
+      Timber.tag("=====").v("tap outside")
+    },
+    title = {
+      Text(text = title)
+    },
+    text = {
+      Text(message)
+    },
+    confirmButton = {
+      Button(
+        onClick = {
+          onConfirm()
+        }
+      ) {
+        Text("Approve")
+      }
+    },
+    dismissButton = {
+      Button(
+        onClick = {
+          onDismiss()
+        }
+      ) {
+        Text("Cancel")
+      }
+    }
+  )
 }

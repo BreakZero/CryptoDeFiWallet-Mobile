@@ -41,7 +41,7 @@ import com.easy.defi.app.core.model.x.byDecimal
 
 @ExperimentalMaterial3Api
 @Composable
-fun AssetCard(
+internal fun AssetCard(
   modifier: Modifier = Modifier,
   asset: Asset,
   onClick: (Asset) -> Unit
