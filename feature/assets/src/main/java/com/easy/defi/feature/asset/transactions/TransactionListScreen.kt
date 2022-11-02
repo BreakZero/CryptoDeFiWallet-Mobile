@@ -52,6 +52,7 @@ import java.math.BigInteger
 @Composable
 internal fun TransactionListScreen(
   listViewModel: TransactionListViewModel = hiltViewModel(),
+  navigateToSend: (String) -> Unit,
   onBackClick: () -> Unit
 ) {
   val uiState by listViewModel.transactionListUiState.collectAsState()
@@ -70,6 +71,7 @@ internal fun TransactionListScreen(
     DeFiAppBar {
       onBackClick()
     }
+
     LazyColumn(
       modifier = Modifier
         .fillMaxSize(),
@@ -82,24 +84,20 @@ internal fun TransactionListScreen(
       item {
         TransactionListHeader(
           asset = uiState.asset,
-          onSend = {},
+          onSend = {
+            navigateToSend(listViewModel.slug())
+          },
           onReceive = {}
         )
-      }
-      items(items = transactionPaging, key = { it.hash }) { transaction ->
-        transaction?.let {
-          TransactionItemView(modifier = Modifier, data = it) {
-            Timber.v("${it.timeStamp}, ${it is EvmTransaction}")
-          }
-        }
       }
       when (transactionPaging.loadState.refresh) {
         is LoadState.Loading -> {
           item {
             Box(
               modifier = Modifier
-                .fillMaxSize(),
-              contentAlignment = Alignment.Center
+                .fillMaxWidth()
+                .height(128.dp),
+              contentAlignment = Alignment.BottomCenter
             ) {
               LoadingIndicator(animating = true)
             }
@@ -108,32 +106,42 @@ internal fun TransactionListScreen(
         is LoadState.Error -> {
           item {
             Box(
-              modifier = Modifier.fillMaxSize(),
-              contentAlignment = Alignment.Center
+              modifier = Modifier
+                .fillMaxWidth()
+                .height(128.dp),
+              contentAlignment = Alignment.BottomCenter
             ) {
               Text(text = "somethings went wrong")
             }
           }
         }
-        else -> Unit
-      }
-      if (transactionPaging.loadState.append.endOfPaginationReached) {
-        item {
-          Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-          ) {
-            Text(text = "-- Ending --")
+        else -> {
+          items(items = transactionPaging, key = { it.hash }) { transaction ->
+            transaction?.let {
+              TransactionItemView(modifier = Modifier, data = it) {
+                Timber.v("${it.timeStamp}, ${it is EvmTransaction}")
+              }
+            }
           }
-        }
-      }
-      if (transactionPaging.loadState.append is LoadState.Loading) {
-        item {
-          Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-          ) {
-            LoadingIndicator(animating = true)
+          if (transactionPaging.loadState.append.endOfPaginationReached) {
+            item {
+              Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+              ) {
+                Text(text = "-- Ending --")
+              }
+            }
+          }
+          if (transactionPaging.loadState.append is LoadState.Loading) {
+            item {
+              Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+              ) {
+                LoadingIndicator(animating = true)
+              }
+            }
           }
         }
       }

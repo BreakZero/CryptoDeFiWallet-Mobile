@@ -30,26 +30,30 @@ import com.easy.defi.app.core.designsystem.theme.spacing
 import com.easy.defi.app.core.model.data.Asset
 import com.easy.defi.app.core.model.data.TransactionPlan
 import com.easy.defi.app.core.model.x.byDecimal2String
+import com.easy.defi.app.core.ui.DeFiAppBar
 import com.easy.defi.app.core.ui.LoadingButton
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun SendFormScreen(
-  sendFormViewModel: SendFormViewModel = hiltViewModel()
+  sendFormViewModel: SendFormViewModel = hiltViewModel(),
+  onBackClick: () -> Unit
 ) {
   val keyboardController = LocalSoftwareKeyboardController.current
   val uiState by sendFormViewModel.sendFormState.collectAsState()
   Column(
     modifier = Modifier
       .fillMaxSize()
-      .padding(
-        horizontal = MaterialTheme.spacing.medium,
-        vertical = MaterialTheme.spacing.medium
-      )
-      .imePadding(),
-    verticalArrangement = Arrangement.SpaceBetween
+      .imePadding()
   ) {
-    Column {
+    DeFiAppBar() {
+      onBackClick()
+    }
+    Column(
+      modifier = Modifier
+        .padding(MaterialTheme.spacing.medium)
+        .weight(1f)
+    ) {
       Text(text = stringResource(id = R.string.send__to))
       Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
       BasicTextField(
@@ -140,11 +144,17 @@ internal fun SendFormScreen(
       )
       Text(text = "Miner Fee")
     }
-    Button(modifier = Modifier.fillMaxWidth(), onClick = {
-      keyboardController?.hide()
-    }) {
+    Button(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = MaterialTheme.spacing.medium),
+      onClick = {
+        keyboardController?.hide()
+      }
+    ) {
       Text(text = "Next")
     }
+    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
   }
 }
 

@@ -9,6 +9,7 @@ import com.easy.defi.app.core.data.repository.ChainRepository
 import com.easy.defi.app.core.data.repository.CoinRepository
 import com.easy.defi.app.core.model.data.Asset
 import com.easy.defi.app.core.model.data.TransactionPlan
+import com.easy.defi.feature.asset.send.navigation.TransactionSendArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,7 +24,10 @@ class SendFormViewModel @Inject constructor(
   coinRepository: CoinRepository,
   @Ethereum chainRepository: ChainRepository
 ) : ViewModel() {
-  private val _asset = coinRepository.assetBySlug("")
+
+  private val slugArgs = TransactionSendArgs(savedStateHandle, stringDecoder)
+
+  private val _asset = coinRepository.assetBySlug(slugArgs.slug)
   private val _to = MutableStateFlow("")
   private val _memo = MutableStateFlow("")
   private val _amount = MutableStateFlow("")

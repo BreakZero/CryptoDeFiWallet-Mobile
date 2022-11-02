@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.easy.defi.app.core.model.data.BaseTransaction
 import com.easy.defi.app.core.network.EthereumDataSource
-import timber.log.Timber
 
 class TransactionPagingSource(
   private val address: String?,
@@ -19,7 +18,6 @@ class TransactionPagingSource(
     return address?.let {
       try {
         val nextPage = params.key ?: 1
-        Timber.tag("======").v("request by page: $nextPage")
         val transactions = ethereumDataSource.getTransactions(
           address = address,
           page = nextPage,

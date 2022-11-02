@@ -25,6 +25,7 @@ fun NavController.toTransactionList(slug: String) {
 }
 
 fun NavGraphBuilder.transactionListScreen(
+  navigateToSend: (String) -> Unit,
   onBackClick: () -> Unit
 ) {
   composableWithAnimation(
@@ -33,6 +34,6 @@ fun NavGraphBuilder.transactionListScreen(
       navArgument(assetSlugArg) { type = NavType.StringType }
     )
   ) {
-    TransactionListScreen(onBackClick = onBackClick)
+    TransactionListScreen(onBackClick = onBackClick, navigateToSend = navigateToSend)
   }
 }

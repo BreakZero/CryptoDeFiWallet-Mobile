@@ -31,6 +31,8 @@ import com.easy.defi.app.settings.navigation.navigateToSettings
 import com.easy.defi.app.settings.navigation.settingsScreen
 import com.easy.defi.feature.asset.list.navigation.assetGraphRoutePattern
 import com.easy.defi.feature.asset.list.navigation.walletGraph
+import com.easy.defi.feature.asset.send.navigation.navigateToSend
+import com.easy.defi.feature.asset.send.navigation.transactionSendScreen
 import com.easy.defi.feature.asset.transactions.navigation.toTransactionList
 import com.easy.defi.feature.asset.transactions.navigation.transactionListScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -75,7 +77,10 @@ fun DeFiNavHost(
         navController.toTransactionList(it)
       },
       nestedGraphs = {
-        transactionListScreen(onBackClick)
+        transactionListScreen(onBackClick = onBackClick, navigateToSend = {
+          navController.navigateToSend(it)
+        })
+        transactionSendScreen(onBackClick)
       }
     )
     dAppGraph(

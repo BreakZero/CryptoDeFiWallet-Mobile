@@ -32,6 +32,8 @@ class TransactionListViewModel @Inject constructor(
     Timber.tag("=====").v(it.slug)
   }
 
+  fun slug() = assetArgs.slug
+
   val transactionListUiState = coinRepository.assetBySlug(assetArgs.slug)
     .filterNotNull().map {
       TransactionListUiState(

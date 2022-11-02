@@ -74,20 +74,16 @@ class EthereumDataSource @Inject constructor(
     offset: Int,
     contract: String?
   ): List<EvmTransaction> {
-    return try {
-      httpClient.get(
-        urlString = "${UrlConstant.BASE_URL}/ethereum/transactions/$address"
-      ) {
-        parameter("page", page)
-        parameter("offset", offset)
-        if (!contract.isNullOrEmpty()) {
-          parameter("contract", contract)
-        }
-      }.body<BaseResponse<List<EvmTransactionDto>>>().data.map {
-        it.asExternalModel(address)
+    return httpClient.get(
+      urlString = "${UrlConstant.BASE_URL}/ethereum/transactions/$address"
+    ) {
+      parameter("page", page)
+      parameter("offset", offset)
+      if (!contract.isNullOrEmpty()) {
+        parameter("contract", contract)
       }
-    } catch (e: Exception) {
-      emptyList()
+    }.body<BaseResponse<List<EvmTransactionDto>>>().data.map {
+      it.asExternalModel(address)
     }
   }
 
