@@ -16,4 +16,40 @@
 
 package com.easy.defi.app.core.network
 
-class NftDataSource
+import com.easy.defi.app.core.model.data.NftGroup
+import com.easy.defi.app.core.model.data.NftInfo
+import com.easy.defi.app.core.network.model.nft.BaseNftResponse
+import com.easy.defi.app.core.network.model.nft.NftAssetGroupDto
+import com.easy.defi.app.core.network.model.nft.NftInfoDto
+import com.easy.defi.app.core.network.model.nft.asExternalModel
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import javax.inject.Inject
+
+class NftDataSource @Inject constructor(
+  private val httpClient: HttpClient
+) {
+
+  companion object {
+    private const val API_KEY = ""
+  }
+  suspend fun groupOfType(ercType: String): List<NftGroup> {
+    val response: BaseNftResponse<List<NftAssetGroupDto>> = httpClient.get {
+      url("${UrlConstant.NFT_SCAN_URL}/account/own/all/0x30145d714db337606c8f520bee9a3e3eac910636")
+      header("X-API-KEY", API_KEY)
+      parameter("erc_type", ercType)
+      parameter("show_attribute", false)
+    }.body()
+    return response.data.map(NftAssetGroupDto::asExternalModel)
+  }
+
+  suspend fun getNftAssetByTokenId(contractAddress: String, tokenId: String): NftInfo {
+    val response: BaseNftResponse<NftInfoDto> = httpClient.get {
+      url("${UrlConstant.NFT_SCAN_URL}/assets/$contractAddress/$tokenId")
+      header("X-API-KEY", API_KEY)
+      parameter("show_attribute", true)
+    }.body()
+    return response.data.asExternalModel()
+  }
+}

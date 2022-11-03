@@ -27,6 +27,8 @@ import com.easy.defi.app.core.data.repository.SupportCoinRepository
 import com.easy.defi.app.core.data.repository.WalletRepository
 import com.easy.defi.app.core.data.repository.dapp.CryptoDAppsRepository
 import com.easy.defi.app.core.data.repository.dapp.DAppRepository
+import com.easy.defi.app.core.data.repository.nft.NftRepository
+import com.easy.defi.app.core.data.repository.nft.NftScanRepository
 import com.easy.defi.app.core.data.repository.user.OfflineUserDataRepository
 import com.easy.defi.app.core.data.repository.user.UserDataRepository
 import com.easy.defi.app.core.data.util.ConnectivityManagerNetworkMonitor
@@ -68,6 +70,11 @@ interface DataModule {
   fun bindsCryptoDAppRepository(
     cryptoDAppsRepository: CryptoDAppsRepository
   ): DAppRepository
+
+  @Binds
+  fun bindsNftScanRepository(
+    nftScanRepository: NftScanRepository
+  ): NftRepository
 
   @Binds
   fun bindsNetworkMonitor(

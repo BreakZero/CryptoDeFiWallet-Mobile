@@ -19,6 +19,7 @@ package com.easy.defi
 import android.app.Application
 import coil.ImageLoader
 import coil.ImageLoaderFactory
+import coil.decode.GifDecoder
 import coil.decode.SvgDecoder
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
@@ -42,9 +43,9 @@ class DeFiApplication : Application(), ImageLoaderFactory {
     return ImageLoader.Builder(this)
       .components {
         add(SvgDecoder.Factory())
+        add(GifDecoder.Factory())
       }.memoryCache {
         MemoryCache.Builder(this)
-          // Set the max size to 25% of the app's available memory.
           .maxSizePercent(0.25)
           .build()
       }.diskCache {

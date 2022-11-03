@@ -16,13 +16,16 @@
 
 package com.easy.defi.app.core.network.model.nft
 
+import com.easy.defi.app.core.model.data.NftAttribute
+import com.easy.defi.app.core.model.data.NftGroup
+import com.easy.defi.app.core.model.data.NftInfo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NftAssetGroup(
+internal data class NftAssetGroupDto(
   @SerialName("assets")
-  val assets: List<NftInfo>,
+  val assets: List<NftInfoDto>,
   @SerialName("contract_address")
   val contractAddress: String,
   @SerialName("contract_name")
@@ -40,9 +43,9 @@ data class NftAssetGroup(
 )
 
 @Serializable
-data class NftOwnerAssets(
+internal data class NftOwnerAssetsDto(
   @SerialName("content")
-  val content: List<NftInfo>,
+  val content: List<NftInfoDto>,
   @SerialName("next")
   val next: String,
   @SerialName("total")
@@ -50,7 +53,7 @@ data class NftOwnerAssets(
 )
 
 @Serializable
-data class NftAttribute(
+internal data class NftAttributeDto(
   @SerialName("attribute_name")
   val attributeName: String,
   @SerialName("attribute_value")
@@ -60,11 +63,11 @@ data class NftAttribute(
 )
 
 @Serializable
-data class NftInfo(
+internal data class NftInfoDto(
   @SerialName("amount")
   val amount: String,
   @SerialName("attributes")
-  val attributes: List<NftAttribute>?,
+  val attributes: List<NftAttributeDto>?,
   @SerialName("content_type")
   val contentType: String?,
   @SerialName("content_uri")
@@ -110,3 +113,53 @@ data class NftInfo(
   @SerialName("token_uri")
   val tokenUri: String?
 )
+
+internal fun NftAssetGroupDto.asExternalModel(): NftGroup {
+  return NftGroup(
+    assets = assets.map(NftInfoDto::asExternalModel),
+    contractAddress = contractAddress,
+    contractName = contractName,
+    description = description,
+    floorPrice = floorPrice,
+    itemsTotal = itemsTotal,
+    logoUrl = logoUrl,
+    ownsTotal = ownsTotal
+  )
+}
+
+internal fun NftAttributeDto.asExternalModel(): NftAttribute {
+  return NftAttribute(
+    attributeName = attributeName,
+    attributeValue = attributeValue,
+    percentage = percentage
+  )
+}
+
+internal fun NftInfoDto.asExternalModel(): NftInfo {
+  return NftInfo(
+    amount = amount,
+    attributes = attributes?.map(NftAttributeDto::asExternalModel),
+    contentType = contentType,
+    contentUri = contentUri,
+    contractAddress = contractAddress,
+    contractName = contractName,
+    contractTokenId = contractTokenId,
+    ercType = ercType,
+    externalLink = externalLink,
+    imageUri = imageUri,
+    latestTradePrice = latestTradePrice,
+    latestTradeSymbol = latestTradeSymbol,
+    latestTradeTimestamp = latestTradeTimestamp,
+    metadataJson = metadataJson,
+    mintPrice = mintPrice,
+    mintTimestamp = mintTimestamp,
+    mintTransactionHash = mintTransactionHash,
+    minter = minter,
+    name = name,
+    nftscanId = nftscanId,
+    nftscanUri = nftscanUri,
+    owner = owner,
+    tokenId = tokenId,
+    tokenUri = tokenUri
+  )
+}

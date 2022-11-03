@@ -10,5 +10,10 @@ android {
 
 dependencies {
   implementation(libs.accompanist.swiperefresh)
+  implementation(libs.coil.kt.gif)
+  implementation(libs.androidx.media3.exoplayer)
+  implementation(libs.androidx.media3.ui)
+  implementation(libs.androidx.media3.dash)
+
 }
 

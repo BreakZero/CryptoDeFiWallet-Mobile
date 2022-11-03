@@ -24,6 +24,8 @@ import com.easy.defi.app.feature.dapp.launch.navigation.dAppLaunchScreen
 import com.easy.defi.app.feature.dapp.launch.navigation.navigateIntoDApp
 import com.easy.defi.app.feature.dapp.navigation.dAppGraph
 import com.easy.defi.app.feature.earn.navigation.earnGraph
+import com.easy.defi.app.feature.nft.detail.navigation.navigateToNftDetail
+import com.easy.defi.app.feature.nft.detail.navigation.nftDetailScreen
 import com.easy.defi.app.feature.nft.navigation.nftGraph
 import com.easy.defi.app.onboarding.OnBoardingNavigations
 import com.easy.defi.app.onboarding.onBoardingGraph
@@ -91,9 +93,17 @@ fun DeFiNavHost(
         navController.navigateIntoDApp(chainId, url, rpc)
       }
     )
-    nftGraph()
+    nftGraph(
+      navigateToSettings = {
+        navController.navigateToSettings()
+      },
+      navigateToNftDetail = { contractAddress, tokenId ->
+        navController.navigateToNftDetail(contractAddress, tokenId)
+      }
+    )
     earnGraph()
 
     dAppLaunchScreen(onBackClick)
+    nftDetailScreen(onBackClick)
   }
 }
