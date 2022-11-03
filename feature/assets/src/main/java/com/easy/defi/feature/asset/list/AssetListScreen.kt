@@ -31,7 +31,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +44,8 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.easy.defi.app.core.designsystem.R
@@ -56,7 +57,8 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @OptIn(
-  ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class
+  ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+  ExperimentalLifecycleComposeApi::class
 ) @Composable
 internal fun AssetListScreen(
   assetsViewModel: AssetListViewModel = hiltViewModel(),
@@ -64,7 +66,7 @@ internal fun AssetListScreen(
   navigateToTransactionList: (String) -> Unit
 ) {
   val context = LocalContext.current
-  val assetsUiState by assetsViewModel.assetState.collectAsState()
+  val assetsUiState by assetsViewModel.assetState.collectAsStateWithLifecycle()
   Column(
     modifier = Modifier
       .fillMaxSize()

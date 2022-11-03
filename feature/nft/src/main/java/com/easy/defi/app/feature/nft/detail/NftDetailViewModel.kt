@@ -15,7 +15,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,26 +26,25 @@ class NftDetailViewModel @Inject constructor(
 ) : ViewModel() {
   private val nftDetailArgs: NftDetailArgs = NftDetailArgs(savedStateHandle, stringDecoder)
 
-  companion object {
-    private const val DEFAULT_MEDIA_URI = "https://storage.googleapis.com/exoplayer-test-media-1/mkv/android-screens-lavf-56.36.100-aac-avc-main-1280x720.mkv"
-  }
-
-  init {
-    val mediaItem = MediaItem.fromUri(DEFAULT_MEDIA_URI)
-    player.setMediaItem(mediaItem)
-  }
-
   val nftDetailState = nftRepository.getNftAssetByTokenId(
     contractAddress = nftDetailArgs.contractAddress,
     tokenId = nftDetailArgs.tokenId
   ).asResult().map { nftResult ->
-    Timber.tag("=====").v(nftResult.toString())
     when (nftResult) {
-      is Result.Loading -> NftDetailState.Loading
-      is Result.Error -> NftDetailState.Error
-      is Result.Success<NftInfo> -> NftDetailState.Success(nftResult.data)
+      is Result.Loading -> NftDetailUiState.Loading
+      is Result.Error -> NftDetailUiState.Error
+      is Result.Success<NftInfo> -> {
+        val nftInfo = nftResult.data
+        if (nftInfo.contentType?.startsWith("video/") == true) {
+          nftInfo.contentUri?.let {
+            val mediaItem = MediaItem.fromUri(it)
+            player.setMediaItem(mediaItem)
+          }
+        }
+        NftDetailUiState.Success(nftResult.data)
+      }
     }
-  }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(1000), NftDetailState.Loading)
+  }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(1000), NftDetailUiState.Loading)
 
   override fun onCleared() {
     super.onCleared()
@@ -54,8 +52,8 @@ class NftDetailViewModel @Inject constructor(
   }
 }
 
-sealed interface NftDetailState {
-  object Loading : NftDetailState
-  object Error : NftDetailState
-  data class Success(val nftInfo: NftInfo) : NftDetailState
+sealed interface NftDetailUiState {
+  object Loading : NftDetailUiState
+  object Error : NftDetailUiState
+  data class Success(val nftInfo: NftInfo) : NftDetailUiState
 }

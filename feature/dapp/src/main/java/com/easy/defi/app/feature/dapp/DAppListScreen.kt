@@ -26,7 +26,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +36,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.easy.defi.app.core.common.result.ResultLoadState
@@ -46,14 +47,14 @@ import com.easy.defi.app.core.designsystem.theme.spacing
 import com.easy.defi.app.core.ui.LoadingIndicator
 import com.easy.defi.app.core.ui.extension.rotating
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun DAppListScreen(
   dAppListViewModel: DAppListViewModel = hiltViewModel(),
   navigateToSettings: () -> Unit,
   navigateIntoDApp: (Int, String, String) -> Unit
 ) {
-  val uiState by dAppListViewModel.uiState.collectAsState()
+  val uiState by dAppListViewModel.uiState.collectAsStateWithLifecycle()
   Column(
     modifier = Modifier
       .fillMaxSize()

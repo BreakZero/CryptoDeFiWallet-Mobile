@@ -20,11 +20,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easy.defi.app.core.ui.DeFiAppBar
 import com.easy.defi.app.feature.dapp.R
 import com.easy.defi.app.feature.dapp.launch.util.ActionMethod
@@ -36,6 +37,7 @@ import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 import timber.log.Timber
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 internal fun DAppLaunchScreen(
@@ -43,9 +45,8 @@ internal fun DAppLaunchScreen(
   onBackClick: () -> Unit
 ) {
   val context = LocalContext.current
-  val scope = rememberCoroutineScope()
   val message by dAppLaunchViewModel.uiState.collectAsState()
-  val showConfirm by dAppLaunchViewModel.showConfirmDialog.collectAsState()
+  val showConfirm by dAppLaunchViewModel.showConfirmDialog.collectAsStateWithLifecycle()
   var currWebView by remember { mutableStateOf<WebView?>(null) }
 
   val provideJs by remember {

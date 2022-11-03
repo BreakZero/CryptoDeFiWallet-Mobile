@@ -31,7 +31,6 @@ import androidx.compose.material.icons.filled.AudioFile
 import androidx.compose.material.icons.filled.MovieFilter
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +43,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.easy.defi.app.core.common.result.ResultLoadState
@@ -52,17 +53,18 @@ import com.easy.defi.app.core.designsystem.component.brushBackground
 import com.easy.defi.app.core.designsystem.theme.spacing
 import com.easy.defi.app.core.model.data.NftGroup
 import com.easy.defi.app.core.model.data.NftInfo
+import com.easy.defi.app.core.model.data.NftMediaType
 import com.easy.defi.app.core.ui.LoadingIndicator
 import com.easy.defi.app.core.ui.extension.rotating
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun NftGroupScreen(
   nftGroupViewModel: NftListViewModel = hiltViewModel(),
   navigateToSettings: () -> Unit,
   navigateToNftDetail: (String, String) -> Unit
 ) {
-  val nftGroupUiState by nftGroupViewModel.nftGroupState.collectAsState()
+  val nftGroupUiState by nftGroupViewModel.nftGroupState.collectAsStateWithLifecycle()
   Column(
     modifier = Modifier
       .fillMaxSize()
@@ -250,8 +252,8 @@ internal fun NFTContentPreview(
   onItemClick: (NftInfo) -> Unit,
   nftInfo: NftInfo
 ) {
-  when {
-    nftInfo.contentType?.startsWith("video/") == true -> {
+  when (nftInfo.mediaType()) {
+    NftMediaType.VIDEO -> {
       Image(
         imageVector = Icons.Default.MovieFilter,
         modifier = modifier.clickable {
@@ -261,7 +263,7 @@ internal fun NFTContentPreview(
         contentDescription = null
       )
     }
-    nftInfo.contentType?.startsWith("audio/") == true -> {
+    NftMediaType.AUDIO -> {
       Image(
         imageVector = Icons.Default.AudioFile,
         modifier = modifier.clickable {

@@ -15,7 +15,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +30,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -49,13 +50,14 @@ import com.easy.defi.app.core.ui.LoadingIndicator
 import timber.log.Timber
 import java.math.BigInteger
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun TransactionListScreen(
   listViewModel: TransactionListViewModel = hiltViewModel(),
   navigateToSend: (String) -> Unit,
   onBackClick: () -> Unit
 ) {
-  val uiState by listViewModel.transactionListUiState.collectAsState()
+  val uiState by listViewModel.transactionListUiState.collectAsStateWithLifecycle()
   val transactionPaging = uiState.transactionPaging.collectAsLazyPagingItems()
   Column(
     modifier = Modifier

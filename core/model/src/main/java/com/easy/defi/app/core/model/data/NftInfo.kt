@@ -42,4 +42,16 @@ data class NftInfo(
   val owner: String?,
   val tokenId: String,
   val tokenUri: String?
-)
+) {
+  fun mediaType(): NftMediaType {
+    return when {
+      contentType?.startsWith("video/") == true -> NftMediaType.VIDEO
+      contentType?.startsWith("audio/") == true -> NftMediaType.AUDIO
+      else -> NftMediaType.IMAGE
+    }
+  }
+}
+
+enum class NftMediaType {
+  VIDEO, IMAGE, AUDIO
+}

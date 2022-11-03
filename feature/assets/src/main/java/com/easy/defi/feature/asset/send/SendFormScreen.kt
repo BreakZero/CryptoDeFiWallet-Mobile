@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easy.defi.app.core.designsystem.R
 import com.easy.defi.app.core.designsystem.theme.spacing
 import com.easy.defi.app.core.model.data.Asset
@@ -33,14 +34,17 @@ import com.easy.defi.app.core.model.x.byDecimal2String
 import com.easy.defi.app.core.ui.DeFiAppBar
 import com.easy.defi.app.core.ui.LoadingButton
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(
+  ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
+  ExperimentalLifecycleComposeApi::class
+)
 @Composable
 internal fun SendFormScreen(
   sendFormViewModel: SendFormViewModel = hiltViewModel(),
   onBackClick: () -> Unit
 ) {
   val keyboardController = LocalSoftwareKeyboardController.current
-  val uiState by sendFormViewModel.sendFormState.collectAsState()
+  val uiState by sendFormViewModel.sendFormState.collectAsStateWithLifecycle()
   Column(
     modifier = Modifier
       .fillMaxSize()
