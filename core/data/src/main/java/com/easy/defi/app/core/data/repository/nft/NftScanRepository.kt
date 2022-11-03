@@ -10,8 +10,8 @@ import javax.inject.Inject
 class NftScanRepository @Inject constructor(
   private val nftDataSource: NftDataSource
 ) : NftRepository {
-  override fun getGroupByErcType(ercType: String): Flow<List<NftGroup>> {
-    return flow { emit(nftDataSource.groupOfType(ercType)) }
+  override fun getGroupByErcType(address: String, ercType: String): Flow<List<NftGroup>> {
+    return flow { emit(nftDataSource.groupOfType(address, ercType)) }
   }
 
   override fun getNftAssetByTokenId(contractAddress: String, tokenId: String): Flow<NftInfo> {

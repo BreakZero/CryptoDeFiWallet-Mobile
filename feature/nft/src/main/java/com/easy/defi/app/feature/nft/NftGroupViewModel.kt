@@ -21,7 +21,10 @@ class NftListViewModel @Inject constructor(
   nftRepository: NftRepository
 ) : ViewModel() {
   private val _userProfile = userDataRepository.userDataStream
-  private val _nftGroup = nftRepository.getGroupByErcType("erc721").asResult()
+  private val _nftGroup = nftRepository.getGroupByErcType(
+    "0x30145d714db337606c8f520bee9a3e3eac910636",
+    "erc721"
+  ).asResult()
 
   val nftGroupState = combine(_userProfile, _nftGroup) { userData, nftGroupResult ->
     when (nftGroupResult) {

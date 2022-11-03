@@ -5,7 +5,7 @@ import com.easy.defi.app.core.model.data.NftInfo
 import kotlinx.coroutines.flow.Flow
 
 interface NftRepository {
-  fun getGroupByErcType(ercType: String): Flow<List<NftGroup>>
+  fun getGroupByErcType(address: String, ercType: String): Flow<List<NftGroup>>
 
   fun getNftAssetByTokenId(contractAddress: String, tokenId: String): Flow<NftInfo>
 }

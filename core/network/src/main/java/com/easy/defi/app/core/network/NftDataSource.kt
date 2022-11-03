@@ -34,9 +34,9 @@ class NftDataSource @Inject constructor(
   companion object {
     private const val API_KEY = ""
   }
-  suspend fun groupOfType(ercType: String): List<NftGroup> {
+  suspend fun groupOfType(address: String, ercType: String): List<NftGroup> {
     val response: BaseNftResponse<List<NftAssetGroupDto>> = httpClient.get {
-      url("${UrlConstant.NFT_SCAN_URL}/account/own/all/0x30145d714db337606c8f520bee9a3e3eac910636")
+      url("${UrlConstant.NFT_SCAN_URL}/account/own/all/$address")
       header("X-API-KEY", API_KEY)
       parameter("erc_type", ercType)
       parameter("show_attribute", false)
