@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.easy.defi.app.core.data.repository
+package com.easy.defi.app.core.data.repository.chain
 
 import androidx.paging.PagingData
 import com.easy.defi.app.core.data.Syncable

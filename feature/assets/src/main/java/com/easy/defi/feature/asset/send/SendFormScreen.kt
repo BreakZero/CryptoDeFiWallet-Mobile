@@ -80,6 +80,7 @@ internal fun SendFormScreen(
         ),
         value = uiState.to,
         onValueChange = {
+          sendFormViewModel.onToChanged(it)
         }
       )
       Row(
@@ -116,6 +117,7 @@ internal fun SendFormScreen(
         ),
         value = uiState.amount.orEmpty(),
         onValueChange = {
+          sendFormViewModel.onAmountChanged(it)
         }
       )
       Divider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
@@ -144,6 +146,7 @@ internal fun SendFormScreen(
         ),
         value = uiState.memo,
         onValueChange = {
+          sendFormViewModel.onMemoChanged(it)
         }
       )
       Text(text = "Miner Fee")
@@ -154,6 +157,7 @@ internal fun SendFormScreen(
         .padding(horizontal = MaterialTheme.spacing.medium),
       onClick = {
         keyboardController?.hide()
+        sendFormViewModel.sign()
       }
     ) {
       Text(text = "Next")

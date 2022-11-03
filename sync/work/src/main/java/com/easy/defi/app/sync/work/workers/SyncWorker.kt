@@ -25,7 +25,7 @@ import com.easy.defi.app.core.common.network.DwDispatchers
 import com.easy.defi.app.core.data.Synchronizer
 import com.easy.defi.app.core.data.di.annotations.Bitcoin
 import com.easy.defi.app.core.data.di.annotations.Ethereum
-import com.easy.defi.app.core.data.repository.ChainRepository
+import com.easy.defi.app.core.data.repository.chain.ChainRepository
 import com.easy.defi.app.sync.work.initializers.SyncConstraints
 import com.easy.defi.app.sync.work.initializers.syncForegroundInfo
 import dagger.assisted.Assisted

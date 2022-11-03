@@ -14,42 +14,64 @@
  * limitations under the License.
  */
 
-package com.easy.defi.app.core.data.repository
+package com.easy.defi.app.core.data.repository.chain
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.easy.defi.app.core.data.HdWalletHolder
 import com.easy.defi.app.core.data.Synchronizer
+import com.easy.defi.app.core.data.paging.TransactionPagingSource
+import com.easy.defi.app.core.database.dao.AssetDao
 import com.easy.defi.app.core.model.data.BaseTransaction
+import com.easy.defi.app.core.network.EthereumDataSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import wallet.core.jni.CoinType
 import java.math.BigInteger
 import javax.inject.Inject
 
-class BitcoinChainRepository @Inject constructor(
-  private val hdWalletHolder: HdWalletHolder
+class EthereumRepository @Inject constructor(
+  private val hdWalletHolder: HdWalletHolder,
+  private val ethereumDataSource: EthereumDataSource,
+  private val assetDao: AssetDao
 ) : ChainRepository {
 
   override val address: String?
-    get() = hdWalletHolder.hdWallet?.getAddressForCoin(CoinType.BITCOIN)
+    get() = hdWalletHolder.hdWallet?.getAddressForCoin(CoinType.ETHEREUM)
 
   override suspend fun getBalance(contractAddress: String?): BigInteger {
-    return BigInteger.ZERO
+    return address?.let {
+      ethereumDataSource.getSingleBalance(it, contractAddress)
+    } ?: BigInteger.ZERO
   }
 
   override suspend fun getTransactions(
     contractAddress: String?
   ): Flow<PagingData<BaseTransaction>> {
-    return flow { emit(PagingData.empty()) }
+    return Pager(PagingConfig(pageSize = 20)) {
+      TransactionPagingSource(
+        contractAddress = contractAddress,
+        address = address,
+        ethereumDataSource = ethereumDataSource
+      )
+    }.flow
   }
 
   override suspend fun broadcastTransaction(rawData: String): String {
-    return ""
+    return ethereumDataSource.broadcast(rawData)
   }
 
   override suspend fun syncWith(synchronizer: Synchronizer): Boolean {
-    Timber.tag("=====").v("bitcoin address: $address")
-    return true
+    Timber.tag("=====").v(address)
+    return address?.let {
+      val ethBalance = ethereumDataSource.getSingleBalance(it, null)
+      assetDao.updateBalanceForMainChain("eth", ethBalance.toString())
+      val tokenHoldings = ethereumDataSource.getTokenHoldings(it)
+      tokenHoldings.onEach {
+        assetDao.updateBalance(contract = it.contractAddress, balance = it.amount)
+      }
+      true
+    } ?: false
   }
 }

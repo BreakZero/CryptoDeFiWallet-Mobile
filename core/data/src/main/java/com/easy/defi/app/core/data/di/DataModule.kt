@@ -19,12 +19,12 @@ package com.easy.defi.app.core.data.di
 import com.easy.defi.app.core.data.HdWalletHolder
 import com.easy.defi.app.core.data.di.annotations.Bitcoin
 import com.easy.defi.app.core.data.di.annotations.Ethereum
-import com.easy.defi.app.core.data.repository.BitcoinChainRepository
-import com.easy.defi.app.core.data.repository.ChainRepository
 import com.easy.defi.app.core.data.repository.CoinRepository
-import com.easy.defi.app.core.data.repository.EvmChainRepository
 import com.easy.defi.app.core.data.repository.SupportCoinRepository
 import com.easy.defi.app.core.data.repository.WalletRepository
+import com.easy.defi.app.core.data.repository.chain.BitcoinRepository
+import com.easy.defi.app.core.data.repository.chain.ChainRepository
+import com.easy.defi.app.core.data.repository.chain.EthereumRepository
 import com.easy.defi.app.core.data.repository.dapp.CryptoDAppsRepository
 import com.easy.defi.app.core.data.repository.dapp.DAppRepository
 import com.easy.defi.app.core.data.repository.nft.NftRepository
@@ -47,13 +47,13 @@ interface DataModule {
   @Binds
   @Ethereum
   fun bindsEthereumChainRepository(
-    evmChainRepository: EvmChainRepository
+    evmChainRepository: EthereumRepository
   ): ChainRepository
 
   @Binds
   @Bitcoin
   fun bindsBitcoinChainRepository(
-    bitcoinChainRepository: BitcoinChainRepository
+    bitcoinChainRepository: BitcoinRepository
   ): ChainRepository
 
   @Binds

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.easy.defi.app.core.common.decoder.StringDecoder
 import com.easy.defi.app.core.data.di.annotations.Ethereum
-import com.easy.defi.app.core.data.repository.ChainRepository
+import com.easy.defi.app.core.data.repository.chain.ChainRepository
 import com.easy.defi.app.feature.dapp.launch.navigation.DAppLaunchArgs
 import com.easy.defi.app.feature.dapp.launch.util.ActionMethod
 import com.easy.defi.app.feature.dapp.launch.util.MessageData
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class DAppLaunchViewModel @Inject constructor(
   savedStateHandle: SavedStateHandle,
   stringDecoder: StringDecoder,
-  @Ethereum evmChainRepository: ChainRepository
+  @Ethereum ethereumRepository: ChainRepository
 ) : ViewModel() {
 
   private val dAppInfoArgs: DAppLaunchArgs = DAppLaunchArgs(savedStateHandle, stringDecoder)
@@ -55,7 +55,7 @@ class DAppLaunchViewModel @Inject constructor(
 
   val webUrl = dAppInfoArgs.dAppUrl
 
-  private val ethAddress = evmChainRepository.address.orEmpty()
+  private val ethAddress = ethereumRepository.address.orEmpty()
 
   private val _message = MutableStateFlow(MessageData.Empty)
 
