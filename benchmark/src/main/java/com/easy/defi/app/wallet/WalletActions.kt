@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.easy.defi.app.core.model.data
+package com.easy.defi.app.wallet
 
-import java.math.BigInteger
+import androidx.benchmark.macro.MacrobenchmarkScope
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Until
 
-data class ReadyToSign(
-  val to: String,
-  val amount: BigInteger,
-  val memo: String? = null,
-  val contract: String? = null,
-  val chainId: Int = 1
-)
+fun MacrobenchmarkScope.walletWaitForContent() {
+  // Wait until content is loaded
+  device.wait(Until.hasObject(By.text("TOTAL BALANCE")), 30_000)
+}

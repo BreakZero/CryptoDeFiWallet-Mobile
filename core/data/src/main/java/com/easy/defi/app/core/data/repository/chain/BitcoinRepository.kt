@@ -20,6 +20,8 @@ import androidx.paging.PagingData
 import com.easy.defi.app.core.data.HdWalletHolder
 import com.easy.defi.app.core.data.Synchronizer
 import com.easy.defi.app.core.model.data.BaseTransaction
+import com.easy.defi.app.core.model.data.ReadyToSign
+import com.easy.defi.app.core.model.data.TransactionPlan
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
@@ -46,6 +48,10 @@ class BitcoinRepository @Inject constructor(
 
   override suspend fun broadcastTransaction(rawData: String): String {
     return ""
+  }
+
+  override suspend fun sign(readyToSign: ReadyToSign): TransactionPlan {
+    return TransactionPlan.EmptyPlan
   }
 
   override suspend fun syncWith(synchronizer: Synchronizer): Boolean {

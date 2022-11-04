@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.easy.defi.app.core.model.data
+package com.easy.defi.app
 
-import java.math.BigInteger
+import com.easy.defi.app.benchmark.BuildConfig
 
-data class ReadyToSign(
-  val to: String,
-  val amount: BigInteger,
-  val memo: String? = null,
-  val contract: String? = null,
-  val chainId: Int = 1
-)
+/**
+ * Convenience parameter to use proper package name with regards to build type and build flavor.
+ */
+const val PACKAGE_NAME =
+  "com.crypto.defi.${BuildConfig.FLAVOR}.${BuildConfig.BUILD_TYPE}"

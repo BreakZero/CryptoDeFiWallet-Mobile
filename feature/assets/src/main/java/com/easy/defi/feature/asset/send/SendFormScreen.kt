@@ -33,6 +33,7 @@ import com.easy.defi.app.core.model.data.TransactionPlan
 import com.easy.defi.app.core.model.x.byDecimal2String
 import com.easy.defi.app.core.ui.DeFiAppBar
 import com.easy.defi.app.core.ui.LoadingButton
+import timber.log.Timber
 
 @OptIn(
   ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
@@ -164,6 +165,11 @@ internal fun SendFormScreen(
     }
     Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
   }
+  if (uiState.plan != TransactionPlan.EmptyPlan) {
+    ConfirmDialog(asset = uiState.asset!!, plan = uiState.plan) {
+      Timber.tag("=====").v("confirm")
+    }
+  }
 }
 
 @Composable
@@ -172,8 +178,7 @@ private fun ConfirmDialog(
   plan: TransactionPlan,
   onConfirm: () -> Unit
 ) {
-  Dialog(onDismissRequest = {
-  }) {
+  Dialog(onDismissRequest = {}) {
     var loading by remember {
       mutableStateOf(false)
     }

@@ -66,10 +66,12 @@ class MainActivity : ComponentActivity() {
       }
     }
 
-    splashScreen.setKeepOnScreenCondition {
-      when (uiState) {
-        MainActivityUiState.Loading -> true
-        is MainActivityUiState.Success -> false
+    if (BuildConfig.BUILD_TYPE != "benchmark") {
+      splashScreen.setKeepOnScreenCondition {
+        when (uiState) {
+          MainActivityUiState.Loading -> true
+          is MainActivityUiState.Success -> false
+        }
       }
     }
 

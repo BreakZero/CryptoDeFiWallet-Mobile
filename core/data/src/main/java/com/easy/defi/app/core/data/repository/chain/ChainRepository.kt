@@ -19,6 +19,8 @@ package com.easy.defi.app.core.data.repository.chain
 import androidx.paging.PagingData
 import com.easy.defi.app.core.data.Syncable
 import com.easy.defi.app.core.model.data.BaseTransaction
+import com.easy.defi.app.core.model.data.ReadyToSign
+import com.easy.defi.app.core.model.data.TransactionPlan
 import kotlinx.coroutines.flow.Flow
 import java.math.BigInteger
 
@@ -33,4 +35,6 @@ interface ChainRepository : Syncable {
   ): Flow<PagingData<BaseTransaction>>
 
   suspend fun broadcastTransaction(rawData: String): String
+
+  suspend fun sign(readyToSign: ReadyToSign): TransactionPlan
 }

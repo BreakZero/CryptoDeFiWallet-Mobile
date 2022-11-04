@@ -16,15 +16,20 @@
 
 package com.easy.defi.app.core.network
 
+import androidx.annotation.Keep
+import com.easy.defi.app.core.common.extensions._16toNumber
 import com.easy.defi.app.core.model.data.EvmTransaction
 import com.easy.defi.app.core.model.data.TokenHolding
 import com.easy.defi.app.core.network.model.BaseResponse
 import com.easy.defi.app.core.network.model.EvmTransactionDto
+import com.easy.defi.app.core.network.model.FeeHistoryDto
 import com.easy.defi.app.core.network.model.TokenHoldingDto
 import com.easy.defi.app.core.network.model.asExternalModel
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.math.BigInteger
 import javax.inject.Inject
@@ -93,4 +98,62 @@ class EthereumDataSource @Inject constructor(
       setBody(rawData)
     }.body<BaseResponse<String>>().data
   }
+
+  suspend fun fetchNonce(
+    address: String,
+    chain: String = "ethereum"
+  ) = withContext(Dispatchers.IO) {
+    httpClient.get("${UrlConstant.BASE_URL}/$chain/$address/nonce")
+      .body<BaseResponse<Long>>().data
+  }
+
+  suspend fun estimateGasLimit(
+    chain: String = "ethereum",
+    from: String,
+    to: String,
+    input: String? = null
+  ) = withContext(Dispatchers.IO) {
+    return@withContext input?.let {
+      val response = httpClient.get("${UrlConstant.BASE_URL}/$chain/estimateGas") {
+        parameter("from", from)
+        parameter("to", to)
+        parameter("input_data", it)
+      }.body<BaseResponse<Long>>()
+      response.data
+    } ?: 21000L
+  }
+
+  suspend fun feeHistory(
+    chain: String = "ethereum"
+  ) = withContext(Dispatchers.Default) {
+    val history = httpClient.get("${UrlConstant.BASE_URL}/$chain/feeHistory")
+      .body<BaseResponse<FeeHistoryDto>>()
+    val baseFee = formatFeeHistory(history.data)
+    Pair(baseFee, baseFee)
+  }
+
+  private fun formatFeeHistory(historyDto: FeeHistoryDto): BigInteger {
+    val oldestBlock = historyDto.oldestBlock
+    val blocks = historyDto.baseFeePerGas.mapIndexed { index, value ->
+      BlockInfo(
+        number = oldestBlock._16toNumber().plus(index.toBigInteger()),
+        baseFeePerGas = value._16toNumber(),
+        gasUsedRatio = historyDto.gasUsedRatio.getOrNull(index) ?: 0.0,
+        priorityFeePerGas = historyDto.reward.getOrNull(index)?.map { it._16toNumber() }
+          ?: emptyList()
+      )
+    }
+    val firstPercentialPriorityFees = blocks.first().priorityFeePerGas
+    val sum = firstPercentialPriorityFees.reduce { acc, bigInteger -> acc.plus(bigInteger) }
+    val manual = sum.divide(firstPercentialPriorityFees.size.toBigInteger())
+    return manual
+  }
 }
+
+@Keep
+internal data class BlockInfo(
+  val number: BigInteger,
+  val baseFeePerGas: BigInteger,
+  val gasUsedRatio: Double,
+  val priorityFeePerGas: List<BigInteger>
+)
