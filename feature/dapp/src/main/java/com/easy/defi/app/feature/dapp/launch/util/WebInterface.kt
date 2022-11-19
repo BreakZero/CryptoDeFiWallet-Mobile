@@ -13,7 +13,6 @@ internal class WebInterface(
   fun postMessage(json: String) {
     val obj = JSONObject(json)
     val id = obj.getLong("id")
-    Timber.tag("=====").v(obj.toString())
     when (val method = ActionMethod.fromValue(obj.getString("name"))) {
       ActionMethod.REQUESTACCOUNTS -> {
         result.invoke(

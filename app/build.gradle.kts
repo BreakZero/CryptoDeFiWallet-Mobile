@@ -90,6 +90,7 @@ dependencies {
 
   androidTestImplementation(project(":core:testing"))
   androidTestImplementation(libs.androidx.navigation.testing)
+  androidTestImplementation(kotlin("test"))
   debugImplementation(libs.androidx.compose.ui.testManifest)
 
   implementation(libs.accompanist.systemuicontroller)

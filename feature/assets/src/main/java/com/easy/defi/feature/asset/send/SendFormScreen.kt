@@ -23,6 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,8 +33,6 @@ import com.easy.defi.app.core.model.data.Asset
 import com.easy.defi.app.core.model.data.TransactionPlan
 import com.easy.defi.app.core.model.x.byDecimal2String
 import com.easy.defi.app.core.ui.DeFiAppBar
-import com.easy.defi.app.core.ui.LoadingButton
-import timber.log.Timber
 
 @OptIn(
   ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
@@ -152,6 +151,16 @@ internal fun SendFormScreen(
       )
       Text(text = "Miner Fee")
     }
+    if (uiState.plan != TransactionPlan.EmptyPlan) {
+      ConfirmDialog(
+        asset = uiState.asset!!, plan = uiState.plan,
+        onDismiss = {
+          sendFormViewModel.releasePlan()
+        },
+        onConfirm = {
+        }
+      )
+    }
     Button(
       modifier = Modifier
         .fillMaxWidth()
@@ -165,138 +174,149 @@ internal fun SendFormScreen(
     }
     Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
   }
-  if (uiState.plan != TransactionPlan.EmptyPlan) {
-    ConfirmDialog(asset = uiState.asset!!, plan = uiState.plan) {
-      Timber.tag("=====").v("confirm")
-    }
-  }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun ConfirmDialog(
   asset: Asset,
   plan: TransactionPlan,
+  onDismiss: () -> Unit,
   onConfirm: () -> Unit
 ) {
-  Dialog(onDismissRequest = {}) {
+  Dialog(
+    onDismissRequest = {},
+    properties = DialogProperties(usePlatformDefaultWidth = false)
+  ) {
     var loading by remember {
       mutableStateOf(false)
     }
-    Column(modifier = Modifier.fillMaxWidth()) {
-      Row(
+    Column(modifier = Modifier.fillMaxSize()) {
+      Spacer(modifier = Modifier.weight(1f))
+      Column(
         modifier = Modifier
           .fillMaxWidth()
-          .height(MaterialTheme.spacing.space48),
-        verticalAlignment = Alignment.CenterVertically
+          .clip(
+            RoundedCornerShape(
+              topEnd = MaterialTheme.spacing.space12,
+              topStart = MaterialTheme.spacing.space12
+            )
+          )
+          .background(MaterialTheme.colorScheme.surface)
       ) {
-        IconButton(
-          onClick = {
-          },
+        Row(
           modifier = Modifier
-            .size(MaterialTheme.spacing.space48)
-            .padding(MaterialTheme.spacing.small)
+            .fillMaxWidth()
+            .height(MaterialTheme.spacing.space48),
+          verticalAlignment = Alignment.CenterVertically
         ) {
-          Icon(imageVector = Icons.Default.Close, contentDescription = null)
+          IconButton(
+            onClick = {
+              onDismiss()
+            },
+            modifier = Modifier
+              .size(MaterialTheme.spacing.space48)
+              .padding(MaterialTheme.spacing.small)
+          ) {
+            Icon(imageVector = Icons.Default.Close, contentDescription = null)
+          }
+          Text(
+            modifier = Modifier
+              .weight(1.0f),
+            text = "Payment Details",
+            textAlign = TextAlign.Center
+          )
+          Spacer(modifier = Modifier.size(MaterialTheme.spacing.space48))
         }
+        Divider()
         Text(
-          modifier = Modifier
-            .weight(1.0f),
-          text = "Payment Details",
-          textAlign = TextAlign.Center
+          modifier = Modifier.fillMaxWidth(),
+          textAlign = TextAlign.Center,
+          text = "${plan.amount.byDecimal2String(asset.decimal)} ${asset.symbol}",
+          style = MaterialTheme.typography.titleLarge
         )
-        Spacer(modifier = Modifier.size(MaterialTheme.spacing.space48))
-      }
-      Divider()
-      Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        text = "${plan.amount.byDecimal2String(asset.decimal)} ${asset.symbol}",
-        style = MaterialTheme.typography.titleLarge
-      )
-      Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(
-            vertical = MaterialTheme.spacing.small,
-            horizontal = MaterialTheme.spacing.medium
-          ),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Text(modifier = Modifier.fillMaxWidth(0.3f), text = "Payment Info")
-        Text(
+        Row(
           modifier = Modifier
-            .padding(horizontal = MaterialTheme.spacing.small)
-            .weight(1.0F),
-          text = plan.action
-        )
-      }
-      Divider(thickness = 0.2.dp)
-      Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(
-            vertical = MaterialTheme.spacing.small,
-            horizontal = MaterialTheme.spacing.medium
-          ),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Text(modifier = Modifier.fillMaxWidth(0.3f), text = "To")
-        Text(
+            .fillMaxWidth()
+            .padding(
+              vertical = MaterialTheme.spacing.small,
+              horizontal = MaterialTheme.spacing.medium
+            ),
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          Text(modifier = Modifier.fillMaxWidth(0.3f), text = "Payment Info")
+          Text(
+            modifier = Modifier
+              .padding(horizontal = MaterialTheme.spacing.small)
+              .weight(1.0F),
+            text = plan.action
+          )
+        }
+        Divider(thickness = 0.2.dp)
+        Row(
           modifier = Modifier
-            .padding(horizontal = MaterialTheme.spacing.small)
-            .weight(1.0F),
-          text = plan.to
-        )
-      }
-      Divider(thickness = 0.2.dp)
-      Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(
-            vertical = MaterialTheme.spacing.small,
-            horizontal = MaterialTheme.spacing.medium
-          ),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Text(modifier = Modifier.fillMaxWidth(0.3f), text = "From")
-        Text(
+            .fillMaxWidth()
+            .padding(
+              vertical = MaterialTheme.spacing.small,
+              horizontal = MaterialTheme.spacing.medium
+            ),
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          Text(modifier = Modifier.fillMaxWidth(0.3f), text = "To")
+          Text(
+            modifier = Modifier
+              .padding(horizontal = MaterialTheme.spacing.small)
+              .weight(1.0F),
+            text = plan.to
+          )
+        }
+        Divider(thickness = 0.2.dp)
+        Row(
           modifier = Modifier
-            .padding(horizontal = MaterialTheme.spacing.small)
-            .weight(1.0F),
-          text = plan.from
-        )
-      }
-      Divider(thickness = 0.2.dp)
-      Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(
-            vertical = MaterialTheme.spacing.small,
-            horizontal = MaterialTheme.spacing.medium
-          ),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Text(modifier = Modifier.fillMaxWidth(0.3f), text = "Miner Fee")
-        Text(
+            .fillMaxWidth()
+            .padding(
+              vertical = MaterialTheme.spacing.small,
+              horizontal = MaterialTheme.spacing.medium
+            ),
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          Text(modifier = Modifier.fillMaxWidth(0.3f), text = "From")
+          Text(
+            modifier = Modifier
+              .padding(horizontal = MaterialTheme.spacing.small)
+              .weight(1.0F),
+            text = plan.from
+          )
+        }
+        Divider(thickness = 0.2.dp)
+        Row(
           modifier = Modifier
-            .padding(horizontal = MaterialTheme.spacing.small)
-            .weight(1.0F),
-          text = "${plan.fee.byDecimal2String(asset.feeDecimal())} ${asset.feeSymbol()}"
-        )
-      }
-      LoadingButton(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(horizontal = MaterialTheme.spacing.medium),
-        loading = loading,
-        onClick = {
-          if (!loading) {
-            loading = true
+            .fillMaxWidth()
+            .padding(
+              vertical = MaterialTheme.spacing.small,
+              horizontal = MaterialTheme.spacing.medium
+            ),
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          Text(modifier = Modifier.fillMaxWidth(0.3f), text = "Miner Fee")
+          Text(
+            modifier = Modifier
+              .padding(horizontal = MaterialTheme.spacing.small)
+              .weight(1.0F),
+            text = "${plan.fee.byDecimal2String(asset.feeDecimal())} ${asset.feeSymbol()}"
+          )
+        }
+        Button(
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = MaterialTheme.spacing.medium),
+          onClick = {
             onConfirm()
           }
+        ) {
+          Text(text = stringResource(id = R.string.send__confirm))
         }
-      ) {
-        Text(text = stringResource(id = R.string.send__confirm))
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.space12))
       }
     }
   }

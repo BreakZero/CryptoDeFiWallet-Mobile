@@ -13,12 +13,13 @@ import com.easy.defi.app.core.model.data.TransactionPlan
 import com.easy.defi.app.core.model.x.upWithDecimal
 import com.easy.defi.feature.asset.send.navigation.TransactionSendArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import timber.log.Timber
+import kotlinx.coroutines.withContext
 import java.math.BigInteger
 import javax.inject.Inject
 
@@ -83,12 +84,9 @@ class SendFormViewModel @Inject constructor(
             )
           )
           plan?.let {
-            Timber.tag("=====").v(it.toString())
-            _planState.update { it }
-            // on success
-          } ?: kotlin.run {
-            // on failure
-            _planState.update { TransactionPlan.EmptyPlan }
+            withContext(Dispatchers.Main) {
+              _planState.update { plan }
+            }
           }
         }
       }

@@ -35,7 +35,6 @@ import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
-import timber.log.Timber
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @SuppressLint("SetJavaScriptEnabled")
@@ -123,7 +122,6 @@ internal fun DAppLaunchScreen(
           when (message.method) {
             ActionMethod.REQUESTACCOUNTS -> {
               currWebView?.let {
-                Timber.tag("=====").v(message.toString())
                 dAppLaunchViewModel.setAddress(it)
                 dAppLaunchViewModel.sendAddress(it, message.methodId)
               }
@@ -149,7 +147,6 @@ private fun ActionAlert(
 ) {
   AlertDialog(
     onDismissRequest = {
-      Timber.tag("=====").v("tap outside")
     },
     title = {
       Text(text = title)
