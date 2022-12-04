@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package com.easy.defi.app.settings.navigation
+package com.easy.defi.app.settings.network.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.easy.defi.app.core.designsystem.component.composableWithAnimation
-import com.easy.defi.app.settings.SettingsScreen
+import com.easy.defi.app.settings.network.SettingsCurrencyScreen
 
-const val settingsEntryRoute = "settings_route"
+const val settingsCurrencyEntryRoute = "settings_currency_route"
 
-fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
-  this.navigate(settingsEntryRoute, navOptions)
+fun NavController.navigateToSetCurrency(navOptions: NavOptions? = null) {
+  this.navigate(settingsCurrencyEntryRoute, navOptions)
 }
 
-fun NavGraphBuilder.settingsScreen(
-  navigateToCurrency: () -> Unit,
+fun NavGraphBuilder.settingsCurrencyScreen(
   onBackClick: () -> Unit
 ) {
-  composableWithAnimation(route = settingsEntryRoute) {
-    SettingsScreen(onBackClick = onBackClick, navigateToCurrency = navigateToCurrency)
+  composableWithAnimation(route = settingsCurrencyEntryRoute) {
+    SettingsCurrencyScreen(onBackClick = onBackClick)
   }
 }

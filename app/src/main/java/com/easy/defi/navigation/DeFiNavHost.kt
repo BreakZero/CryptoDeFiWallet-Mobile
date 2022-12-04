@@ -31,6 +31,8 @@ import com.easy.defi.app.onboarding.OnBoardingNavigations
 import com.easy.defi.app.onboarding.onBoardingGraph
 import com.easy.defi.app.settings.navigation.navigateToSettings
 import com.easy.defi.app.settings.navigation.settingsScreen
+import com.easy.defi.app.settings.network.navigation.navigateToSetCurrency
+import com.easy.defi.app.settings.network.navigation.settingsCurrencyScreen
 import com.easy.defi.feature.asset.list.navigation.assetGraphRoutePattern
 import com.easy.defi.feature.asset.list.navigation.walletGraph
 import com.easy.defi.feature.asset.send.navigation.navigateToSend
@@ -69,7 +71,13 @@ fun DeFiNavHost(
     startDestination = startDestination,
     modifier = modifier
   ) {
-    settingsScreen(onBackClick)
+    settingsScreen(
+      onBackClick = onBackClick,
+      navigateToCurrency = {
+        navController.navigateToSetCurrency()
+      }
+    )
+    settingsCurrencyScreen(onBackClick)
 
     walletGraph(
       navigateToSettings = {

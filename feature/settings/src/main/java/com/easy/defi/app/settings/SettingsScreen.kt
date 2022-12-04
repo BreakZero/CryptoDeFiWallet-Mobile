@@ -49,6 +49,7 @@ import com.easy.defi.app.core.ui.extension.rotating
 @Composable
 fun SettingsScreen(
   settingsViewModel: SettingsViewModel = hiltViewModel(),
+  navigateToCurrency: () -> Unit,
   onBackClick: () -> Unit
 ) {
   Scaffold(
@@ -138,6 +139,7 @@ fun SettingsScreen(
       ) {
         when (it) {
           0 -> {
+            navigateToCurrency()
           }
           1 -> {
           }
