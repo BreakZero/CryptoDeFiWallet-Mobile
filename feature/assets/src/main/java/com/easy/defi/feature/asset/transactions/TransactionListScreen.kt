@@ -171,7 +171,7 @@ private fun TransactionListHeader(
       verticalAlignment = Alignment.CenterVertically
     ) {
       AsyncImage(
-        modifier = androidx.compose.ui.Modifier.size(MaterialTheme.spacing.space24),
+        modifier = Modifier.size(MaterialTheme.spacing.space24),
         model = ImageRequest.Builder(LocalContext.current)
           .data(asset?.iconUrl)
           .placeholder(R.drawable.avatar_generic_1)
@@ -219,7 +219,7 @@ private fun TransactionListHeader(
     Text(text = " ~ ${asset?.fiatBalance()?.toPlainString() ?: "--"} USD")
     Row {
       Column(
-        modifier = androidx.compose.ui.Modifier
+        modifier = Modifier
           .width(MaterialTheme.spacing.extraLarge)
           .clickable {
             onSend()
@@ -243,9 +243,9 @@ private fun TransactionListHeader(
           color = MaterialTheme.colorScheme.primaryContainer
         )
       }
-      Spacer(modifier = androidx.compose.ui.Modifier.size(MaterialTheme.spacing.medium))
+      Spacer(modifier = Modifier.size(MaterialTheme.spacing.medium))
       Column(
-        modifier = androidx.compose.ui.Modifier
+        modifier = Modifier
           .width(MaterialTheme.spacing.extraLarge)
           .clickable {
             onReceive()

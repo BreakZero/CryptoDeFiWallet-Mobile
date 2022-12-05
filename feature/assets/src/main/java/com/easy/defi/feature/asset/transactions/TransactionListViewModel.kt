@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,9 +35,11 @@ class TransactionListViewModel @Inject constructor(
     .filterNotNull().map {
       TransactionListUiState(
         asset = it,
-        transactionPaging = chainManager.getChainByAsset(it)?.getTransactions(it.contract) ?: emptyFlow()
+        transactionPaging = chainManager.getChainByAsset(it)?.getTransactions(it.contract).also {
+          Timber.tag("=====").v(it.toString())
+        } ?: emptyFlow()
       )
-    }.stateIn(viewModelScope, SharingStarted.Lazily, TransactionListUiState())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(2000), TransactionListUiState())
 }
 
 data class TransactionListUiState(
