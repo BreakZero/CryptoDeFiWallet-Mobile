@@ -42,9 +42,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.easy.defi.app.core.common.result.ResultLoadState
 import com.easy.defi.app.core.designsystem.R
+import com.easy.defi.app.core.designsystem.component.NiaLoadingWheel
 import com.easy.defi.app.core.designsystem.component.brushBackground
 import com.easy.defi.app.core.designsystem.theme.spacing
-import com.easy.defi.app.core.ui.LoadingIndicator
 import com.easy.defi.app.core.ui.extension.rotating
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
@@ -130,7 +130,7 @@ internal fun DAppListScreen(
             .fillMaxSize(),
           contentAlignment = Alignment.Center
         ) {
-          LoadingIndicator(animating = true)
+          NiaLoadingWheel(contentDesc = "loading")
         }
       }
       ResultLoadState.Error -> {
@@ -139,7 +139,7 @@ internal fun DAppListScreen(
             .fillMaxSize(),
           contentAlignment = Alignment.Center
         ) {
-          Text(text = "somethings went wrong")
+          NiaLoadingWheel(contentDesc = "loading")
         }
       }
       ResultLoadState.Success -> {
